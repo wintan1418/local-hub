@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer: one
+  service: one
+  scheduled_at: 2025-06-25 09:59:38
+  status: 1
+  total_price: 9.99
+
+two:
+  customer: two
+  service: two
+  scheduled_at: 2025-06-25 09:59:38
+  status: 1
+  total_price: 9.99
