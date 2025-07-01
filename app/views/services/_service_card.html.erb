@@ -1,0 +1,18 @@
+<div class="bg-gray-50 rounded-lg shadow p-5 flex flex-col justify-between h-full">
+  <div>
+    <h2 class="text-xl font-semibold mb-2"><%= service.title %></h2>
+    <div class="text-sm text-gray-500 mb-1">
+      <span class="font-medium">Category:</span> <%= service.category.name %>
+    </div>
+    <div class="text-sm text-gray-500 mb-1">
+      <span class="font-medium">Provider:</span> <%= service.provider.email %>
+    </div>
+    <p class="text-gray-700 mb-3"><%= truncate(service.description, length: 80) %></p>
+  </div>
+  <div class="flex items-center justify-between mt-2">
+    <span class="text-lg font-bold text-indigo-700">
+      <%= service.price_type.titleize %>: $<%= number_to_currency(service.base_price, precision: 2) %>
+    </span>
+    <%= link_to 'View Details', service_path(service), class: "ml-2 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 text-sm" %>
+  </div>
+</div> 

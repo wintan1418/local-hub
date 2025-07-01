@@ -22,7 +22,20 @@ Rails.application.routes.draw do
   # User dashboard
   get 'dashboard', to: 'dashboard#index', as: :user_dashboard
   
-  # Catch-all for 404 errors
+  # Modular dashboards
+  get 'customer/dashboard', to: 'customer/dashboard#index', as: :customer_dashboard
+  namespace :provider do
+    get 'dashboard', to: 'dashboard#index', as: :dashboard
+  end
+  namespace :admin do
+    get 'dashboard', to: 'dashboard#index', as: :dashboard
+  end
+  
+  resources :services, only: [:index, :show] do
+    resources :bookings, only: [:create]
+  end
+
+  # Catch-all for 404 errors (always last)
   match "*path", to: "errors#not_found", via: :all, constraints: ->(req) { !req.path.start_with?("/rails/") }
   
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)

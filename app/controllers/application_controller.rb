@@ -14,6 +14,19 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: [:user_role])
   end
 
+  def after_sign_in_path_for(resource)
+    case resource.user_role
+    when "customer"
+      customer_dashboard_path
+    when "provider"
+      provider_dashboard_path
+    when "admin"
+      admin_dashboard_path
+    else
+      root_path
+    end
+  end
+
   private
 
   def user_not_authorized

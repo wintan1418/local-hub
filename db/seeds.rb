@@ -4,41 +4,79 @@
 #
 # Example seed data for LocalServiceHub
 
-puts 'Seeding categories...'
+# Clear existing data
+Booking.destroy_all
+Service.destroy_all
+Category.destroy_all
+User.destroy_all
+
+# Create demo users
+customer = User.create!(email: 'customer@example.com', password: 'password', user_role: :customer)
+provider1 = User.create!(email: 'provider1@example.com', password: 'password', user_role: :provider)
+provider2 = User.create!(email: 'provider2@example.com', password: 'password', user_role: :provider)
+admin = User.create!(email: 'admin@example.com', password: 'password', user_role: :admin)
+
+# Create categories
 categories = [
-  { name: "Plumbing", slug: "plumbing", icon: "fa-pipe" },
-  { name: "Electrical", slug: "electrical", icon: "fa-bolt" },
-  { name: "Tutoring", slug: "tutoring", icon: "fa-book" },
-  { name: "Cleaning", slug: "cleaning", icon: "fa-broom" }
+  { name: 'Home Cleaning', slug: 'home-cleaning', icon: '🧹' },
+  { name: 'Handyman', slug: 'handyman', icon: '🔧' },
+  { name: 'Moving & Storage', slug: 'moving-storage', icon: '🚚' },
+  { name: 'Beauty & Wellness', slug: 'beauty-wellness', icon: '💇' },
+  { name: 'Pet Care', slug: 'pet-care', icon: '🐶' },
+  { name: 'Tutoring', slug: 'tutoring', icon: '📚' }
 ]
-categories.each { |cat| Category.find_or_create_by!(cat) }
-puts 'Categories seeded.'
+categories.each { |cat| Category.create!(cat) }
 
-puts 'Seeding admin user...'
-admin = User.find_or_create_by!(email: "admin@example.com") do |u|
-  u.password = "password"
-  u.user_role = :admin
-end
-puts 'Admin user seeded.'
+# Create services for each category
+Service.create!([
+  {
+    provider: provider1,
+    category: Category.find_by(slug: 'home-cleaning'),
+    title: 'SparklePro Apartment Cleaning',
+    description: 'Thorough cleaning for apartments and condos. Eco-friendly products. Satisfaction guaranteed!',
+    price_type: :fixed,
+    base_price: 120.00
+  },
+  {
+    provider: provider2,
+    category: Category.find_by(slug: 'handyman'),
+    title: 'QuickFix Handyman Services',
+    description: 'Repairs, installations, and odd jobs. Fast, reliable, and affordable.',
+    price_type: :hourly,
+    base_price: 40.00
+  },
+  {
+    provider: provider1,
+    category: Category.find_by(slug: 'moving-storage'),
+    title: 'EasyMove - Local Moving Help',
+    description: 'Professional movers for apartments, homes, and offices. Packing and unpacking available.',
+    price_type: :custom,
+    base_price: 200.00
+  },
+  {
+    provider: provider2,
+    category: Category.find_by(slug: 'beauty-wellness'),
+    title: 'GlowUp Mobile Spa',
+    description: 'Facials, massages, and beauty treatments in the comfort of your home.',
+    price_type: :fixed,
+    base_price: 90.00
+  },
+  {
+    provider: provider1,
+    category: Category.find_by(slug: 'pet-care'),
+    title: 'HappyPaws Dog Walking',
+    description: 'Daily walks, playtime, and pet sitting for your furry friends.',
+    price_type: :hourly,
+    base_price: 25.00
+  },
+  {
+    provider: provider2,
+    category: Category.find_by(slug: 'tutoring'),
+    title: 'Math Master Tutoring',
+    description: 'Expert math tutoring for all ages. In-person or online sessions available.',
+    price_type: :hourly,
+    base_price: 35.00
+  }
+])
 
-puts 'Seeding provider user...'
-provider = User.find_or_create_by!(email: "provider@example.com") do |u|
-  u.password = "password"
-  u.user_role = :provider
-end
-puts 'Provider user seeded.'
-
-puts 'Seeding customer user...'
-customer = User.find_or_create_by!(email: "customer@example.com") do |u|
-  u.password = "password"
-  u.user_role = :customer
-end
-puts 'Customer user seeded.'
-
-puts 'Seeding service...'
-service = Service.find_or_create_by!(title: "Basic Plumbing Fix", provider: provider, category: Category.find_by(slug: "plumbing")) do |s|
-  s.description = "Fix leaks and minor plumbing issues."
-  s.price_type = :fixed
-  s.base_price = 75.0
-end
-puts 'Service seeded.'
+puts 'Seeded users, categories, and services!'
