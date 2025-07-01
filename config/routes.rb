@@ -17,11 +17,7 @@ Rails.application.routes.draw do
   get "home#testimonials", to: "home#index"
   
   # Devise routes for user authentication
-  devise_for :users, controllers: {
-    registrations: 'users/registrations',
-    sessions: 'users/sessions',
-    passwords: 'users/passwords'
-  }
+  devise_for :users
   
   # User dashboard
   get 'dashboard', to: 'dashboard#index', as: :user_dashboard
