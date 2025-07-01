@@ -24,7 +24,7 @@
         <% end %>
         <div>
           <%= f.label :scheduled_at, 'Select Date & Time', class: "block text-sm font-medium text-gray-700" %>
-          <%= f.datetime_field :scheduled_at, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50", required: true %>
+          <%= f.text_field :scheduled_at, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50", required: true, data: { controller: "booking-calendar" } %>
         </div>
         <div>
           <%= f.label :total_price, 'Total Price', class: "block text-sm font-medium text-gray-700" %>

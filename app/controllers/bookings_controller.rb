@@ -9,9 +9,24 @@ class BookingsController < ApplicationController
     @booking.service = @service
     @booking.status = :pending
     if @booking.save
-      redirect_to customer_dashboard_path, notice: 'Booking created successfully!'
+      respond_to do |format|
+        format.html { redirect_to customer_dashboard_path, notice: 'Booking created successfully!' }
+        format.turbo_stream
+      end
     else
-      redirect_to service_path(@service), alert: @booking.errors.full_messages.to_sentence
+      respond_to do |format|
+        format.html { redirect_to service_path(@service), alert: @booking.errors.full_messages.to_sentence }
+        format.turbo_stream
+      end
+    end
+  end
+
+  def destroy
+    @booking = current_user.bookings.find(params[:id])
+    @booking.destroy
+    respond_to do |format|
+      format.html { redirect_to customer_dashboard_path, notice: 'Booking cancelled.' }
+      format.turbo_stream
     end
   end
 
