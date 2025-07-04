@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   get 'customer/dashboard', to: 'customer/dashboard#index', as: :customer_dashboard
   namespace :provider do
     get 'dashboard', to: 'dashboard#index', as: :dashboard
+    resources :services, only: [:new, :create, :edit, :update, :destroy]
   end
   namespace :admin do
     get 'dashboard', to: 'dashboard#index', as: :dashboard
@@ -34,6 +35,7 @@ Rails.application.routes.draw do
   resources :services, only: [:index, :show] do
     resources :bookings, only: [:create]
   end
+  resources :bookings, only: [:destroy]
 
   # Catch-all for 404 errors (always last)
   match "*path", to: "errors#not_found", via: :all, constraints: ->(req) { !req.path.start_with?("/rails/") }

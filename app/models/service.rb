@@ -5,6 +5,8 @@ class Service < ApplicationRecord
   has_many :availabilities, dependent: :destroy
   has_many :bookings, dependent: :destroy
 
+  has_many_attached :images
+
   validates :title, :description, :price_type, :base_price, presence: true
 
   enum :price_type, { fixed: 0, hourly: 1, custom: 2 }

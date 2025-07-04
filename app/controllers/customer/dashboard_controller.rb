@@ -12,7 +12,18 @@ module Customer
       @services = @services.where(category_id: @category_id) if @category_id.present?
       @services = @services.order(created_at: :desc).limit(20)
 
-      @upcoming_bookings = current_user.bookings.includes(:service).where('scheduled_at >= ?', Time.current).order(:scheduled_at)
+      @bookings = current_user.bookings.includes(:service).order(:scheduled_at)
+      @upcoming_bookings = @bookings.where('scheduled_at >= ?', Time.current).limit(5)
+      @past_bookings = @bookings.where('scheduled_at < ?', Time.current).limit(5)
+      @pending_bookings = @bookings.where(status: 'pending')
+      @confirmed_bookings = @bookings.where(status: 'confirmed')
+      
+      # Customer stats
+      @total_bookings = @bookings.count
+      @total_spent = @bookings.where(status: ['completed', 'confirmed']).sum(:total_price)
+      @pending_count = @pending_bookings.count
+      @this_month_bookings = @bookings.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month).count
+      @favorite_services = @bookings.joins(:service).group('services.id').count.sort_by(&:last).reverse.first(3)
     end
 
     private
