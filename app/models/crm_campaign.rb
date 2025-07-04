@@ -45,10 +45,10 @@ class CrmCampaign < ApplicationRecord
 
   def personalize_message(user)
     template = message_template.dup
-    template.gsub!('{{first_name}}', user.first_name || 'Customer')
-    template.gsub!('{{last_name}}', user.last_name || '')
-    template.gsub!('{{full_name}}', user.full_name || user.email.split('@').first)
-    template.gsub!('{{business_name}}', user.business_name || '')
+    template.gsub!("{{first_name}}", user.first_name || "Customer")
+    template.gsub!("{{last_name}}", user.last_name || "")
+    template.gsub!("{{full_name}}", user.full_name || user.email.split("@").first)
+    template.gsub!("{{business_name}}", user.business_name || "")
     template
   end
 end

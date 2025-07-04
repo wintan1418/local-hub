@@ -20,14 +20,14 @@ class ConversationChannel < ApplicationCable::Channel
 
     message = conversation.chat_messages.create!(
       sender: current_user,
-      content: data['content']
+      content: data["content"]
     )
 
     ConversationChannel.broadcast_to(
       conversation,
       {
         message: ApplicationController.render(
-          partial: 'conversations/message',
+          partial: "conversations/message",
           locals: { message: message, current_user: current_user }
         ),
         sender_id: current_user.id

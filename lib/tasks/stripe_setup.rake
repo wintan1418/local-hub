@@ -4,7 +4,7 @@ namespace :stripe do
     puts "🔗 Setting up Stripe products and prices..."
 
     Plan.all.each do |plan|
-      next if plan.name == 'Free' # Skip free plan
+      next if plan.name == "Free" # Skip free plan
 
       begin
         # Create product
@@ -21,9 +21,9 @@ namespace :stripe do
         # Create price
         price = Stripe::Price.create({
           unit_amount: (plan.price * 100).to_i, # Convert to cents
-          currency: 'usd',
+          currency: "usd",
           recurring: {
-            interval: plan.billing_period == 'yearly' ? 'year' : 'month'
+            interval: plan.billing_period == "yearly" ? "year" : "month"
           },
           product: product.id,
           metadata: {
@@ -43,9 +43,9 @@ namespace :stripe do
     end
 
     # Set free plan price ID to a placeholder
-    free_plan = Plan.find_by(name: 'Free')
+    free_plan = Plan.find_by(name: "Free")
     if free_plan && free_plan.stripe_price_id.blank?
-      free_plan.update!(stripe_price_id: 'price_free_plan')
+      free_plan.update!(stripe_price_id: "price_free_plan")
       puts "✅ Set free plan price ID"
     end
 

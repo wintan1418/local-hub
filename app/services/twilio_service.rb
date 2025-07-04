@@ -1,7 +1,7 @@
 class TwilioService
   class << self
     def send_verification(user, phone)
-      return { success: false, error: 'Twilio not configured' } unless twilio_configured?
+      return { success: false, error: "Twilio not configured" } unless twilio_configured?
 
       verification = PhoneVerification.generate_for(user, phone)
       message = "Your LocalServiceHub verification code is: #{verification.code}. Valid for 10 minutes."
@@ -72,27 +72,27 @@ class TwilioService
     end
 
     def send_campaign_message(campaign, recipient)
-      return { success: false, error: 'Twilio not configured' } unless twilio_configured?
+      return { success: false, error: "Twilio not configured" } unless twilio_configured?
 
       prefs = NotificationPreference.for_user(recipient)
       message = campaign.personalize_message(recipient)
 
       case campaign.campaign_type.to_sym
       when :sms
-        return { success: false, error: 'SMS disabled' } unless prefs.can_send_sms?
+        return { success: false, error: "SMS disabled" } unless prefs.can_send_sms?
         send_sms(recipient.phone, message, :marketing, recipient)
       when :whatsapp
-        return { success: false, error: 'WhatsApp disabled' } unless prefs.can_send_whatsapp?
+        return { success: false, error: "WhatsApp disabled" } unless prefs.can_send_whatsapp?
         send_whatsapp(recipient.phone, message, recipient)
       else
-        { success: false, error: 'Unsupported campaign type' }
+        { success: false, error: "Unsupported campaign type" }
       end
     end
 
     private
 
     def send_sms(phone, message, message_type, user)
-      return { success: false, error: 'Phone number required' } if phone.blank?
+      return { success: false, error: "Phone number required" } if phone.blank?
 
       log = SmsLog.create!(
         user: user,
@@ -118,7 +118,7 @@ class TwilioService
     end
 
     def send_whatsapp(phone, message, user)
-      return { success: false, error: 'WhatsApp number not configured' } if Rails.application.config.twilio[:whatsapp_number].blank?
+      return { success: false, error: "WhatsApp number not configured" } if Rails.application.config.twilio[:whatsapp_number].blank?
 
       begin
         message = TWILIO_CLIENT.messages.create(
@@ -135,8 +135,8 @@ class TwilioService
 
     def format_phone(phone)
       # Ensure phone number has country code
-      phone = phone.to_s.gsub(/\D/, '')
-      phone.start_with?('1') ? "+#{phone}" : "+1#{phone}"
+      phone = phone.to_s.gsub(/\D/, "")
+      phone.start_with?("1") ? "+#{phone}" : "+1#{phone}"
     end
 
     def twilio_configured?

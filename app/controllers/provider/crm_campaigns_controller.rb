@@ -15,7 +15,7 @@ class Provider::CrmCampaignsController < ApplicationController
     @campaign = current_user.crm_campaigns.build(campaign_params)
 
     if @campaign.save
-      redirect_to provider_crm_campaigns_path, notice: 'Campaign created successfully.'
+      redirect_to provider_crm_campaigns_path, notice: "Campaign created successfully."
     else
       render :new
     end
@@ -30,7 +30,7 @@ class Provider::CrmCampaignsController < ApplicationController
 
   def update
     if @campaign.update(campaign_params)
-      redirect_to provider_crm_campaigns_path, notice: 'Campaign updated successfully.'
+      redirect_to provider_crm_campaigns_path, notice: "Campaign updated successfully."
     else
       render :edit
     end
@@ -38,7 +38,7 @@ class Provider::CrmCampaignsController < ApplicationController
 
   def destroy
     @campaign.destroy
-    redirect_to provider_crm_campaigns_path, notice: 'Campaign deleted successfully.'
+    redirect_to provider_crm_campaigns_path, notice: "Campaign deleted successfully."
   end
 
   def send_campaign
@@ -46,17 +46,17 @@ class Provider::CrmCampaignsController < ApplicationController
       # This would typically be handled by a background job
       CampaignSenderJob.perform_later(@campaign)
       @campaign.update(status: :scheduled, scheduled_at: Time.current)
-      redirect_to provider_crm_campaigns_path, notice: 'Campaign scheduled for sending.'
+      redirect_to provider_crm_campaigns_path, notice: "Campaign scheduled for sending."
     else
-      redirect_to provider_crm_campaigns_path, alert: 'Campaign cannot be sent in its current state.'
+      redirect_to provider_crm_campaigns_path, alert: "Campaign cannot be sent in its current state."
     end
   end
 
   def cancel_campaign
     if @campaign.update(status: :cancelled)
-      redirect_to provider_crm_campaigns_path, notice: 'Campaign cancelled successfully.'
+      redirect_to provider_crm_campaigns_path, notice: "Campaign cancelled successfully."
     else
-      redirect_to provider_crm_campaigns_path, alert: 'Unable to cancel campaign.'
+      redirect_to provider_crm_campaigns_path, alert: "Unable to cancel campaign."
     end
   end
 
@@ -75,7 +75,7 @@ class Provider::CrmCampaignsController < ApplicationController
 
   def ensure_provider_or_admin
     unless current_user.provider? || current_user.admin?
-      redirect_to root_path, alert: 'Access denied. Providers and admins only.'
+      redirect_to root_path, alert: "Access denied. Providers and admins only."
     end
   end
 end

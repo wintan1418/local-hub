@@ -20,16 +20,16 @@ Rails.application.routes.draw do
   devise_for :users
 
   # User dashboard
-  get 'dashboard', to: 'dashboard#index', as: :user_dashboard
+  get "dashboard", to: "dashboard#index", as: :user_dashboard
 
   # Onboarding
-  get 'welcome', to: 'onboarding#welcome', as: :onboarding_welcome
-  patch 'onboarding/update_profile', to: 'onboarding#update_profile', as: :onboarding_update_profile
+  get "welcome", to: "onboarding#welcome", as: :onboarding_welcome
+  patch "onboarding/update_profile", to: "onboarding#update_profile", as: :onboarding_update_profile
 
   # Modular dashboards
-  get 'customer/dashboard', to: 'customer/dashboard#index', as: :customer_dashboard
+  get "customer/dashboard", to: "customer/dashboard#index", as: :customer_dashboard
   namespace :provider do
-    get 'dashboard', to: 'dashboard#index', as: :dashboard
+    get "dashboard", to: "dashboard#index", as: :dashboard
     resources :services, only: [ :new, :create, :edit, :update, :destroy ]
 
     resource :profile, only: [ :show, :edit, :update ] do
@@ -67,7 +67,7 @@ Rails.application.routes.draw do
     resource :notification_preference, only: [ :show, :edit, :update ]
   end
   namespace :admin do
-    get 'dashboard', to: 'dashboard#index', as: :dashboard
+    get "dashboard", to: "dashboard#index", as: :dashboard
   end
 
   resources :services, only: [ :index, :show ] do
@@ -92,7 +92,7 @@ Rails.application.routes.draw do
 
   # Webhooks
   namespace :webhooks do
-    post 'stripe', to: 'stripe#create'
+    post "stripe", to: "stripe#create"
   end
 
   # Catch-all for 404 errors (always last)

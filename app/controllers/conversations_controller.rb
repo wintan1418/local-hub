@@ -29,7 +29,7 @@ class ConversationsController < ApplicationController
       customer = @other_user
       provider = current_user
     else
-      redirect_to root_path, alert: 'Invalid conversation participants.'
+      redirect_to root_path, alert: "Invalid conversation participants."
       return
     end
 
@@ -74,7 +74,7 @@ class ConversationsController < ApplicationController
 
   def render_message(message)
     ApplicationController.render(
-      partial: 'conversations/message',
+      partial: "conversations/message",
       locals: { message: message, current_user: current_user }
     )
   end

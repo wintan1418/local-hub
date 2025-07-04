@@ -27,9 +27,9 @@ class StripeService
     subscription_params = {
       customer: stripe_customer.id,
       items: [ { price: plan.stripe_price_id } ],
-      payment_behavior: 'default_incomplete',
-      payment_settings: { save_default_payment_method: 'on_subscription' },
-      expand: [ 'latest_invoice.payment_intent' ],
+      payment_behavior: "default_incomplete",
+      payment_settings: { save_default_payment_method: "on_subscription" },
+      expand: [ "latest_invoice.payment_intent" ],
       metadata: {
         user_id: user.id,
         plan_id: plan.id
@@ -121,12 +121,12 @@ class StripeService
 
   def self.map_stripe_status(stripe_status)
     case stripe_status
-    when 'active' then :active
-    when 'trialing' then :trialing
-    when 'past_due' then :past_due
-    when 'canceled' then :canceled
-    when 'unpaid' then :unpaid
-    when 'incomplete' then :incomplete
+    when "active" then :active
+    when "trialing" then :trialing
+    when "past_due" then :past_due
+    when "canceled" then :canceled
+    when "unpaid" then :unpaid
+    when "incomplete" then :incomplete
     else :incomplete
     end
   end

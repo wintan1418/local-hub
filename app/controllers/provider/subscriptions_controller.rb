@@ -26,7 +26,7 @@ class Provider::SubscriptionsController < ApplicationController
       )
 
       if @subscription.save
-        redirect_to provider_dashboard_path, notice: 'Free subscription activated successfully!'
+        redirect_to provider_dashboard_path, notice: "Free subscription activated successfully!"
       else
         @plans = Plan.active.ordered
         render :new, status: :unprocessable_entity
@@ -44,11 +44,11 @@ class Provider::SubscriptionsController < ApplicationController
           )
         else
           # Trial started successfully
-          redirect_to provider_dashboard_path, notice: 'Subscription created successfully! Your 14-day trial has started.'
+          redirect_to provider_dashboard_path, notice: "Subscription created successfully! Your 14-day trial has started."
         end
       else
         @plans = Plan.active.ordered
-        flash.now[:alert] = 'Failed to create subscription. Please try again.'
+        flash.now[:alert] = "Failed to create subscription. Please try again."
         render :new, status: :unprocessable_entity
       end
     end
@@ -58,9 +58,9 @@ class Provider::SubscriptionsController < ApplicationController
     @subscription = current_user.subscription
 
     if @subscription && StripeService.cancel_subscription(@subscription)
-      redirect_to provider_subscriptions_path, notice: 'Subscription will be canceled at the end of the billing period.'
+      redirect_to provider_subscriptions_path, notice: "Subscription will be canceled at the end of the billing period."
     else
-      redirect_to provider_subscriptions_path, alert: 'Unable to cancel subscription.'
+      redirect_to provider_subscriptions_path, alert: "Unable to cancel subscription."
     end
   end
 
@@ -72,18 +72,18 @@ class Provider::SubscriptionsController < ApplicationController
 
   def payment_success
     @subscription = Subscription.find(params[:subscription_id])
-    redirect_to provider_dashboard_path, notice: 'Payment successful! Your subscription is now active.'
+    redirect_to provider_dashboard_path, notice: "Payment successful! Your subscription is now active."
   end
 
   private
 
   def ensure_provider
-    redirect_to root_path, alert: 'Access denied.' unless current_user.provider?
+    redirect_to root_path, alert: "Access denied." unless current_user.provider?
   end
 
   def check_existing_subscription
     if current_user.has_active_subscription?
-      redirect_to provider_subscriptions_path, alert: 'You already have an active subscription.'
+      redirect_to provider_subscriptions_path, alert: "You already have an active subscription."
     end
   end
 end

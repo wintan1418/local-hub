@@ -10,8 +10,8 @@ class User < ApplicationRecord
   # Associations
   has_many :services, foreign_key: :provider_id, dependent: :destroy
   has_many :bookings, foreign_key: :customer_id, dependent: :destroy
-  has_many :messages_sent, class_name: 'Message', foreign_key: :sender_id, dependent: :destroy
-  has_many :messages_received, class_name: 'Message', foreign_key: :recipient_id, dependent: :destroy
+  has_many :messages_sent, class_name: "Message", foreign_key: :sender_id, dependent: :destroy
+  has_many :messages_received, class_name: "Message", foreign_key: :recipient_id, dependent: :destroy
   # If you want reviews written by this user (as customer), you can add:
   # has_many :reviews, through: :bookings
 
@@ -25,9 +25,9 @@ class User < ApplicationRecord
   has_many :subscriptions
 
   # Chat
-  has_many :customer_conversations, class_name: 'Conversation', foreign_key: 'customer_id', dependent: :destroy
-  has_many :provider_conversations, class_name: 'Conversation', foreign_key: 'provider_id', dependent: :destroy
-  has_many :sent_messages, class_name: 'ChatMessage', foreign_key: 'sender_id', dependent: :destroy
+  has_many :customer_conversations, class_name: "Conversation", foreign_key: "customer_id", dependent: :destroy
+  has_many :provider_conversations, class_name: "Conversation", foreign_key: "provider_id", dependent: :destroy
+  has_many :sent_messages, class_name: "ChatMessage", foreign_key: "sender_id", dependent: :destroy
 
   # CRM
   has_many :phone_verifications, dependent: :destroy
@@ -56,11 +56,11 @@ class User < ApplicationRecord
   end
 
   def display_name
-    full_name.presence || email.split('@').first
+    full_name.presence || email.split("@").first
   end
 
   def complete_address
-    [ address, city, state, zip_code ].compact.join(', ')
+    [ address, city, state, zip_code ].compact.join(", ")
   end
 
   def profile_complete?
@@ -136,12 +136,12 @@ class User < ApplicationRecord
 
   def total_completed_bookings
     return 0 unless provider?
-    Booking.joins(:service).where(services: { provider_id: id }, status: 'completed').count
+    Booking.joins(:service).where(services: { provider_id: id }, status: "completed").count
   end
 
   def total_revenue
     return 0 unless provider?
-    Booking.joins(:service).where(services: { provider_id: id }, status: 'completed').sum(:total_price) || 0
+    Booking.joins(:service).where(services: { provider_id: id }, status: "completed").sum(:total_price) || 0
   end
 
   def completion_rate
@@ -158,15 +158,15 @@ class User < ApplicationRecord
 
     case
     when rating >= 4.8 && completed >= 50
-      { name: 'Elite', color: 'purple', icon: 'fas fa-crown' }
+      { name: "Elite", color: "purple", icon: "fas fa-crown" }
     when rating >= 4.5 && completed >= 25
-      { name: 'Professional', color: 'blue', icon: 'fas fa-star' }
+      { name: "Professional", color: "blue", icon: "fas fa-star" }
     when rating >= 4.0 && completed >= 10
-      { name: 'Trusted', color: 'green', icon: 'fas fa-shield-alt' }
+      { name: "Trusted", color: "green", icon: "fas fa-shield-alt" }
     when completed >= 5
-      { name: 'Active', color: 'yellow', icon: 'fas fa-thumbs-up' }
+      { name: "Active", color: "yellow", icon: "fas fa-thumbs-up" }
     else
-      { name: 'New', color: 'gray', icon: 'fas fa-seedling' }
+      { name: "New", color: "gray", icon: "fas fa-seedling" }
     end
   end
 

@@ -28,7 +28,7 @@ class Subscription < ApplicationRecord
 
   # Methods
   def active?
-    (status == 'active' || status == 'trialing') && current_period_end > Time.current
+    (status == "active" || status == "trialing") && current_period_end > Time.current
   end
 
   def expired?

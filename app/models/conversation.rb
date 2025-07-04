@@ -1,6 +1,6 @@
 class Conversation < ApplicationRecord
-  belongs_to :customer, class_name: 'User'
-  belongs_to :provider, class_name: 'User'
+  belongs_to :customer, class_name: "User"
+  belongs_to :provider, class_name: "User"
   has_many :chat_messages, dependent: :destroy
 
   enum :status, { active: 0, archived: 1, blocked: 2 }, default: :active
@@ -11,9 +11,9 @@ class Conversation < ApplicationRecord
   scope :recent, -> { order(last_message_at: :desc) }
   scope :with_unread_for_user, ->(user) do
     if user.customer?
-      where('unread_count_customer > 0')
+      where("unread_count_customer > 0")
     elsif user.provider?
-      where('unread_count_provider > 0')
+      where("unread_count_provider > 0")
     end
   end
 

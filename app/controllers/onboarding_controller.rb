@@ -11,9 +11,9 @@ class OnboardingController < ApplicationController
 
     if @user.update(onboarding_params)
       if @user.provider?
-        redirect_to provider_profile_path, notice: 'Welcome! Your profile has been created.'
+        redirect_to provider_profile_path, notice: "Welcome! Your profile has been created."
       else
-        redirect_to customer_dashboard_path, notice: 'Welcome! Your profile has been created.'
+        redirect_to customer_dashboard_path, notice: "Welcome! Your profile has been created."
       end
     else
       render :welcome, status: :unprocessable_entity

@@ -1,5 +1,5 @@
 class Service < ApplicationRecord
-  belongs_to :provider, class_name: 'User'
+  belongs_to :provider, class_name: "User"
   belongs_to :category
   has_many :service_areas, dependent: :destroy
   has_many :availabilities, dependent: :destroy

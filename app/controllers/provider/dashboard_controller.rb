@@ -7,9 +7,9 @@ module Provider
       @services = current_user.services.includes(:category)
       @bookings = Booking.includes(:service, :customer).where(service: @services).order(scheduled_at: :asc)
       @recent_bookings = @bookings.limit(5)
-      @pending_bookings = @bookings.where(status: 'pending')
-      @confirmed_bookings = @bookings.where(status: 'confirmed')
-      @completed_bookings = @bookings.where(status: 'completed')
+      @pending_bookings = @bookings.where(status: "pending")
+      @confirmed_bookings = @bookings.where(status: "confirmed")
+      @completed_bookings = @bookings.where(status: "completed")
 
       # Dashboard stats
       @total_services = @services.count
@@ -24,7 +24,7 @@ module Provider
     private
 
     def ensure_provider!
-      redirect_to root_path, alert: 'Access denied.' unless current_user&.user_role == 'provider'
+      redirect_to root_path, alert: "Access denied." unless current_user&.user_role == "provider"
     end
   end
 end

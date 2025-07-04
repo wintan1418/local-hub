@@ -14,7 +14,7 @@ class Provider::ProfilesController < ApplicationController
     @user = current_user
 
     if @user.update(profile_params)
-      redirect_to provider_profile_path, notice: 'Profile updated successfully.'
+      redirect_to provider_profile_path, notice: "Profile updated successfully."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -32,9 +32,9 @@ class Provider::ProfilesController < ApplicationController
       params[:verification_documents].each do |document|
         @user.verification_documents.attach(document)
       end
-      redirect_to verification_provider_profile_path, notice: 'Documents uploaded successfully. We will review them shortly.'
+      redirect_to verification_provider_profile_path, notice: "Documents uploaded successfully. We will review them shortly."
     else
-      redirect_to verification_provider_profile_path, alert: 'Please select documents to upload.'
+      redirect_to verification_provider_profile_path, alert: "Please select documents to upload."
     end
   end
 
@@ -50,22 +50,22 @@ class Provider::ProfilesController < ApplicationController
       params[:portfolio_images].each do |image|
         @user.portfolio_images.attach(image)
       end
-      redirect_to portfolio_provider_profile_path, notice: 'Portfolio images uploaded successfully.'
+      redirect_to portfolio_provider_profile_path, notice: "Portfolio images uploaded successfully."
     else
-      redirect_to portfolio_provider_profile_path, alert: 'Please select images to upload.'
+      redirect_to portfolio_provider_profile_path, alert: "Please select images to upload."
     end
   end
 
   def destroy_portfolio_image
     @image = current_user.portfolio_images.find(params[:image_id])
     @image.purge
-    redirect_to portfolio_provider_profile_path, notice: 'Image removed successfully.'
+    redirect_to portfolio_provider_profile_path, notice: "Image removed successfully."
   end
 
   private
 
   def ensure_provider
-    redirect_to root_path, alert: 'Access denied.' unless current_user.provider?
+    redirect_to root_path, alert: "Access denied." unless current_user.provider?
   end
 
   def profile_params

@@ -6,8 +6,8 @@ module Admin
     def index
       # User stats
       @total_users = User.count
-      @total_customers = User.where(user_role: 'customer').count
-      @total_providers = User.where(user_role: 'provider').count
+      @total_customers = User.where(user_role: "customer").count
+      @total_providers = User.where(user_role: "provider").count
       @new_users_this_month = User.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month).count
 
       # Service stats
@@ -17,11 +17,11 @@ module Admin
 
       # Booking stats
       @total_bookings = Booking.count
-      @pending_bookings = Booking.where(status: 'pending').count
-      @confirmed_bookings = Booking.where(status: 'confirmed').count
-      @completed_bookings = Booking.where(status: 'completed').count
-      @total_revenue = Booking.where(status: [ 'completed', 'confirmed' ]).sum(:total_price)
-      @this_month_revenue = Booking.where(status: [ 'completed', 'confirmed' ], created_at: Time.current.beginning_of_month..Time.current.end_of_month).sum(:total_price)
+      @pending_bookings = Booking.where(status: "pending").count
+      @confirmed_bookings = Booking.where(status: "confirmed").count
+      @completed_bookings = Booking.where(status: "completed").count
+      @total_revenue = Booking.where(status: [ "completed", "confirmed" ]).sum(:total_price)
+      @this_month_revenue = Booking.where(status: [ "completed", "confirmed" ], created_at: Time.current.beginning_of_month..Time.current.end_of_month).sum(:total_price)
 
       # Recent activity
       @recent_users = User.order(created_at: :desc).limit(5)
@@ -36,7 +36,7 @@ module Admin
     private
 
     def ensure_admin!
-      redirect_to root_path, alert: 'Access denied.' unless current_user&.user_role == 'admin'
+      redirect_to root_path, alert: "Access denied." unless current_user&.user_role == "admin"
     end
   end
 end

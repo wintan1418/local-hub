@@ -1,6 +1,6 @@
 class ChatMessage < ApplicationRecord
   belongs_to :conversation
-  belongs_to :sender, class_name: 'User'
+  belongs_to :sender, class_name: "User"
 
   enum :message_type, { text: 0, image: 1, file: 2, system: 3 }, default: :text
 

@@ -10,7 +10,7 @@ class BookingsController < ApplicationController
     @booking.status = :pending
     if @booking.save
       respond_to do |format|
-        format.html { redirect_to customer_dashboard_path, notice: 'Booking created successfully!' }
+        format.html { redirect_to customer_dashboard_path, notice: "Booking created successfully!" }
         format.turbo_stream
       end
     else
@@ -25,7 +25,7 @@ class BookingsController < ApplicationController
     @booking = current_user.bookings.find(params[:id])
     @booking.destroy
     respond_to do |format|
-      format.html { redirect_to customer_dashboard_path, notice: 'Booking cancelled.' }
+      format.html { redirect_to customer_dashboard_path, notice: "Booking cancelled." }
       format.turbo_stream
     end
   end
@@ -37,6 +37,6 @@ class BookingsController < ApplicationController
   end
 
   def ensure_customer!
-    redirect_to root_path, alert: 'Access denied.' unless current_user&.user_role == 'customer'
+    redirect_to root_path, alert: "Access denied." unless current_user&.user_role == "customer"
   end
 end

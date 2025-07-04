@@ -30,7 +30,7 @@ class Plan < ApplicationRecord
     when Array
       features
     when String
-      features.split(',').map(&:strip)
+      features.split(",").map(&:strip)
     else
       []
     end

@@ -5,8 +5,8 @@ class PhoneVerification < ApplicationRecord
   validates :code, presence: true, length: { is: 6 }
   validates :attempts, numericality: { greater_than_or_equal_to: 0 }
 
-  scope :pending, -> { where(verified: false).where('expires_at > ?', Time.current) }
-  scope :expired, -> { where(verified: false).where('expires_at <= ?', Time.current) }
+  scope :pending, -> { where(verified: false).where("expires_at > ?", Time.current) }
+  scope :expired, -> { where(verified: false).where("expires_at <= ?", Time.current) }
 
   before_create :set_defaults
 
@@ -53,7 +53,7 @@ class PhoneVerification < ApplicationRecord
   private
 
   def self.generate_code
-    SecureRandom.random_number(999999).to_s.rjust(6, '0')
+    SecureRandom.random_number(999999).to_s.rjust(6, "0")
   end
 
   def set_defaults
