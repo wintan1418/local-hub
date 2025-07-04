@@ -77,6 +77,9 @@
 </div>
 
 <script>
+// Set current user ID for ActionCable
+window.currentUserId = <%= current_user.id %>;
+
 document.addEventListener('DOMContentLoaded', function() {
   const messagesContainer = document.getElementById('messages-container');
   const messageForm = document.getElementById('message-form');
@@ -85,116 +88,87 @@ document.addEventListener('DOMContentLoaded', function() {
   let typingTimer;
   let isTyping = false;
   
+  // Wait for App to be available
+  function initializeChat() {
+    if (typeof window.App === 'undefined' || typeof window.App.ConversationChannel === 'undefined') {
+      setTimeout(initializeChat, 100);
+      return;
+    }
+    
+    // Initialize ActionCable subscription
+    window.App.conversation = window.App.ConversationChannel.subscribe(<%= @conversation.id %>);
+    
+    // Initial scroll to bottom
+    scrollToBottom();
+  }
+  
   // Scroll to bottom of messages
   function scrollToBottom() {
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
   }
   
   // Auto-resize textarea
-  messageInput.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-    
-    // Handle typing indicator
-    if (this.value.trim() && !isTyping) {
-      isTyping = true;
-      App.conversation.startTyping();
-    }
-    
-    clearTimeout(typingTimer);
-    typingTimer = setTimeout(() => {
-      if (isTyping) {
-        isTyping = false;
-        App.conversation.stopTyping();
+  if (messageInput) {
+    messageInput.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+      
+      // Handle typing indicator
+      if (this.value.trim() && !isTyping && window.App && window.App.conversation) {
+        isTyping = true;
+        window.App.conversation.startTyping();
       }
-    }, 1000);
-  });
-  
-  // Handle Enter key
-  messageInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      messageForm.dispatchEvent(new Event('submit'));
-    }
-  });
-  
-  // Handle form submission
-  messageForm.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const content = messageInput.value.trim();
-    if (!content) return;
-    
-    // Stop typing indicator
-    if (isTyping) {
-      isTyping = false;
-      App.conversation.stopTyping();
-    }
-    
-    // Send via ActionCable
-    App.conversation.speak({
-      content: content,
-      conversation_id: <%= @conversation.id %>
+      
+      clearTimeout(typingTimer);
+      typingTimer = setTimeout(() => {
+        if (isTyping && window.App && window.App.conversation) {
+          isTyping = false;
+          window.App.conversation.stopTyping();
+        }
+      }, 1000);
     });
     
-    messageInput.value = '';
-    messageInput.style.height = 'auto';
-    toggleEmojiPicker(false);
-  });
-  
-  // Initialize ActionCable subscription
-  App.conversation = App.cable.subscriptions.create({
-    channel: "ConversationChannel",
-    conversation_id: <%= @conversation.id %>
-  }, {
-    received: function(data) {
-      if (data.typing !== undefined) {
-        // Handle typing indicator
-        if (data.typing && data.sender_id !== <%= current_user.id %>) {
-          document.getElementById('typing-user').textContent = data.sender_name;
-          typingIndicator.classList.remove('hidden');
-        } else if (!data.typing) {
-          typingIndicator.classList.add('hidden');
+    // Handle Enter key
+    messageInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (messageForm) {
+          messageForm.dispatchEvent(new Event('submit'));
         }
-      } else if (data.sender_id !== <%= current_user.id %>) {
-        // Handle incoming message
-        messagesContainer.insertAdjacentHTML('beforeend', data.message);
-        scrollToBottom();
       }
-    },
-    
-    speak: function(data) {
-      this.perform('speak', data);
-      
-      // Add message optimistically
-      const messageHtml = `
-        <div class="flex justify-end">
-          <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg bg-blue-600 text-white relative">
-            <p class="text-sm">${data.content}</p>
-            <div class="flex items-center justify-end mt-1 space-x-1">
-              <p class="text-xs text-blue-100">Just now</p>
-              <div class="text-blue-100 text-xs">
-                <i class="fas fa-check"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-      messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
-      scrollToBottom();
-    },
-    
-    startTyping: function() {
-      this.perform('start_typing');
-    },
-    
-    stopTyping: function() {
-      this.perform('stop_typing');
-    }
-  });
+    });
+  }
   
-  // Initial scroll to bottom
-  scrollToBottom();
+  // Handle form submission
+  if (messageForm) {
+    messageForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const content = messageInput.value.trim();
+      if (!content || !window.App || !window.App.conversation) return;
+      
+      // Stop typing indicator
+      if (isTyping) {
+        isTyping = false;
+        window.App.conversation.stopTyping();
+      }
+      
+      // Send via ActionCable
+      window.App.conversation.speak({
+        content: content,
+        conversation_id: <%= @conversation.id %>
+      });
+      
+      messageInput.value = '';
+      messageInput.style.height = 'auto';
+      toggleEmojiPicker(false);
+    });
+  }
+  
+  // Initialize chat
+  initializeChat();
 });
 
 // Emoji picker functions
