@@ -1,9 +1,11 @@
 class Service < ApplicationRecord
-  belongs_to :provider, class_name: 'User'
+  belongs_to :provider, class_name: "User"
   belongs_to :category
   has_many :service_areas, dependent: :destroy
   has_many :availabilities, dependent: :destroy
   has_many :bookings, dependent: :destroy
+
+  has_many_attached :images
 
   validates :title, :description, :price_type, :base_price, presence: true
 

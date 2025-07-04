@@ -1,0 +1,232 @@
+<div class="max-w-6xl mx-auto p-6">
+  <div class="bg-white shadow rounded-lg overflow-hidden" style="height: 80vh; display: flex; flex-direction: column;">
+    <!-- Chat Header -->
+    <div class="border-b border-gray-200 p-4">
+      <div class="flex items-center space-x-3">
+        <%= link_to conversations_path, class: "text-blue-600 hover:text-blue-800" do %>
+          <i class="fas fa-arrow-left mr-2"></i>
+        <% end %>
+        
+        <div class="flex-shrink-0">
+          <% if @other_user.profile_picture.attached? %>
+            <%= image_tag @other_user.profile_picture, class: "h-10 w-10 rounded-full object-cover" %>
+          <% else %>
+            <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+              <i class="fas fa-user text-gray-600"></i>
+            </div>
+          <% end %>
+        </div>
+        
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900"><%= @other_user.display_name %></h2>
+          <% if @other_user.provider? && @other_user.business_name.present? %>
+            <p class="text-sm text-gray-600"><%= @other_user.business_name %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Messages Container -->
+    <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-1" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iI2Y5ZmFmYiIgZmlsbC1vcGFjaXR5PSIwLjQiLz4KPC9zdmc+'); background-size: 40px 40px;">
+      <% @messages.each do |message| %>
+        <%= render 'message', message: message, current_user: current_user %>
+      <% end %>
+    </div>
+    
+    <!-- Message Input -->
+    <div class="border-t border-gray-200 p-4">
+      <div id="typing-indicator" class="text-xs text-gray-500 mb-2 hidden">
+        <i class="fas fa-circle-notch fa-spin"></i> <span id="typing-user"></span> is typing...
+      </div>
+      <%= form_with url: create_message_conversation_path(@conversation), local: false, id: "message-form", class: "flex items-end space-x-3" do |form| %>
+        <div class="flex-1 relative">
+          <%= form.text_area :content, rows: 1, placeholder: "Type your message...", 
+              class: "w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none",
+              id: "message-input",
+              autocomplete: "off" %>
+          <button type="button" onclick="toggleEmojiPicker()" class="absolute right-2 top-2 text-gray-500 hover:text-gray-700">
+            <i class="fas fa-smile"></i>
+          </button>
+          <div id="emoji-picker" class="absolute bottom-full right-0 mb-2 bg-white border rounded-lg shadow-lg p-3 hidden z-10">
+            <div class="grid grid-cols-8 gap-1 text-lg">
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😀')">😀</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😃')">😃</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😄')">😄</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😁')">😁</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😊')">😊</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😍')">😍</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('🤔')">🤔</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('👍')">👍</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('👎')">👎</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('❤️')">❤️</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😂')">😂</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😭')">😭</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('🎉')">🎉</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('🔥')">🔥</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('💪')">💪</span>
+              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('🙏')">🙏</span>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const messagesContainer = document.getElementById('messages-container');
+  const messageForm = document.getElementById('message-form');
+  const messageInput = document.getElementById('message-input');
+  const typingIndicator = document.getElementById('typing-indicator');
+  let typingTimer;
+  let isTyping = false;
+  
+  // Scroll to bottom of messages
+  function scrollToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+  
+  // Auto-resize textarea
+  messageInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    
+    // Handle typing indicator
+    if (this.value.trim() && !isTyping) {
+      isTyping = true;
+      App.conversation.startTyping();
+    }
+    
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => {
+      if (isTyping) {
+        isTyping = false;
+        App.conversation.stopTyping();
+      }
+    }, 1000);
+  });
+  
+  // Handle Enter key
+  messageInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      messageForm.dispatchEvent(new Event('submit'));
+    }
+  });
+  
+  // Handle form submission
+  messageForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const content = messageInput.value.trim();
+    if (!content) return;
+    
+    // Stop typing indicator
+    if (isTyping) {
+      isTyping = false;
+      App.conversation.stopTyping();
+    }
+    
+    // Send via ActionCable
+    App.conversation.speak({
+      content: content,
+      conversation_id: <%= @conversation.id %>
+    });
+    
+    messageInput.value = '';
+    messageInput.style.height = 'auto';
+    toggleEmojiPicker(false);
+  });
+  
+  // Initialize ActionCable subscription
+  App.conversation = App.cable.subscriptions.create({
+    channel: "ConversationChannel",
+    conversation_id: <%= @conversation.id %>
+  }, {
+    received: function(data) {
+      if (data.typing !== undefined) {
+        // Handle typing indicator
+        if (data.typing && data.sender_id !== <%= current_user.id %>) {
+          document.getElementById('typing-user').textContent = data.sender_name;
+          typingIndicator.classList.remove('hidden');
+        } else if (!data.typing) {
+          typingIndicator.classList.add('hidden');
+        }
+      } else if (data.sender_id !== <%= current_user.id %>) {
+        // Handle incoming message
+        messagesContainer.insertAdjacentHTML('beforeend', data.message);
+        scrollToBottom();
+      }
+    },
+    
+    speak: function(data) {
+      this.perform('speak', data);
+      
+      // Add message optimistically
+      const messageHtml = `
+        <div class="flex justify-end">
+          <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg bg-blue-600 text-white relative">
+            <p class="text-sm">${data.content}</p>
+            <div class="flex items-center justify-end mt-1 space-x-1">
+              <p class="text-xs text-blue-100">Just now</p>
+              <div class="text-blue-100 text-xs">
+                <i class="fas fa-check"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
+      scrollToBottom();
+    },
+    
+    startTyping: function() {
+      this.perform('start_typing');
+    },
+    
+    stopTyping: function() {
+      this.perform('stop_typing');
+    }
+  });
+  
+  // Initial scroll to bottom
+  scrollToBottom();
+});
+
+// Emoji picker functions
+function toggleEmojiPicker(show) {
+  const picker = document.getElementById('emoji-picker');
+  if (show === false) {
+    picker.classList.add('hidden');
+  } else {
+    picker.classList.toggle('hidden');
+  }
+}
+
+function insertEmoji(emoji) {
+  const input = document.getElementById('message-input');
+  const start = input.selectionStart;
+  const end = input.selectionEnd;
+  const text = input.value;
+  
+  input.value = text.substring(0, start) + emoji + text.substring(end);
+  input.focus();
+  input.setSelectionRange(start + emoji.length, start + emoji.length);
+  
+  // Trigger input event for auto-resize
+  input.dispatchEvent(new Event('input'));
+}
+
+// Close emoji picker when clicking outside
+document.addEventListener('click', function(e) {
+  const picker = document.getElementById('emoji-picker');
+  const button = e.target.closest('.fa-smile');
+  if (!picker.contains(e.target) && !button) {
+    picker.classList.add('hidden');
+  }
+});
+</script>

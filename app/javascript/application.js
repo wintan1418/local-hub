@@ -4,3 +4,4 @@ import "controllers"
 
 // Import and register all your controllers automatically
 // This is handled by the Stimulus loaders in controllers/index.js
+import "./channels"

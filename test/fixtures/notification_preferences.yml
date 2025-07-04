@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  sms_enabled: false
+  whatsapp_enabled: false
+  email_enabled: false
+  booking_reminders: false
+  marketing_messages: false
+  service_updates: false
+  quiet_hours_start: 2025-07-04 15:32:39
+  quiet_hours_end: 2025-07-04 15:32:39
+
+two:
+  user: two
+  sms_enabled: false
+  whatsapp_enabled: false
+  email_enabled: false
+  booking_reminders: false
+  marketing_messages: false
+  service_updates: false
+  quiet_hours_start: 2025-07-04 15:32:39
+  quiet_hours_end: 2025-07-04 15:32:39

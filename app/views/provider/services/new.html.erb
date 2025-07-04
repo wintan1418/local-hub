@@ -1,0 +1,43 @@
+<div class="max-w-2xl mx-auto mt-10 p-8 bg-white rounded shadow">
+  <h1 class="text-2xl font-bold mb-6 text-orange-600">Add New Service</h1>
+  <%= form_with model: [:provider, @service], local: true, class: "space-y-6" do |f| %>
+    <% if @service.errors.any? %>
+      <div class="bg-red-100 border border-red-300 text-red-700 rounded p-3 mb-2">
+        <h3 class="font-semibold mb-2">Please fix the following errors:</h3>
+        <ul class="list-disc pl-5">
+          <% @service.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div>
+      <%= f.label :title, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_field :title, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50", required: true %>
+    </div>
+    <div>
+      <%= f.label :description, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.text_area :description, rows: 4, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50", required: true %>
+    </div>
+    <div>
+      <%= f.label :category_id, 'Category', class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :category_id, options_from_collection_for_select(@categories, :id, :name, @service.category_id), { prompt: 'Select a category' }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50" %>
+    </div>
+    <div>
+      <%= f.label :price_type, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.select :price_type, Service.price_types.keys.map { |k| [k.titleize, k] }, { prompt: 'Select price type' }, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50" %>
+    </div>
+    <div>
+      <%= f.label :base_price, class: "block text-sm font-medium text-gray-700" %>
+      <%= f.number_field :base_price, min: 0, step: 1, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50", required: true %>
+    </div>
+    <div>
+      <%= f.label :images, 'Service Images', class: "block text-sm font-medium text-gray-700" %>
+      <%= f.file_field :images, multiple: true, direct_upload: true, class: "mt-1 block w-full rounded border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50" %>
+      <p class="text-xs text-gray-500 mt-1">You can upload multiple images. The cover will be picked randomly.</p>
+    </div>
+    <div>
+      <%= f.submit 'Create Service', class: "w-full py-2 px-4 bg-orange-600 text-white rounded-lg shadow hover:bg-orange-700 transition font-semibold" %>
+    </div>
+  <% end %>
+</div> 

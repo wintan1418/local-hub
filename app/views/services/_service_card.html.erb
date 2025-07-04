@@ -1,0 +1,43 @@
+<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+  <div class="relative h-48 bg-gray-200">
+    <% if service.images.attached? %>
+      <% cover = service.images.sample %>
+      <%= image_tag cover.variant(resize_to_fill: [400, 192]), class: "w-full h-full object-cover" %>
+      <% if service.images.size > 1 %>
+        <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+          <% service.images.each_with_index do |img, idx| %>
+            <span class="w-2 h-2 rounded-full <%= img == cover ? 'bg-orange-500' : 'bg-gray-300' %> inline-block"></span>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <% default_images = {
+        "Plumbing" => "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?q=80&w=800&auto=format&fit=crop",
+        "Electrical" => "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800&auto=format&fit=crop",
+        "Cleaning" => "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=800&auto=format&fit=crop",
+        "Painting" => "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop",
+        "Landscaping" => "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop",
+        "Moving" => "https://images.unsplash.com/photo-1600518464441-9154a4dea21b?q=80&w=800&auto=format&fit=crop",
+        "Carpentry" => "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=800&auto=format&fit=crop",
+        "HVAC" => "https://images.unsplash.com/photo-1621873495884-845a939892d7?q=80&w=800&auto=format&fit=crop"
+      } %>
+      <% category_name = service.category&.name || "General" %>
+      <% image_url = default_images[category_name] || "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop" %>
+      <img src="<%= image_url %>" alt="<%= service.title %>" class="w-full h-full object-cover">
+    <% end %>
+  </div>
+  <div class="p-6">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-lg font-bold text-orange-700">
+        $<%= number_to_currency(service.base_price, precision: 2) %>
+      </span>
+      <span class="text-xs bg-orange-100 text-orange-800 rounded px-2 py-1"><%= service.category.name %></span>
+    </div>
+    <h3 class="text-xl font-semibold mb-2 text-gray-900"><%= service.title %></h3>
+    <p class="text-gray-600 mb-4 line-clamp-2"><%= service.description %></p>
+    <div class="flex items-center justify-between">
+      <span class="text-sm text-gray-500"><%= service.provider.email %></span>
+      <%= link_to 'View Details', service_path(service), class: "ml-2 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 text-sm" %>
+    </div>
+  </div>
+</div> 
