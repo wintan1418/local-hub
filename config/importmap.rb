@@ -18,3 +18,5 @@ pin "@fortawesome/fontawesome-free", to: "https://cdnjs.cloudflare.com/ajax/libs
 # Flatpickr
 pin "flatpickr", to: "https://ga.jspm.io/npm:flatpickr@4.6.13/dist/esm/index.js", preload: true
 pin "flatpickr/dist/flatpickr.min.css", to: "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css"
+pin "@rails/actioncable", to: "actioncable.esm.js"
+pin_all_from "app/javascript/channels", under: "channels"

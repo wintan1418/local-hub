@@ -57,6 +57,9 @@
               <%= link_to 'Services', services_path, 
                         class: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200' %>
                         
+              <%= link_to 'Leaderboard', leaderboard_index_path, 
+                        class: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200' %>
+                        
               <%= link_to 'About', about_path, 
                         class: 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200' %>
             </div>
@@ -64,8 +67,8 @@
           <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
             <% if user_signed_in? %>
               <div class="flex items-center space-x-4">
-                <div class="relative" data-controller="dropdown">
-                  <button type="button" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" data-action="click->dropdown#toggle">
+                <div class="relative">
+                  <button type="button" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" onclick="toggleDropdown()">
                     <span class="sr-only">Open user menu</span>
                     <div class="h-8 w-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-medium">
                       <%= current_user.email.first.upcase %>
@@ -76,7 +79,7 @@
                     </svg>
                   </button>
                   
-                  <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden" data-dropdown-target="menu">
+                  <div id="user-dropdown" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50">
                     <div class="py-1">
                       <% case current_user.user_role %>
                       <% when "customer" %>
@@ -94,12 +97,24 @@
                         <%= link_to admin_dashboard_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
                           <i class="fas fa-cogs mr-2"></i>Admin Dashboard
                         <% end %>
+                      <% else %>
+                        <%= link_to customer_dashboard_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
+                          <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                        <% end %>
+                      <% end %>
+                      <%= link_to conversations_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
+                        <i class="fas fa-comments mr-2"></i>Messages
+                        <% if current_user.total_unread_messages > 0 %>
+                          <span class="bg-red-500 text-white text-xs font-medium px-1.5 py-0.5 rounded-full ml-1">
+                            <%= current_user.total_unread_messages %>
+                          </span>
+                        <% end %>
                       <% end %>
                       <div class="border-t border-gray-100"></div>
                       <%= link_to edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
                         <i class="fas fa-user-edit mr-2"></i>Edit Profile
                       <% end %>
-                      <%= link_to destroy_user_session_path, method: :delete, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
+                      <%= link_to destroy_user_session_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", data: { "turbo-method": :delete } do %>
                         <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
                       <% end %>
                     </div>
@@ -144,7 +159,11 @@
                     class: 'block pl-3 pr-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent hover:border-orange-500 transition-colors duration-200',
                     data: { action: 'click->mobile-menu#close', turbo: false } %>
                     
-          <%= link_to 'Services', root_path(anchor: 'services'), 
+          <%= link_to 'Services', services_path, 
+                    class: 'block pl-3 pr-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent hover:border-orange-500 transition-colors duration-200',
+                    data: { action: 'click->mobile-menu#close', turbo: false } %>
+                    
+          <%= link_to 'Leaderboard', leaderboard_index_path, 
                     class: 'block pl-3 pr-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent hover:border-orange-500 transition-colors duration-200',
                     data: { action: 'click->mobile-menu#close', turbo: false } %>
                     
@@ -279,5 +298,55 @@
         </div>
       </div>
     </footer>
+    
+    <script>
+      function toggleDropdown() {
+        const dropdown = document.getElementById('user-dropdown');
+        if (dropdown) {
+          dropdown.classList.toggle('hidden');
+        }
+      }
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(event) {
+        const dropdown = document.getElementById('user-dropdown');
+        const button = event.target.closest('button[onclick="toggleDropdown()"]');
+        
+        // If clicking outside dropdown and not on the toggle button
+        if (dropdown && !dropdown.contains(event.target) && !button) {
+          dropdown.classList.add('hidden');
+        }
+      });
+      
+      // Handle sign out with proper form submission
+      document.addEventListener('DOMContentLoaded', function() {
+        const signOutLink = document.querySelector('a[href*="sign_out"]');
+        if (signOutLink) {
+          signOutLink.addEventListener('click', function(event) {
+            event.preventDefault();
+            
+            // Create a form and submit it
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = this.href;
+            
+            const methodInput = document.createElement('input');
+            methodInput.type = 'hidden';
+            methodInput.name = '_method';
+            methodInput.value = 'delete';
+            form.appendChild(methodInput);
+            
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = 'authenticity_token';
+            tokenInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            form.appendChild(tokenInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+          });
+        }
+      });
+    </script>
   </body>
 </html>

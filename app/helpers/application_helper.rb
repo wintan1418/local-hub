@@ -72,4 +72,37 @@ module ApplicationHelper
     options[:class] += ' active' if current_page?(path)
     link_to name, path, options
   end
+
+  # Helper for subscription plan features
+  def default_features_for(plan)
+    case plan.name
+    when 'Free'
+      [
+        'List up to 1 service',
+        'Basic profile page',
+        'Accept bookings',
+        'Email support'
+      ]
+    when 'Professional'
+      [
+        'List up to 10 services',
+        'Advanced profile customization',
+        'Portfolio showcase',
+        'Verified provider badge',
+        'Priority support',
+        'Analytics dashboard'
+      ]
+    when 'Business'
+      [
+        'Unlimited services',
+        'Premium profile features',
+        'Featured listings',
+        'Advanced analytics',
+        'API access',
+        'Dedicated support'
+      ]
+    else
+      ['All features included']
+    end
+  end
 end

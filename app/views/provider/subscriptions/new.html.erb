@@ -1,0 +1,76 @@
+<div class="min-h-screen bg-gray-50 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">Choose Your Plan</h2>
+      <p class="mt-4 text-xl text-gray-600">Select the perfect plan for your business</p>
+    </div>
+
+    <div class="mt-12 space-y-4 sm:mt-16 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-6 lg:max-w-4xl lg:mx-auto xl:max-w-none xl:grid-cols-3">
+      <% @plans.each_with_index do |plan, index| %>
+        <div class="border <%= index == 1 ? 'border-blue-500' : 'border-gray-200' %> rounded-lg shadow-sm divide-y divide-gray-200">
+          <% if index == 1 %>
+            <div class="bg-blue-500 text-white text-center py-2 text-sm font-medium rounded-t-lg">
+              Most Popular
+            </div>
+          <% end %>
+          <div class="p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900"><%= plan.name %></h3>
+            <p class="mt-4 text-sm text-gray-500">
+              <%= case plan.name
+                  when 'Free'
+                    'Perfect for trying out the platform'
+                  when 'Professional'
+                    'Great for established service providers'
+                  when 'Business'
+                    'For businesses with multiple services'
+                  else
+                    'Everything you need to grow your business'
+                  end %>
+            </p>
+            <p class="mt-8">
+              <span class="text-4xl font-extrabold text-gray-900">
+                <% if plan.price == 0 %>
+                  Free
+                <% else %>
+                  $<%= plan.price.to_i %>
+                <% end %>
+              </span>
+              <% if plan.price > 0 %>
+                <span class="text-base font-medium text-gray-500">/<%= plan.billing_period %></span>
+              <% end %>
+            </p>
+            <% if plan.price > 0 %>
+              <p class="mt-2 text-sm text-gray-500">14-day free trial included</p>
+            <% end %>
+
+            <%= form_with(url: provider_subscriptions_path, method: :post, local: true) do |form| %>
+              <%= form.hidden_field :plan_id, value: plan.id %>
+              <%= form.submit "Get Started", 
+                  class: "mt-8 block w-full bg-blue-600 border border-blue-600 rounded-md py-2 text-sm font-semibold text-white text-center hover:bg-blue-700 cursor-pointer" %>
+            <% end %>
+          </div>
+          <div class="pt-6 pb-8 px-6">
+            <h4 class="text-xs font-medium text-gray-900 tracking-wide uppercase">What's included</h4>
+            <ul class="mt-6 space-y-4">
+              <% (plan.feature_list.presence || default_features_for(plan)).each do |feature| %>
+                <li class="flex space-x-3">
+                  <svg class="flex-shrink-0 h-5 w-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="text-sm text-gray-500"><%= feature %></span>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-10 text-center">
+      <p class="text-base text-gray-500">
+        Need help choosing? 
+        <a href="#" class="font-medium text-blue-600 hover:text-blue-500">Contact our sales team</a>
+      </p>
+    </div>
+  </div>
+</div>

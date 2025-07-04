@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  status: 1
+  plan_type: 1
+  stripe_subscription_id: MyString
+  stripe_customer_id: MyString
+  current_period_start: 2025-07-04 11:06:45
+  current_period_end: 2025-07-04 11:06:45
+  cancel_at_period_end: false
+
+two:
+  user: two
+  status: 1
+  plan_type: 1
+  stripe_subscription_id: MyString
+  stripe_customer_id: MyString
+  current_period_start: 2025-07-04 11:06:45
+  current_period_end: 2025-07-04 11:06:45
+  cancel_at_period_end: false

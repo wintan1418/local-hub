@@ -256,7 +256,7 @@
                             when 'provider' then 'bg-green-100 text-green-800'
                             when 'admin' then 'bg-orange-100 text-orange-800'
                             end %>">
-                        <%= user.user_role.titleize %>
+                        <%= user.user_role&.titleize || 'Unknown' %>
                       </span>
                     </p>
                   </div>

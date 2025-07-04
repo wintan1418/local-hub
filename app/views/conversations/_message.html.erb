@@ -1,0 +1,32 @@
+<% is_current_user = message.sender == current_user %>
+<div class="flex <%= is_current_user ? 'justify-end' : 'justify-start' %> mb-3">
+  <% unless is_current_user %>
+    <div class="flex-shrink-0 mr-3">
+      <% if message.sender.profile_picture.attached? %>
+        <%= image_tag message.sender.profile_picture, class: "h-8 w-8 rounded-full object-cover" %>
+      <% else %>
+        <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
+          <i class="fas fa-user text-gray-600 text-xs"></i>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg <%= is_current_user ? 'bg-blue-600 text-white rounded-br-sm' : 'bg-gray-200 text-gray-900 rounded-bl-sm' %> relative">
+    <p class="text-sm whitespace-pre-wrap"><%= message.content %></p>
+    <div class="flex items-center <%= is_current_user ? 'justify-end' : 'justify-start' %> mt-1 space-x-1">
+      <p class="text-xs <%= is_current_user ? 'text-blue-100' : 'text-gray-500' %>">
+        <%= message.created_at.strftime('%H:%M') %>
+      </p>
+      <% if is_current_user %>
+        <div class="text-blue-100 text-xs">
+          <% if message.read_at.present? %>
+            <i class="fas fa-check-double"></i>
+          <% else %>
+            <i class="fas fa-check"></i>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -36,7 +36,7 @@
         </div>
         <div class="mb-8">
           <%= f.label :user_role, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.select :user_role, options_for_select([["Select a role", ""]] + User.user_roles.keys.map { |r| [r.titleize, r] }), {}, class: "block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50" %>
+          <%= f.select :user_role, options_for_select(User.user_roles.keys.map { |r| [r.titleize, r] }), { prompt: "Select a role" }, { required: true, class: "block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50" } %>
           <p class="text-xs text-gray-500 mt-1">Choose your role: Customer, Provider, or Admin.</p>
         </div>
       </div>

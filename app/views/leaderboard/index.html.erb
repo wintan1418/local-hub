@@ -1,0 +1,182 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Hero Section -->
+  <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div class="text-center">
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Top Providers</h1>
+        <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+          Discover the highest-rated service providers in your area
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Filters -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+        <div class="flex flex-wrap gap-2">
+          <%= link_to leaderboard_index_path(filter: 'rating', category_id: params[:category_id]), 
+              class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{ @filter == 'rating' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }" do %>
+            <i class="fas fa-star mr-2"></i>Top Rated
+          <% end %>
+          <%= link_to leaderboard_index_path(filter: 'bookings', category_id: params[:category_id]), 
+              class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{ @filter == 'bookings' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }" do %>
+            <i class="fas fa-calendar-check mr-2"></i>Most Bookings
+          <% end %>
+          <%= link_to leaderboard_index_path(filter: 'revenue', category_id: params[:category_id]), 
+              class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{ @filter == 'revenue' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }" do %>
+            <i class="fas fa-dollar-sign mr-2"></i>Top Earning
+          <% end %>
+          <%= link_to leaderboard_index_path(filter: 'recent', category_id: params[:category_id]), 
+              class: "px-4 py-2 rounded-md text-sm font-medium transition-colors #{ @filter == 'recent' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }" do %>
+            <i class="fas fa-clock mr-2"></i>Most Active
+          <% end %>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="flex items-center space-x-3">
+          <label class="text-sm font-medium text-gray-700">Category:</label>
+          <%= form_with url: leaderboard_index_path, method: :get, local: true, class: "flex items-center space-x-2" do |form| %>
+            <%= form.hidden_field :filter, value: @filter %>
+            <%= form.collection_select :category_id, @categories, :id, :name, 
+                { prompt: "All Categories", selected: @category_id }, 
+                { class: "border-gray-300 rounded-md text-sm", onchange: "this.form.submit();" } %>
+          <% end %>
+          <% if @selected_category %>
+            <%= link_to leaderboard_index_path(filter: @filter), 
+                class: "text-red-600 hover:text-red-700 text-sm" do %>
+              <i class="fas fa-times"></i> Clear
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="space-y-4">
+      <% @providers.each_with_index do |provider, index| %>
+        <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6">
+          <div class="flex items-center space-x-6">
+            <!-- Rank -->
+            <div class="flex-shrink-0">
+              <div class="flex items-center justify-center w-12 h-12 rounded-full 
+                  <%= case index
+                      when 0 then 'bg-yellow-100 text-yellow-600'
+                      when 1 then 'bg-gray-100 text-gray-600'
+                      when 2 then 'bg-orange-100 text-orange-600'
+                      else 'bg-blue-100 text-blue-600'
+                      end %>">
+                <% if index < 3 %>
+                  <i class="fas fa-trophy text-xl"></i>
+                <% else %>
+                  <span class="text-lg font-bold">#<%= index + 1 %></span>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- Profile Picture -->
+            <div class="flex-shrink-0">
+              <% if provider.profile_picture.attached? %>
+                <%= image_tag provider.profile_picture, class: "h-16 w-16 rounded-full object-cover" %>
+              <% else %>
+                <div class="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center">
+                  <i class="fas fa-user text-gray-500 text-xl"></i>
+                </div>
+              <% end %>
+            </div>
+
+            <!-- Provider Info -->
+            <div class="flex-grow">
+              <div class="flex items-center space-x-3 mb-2">
+                <h3 class="text-xl font-semibold text-gray-900">
+                  <%= link_to leaderboard_path(provider), class: "hover:text-blue-600 transition-colors" do %>
+                    <%= provider.business_name || provider.full_name %>
+                  <% end %>
+                </h3>
+                
+                <!-- Badge -->
+                <% badge = provider.provider_badge %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                    bg-<%= badge[:color] %>-100 text-<%= badge[:color] %>-800">
+                  <i class="<%= badge[:icon] %> mr-1"></i>
+                  <%= badge[:name] %>
+                </span>
+
+                <!-- Verification -->
+                <% if provider.verified? %>
+                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <i class="fas fa-check-circle mr-1"></i>Verified
+                  </span>
+                <% end %>
+              </div>
+
+              <p class="text-gray-600 mb-3"><%= provider.bio&.truncate(120) %></p>
+
+              <!-- Stats -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div class="text-center">
+                  <div class="flex items-center justify-center mb-1">
+                    <i class="fas fa-star text-yellow-500 mr-1"></i>
+                    <span class="font-semibold text-gray-900">
+                      <%= provider.respond_to?(:avg_rating) ? provider.avg_rating&.round(1) || 0 : provider.average_rating %>
+                    </span>
+                  </div>
+                  <p class="text-gray-500">Rating</p>
+                </div>
+
+                <div class="text-center">
+                  <div class="font-semibold text-gray-900 mb-1">
+                    <%= provider.respond_to?(:completed_count) ? provider.completed_count : provider.total_completed_bookings %>
+                  </div>
+                  <p class="text-gray-500">Completed</p>
+                </div>
+
+                <div class="text-center">
+                  <div class="font-semibold text-gray-900 mb-1">
+                    <%= provider.total_reviews %>
+                  </div>
+                  <p class="text-gray-500">Reviews</p>
+                </div>
+
+                <div class="text-center">
+                  <div class="font-semibold text-gray-900 mb-1">
+                    <% if @filter == 'revenue' && provider.respond_to?(:total_revenue) %>
+                      $<%= number_with_delimiter(provider.total_revenue.to_i) %>
+                    <% else %>
+                      <%= provider.completion_rate %>%
+                    <% end %>
+                  </div>
+                  <p class="text-gray-500">
+                    <% if @filter == 'revenue' && provider.respond_to?(:total_revenue) %>
+                      Revenue
+                    <% else %>
+                      Success Rate
+                    <% end %>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- View Profile -->
+            <div class="flex-shrink-0">
+              <%= link_to leaderboard_path(provider), 
+                  class: "inline-flex items-center px-4 py-2 border border-blue-300 text-sm font-medium rounded-md text-blue-700 bg-blue-50 hover:bg-blue-100 transition-colors" do %>
+                View Profile
+                <i class="fas fa-arrow-right ml-2"></i>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <% if @providers.empty? %>
+        <div class="text-center py-12">
+          <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No providers found</h3>
+          <p class="text-gray-500">Try adjusting your filters or check back later</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

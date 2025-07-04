@@ -1,0 +1,251 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Provider Header -->
+  <div class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex items-center space-x-6">
+        <!-- Back Button -->
+        <div class="flex-shrink-0">
+          <%= link_to leaderboard_index_path, 
+              class: "inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50" do %>
+            <i class="fas fa-arrow-left mr-2"></i>Back to Leaderboard
+          <% end %>
+        </div>
+
+        <!-- Profile Picture -->
+        <div class="flex-shrink-0">
+          <% if @provider.profile_picture.attached? %>
+            <%= image_tag @provider.profile_picture, class: "h-24 w-24 rounded-full object-cover" %>
+          <% else %>
+            <div class="h-24 w-24 rounded-full bg-gray-300 flex items-center justify-center">
+              <i class="fas fa-user text-gray-500 text-2xl"></i>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Provider Info -->
+        <div class="flex-grow">
+          <div class="flex items-center space-x-4 mb-2">
+            <h1 class="text-3xl font-bold text-gray-900">
+              <%= @provider.business_name || @provider.full_name %>
+            </h1>
+            
+            <!-- Badge -->
+            <% badge = @provider.provider_badge %>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium 
+                bg-<%= badge[:color] %>-100 text-<%= badge[:color] %>-800">
+              <i class="<%= badge[:icon] %> mr-2"></i>
+              <%= badge[:name] %> Provider
+            </span>
+
+            <!-- Verification -->
+            <% if @provider.verified? %>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                <i class="fas fa-check-circle mr-2"></i>Verified
+              </span>
+            <% end %>
+          </div>
+
+          <p class="text-gray-600 mb-4"><%= @provider.bio %></p>
+
+          <!-- Contact Info -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-6 text-sm text-gray-500">
+              <div class="flex items-center">
+                <i class="fas fa-map-marker-alt mr-2"></i>
+                <%= @provider.complete_address %>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-calendar mr-2"></i>
+                <%= @provider.years_experience %> years experience
+              </div>
+            </div>
+            
+            <!-- Start Conversation Button -->
+            <% if user_signed_in? && current_user.customer? && current_user != @provider %>
+              <%= link_to conversations_path, 
+                  method: :post, 
+                  params: { user_id: @provider.id },
+                  class: "bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200" do %>
+                <i class="fas fa-comments mr-2"></i>Start Conversation
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-8">
+        <!-- Statistics -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Performance Statistics</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-blue-600 mb-2">
+                <%= @stats[:avg_rating] %>
+              </div>
+              <div class="flex justify-center mb-2">
+                <% 5.times do |i| %>
+                  <i class="fas fa-star <%= i < @stats[:avg_rating] ? 'text-yellow-400' : 'text-gray-300' %>"></i>
+                <% end %>
+              </div>
+              <p class="text-sm text-gray-500">Average Rating</p>
+            </div>
+
+            <div class="text-center">
+              <div class="text-3xl font-bold text-green-600 mb-2">
+                <%= @stats[:completed_bookings] %>
+              </div>
+              <p class="text-sm text-gray-500">Completed Jobs</p>
+            </div>
+
+            <div class="text-center">
+              <div class="text-3xl font-bold text-purple-600 mb-2">
+                <%= @stats[:total_reviews] %>
+              </div>
+              <p class="text-sm text-gray-500">Customer Reviews</p>
+            </div>
+
+            <div class="text-center">
+              <div class="text-3xl font-bold text-orange-600 mb-2">
+                <%= @stats[:completion_rate] %>%
+              </div>
+              <p class="text-sm text-gray-500">Success Rate</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Services Offered</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <% @services.each do |service| %>
+              <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-2">
+                  <h3 class="font-medium text-gray-900"><%= service.title %></h3>
+                  <span class="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                    <%= service.category.name %>
+                  </span>
+                </div>
+                <p class="text-sm text-gray-600 mb-3"><%= service.description.truncate(100) %></p>
+                <div class="flex justify-between items-center">
+                  <span class="text-lg font-semibold text-blue-600">
+                    $<%= service.base_price %>
+                    <span class="text-sm text-gray-500">/<%= service.price_type %></span>
+                  </span>
+                  <%= link_to service_path(service), 
+                      class: "text-sm text-blue-600 hover:text-blue-700 font-medium" do %>
+                    View Details <i class="fas fa-arrow-right ml-1"></i>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Recent Reviews -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-6">Recent Reviews</h2>
+          <div class="space-y-6">
+            <% @recent_reviews.each do |review| %>
+              <div class="border-b border-gray-200 pb-6 last:border-b-0 last:pb-0">
+                <div class="flex items-center space-x-3 mb-3">
+                  <div class="flex">
+                    <% 5.times do |i| %>
+                      <i class="fas fa-star <%= i < review.rating ? 'text-yellow-400' : 'text-gray-300' %>"></i>
+                    <% end %>
+                  </div>
+                  <span class="text-sm text-gray-500">
+                    <%= review.booking.customer.first_name %>
+                  </span>
+                  <span class="text-sm text-gray-400">•</span>
+                  <span class="text-sm text-gray-500">
+                    <%= review.created_at.strftime("%B %d, %Y") %>
+                  </span>
+                </div>
+                <p class="text-gray-700"><%= review.comment %></p>
+                <p class="text-sm text-gray-500 mt-2">
+                  Service: <%= review.booking.service.title %>
+                </p>
+              </div>
+            <% end %>
+
+            <% if @recent_reviews.empty? %>
+              <div class="text-center py-8">
+                <i class="fas fa-comment-alt text-3xl text-gray-400 mb-3"></i>
+                <p class="text-gray-500">No reviews yet</p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="space-y-6">
+        <!-- Portfolio -->
+        <% if @provider.portfolio_images.any? %>
+          <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Portfolio</h3>
+            <div class="grid grid-cols-2 gap-3">
+              <% @provider.portfolio_images.limit(6).each do |image| %>
+                <div class="aspect-square rounded-lg overflow-hidden">
+                  <%= image_tag image, class: "object-cover w-full h-full hover:scale-105 transition-transform" %>
+                </div>
+              <% end %>
+            </div>
+            <% if @provider.portfolio_images.count > 6 %>
+              <p class="text-sm text-gray-500 mt-3 text-center">
+                +<%= @provider.portfolio_images.count - 6 %> more photos
+              </p>
+            <% end %>
+          </div>
+        <% end %>
+
+        <!-- Contact -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+          <div class="space-y-3">
+            <div class="flex items-center">
+              <i class="fas fa-envelope text-gray-400 mr-3"></i>
+              <span class="text-gray-600">Contact via platform</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-map-marker-alt text-gray-400 mr-3"></i>
+              <span class="text-gray-600"><%= @provider.complete_address %></span>
+            </div>
+            <% if @provider.verified? %>
+              <div class="flex items-center">
+                <i class="fas fa-shield-alt text-green-500 mr-3"></i>
+                <span class="text-green-600">Background verified</span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="bg-white rounded-lg shadow p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-gray-600">Response Time</span>
+              <span class="text-gray-900 font-medium">< 2 hours</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Total Revenue</span>
+              <span class="text-gray-900 font-medium">$<%= number_with_delimiter(@stats[:total_revenue].to_i) %></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-600">Member Since</span>
+              <span class="text-gray-900 font-medium">
+                <%= @provider.created_at.strftime("%B %Y") %>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

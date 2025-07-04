@@ -180,3 +180,4 @@ db/*.sqlite3-*
 .env.development.local
 .env.test.local
 .env.production.local
+ENV_SETUP.md

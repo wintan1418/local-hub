@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  crm_campaign: one
+  user: one
+  status: MyString
+  sent_at: 2025-07-04 15:34:21
+  delivered_at: 2025-07-04 15:34:21
+  error_message: MyString
+
+two:
+  crm_campaign: two
+  user: two
+  status: MyString
+  sent_at: 2025-07-04 15:34:21
+  delivered_at: 2025-07-04 15:34:21
+  error_message: MyString

@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer: one
+  provider: one
+  status: 1
+
+two:
+  customer: two
+  provider: two
+  status: 1

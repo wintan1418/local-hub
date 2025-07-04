@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  phone: MyString
+  code: MyString
+  verified: false
+  verified_at: 2025-07-04 15:32:31
+  expires_at: 2025-07-04 15:32:31
+  attempts: 1
+
+two:
+  user: two
+  phone: MyString
+  code: MyString
+  verified: false
+  verified_at: 2025-07-04 15:32:31
+  expires_at: 2025-07-04 15:32:31
+  attempts: 1

@@ -67,6 +67,8 @@ gem "redis"
 gem "stripe"
 gem "geocoder"
 gem "administrate"
+gem "faker"
+gem "twilio-ruby"
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]

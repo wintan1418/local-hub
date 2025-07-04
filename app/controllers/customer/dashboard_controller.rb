@@ -23,7 +23,12 @@ module Customer
       @total_spent = @bookings.where(status: ['completed', 'confirmed']).sum(:total_price)
       @pending_count = @pending_bookings.count
       @this_month_bookings = @bookings.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month).count
-      @favorite_services = @bookings.joins(:service).group('services.id').count.sort_by(&:last).reverse.first(3)
+      @favorite_services = current_user.bookings
+                                      .joins(:service)
+                                      .group('services.id, services.title')
+                                      .order(Arel.sql('COUNT(*) DESC'))
+                                      .limit(3)
+                                      .count
     end
 
     private
