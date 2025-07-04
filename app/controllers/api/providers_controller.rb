@@ -1,9 +1,9 @@
 class Api::ProvidersController < ApplicationController
   before_action :authenticate_user!
-  
+
   def index
     @providers = User.provider.includes(:profile_picture_attachment)
-    
+
     if params[:search].present?
       search_term = "%#{params[:search]}%"
       @providers = @providers.where(
@@ -11,9 +11,9 @@ class Api::ProvidersController < ApplicationController
         search_term, search_term, search_term, search_term
       )
     end
-    
+
     @providers = @providers.limit(20)
-    
+
     render json: @providers.map { |provider|
       {
         id: provider.id,
@@ -22,8 +22,8 @@ class Api::ProvidersController < ApplicationController
         email: provider.email,
         average_rating: provider.average_rating,
         total_reviews: provider.total_reviews,
-        profile_picture_url: provider.profile_picture.attached? ? 
-          url_for(provider.profile_picture.variant(resize_to_fill: [100, 100])) : nil
+        profile_picture_url: provider.profile_picture.attached? ?
+          url_for(provider.profile_picture.variant(resize_to_fill: [ 100, 100 ])) : nil
       }
     }
   end

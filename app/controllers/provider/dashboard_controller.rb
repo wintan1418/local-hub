@@ -10,7 +10,7 @@ module Provider
       @pending_bookings = @bookings.where(status: 'pending')
       @confirmed_bookings = @bookings.where(status: 'confirmed')
       @completed_bookings = @bookings.where(status: 'completed')
-      
+
       # Dashboard stats
       @total_services = @services.count
       @total_bookings = @bookings.count
@@ -27,4 +27,4 @@ module Provider
       redirect_to root_path, alert: 'Access denied.' unless current_user&.user_role == 'provider'
     end
   end
-end 
+end

@@ -1,23 +1,23 @@
 class LeaderboardController < ApplicationController
   before_action :authenticate_user!
-  
+
   def index
     @filter = params[:filter] || 'rating'
     @category_id = params[:category_id]
-    
+
     # Get all providers with completed bookings
     base_scope = User.provider
                     .joins(services: { bookings: :review })
                     .where(bookings: { status: 'completed' })
                     .group('users.id')
                     .having('COUNT(reviews.id) >= 3') # At least 3 reviews
-    
+
     # Filter by category if specified
     if @category_id.present?
       base_scope = base_scope.where(services: { category_id: @category_id })
       @selected_category = Category.find(@category_id)
     end
-    
+
     # Apply sorting based on filter
     case @filter
     when 'rating'
@@ -37,10 +37,10 @@ class LeaderboardController < ApplicationController
                             .order('latest_booking DESC')
                             .limit(50)
     end
-    
+
     @categories = Category.joins(:services).distinct.order(:name)
   end
-  
+
   def show
     @provider = User.provider.find(params[:id])
     @services = @provider.services.includes(:category, :reviews)

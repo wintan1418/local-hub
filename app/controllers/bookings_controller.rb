@@ -39,4 +39,4 @@ class BookingsController < ApplicationController
   def ensure_customer!
     redirect_to root_path, alert: 'Access denied.' unless current_user&.user_role == 'customer'
   end
-end 
+end

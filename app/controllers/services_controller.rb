@@ -12,4 +12,4 @@ class ServicesController < ApplicationController
   def show
     @service = Service.includes(:provider, :category).find(params[:id])
   end
-end 
+end

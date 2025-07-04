@@ -131,7 +131,7 @@ providers = 40.times.map do |i|
   location = cities.sample
   first_name = Faker::Name.first_name
   last_name = Faker::Name.last_name
-  
+
   user = User.create!(
     email: "provider#{i+1}@example.com",
     password: 'password123',
@@ -140,7 +140,7 @@ providers = 40.times.map do |i|
     last_name: last_name,
     phone: Faker::Number.number(digits: 10).to_s,
     bio: Faker::Lorem.paragraph(sentence_count: 3),
-    business_name: "#{last_name}'s #{['Services', 'Solutions', 'Experts', 'Professionals'].sample}",
+    business_name: "#{last_name}'s #{[ 'Services', 'Solutions', 'Experts', 'Professionals' ].sample}",
     business_license: "LIC-#{Faker::Number.number(digits: 8)}",
     insurance_number: "INS-#{Faker::Number.number(digits: 10)}",
     years_experience: rand(1..20),
@@ -148,20 +148,20 @@ providers = 40.times.map do |i|
     city: location[:city],
     state: location[:state],
     zip_code: location[:zip],
-    verified: [true, true, true, false].sample, # 75% verified
-    verified_at: [true, true, true, false].sample ? rand(1..365).days.ago : nil
+    verified: [ true, true, true, false ].sample, # 75% verified
+    verified_at: [ true, true, true, false ].sample ? rand(1..365).days.ago : nil
   )
-  
+
   # Create subscription for provider
   plan = created_plans.sample
   Subscription.create!(
     user: user,
     plan: plan,
-    status: plan.price == 0 ? :active : [:active, :trialing].sample,
+    status: plan.price == 0 ? :active : [ :active, :trialing ].sample,
     current_period_start: 30.days.ago,
     current_period_end: plan.price == 0 ? 100.years.from_now : 30.days.from_now
   )
-  
+
   puts "  ✅ Created provider: #{user.email} with #{plan.name} plan"
   user
 end
@@ -183,36 +183,36 @@ end
 # Create Services for Providers
 puts "🛠️  Creating services..."
 service_names = {
-  'Home Cleaning' => ['Deep House Cleaning', 'Regular Weekly Cleaning', 'Move-in/Move-out Cleaning', 'Window Cleaning', 'Carpet Cleaning'],
-  'Plumbing' => ['Drain Cleaning', 'Pipe Repair', 'Water Heater Installation', 'Bathroom Remodeling', 'Emergency Plumbing'],
-  'Electrical' => ['Outlet Installation', 'Light Fixture Installation', 'Circuit Breaker Repair', 'Home Rewiring', 'Smart Home Setup'],
-  'Landscaping' => ['Lawn Mowing', 'Tree Trimming', 'Garden Design', 'Sprinkler Installation', 'Seasonal Cleanup'],
-  'Moving' => ['Local Moving', 'Long Distance Moving', 'Packing Services', 'Furniture Assembly', 'Storage Solutions'],
-  'Handyman' => ['Furniture Assembly', 'TV Mounting', 'Shelving Installation', 'Door Repair', 'General Repairs'],
-  'Painting' => ['Interior Painting', 'Exterior Painting', 'Cabinet Painting', 'Deck Staining', 'Wallpaper Removal'],
-  'Pet Care' => ['Dog Walking', 'Pet Sitting', 'Pet Grooming', 'Pet Training', 'Veterinary Transport'],
-  'Tutoring' => ['Math Tutoring', 'Science Tutoring', 'Language Tutoring', 'Test Prep', 'College Counseling'],
-  'Personal Training' => ['Weight Loss Training', 'Strength Training', 'Yoga Classes', 'Nutrition Coaching', 'Group Fitness']
+  'Home Cleaning' => [ 'Deep House Cleaning', 'Regular Weekly Cleaning', 'Move-in/Move-out Cleaning', 'Window Cleaning', 'Carpet Cleaning' ],
+  'Plumbing' => [ 'Drain Cleaning', 'Pipe Repair', 'Water Heater Installation', 'Bathroom Remodeling', 'Emergency Plumbing' ],
+  'Electrical' => [ 'Outlet Installation', 'Light Fixture Installation', 'Circuit Breaker Repair', 'Home Rewiring', 'Smart Home Setup' ],
+  'Landscaping' => [ 'Lawn Mowing', 'Tree Trimming', 'Garden Design', 'Sprinkler Installation', 'Seasonal Cleanup' ],
+  'Moving' => [ 'Local Moving', 'Long Distance Moving', 'Packing Services', 'Furniture Assembly', 'Storage Solutions' ],
+  'Handyman' => [ 'Furniture Assembly', 'TV Mounting', 'Shelving Installation', 'Door Repair', 'General Repairs' ],
+  'Painting' => [ 'Interior Painting', 'Exterior Painting', 'Cabinet Painting', 'Deck Staining', 'Wallpaper Removal' ],
+  'Pet Care' => [ 'Dog Walking', 'Pet Sitting', 'Pet Grooming', 'Pet Training', 'Veterinary Transport' ],
+  'Tutoring' => [ 'Math Tutoring', 'Science Tutoring', 'Language Tutoring', 'Test Prep', 'College Counseling' ],
+  'Personal Training' => [ 'Weight Loss Training', 'Strength Training', 'Yoga Classes', 'Nutrition Coaching', 'Group Fitness' ]
 }
 
 providers.each do |provider|
   # Each provider gets 1-5 services
   num_services = provider.subscription.plan.name == 'Free' ? 1 : rand(1..5)
   categories_to_use = created_categories.sample(rand(1..2))
-  
+
   num_services.times do
     category = categories_to_use.sample
     service_name = service_names[category.name].sample
-    
+
     service = Service.create!(
       provider: provider,
       category: category,
       title: service_name,
       description: Faker::Lorem.paragraph(sentence_count: 5),
-      price_type: ['hourly', 'fixed', 'custom'].sample,
+      price_type: [ 'hourly', 'fixed', 'custom' ].sample,
       base_price: rand(25..500)
     )
-    
+
     # Create availabilities
     5.times do |day|
       Availability.create!(
@@ -222,7 +222,7 @@ providers.each do |provider|
         end_time: "17:00"
       )
     end
-    
+
     # Create service areas
     ServiceArea.create!(
       service: service,
@@ -231,7 +231,7 @@ providers.each do |provider|
       zip: provider.zip_code,
       radius: rand(5..50)
     )
-    
+
     puts "  ✅ Created service: #{service.title} for #{provider.business_name}"
   end
 end
@@ -244,11 +244,11 @@ Service.all.each do |service|
     customer = customers.sample
     scheduled_date = rand(90.days.ago..30.days.from_now)
     status = if scheduled_date < Time.current
-               ['completed', 'completed', 'completed', 'cancelled'].sample
-             else
-               ['pending', 'confirmed'].sample
-             end
-    
+               [ 'completed', 'completed', 'completed', 'cancelled' ].sample
+    else
+               [ 'pending', 'confirmed' ].sample
+    end
+
     booking = Booking.create!(
       customer: customer,
       service: service,
@@ -256,9 +256,9 @@ Service.all.each do |service|
       status: status,
       total_price: service.base_price * rand(1..4)
     )
-    
+
     # Create review for completed bookings
-    if booking.status == 'completed' && [true, true, false].sample
+    if booking.status == 'completed' && [ true, true, false ].sample
       Review.create!(
         booking: booking,
         rating: rand(3..5),

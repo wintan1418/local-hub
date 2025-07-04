@@ -1,7 +1,7 @@
 class Provider::SubscriptionsController < ApplicationController
   before_action :authenticate_user!
   before_action :ensure_provider
-  before_action :check_existing_subscription, only: [:new, :create]
+  before_action :check_existing_subscription, only: [ :new, :create ]
 
   def index
     @subscription = current_user.subscription
@@ -15,7 +15,7 @@ class Provider::SubscriptionsController < ApplicationController
 
   def create
     @plan = Plan.find(params[:plan_id])
-    
+
     if @plan.price == 0
       # Handle free plan locally
       @subscription = current_user.subscriptions.build(
@@ -24,7 +24,7 @@ class Provider::SubscriptionsController < ApplicationController
         current_period_start: Time.current,
         current_period_end: 100.years.from_now
       )
-      
+
       if @subscription.save
         redirect_to provider_dashboard_path, notice: 'Free subscription activated successfully!'
       else
@@ -34,7 +34,7 @@ class Provider::SubscriptionsController < ApplicationController
     else
       # Handle paid plans with Stripe
       result = StripeService.create_subscription(current_user, @plan, params[:payment_method_id])
-      
+
       if result && result[:subscription]
         if result[:client_secret]
           # Payment required - redirect to confirmation page
@@ -56,7 +56,7 @@ class Provider::SubscriptionsController < ApplicationController
 
   def cancel
     @subscription = current_user.subscription
-    
+
     if @subscription && StripeService.cancel_subscription(@subscription)
       redirect_to provider_subscriptions_path, notice: 'Subscription will be canceled at the end of the billing period.'
     else

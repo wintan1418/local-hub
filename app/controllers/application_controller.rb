@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:user_role])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :user_role ])
     devise_parameter_sanitizer.permit(:account_update, keys: [
       :user_role, :first_name, :last_name, :phone, :bio,
       :business_name, :business_license, :insurance_number,
@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
     if !resource.profile_complete? && (resource.first_name.blank? || resource.last_name.blank?)
       return onboarding_welcome_path
     end
-    
+
     case resource.user_role
     when "customer"
       customer_dashboard_path

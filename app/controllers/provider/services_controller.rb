@@ -2,8 +2,8 @@ module Provider
   class ServicesController < ApplicationController
     before_action :authenticate_user!
     before_action :ensure_provider!
-    before_action :check_subscription!, only: [:new, :create]
-    before_action :set_service, only: [:edit, :update, :destroy]
+    before_action :check_subscription!, only: [ :new, :create ]
+    before_action :set_service, only: [ :edit, :update, :destroy ]
 
     def new
       @service = current_user.services.build
@@ -51,11 +51,11 @@ module Provider
     def ensure_provider!
       redirect_to root_path, alert: 'Access denied.' unless current_user&.user_role == 'provider'
     end
-    
+
     def check_subscription!
       unless current_user.has_active_subscription?
         redirect_to new_provider_subscription_path, alert: 'You need an active subscription to create services.'
       end
     end
   end
-end 
+end

@@ -8,7 +8,7 @@ class StripeService
         user_role: user.user_role
       }
     })
-    
+
     user.update(stripe_customer_id: customer.id)
     customer
   rescue Stripe::StripeError => e
@@ -18,18 +18,18 @@ class StripeService
 
   def self.create_subscription(user, plan, payment_method_id = nil)
     # Ensure user has a Stripe customer ID
-    stripe_customer = user.stripe_customer_id.present? ? 
-                      Stripe::Customer.retrieve(user.stripe_customer_id) : 
+    stripe_customer = user.stripe_customer_id.present? ?
+                      Stripe::Customer.retrieve(user.stripe_customer_id) :
                       create_customer(user)
-    
+
     return nil unless stripe_customer
 
     subscription_params = {
       customer: stripe_customer.id,
-      items: [{ price: plan.stripe_price_id }],
+      items: [ { price: plan.stripe_price_id } ],
       payment_behavior: 'default_incomplete',
       payment_settings: { save_default_payment_method: 'on_subscription' },
-      expand: ['latest_invoice.payment_intent'],
+      expand: [ 'latest_invoice.payment_intent' ],
       metadata: {
         user_id: user.id,
         plan_id: plan.id
@@ -49,7 +49,7 @@ class StripeService
     end
 
     stripe_subscription = Stripe::Subscription.create(subscription_params)
-    
+
     # Create local subscription record
     local_subscription = user.subscriptions.create!(
       plan: plan,

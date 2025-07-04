@@ -11,7 +11,7 @@ class CreatePlans < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    
+
     add_index :plans, :stripe_price_id, unique: true
     add_index :plans, :active
   end

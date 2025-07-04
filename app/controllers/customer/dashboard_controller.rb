@@ -17,10 +17,10 @@ module Customer
       @past_bookings = @bookings.where('scheduled_at < ?', Time.current).limit(5)
       @pending_bookings = @bookings.where(status: 'pending')
       @confirmed_bookings = @bookings.where(status: 'confirmed')
-      
+
       # Customer stats
       @total_bookings = @bookings.count
-      @total_spent = @bookings.where(status: ['completed', 'confirmed']).sum(:total_price)
+      @total_spent = @bookings.where(status: [ 'completed', 'confirmed' ]).sum(:total_price)
       @pending_count = @pending_bookings.count
       @this_month_bookings = @bookings.where(created_at: Time.current.beginning_of_month..Time.current.end_of_month).count
       @favorite_services = current_user.bookings
@@ -37,4 +37,4 @@ module Customer
       redirect_to root_path, alert: 'Access denied.' unless current_user&.user_role == 'customer'
     end
   end
-end 
+end

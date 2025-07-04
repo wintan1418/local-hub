@@ -10,8 +10,8 @@ class CreateConversations < ActiveRecord::Migration[8.0]
 
       t.timestamps
     end
-    
-    add_index :conversations, [:customer_id, :provider_id], unique: true
+
+    add_index :conversations, [ :customer_id, :provider_id ], unique: true
     add_index :conversations, :last_message_at
   end
 end

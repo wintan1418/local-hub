@@ -102,7 +102,7 @@ module ApplicationHelper
         'Dedicated support'
       ]
     else
-      ['All features included']
+      [ 'All features included' ]
     end
   end
 end

@@ -12,7 +12,7 @@ class Provider::ProfilesController < ApplicationController
 
   def update
     @user = current_user
-    
+
     if @user.update(profile_params)
       redirect_to provider_profile_path, notice: 'Profile updated successfully.'
     else
@@ -27,7 +27,7 @@ class Provider::ProfilesController < ApplicationController
 
   def upload_documents
     @user = current_user
-    
+
     if params[:verification_documents].present?
       params[:verification_documents].each do |document|
         @user.verification_documents.attach(document)
@@ -45,7 +45,7 @@ class Provider::ProfilesController < ApplicationController
 
   def upload_portfolio
     @user = current_user
-    
+
     if params[:portfolio_images].present?
       params[:portfolio_images].each do |image|
         @user.portfolio_images.attach(image)

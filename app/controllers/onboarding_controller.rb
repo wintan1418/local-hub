@@ -8,7 +8,7 @@ class OnboardingController < ApplicationController
 
   def update_profile
     @user = current_user
-    
+
     if @user.update(onboarding_params)
       if @user.provider?
         redirect_to provider_profile_path, notice: 'Welcome! Your profile has been created.'

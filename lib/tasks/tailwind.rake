@@ -13,4 +13,4 @@ namespace :tailwind do
 end
 
 # Hook into assets:precompile to ensure Tailwind CSS is built
-Rake::Task['assets:precompile'].enhance(['tailwind:build'])
+Rake::Task['assets:precompile'].enhance([ 'tailwind:build' ])
