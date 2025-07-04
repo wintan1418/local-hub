@@ -77,9 +77,6 @@
 </div>
 
 <script>
-// Set current user ID for ActionCable
-window.currentUserId = <%= current_user.id %>;
-
 document.addEventListener('DOMContentLoaded', function() {
   const messagesContainer = document.getElementById('messages-container');
   const messageForm = document.getElementById('message-form');
@@ -87,26 +84,62 @@ document.addEventListener('DOMContentLoaded', function() {
   const typingIndicator = document.getElementById('typing-indicator');
   let typingTimer;
   let isTyping = false;
-  
-  // Wait for App to be available
-  function initializeChat() {
-    if (typeof window.App === 'undefined' || typeof window.App.ConversationChannel === 'undefined') {
-      setTimeout(initializeChat, 100);
-      return;
-    }
-    
-    // Initialize ActionCable subscription
-    window.App.conversation = window.App.ConversationChannel.subscribe(<%= @conversation.id %>);
-    
-    // Initial scroll to bottom
-    scrollToBottom();
-  }
+  let conversation;
   
   // Scroll to bottom of messages
   function scrollToBottom() {
     if (messagesContainer) {
       messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
+  }
+  
+  // Wait for ActionCable to be available and initialize
+  function initializeChat() {
+    if (typeof window.App === 'undefined' || typeof window.App.cable === 'undefined') {
+      setTimeout(initializeChat, 100);
+      return;
+    }
+    
+    // Create ActionCable subscription directly
+    conversation = window.App.cable.subscriptions.create({
+      channel: "ConversationChannel",
+      conversation_id: <%= @conversation.id %>
+    }, {
+      received: function(data) {
+        if (data.typing !== undefined) {
+          // Handle typing indicator
+          const typingUser = document.getElementById('typing-user');
+          
+          if (data.typing && data.sender_id !== <%= current_user.id %>) {
+            if (typingUser) typingUser.textContent = data.sender_name;
+            if (typingIndicator) typingIndicator.classList.remove('hidden');
+          } else if (!data.typing) {
+            if (typingIndicator) typingIndicator.classList.add('hidden');
+          }
+        } else if (data.sender_id !== <%= current_user.id %>) {
+          // Handle incoming message
+          if (messagesContainer) {
+            messagesContainer.insertAdjacentHTML('beforeend', data.message);
+            scrollToBottom();
+          }
+        }
+      },
+      
+      speak: function(messageData) {
+        this.perform('speak', messageData);
+      },
+      
+      startTyping: function() {
+        this.perform('start_typing');
+      },
+      
+      stopTyping: function() {
+        this.perform('stop_typing');
+      }
+    });
+    
+    // Initial scroll to bottom
+    scrollToBottom();
   }
   
   // Auto-resize textarea
@@ -116,16 +149,16 @@ document.addEventListener('DOMContentLoaded', function() {
       this.style.height = Math.min(this.scrollHeight, 120) + 'px';
       
       // Handle typing indicator
-      if (this.value.trim() && !isTyping && window.App && window.App.conversation) {
+      if (this.value.trim() && !isTyping && conversation) {
         isTyping = true;
-        window.App.conversation.startTyping();
+        conversation.startTyping();
       }
       
       clearTimeout(typingTimer);
       typingTimer = setTimeout(() => {
-        if (isTyping && window.App && window.App.conversation) {
+        if (isTyping && conversation) {
           isTyping = false;
-          window.App.conversation.stopTyping();
+          conversation.stopTyping();
         }
       }, 1000);
     });
@@ -147,16 +180,33 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       
       const content = messageInput.value.trim();
-      if (!content || !window.App || !window.App.conversation) return;
+      if (!content || !conversation) return;
       
       // Stop typing indicator
       if (isTyping) {
         isTyping = false;
-        window.App.conversation.stopTyping();
+        conversation.stopTyping();
       }
       
+      // Add message optimistically
+      const messageHtml = `
+        <div class="flex justify-end mb-3">
+          <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg bg-blue-600 text-white rounded-br-sm relative">
+            <p class="text-sm whitespace-pre-wrap">${content}</p>
+            <div class="flex items-center justify-end mt-1 space-x-1">
+              <p class="text-xs text-blue-100">Just now</p>
+              <div class="text-blue-100 text-xs">
+                <i class="fas fa-check"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
+      scrollToBottom();
+      
       // Send via ActionCable
-      window.App.conversation.speak({
+      conversation.speak({
         content: content,
         conversation_id: <%= @conversation.id %>
       });
