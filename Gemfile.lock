@@ -501,7 +501,7 @@ DEPENDENCIES
   solid_queue
   stimulus-rails
   stripe
-  tailwindcss-rails
+  tailwindcss-rails (~> 4.2.0)
   thruster
   turbo-rails
   twilio-ruby

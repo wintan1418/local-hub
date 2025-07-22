@@ -10,6 +10,7 @@ bundle install
 
 echo "🎨 Precompiling assets..."
 bundle exec rails assets:precompile
+bundle exec rails assets:clean
 
 echo "🗄️ Running database migrations..."
 bundle exec rails db:create db:migrate
