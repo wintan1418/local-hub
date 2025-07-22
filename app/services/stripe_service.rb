@@ -42,12 +42,12 @@ class StripeService
     # Create Stripe Checkout session
     session = Stripe::Checkout::Session.create({
       customer: stripe_customer.id,
-      payment_method_types: [ 'card' ],
+      payment_method_types: [ "card" ],
       line_items: [ {
         price: plan.stripe_price_id,
         quantity: 1
       } ],
-      mode: 'subscription',
+      mode: "subscription",
       success_url: "#{Rails.application.routes.url_helpers.payment_success_provider_subscriptions_url}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: Rails.application.routes.url_helpers.new_provider_subscription_url,
       metadata: {

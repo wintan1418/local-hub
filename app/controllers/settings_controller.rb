@@ -11,7 +11,7 @@ class SettingsController < ApplicationController
     @user = current_user
 
     if @user.update(user_params)
-      redirect_to settings_path, notice: 'Profile updated successfully!'
+      redirect_to settings_path, notice: "Profile updated successfully!"
     else
       @notification_preference = @notification_preference
       render :index, status: :unprocessable_entity
@@ -20,7 +20,7 @@ class SettingsController < ApplicationController
 
   def update_notifications
     if @notification_preference.update(notification_params)
-      redirect_to settings_path, notice: 'Notification preferences updated successfully!'
+      redirect_to settings_path, notice: "Notification preferences updated successfully!"
     else
       @user = current_user
       render :index, status: :unprocessable_entity
@@ -32,7 +32,7 @@ class SettingsController < ApplicationController
 
     if @user.update_with_password(password_params)
       bypass_sign_in(@user)
-      redirect_to settings_path, notice: 'Password updated successfully!'
+      redirect_to settings_path, notice: "Password updated successfully!"
     else
       @notification_preference = @notification_preference
       render :index, status: :unprocessable_entity
@@ -44,10 +44,10 @@ class SettingsController < ApplicationController
 
     if @user.valid_password?(params[:password])
       @user.destroy
-      redirect_to root_path, notice: 'Your account has been deleted successfully.'
+      redirect_to root_path, notice: "Your account has been deleted successfully."
     else
       @notification_preference = @notification_preference
-      flash.now[:alert] = 'Incorrect password. Please try again.'
+      flash.now[:alert] = "Incorrect password. Please try again."
       render :index, status: :unprocessable_entity
     end
   end
