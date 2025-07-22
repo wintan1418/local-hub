@@ -51,8 +51,5 @@ module.exports = {
   // Disable modern features that might cause issues
   future: {
     hoverOnlyWhenSupported: false,
-  },
-  experimental: {
-    optimizeUniversalDefaults: false
   }
 }
