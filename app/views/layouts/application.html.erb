@@ -27,19 +27,23 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
     <!-- JavaScript -->
     <%= javascript_importmap_tags %>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Custom head content -->
     <%= yield(:head) if content_for?(:head) %>
   </head>
 
-  <body class="bg-gradient-to-br from-orange-50 to-white min-h-screen font-sans antialiased text-gray-800" data-controller="smooth-scroll">
+  <body class="bg-gradient-to-br from-orange-50 to-white min-h-screen font-sans antialiased text-gray-800" data-controller="smooth-scroll" style="font-family: 'Inter', 'Poppins', sans-serif;">
     <!-- Navigation -->
     <nav class="bg-white shadow-sm sticky top-0 z-50" data-controller="mobile-menu" data-mobile-menu-open-class="mobile-menu-open">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -110,9 +114,17 @@
                           </span>
                         <% end %>
                       <% end %>
+                      <%= link_to notifications_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
+                        <i class="fas fa-bell mr-2"></i>Notifications
+                        <% if current_user.unread_notifications_count > 0 %>
+                          <span class="bg-red-500 text-white text-xs font-medium px-1.5 py-0.5 rounded-full ml-1">
+                            <%= current_user.unread_notifications_count %>
+                          </span>
+                        <% end %>
+                      <% end %>
                       <div class="border-t border-gray-100"></div>
-                      <%= link_to edit_user_registration_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                        <i class="fas fa-user-edit mr-2"></i>Edit Profile
+                      <%= link_to settings_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
+                        <i class="fas fa-cog mr-2"></i>Settings
                       <% end %>
                       <%= link_to destroy_user_session_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", data: { "turbo-method": :delete } do %>
                         <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
@@ -190,30 +202,34 @@
       </div>
     </nav>
 
-    <!-- Flash Messages -->
+    <!-- Enhanced Flash Messages -->
     <% if notice %>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-        <div class="rounded-md bg-orange-50 p-4" data-controller="dismissable">
-          <div class="flex">
+      <div class="fixed top-4 right-4 z-50 max-w-md" id="notice-flash">
+        <div class="bg-white border border-green-200 rounded-xl shadow-2xl p-4 transform transition-all duration-500 translate-x-0 opacity-100">
+          <div class="flex items-start">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-orange-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-              </svg>
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
             </div>
-            <div class="ml-3">
-              <p class="text-sm text-orange-700">
+            <div class="ml-3 flex-1">
+              <p class="text-sm font-medium text-gray-900">Success!</p>
+              <p class="text-sm text-gray-700 mt-1">
                 <%= notice %>
               </p>
             </div>
-            <div class="ml-auto pl-3">
-              <div class="-mx-1.5 -my-1.5">
-                <button type="button" data-action="dismissable#dismiss" class="inline-flex bg-orange-50 rounded-md p-1.5 text-orange-500 hover:bg-orange-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500">
-                  <span class="sr-only">Dismiss</span>
-                  <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
+            <button type="button" onclick="dismissFlash('notice-flash')" class="ml-4 flex-shrink-0 bg-white rounded-md text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+              <span class="sr-only">Dismiss</span>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="mt-2">
+            <div class="bg-green-200 h-1 rounded-full overflow-hidden">
+              <div class="bg-green-500 h-full rounded-full animate-progress"></div>
             </div>
           </div>
         </div>
@@ -221,28 +237,32 @@
     <% end %>
     
     <% if alert %>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
-        <div class="rounded-md bg-red-50 p-4" data-controller="dismissable">
-          <div class="flex">
+      <div class="fixed top-4 right-4 z-50 max-w-md" id="alert-flash">
+        <div class="bg-white border border-red-200 rounded-xl shadow-2xl p-4 transform transition-all duration-500 translate-x-0 opacity-100">
+          <div class="flex items-start">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-              </svg>
+              <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
             </div>
-            <div class="ml-3">
-              <p class="text-sm text-red-700">
+            <div class="ml-3 flex-1">
+              <p class="text-sm font-medium text-gray-900">Error!</p>
+              <p class="text-sm text-gray-700 mt-1">
                 <%= alert %>
               </p>
             </div>
-            <div class="ml-auto pl-3">
-              <div class="-mx-1.5 -my-1.5">
-                <button type="button" data-action="dismissable#dismiss" class="inline-flex bg-red-50 rounded-md p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                  <span class="sr-only">Dismiss</span>
-                  <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </button>
-              </div>
+            <button type="button" onclick="dismissFlash('alert-flash')" class="ml-4 flex-shrink-0 bg-white rounded-md text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+              <span class="sr-only">Dismiss</span>
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="mt-2">
+            <div class="bg-red-200 h-1 rounded-full overflow-hidden">
+              <div class="bg-red-500 h-full rounded-full animate-progress"></div>
             </div>
           </div>
         </div>
@@ -347,6 +367,46 @@
           });
         }
       });
+      
+      // Initialize AOS
+      AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100
+      });
+
+      // Flash message functions
+      function dismissFlash(id) {
+        const flash = document.getElementById(id);
+        if (flash) {
+          flash.style.transform = 'translateX(100%)';
+          flash.style.opacity = '0';
+          setTimeout(() => flash.remove(), 300);
+        }
+      }
+
+      // Auto-dismiss flash messages
+      document.addEventListener('DOMContentLoaded', function() {
+        const flashes = ['notice-flash', 'alert-flash'];
+        flashes.forEach(id => {
+          const flash = document.getElementById(id);
+          if (flash) {
+            setTimeout(() => dismissFlash(id), 5000); // Auto-dismiss after 5 seconds
+          }
+        });
+      });
     </script>
+    
+    <style>
+      @keyframes progress {
+        0% { width: 0%; }
+        100% { width: 100%; }
+      }
+      
+      .animate-progress {
+        animation: progress 5s linear forwards;
+      }
+    </style>
   </body>
 </html>

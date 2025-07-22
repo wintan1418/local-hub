@@ -16,42 +16,27 @@ class Provider::SubscriptionsController < ApplicationController
   def create
     @plan = Plan.find(params[:plan_id])
 
-    if @plan.price == 0
-      # Handle free plan locally
-      @subscription = current_user.subscriptions.build(
-        plan: @plan,
-        status: :active,
-        current_period_start: Time.current,
-        current_period_end: 100.years.from_now
-      )
+    # Use StripeService for all plan types (it handles free plans internally)
+    result = StripeService.create_checkout_session(current_user, @plan)
 
-      if @subscription.save
+    if result
+      if result[:checkout_url]
+        # Redirect to Stripe Checkout for paid plans
+        redirect_to result[:checkout_url], allow_other_host: true
+      elsif result[:subscription]
+        # Free plan activated
         redirect_to provider_dashboard_path, notice: "Free subscription activated successfully!"
-      else
-        @plans = Plan.active.ordered
-        render :new, status: :unprocessable_entity
       end
     else
-      # Handle paid plans with Stripe
-      result = StripeService.create_subscription(current_user, @plan, params[:payment_method_id])
-
-      if result && result[:subscription]
-        if result[:client_secret]
-          # Payment required - redirect to confirmation page
-          redirect_to confirm_payment_provider_subscriptions_path(
-            subscription_id: result[:subscription].id,
-            client_secret: result[:client_secret]
-          )
-        else
-          # Trial started successfully
-          redirect_to provider_dashboard_path, notice: "Subscription created successfully! Your 14-day trial has started."
-        end
-      else
-        @plans = Plan.active.ordered
-        flash.now[:alert] = "Failed to create subscription. Please try again."
-        render :new, status: :unprocessable_entity
-      end
+      @plans = Plan.active.ordered
+      flash.now[:alert] = "Failed to create subscription. Please try again."
+      render :new, status: :unprocessable_entity
     end
+  rescue => e
+    Rails.logger.error "Subscription Creation Error: #{e.message}"
+    @plans = Plan.active.ordered
+    flash.now[:alert] = "Failed to create subscription. Please try again."
+    render :new, status: :unprocessable_entity
   end
 
   def cancel
@@ -70,9 +55,48 @@ class Provider::SubscriptionsController < ApplicationController
     @publishable_key = Rails.application.config.stripe[:publishable_key]
   end
 
+  def success
+    @subscription = current_user.subscriptions.find(params[:subscription_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to provider_subscriptions_path, alert: "Subscription not found."
+  end
+
   def payment_success
-    @subscription = Subscription.find(params[:subscription_id])
-    redirect_to provider_dashboard_path, notice: "Payment successful! Your subscription is now active."
+    session_id = params[:session_id]
+    
+    if session_id
+      # Retrieve the checkout session from Stripe
+      session = Stripe::Checkout::Session.retrieve(session_id)
+      
+      # Check if subscription was actually created
+      if session.subscription
+        subscription = Stripe::Subscription.retrieve(session.subscription)
+        
+        # Find the plan and user from metadata
+        plan = Plan.find(session.metadata.plan_id)
+        user = User.find(session.metadata.user_id)
+        
+        # Create local subscription record
+        local_subscription = user.subscriptions.create!(
+          plan: plan,
+          stripe_subscription_id: subscription.id,
+          stripe_customer_id: session.customer,
+          status: subscription.status&.to_sym || :active,
+          current_period_start: Time.current,
+          current_period_end: 1.month.from_now
+        )
+        
+        redirect_to success_provider_subscriptions_path(subscription_id: local_subscription.id)
+      else
+        Rails.logger.error "No subscription found in session: #{session_id}"
+        redirect_to provider_subscriptions_path, alert: "No subscription was created. Please try again."
+      end
+    else
+      redirect_to provider_subscriptions_path, alert: "Invalid payment session."
+    end
+  rescue => e
+    Rails.logger.error "Payment Success Error: #{e.message}"
+    redirect_to provider_subscriptions_path, alert: "There was an error processing your payment. Please contact support."
   end
 
   private

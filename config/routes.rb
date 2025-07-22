@@ -47,6 +47,7 @@ Rails.application.routes.draw do
         post :cancel
         get :confirm_payment
         get :payment_success
+        get :success
       end
     end
 
@@ -82,6 +83,23 @@ Rails.application.routes.draw do
   resources :conversations, only: [ :index, :show, :create ] do
     member do
       post :create_message
+    end
+  end
+
+  # Settings
+  get "settings", to: "settings#index", as: :settings
+  patch "settings/profile", to: "settings#update_profile", as: :settings_profile
+  patch "settings/notifications", to: "settings#update_notifications", as: :settings_notifications
+  patch "settings/password", to: "settings#update_password", as: :settings_password
+  delete "settings/account", to: "settings#delete_account", as: :delete_account
+
+  # Notifications
+  resources :notifications, only: [:index, :show, :destroy] do
+    member do
+      patch :mark_as_read
+    end
+    collection do
+      patch :mark_all_as_read
     end
   end
 
