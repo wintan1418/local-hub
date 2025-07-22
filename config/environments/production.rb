@@ -3,6 +3,10 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Configure URL options for production
+  config.action_mailer.default_url_options = { host: ENV.fetch("RENDER_EXTERNAL_URL") { "localhost" }, protocol: "https" }
+  Rails.application.routes.default_url_options = { host: ENV.fetch("RENDER_EXTERNAL_URL") { "localhost" }, protocol: "https" }
+
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
@@ -57,7 +61,7 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   # Set host to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "example.com" }
+  # config.action_mailer.default_url_options = { host: "example.com" }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via rails credentials:edit.
   # config.action_mailer.smtp_settings = {
