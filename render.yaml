@@ -10,7 +10,7 @@ services:
     runtime: ruby
     plan: free
     buildCommand: "./bin/render-build.sh"
-    startCommand: "bundle exec rails server -b 0.0.0.0 -p $PORT -e production"
+    startCommand: "bundle exec puma -t 5:5 -p $PORT -e production"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
