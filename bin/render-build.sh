@@ -8,11 +8,17 @@ echo "🚀 Starting Render build process..."
 echo "📦 Installing Ruby gems..."
 bundle install
 
+echo "📦 Installing Node dependencies..."
+npm install
+
 echo "📂 Copying JavaScript files for asset precompilation..."
 mkdir -p app/assets/builds/channels
 mkdir -p app/assets/builds/controllers
 cp app/javascript/channels/*.js app/assets/builds/channels/ 2>/dev/null || echo "No channel files to copy"
 cp app/javascript/controllers/*.js app/assets/builds/controllers/ 2>/dev/null || echo "No controller files to copy"
+
+echo "🎨 Building Tailwind CSS..."
+npm run build:css
 
 echo "🎨 Precompiling assets..."
 bundle exec rails assets:precompile

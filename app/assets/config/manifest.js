@@ -1,5 +1,6 @@
 // Application stylesheets
 //= link application.css
+//= link tailwind.css
 
 // JavaScript files
 //= link application.js
