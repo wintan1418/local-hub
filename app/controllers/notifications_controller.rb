@@ -34,7 +34,7 @@ class NotificationsController < ApplicationController
     @notification.update(read_at: Time.current)
 
     respond_to do |format|
-      format.json { render json: { status: 'success' } }
+      format.json { render json: { status: "success" } }
       format.html { redirect_back(fallback_location: notifications_path) }
     end
   end
@@ -43,8 +43,8 @@ class NotificationsController < ApplicationController
     current_user.notifications.unread.update_all(read_at: Time.current)
 
     respond_to do |format|
-      format.json { render json: { status: 'success' } }
-      format.html { redirect_to notifications_path, notice: 'All notifications marked as read.' }
+      format.json { render json: { status: "success" } }
+      format.html { redirect_to notifications_path, notice: "All notifications marked as read." }
     end
   end
 
@@ -53,8 +53,8 @@ class NotificationsController < ApplicationController
     @notification.destroy
 
     respond_to do |format|
-      format.json { render json: { status: 'success' } }
-      format.html { redirect_to notifications_path, notice: 'Notification deleted.' }
+      format.json { render json: { status: "success" } }
+      format.html { redirect_to notifications_path, notice: "Notification deleted." }
     end
   end
 
@@ -62,17 +62,17 @@ class NotificationsController < ApplicationController
 
   def notification_redirect_path(notification)
     case notification.notifiable_type
-    when 'Booking'
+    when "Booking"
       booking = notification.notifiable
       if current_user.provider?
         provider_dashboard_path
       else
         customer_dashboard_path
       end
-    when 'ChatMessage'
+    when "ChatMessage"
       message = notification.notifiable
       conversation_path(message.conversation)
-    when 'Subscription'
+    when "Subscription"
       subscription = notification.notifiable
       if current_user.provider?
         provider_subscriptions_path
