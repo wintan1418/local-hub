@@ -9,7 +9,7 @@ class SettingsController < ApplicationController
 
   def update_profile
     @user = current_user
-    
+
     if @user.update(user_params)
       redirect_to settings_path, notice: 'Profile updated successfully!'
     else
@@ -29,7 +29,7 @@ class SettingsController < ApplicationController
 
   def update_password
     @user = current_user
-    
+
     if @user.update_with_password(password_params)
       bypass_sign_in(@user)
       redirect_to settings_path, notice: 'Password updated successfully!'
@@ -41,7 +41,7 @@ class SettingsController < ApplicationController
 
   def delete_account
     @user = current_user
-    
+
     if @user.valid_password?(params[:password])
       @user.destroy
       redirect_to root_path, notice: 'Your account has been deleted successfully.'

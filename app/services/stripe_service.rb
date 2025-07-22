@@ -25,7 +25,7 @@ class StripeService
         current_period_start: Time.current,
         current_period_end: plan.price == 0 ? 100.years.from_now : 1.month.from_now
       )
-      
+
       return {
         subscription: local_subscription,
         checkout_url: nil
@@ -42,11 +42,11 @@ class StripeService
     # Create Stripe Checkout session
     session = Stripe::Checkout::Session.create({
       customer: stripe_customer.id,
-      payment_method_types: ['card'],
-      line_items: [{
+      payment_method_types: [ 'card' ],
+      line_items: [ {
         price: plan.stripe_price_id,
         quantity: 1
-      }],
+      } ],
       mode: 'subscription',
       success_url: "#{Rails.application.routes.url_helpers.payment_success_provider_subscriptions_url}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: Rails.application.routes.url_helpers.new_provider_subscription_url,

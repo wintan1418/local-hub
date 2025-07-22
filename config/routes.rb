@@ -94,7 +94,7 @@ Rails.application.routes.draw do
   delete "settings/account", to: "settings#delete_account", as: :delete_account
 
   # Notifications
-  resources :notifications, only: [:index, :show, :destroy] do
+  resources :notifications, only: [ :index, :show, :destroy ] do
     member do
       patch :mark_as_read
     end

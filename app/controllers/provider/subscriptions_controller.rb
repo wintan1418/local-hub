@@ -63,19 +63,19 @@ class Provider::SubscriptionsController < ApplicationController
 
   def payment_success
     session_id = params[:session_id]
-    
+
     if session_id
       # Retrieve the checkout session from Stripe
       session = Stripe::Checkout::Session.retrieve(session_id)
-      
+
       # Check if subscription was actually created
       if session.subscription
         subscription = Stripe::Subscription.retrieve(session.subscription)
-        
+
         # Find the plan and user from metadata
         plan = Plan.find(session.metadata.plan_id)
         user = User.find(session.metadata.user_id)
-        
+
         # Create local subscription record
         local_subscription = user.subscriptions.create!(
           plan: plan,
@@ -85,7 +85,7 @@ class Provider::SubscriptionsController < ApplicationController
           current_period_start: Time.current,
           current_period_end: 1.month.from_now
         )
-        
+
         redirect_to success_provider_subscriptions_path(subscription_id: local_subscription.id)
       else
         Rails.logger.error "No subscription found in session: #{session_id}"

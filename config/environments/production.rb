@@ -2,7 +2,7 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  
+
   # Configure URL options for production
   config.action_mailer.default_url_options = { host: ENV.fetch("RENDER_EXTERNAL_URL") { "localhost" }, protocol: "https" }
   Rails.application.routes.default_url_options = { host: ENV.fetch("RENDER_EXTERNAL_URL") { "localhost" }, protocol: "https" }

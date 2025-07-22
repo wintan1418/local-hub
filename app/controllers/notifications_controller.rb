@@ -7,10 +7,10 @@ class NotificationsController < ApplicationController
                                .order(created_at: :desc)
                                .page(params[:page])
                                .per(20)
-    
+
     # Mark all as seen when viewing
     current_user.notifications.unread.update_all(read_at: Time.current)
-    
+
     respond_to do |format|
       format.html
       format.json { render json: @notifications }
@@ -20,7 +20,7 @@ class NotificationsController < ApplicationController
   def show
     @notification = current_user.notifications.find(params[:id])
     @notification.update(read_at: Time.current) unless @notification.read?
-    
+
     # Redirect to the related object if applicable
     if @notification.notifiable.present?
       redirect_to notification_redirect_path(@notification)
@@ -32,7 +32,7 @@ class NotificationsController < ApplicationController
   def mark_as_read
     @notification = current_user.notifications.find(params[:id])
     @notification.update(read_at: Time.current)
-    
+
     respond_to do |format|
       format.json { render json: { status: 'success' } }
       format.html { redirect_back(fallback_location: notifications_path) }
@@ -41,7 +41,7 @@ class NotificationsController < ApplicationController
 
   def mark_all_as_read
     current_user.notifications.unread.update_all(read_at: Time.current)
-    
+
     respond_to do |format|
       format.json { render json: { status: 'success' } }
       format.html { redirect_to notifications_path, notice: 'All notifications marked as read.' }
@@ -51,7 +51,7 @@ class NotificationsController < ApplicationController
   def destroy
     @notification = current_user.notifications.find(params[:id])
     @notification.destroy
-    
+
     respond_to do |format|
       format.json { render json: { status: 'success' } }
       format.html { redirect_to notifications_path, notice: 'Notification deleted.' }

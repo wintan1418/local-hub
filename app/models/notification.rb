@@ -80,13 +80,13 @@ class Notification < ApplicationRecord
   def self.create_for_booking(booking, type, custom_message = nil)
     case type
     when :created
-      create_booking_notification(booking, 'booking_created', 'New Booking Received', 
+      create_booking_notification(booking, 'booking_created', 'New Booking Received',
                                 custom_message || "You have a new booking for #{booking.service.title}")
     when :updated
-      create_booking_notification(booking, 'booking_updated', 'Booking Updated', 
+      create_booking_notification(booking, 'booking_updated', 'Booking Updated',
                                 custom_message || "Your booking for #{booking.service.title} has been updated")
     when :cancelled
-      create_booking_notification(booking, 'booking_cancelled', 'Booking Cancelled', 
+      create_booking_notification(booking, 'booking_cancelled', 'Booking Cancelled',
                                 custom_message || "Your booking for #{booking.service.title} has been cancelled")
     end
   end
@@ -94,7 +94,7 @@ class Notification < ApplicationRecord
   def self.create_for_message(message)
     # Notify the recipient of the conversation
     recipient = message.conversation.other_participant(message.sender)
-    
+
     create!(
       user: recipient,
       notifiable: message,
