@@ -1,2 +1,2 @@
-web: bin/rails server -p 3001
+web: bin/rails server -p 10000
 css: bin/rails tailwindcss:watch
