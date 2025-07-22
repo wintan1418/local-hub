@@ -6,4 +6,4 @@
 //= link application.css
 
 // JavaScript is handled by import maps in app/javascript
-//= link_tree ../../javascript .js
+// No need to link_tree JavaScript files when using import maps
