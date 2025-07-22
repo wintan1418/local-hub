@@ -81,3 +81,8 @@ test:
 production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
+  
+  # SolidCable database configuration
+  cable:
+    <<: *default
+    url: <%= ENV['DATABASE_URL'] %>
