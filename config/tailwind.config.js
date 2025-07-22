@@ -3,16 +3,12 @@ const containerPlugin = require('./initializers/tailwind_container_plugin')
 
 module.exports = {
   content: [
-    '../app/views/**/*.html.erb',
-    '../app/helpers/**/*.rb',
-    '../app/assets/stylesheets/**/*.css',
-    '../app/javascript/**/*.js',
-    './initializers/simple_form_tailwind.rb',
-    '../app/components/**/*.rb',
-    '../app/components/**/*.html.erb',
-    '../app/views/devise/**/*.html.erb',
-    '../app/views/layouts/**/*.html.erb',
-    '../app/views/shared/**/*.html.erb'
+    './app/views/**/*.html.erb',
+    './app/helpers/**/*.rb',
+    './app/assets/stylesheets/**/*.css',
+    './app/javascript/**/*.js',
+    './app/components/**/*.rb',
+    './app/components/**/*.html.erb'
   ],
   theme: {
     screens: {
