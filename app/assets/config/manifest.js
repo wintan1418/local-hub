@@ -1,5 +1,4 @@
 // Application stylesheets
-//= link tailwind.css
 //= link application.css
 
 // JavaScript is handled by import maps in app/javascript

@@ -15,9 +15,6 @@
  *= require_self
  */
 
-/* Import Tailwind CSS */
-@import 'tailwind';
-
 /* Custom styles */
 body {
   @apply bg-gray-50 text-gray-900;
