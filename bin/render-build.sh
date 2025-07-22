@@ -12,7 +12,7 @@ echo "🎨 Precompiling assets..."
 bundle exec rails assets:precompile
 
 echo "🗄️ Running database migrations..."
-bundle exec rails db:migrate
+bundle exec rails db:create db:migrate
 
 echo "🌱 Seeding database (if needed)..."
 bundle exec rails db:seed
