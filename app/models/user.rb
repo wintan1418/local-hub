@@ -29,6 +29,9 @@ class User < ApplicationRecord
   has_many :provider_conversations, class_name: "Conversation", foreign_key: "provider_id", dependent: :destroy
   has_many :sent_messages, class_name: "ChatMessage", foreign_key: "sender_id", dependent: :destroy
 
+  # Notifications
+  has_many :notifications, dependent: :destroy
+
   # CRM
   has_many :phone_verifications, dependent: :destroy
   has_one :notification_preference, dependent: :destroy
@@ -119,6 +122,14 @@ class User < ApplicationRecord
     conversations.sum do |conv|
       conv.unread_count_for(self)
     end
+  end
+
+  def unread_notifications_count
+    notifications.unread.count
+  end
+
+  def total_unread_count
+    unread_notifications_count + total_unread_messages
   end
 
   # Provider statistics and ratings

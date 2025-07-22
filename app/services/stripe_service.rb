@@ -16,55 +16,64 @@ class StripeService
     nil
   end
 
-  def self.create_subscription(user, plan, payment_method_id = nil)
-    # Ensure user has a Stripe customer ID
+  def self.create_checkout_session(user, plan)
+    # Handle free plans without Stripe
+    if plan.price == 0 || plan.stripe_price_id.blank?
+      local_subscription = user.subscriptions.create!(
+        plan: plan,
+        status: :active,
+        current_period_start: Time.current,
+        current_period_end: plan.price == 0 ? 100.years.from_now : 1.month.from_now
+      )
+      
+      return {
+        subscription: local_subscription,
+        checkout_url: nil
+      }
+    end
+
+    # Ensure user has a Stripe customer ID for paid plans
     stripe_customer = user.stripe_customer_id.present? ?
                       Stripe::Customer.retrieve(user.stripe_customer_id) :
                       create_customer(user)
 
     return nil unless stripe_customer
 
-    subscription_params = {
+    # Create Stripe Checkout session
+    session = Stripe::Checkout::Session.create({
       customer: stripe_customer.id,
-      items: [ { price: plan.stripe_price_id } ],
-      payment_behavior: "default_incomplete",
-      payment_settings: { save_default_payment_method: "on_subscription" },
-      expand: [ "latest_invoice.payment_intent" ],
+      payment_method_types: ['card'],
+      line_items: [{
+        price: plan.stripe_price_id,
+        quantity: 1
+      }],
+      mode: 'subscription',
+      success_url: "#{Rails.application.routes.url_helpers.payment_success_provider_subscriptions_url}?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: Rails.application.routes.url_helpers.new_provider_subscription_url,
       metadata: {
         user_id: user.id,
         plan_id: plan.id
+      },
+      subscription_data: {
+        trial_period_days: 14,
+        metadata: {
+          user_id: user.id,
+          plan_id: plan.id
+        }
       }
-    }
-
-    # Add payment method if provided
-    if payment_method_id.present?
-      subscription_params[:default_payment_method] = payment_method_id
-    elsif plan.price == 0
-      # For free plans, don't require payment method
-      subscription_params.delete(:payment_behavior)
-      subscription_params.delete(:payment_settings)
-    else
-      # Add trial period for paid plans without payment method
-      subscription_params[:trial_period_days] = 14
-    end
-
-    stripe_subscription = Stripe::Subscription.create(subscription_params)
-
-    # Create local subscription record
-    local_subscription = user.subscriptions.create!(
-      plan: plan,
-      stripe_subscription_id: stripe_subscription.id,
-      stripe_customer_id: stripe_customer.id,
-      status: map_stripe_status(stripe_subscription.status),
-      current_period_start: Time.at(stripe_subscription.current_period_start),
-      current_period_end: Time.at(stripe_subscription.current_period_end)
-    )
+    })
 
     {
-      subscription: local_subscription,
-      stripe_subscription: stripe_subscription,
-      client_secret: stripe_subscription.latest_invoice&.payment_intent&.client_secret
+      subscription: nil,
+      checkout_url: session.url,
+      session_id: session.id
     }
+  end
+
+  def self.create_subscription(user, plan, payment_method_id = nil)
+    # This method is kept for backward compatibility
+    # but now redirects to checkout session creation
+    create_checkout_session(user, plan)
   rescue Stripe::StripeError => e
     Rails.logger.error "Stripe Subscription Creation Error: #{e.message}"
     nil

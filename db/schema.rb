@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_04_212309) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_22_153010) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -158,6 +158,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_04_212309) do
     t.index ["user_id"], name: "index_notification_preferences_on_user_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "notifiable_type"
+    t.bigint "notifiable_id"
+    t.string "notification_type", null: false
+    t.string "title", null: false
+    t.text "message", null: false
+    t.datetime "read_at"
+    t.json "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notifiable_type", "notifiable_id"], name: "index_notifications_on_notifiable"
+    t.index ["notification_type"], name: "index_notifications_on_notification_type"
+    t.index ["user_id", "created_at"], name: "index_notifications_on_user_id_and_created_at"
+    t.index ["user_id", "read_at"], name: "index_notifications_on_user_id_and_read_at"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "phone_verifications", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "phone"
@@ -296,6 +314,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_04_212309) do
   add_foreign_key "messages", "users", column: "recipient_id"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "notification_preferences", "users"
+  add_foreign_key "notifications", "users"
   add_foreign_key "phone_verifications", "users"
   add_foreign_key "reviews", "bookings"
   add_foreign_key "service_areas", "services"
