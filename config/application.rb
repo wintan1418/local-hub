@@ -2,14 +2,22 @@ require_relative "boot"
 
 require "rails/all"
 
-# Load environment variables from .env file
-env_file = File.expand_path('../..', __FILE__) + '/.env'
-if ENV['RAILS_ENV'] == 'development' && File.exist?(env_file)
-  File.readlines(env_file).each do |line|
-    next if line.strip.empty? || line.start_with?('#')
-    key, value = line.split('=', 2)
-    ENV[key.strip] = value.strip if key && value
+# Load environment variables from .env file for development
+begin
+  env_file = File.expand_path('../..', __FILE__) + '/.env'
+  if (ENV['RAILS_ENV'] == 'development' || ENV['RAILS_ENV'].nil?) && File.exist?(env_file)
+    File.readlines(env_file).each do |line|
+      line = line.strip
+      next if line.empty? || line.start_with?('#')
+      key, value = line.split('=', 2)
+      if key && value
+        ENV[key.strip] = value.strip.gsub(/^["']|["']$/, '') # Remove quotes
+      end
+    end
   end
+rescue => e
+  # Ignore errors in .env loading during development
+  puts "Warning: Could not load .env file: #{e.message}" if ENV['RAILS_ENV'] == 'development'
 end
 
 # Require the gems listed in Gemfile, including any gems

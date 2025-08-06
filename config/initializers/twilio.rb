@@ -1,9 +1,25 @@
 Rails.application.configure do
+  # Try to get from credentials first, fallback to environment variables
+  twilio_account_sid = nil
+  twilio_auth_token = nil
+  twilio_phone_number = nil
+  twilio_whatsapp_number = nil
+  
+  begin
+    twilio_account_sid = Rails.application.credentials.dig(:twilio, :account_sid)
+    twilio_auth_token = Rails.application.credentials.dig(:twilio, :auth_token)
+    twilio_phone_number = Rails.application.credentials.dig(:twilio, :phone_number)
+    twilio_whatsapp_number = Rails.application.credentials.dig(:twilio, :whatsapp_number)
+  rescue => e
+    # Credentials not available or invalid, use environment variables
+    Rails.logger.warn "Could not access Rails credentials: #{e.message}" if Rails.env.development?
+  end
+  
   config.twilio = {
-    account_sid: ENV["TWILIO_ACCOUNT_SID"] || Rails.application.credentials.dig(:twilio, :account_sid),
-    auth_token: ENV["TWILIO_AUTH_TOKEN"] || Rails.application.credentials.dig(:twilio, :auth_token),
-    phone_number: ENV["TWILIO_PHONE_NUMBER"] || Rails.application.credentials.dig(:twilio, :phone_number),
-    whatsapp_number: ENV["TWILIO_WHATSAPP_NUMBER"] || Rails.application.credentials.dig(:twilio, :whatsapp_number)
+    account_sid: ENV["TWILIO_ACCOUNT_SID"] || twilio_account_sid,
+    auth_token: ENV["TWILIO_AUTH_TOKEN"] || twilio_auth_token,
+    phone_number: ENV["TWILIO_PHONE_NUMBER"] || twilio_phone_number,
+    whatsapp_number: ENV["TWILIO_WHATSAPP_NUMBER"] || twilio_whatsapp_number
   }
 end
 
