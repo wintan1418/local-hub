@@ -8,12 +8,10 @@ echo "🚀 Starting Render build process..."
 echo "📦 Installing Ruby gems..."
 bundle install
 
-echo "🎨 Building Tailwind CSS..."
-bundle exec rails tailwindcss:build
+echo "🎨 Building Tailwind CSS for production..."
+RAILS_ENV=production bundle exec rails tailwindcss:build
 
-echo "🎨 Precompiling assets..."
-RAILS_ENV=production bundle exec rails assets:precompile
-RAILS_ENV=production bundle exec rails assets:clean
+echo "🎨 Assets ready - Propshaft will serve them automatically"
 
 echo "🗄️ Running database migrations..."
 bundle exec rails db:create db:migrate

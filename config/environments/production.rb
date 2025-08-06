@@ -19,10 +19,6 @@ Rails.application.configure do
   # Turn on fragment caching in view templates.
   config.action_controller.perform_caching = true
 
-  # Asset compilation settings
-  config.assets.compile = false
-  config.assets.digest = true
-  
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.public_file_server.enabled = true
   
