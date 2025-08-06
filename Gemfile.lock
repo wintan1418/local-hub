@@ -497,7 +497,6 @@ DEPENDENCIES
   solid_cable
   solid_cache
   solid_queue
-  sprockets-rails
   stimulus-rails
   stripe
   tailwindcss-rails (~> 3.3.1)

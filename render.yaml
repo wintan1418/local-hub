@@ -9,7 +9,7 @@ services:
     name: localservicehub
     runtime: ruby
     plan: free
-    buildCommand: "./bin/render-build.sh"
+    buildCommand: "chmod +x ./bin/render-build.sh && ./bin/render-build.sh"
     startCommand: "bundle exec puma -t 5:5 -p $PORT -e production"
     envVars:
       - key: DATABASE_URL
