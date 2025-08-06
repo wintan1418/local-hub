@@ -7,10 +7,10 @@ databases:
 services:
   - type: web
     name: localservicehub
-    runtime: ruby
+    runtime: docker
     plan: free
-    buildCommand: "chmod +x ./bin/render-build.sh && ./bin/render-build.sh"
-    startCommand: "bundle exec puma -t 5:5 -p $PORT -e production"
+    dockerfilePath: ./Dockerfile
+    dockerContext: ./
     envVars:
       - key: DATABASE_URL
         fromDatabase:

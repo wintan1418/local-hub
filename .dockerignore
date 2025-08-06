@@ -30,11 +30,13 @@
 /tmp/storage/*
 !/tmp/storage/.keep
 
-# Ignore assets.
+# Ignore node modules and public assets
 /node_modules/
-/app/assets/builds/*
-!/app/assets/builds/.keep
 /public/assets
+
+# Keep built assets for Propshaft (don't ignore app/assets/builds)
+# /app/assets/builds/*
+# !/app/assets/builds/.keep
 
 # Ignore CI service files.
 /.github
