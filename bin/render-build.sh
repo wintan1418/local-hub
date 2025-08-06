@@ -12,8 +12,8 @@ echo "🎨 Building Tailwind CSS..."
 bundle exec rails tailwindcss:build
 
 echo "🎨 Precompiling assets..."
-bundle exec rails assets:precompile
-bundle exec rails assets:clean
+RAILS_ENV=production bundle exec rails assets:precompile
+RAILS_ENV=production bundle exec rails assets:clean
 
 echo "🗄️ Running database migrations..."
 bundle exec rails db:create db:migrate
