@@ -2,6 +2,16 @@ require_relative "boot"
 
 require "rails/all"
 
+# Load environment variables from .env file
+env_file = File.expand_path('../..', __FILE__) + '/.env'
+if ENV['RAILS_ENV'] == 'development' && File.exist?(env_file)
+  File.readlines(env_file).each do |line|
+    next if line.strip.empty? || line.start_with?('#')
+    key, value = line.split('=', 2)
+    ENV[key.strip] = value.strip if key && value
+  end
+end
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)

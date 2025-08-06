@@ -20,13 +20,35 @@ services:
         sync: false
       - key: SECRET_KEY_BASE
         generateValue: true
-      - key: STRIPE_PUBLISHABLE_KEY
-        sync: false
-      - key: STRIPE_SECRET_KEY
-        sync: false
       - key: RAILS_ENV
         value: production
       - key: BUNDLE_WITHOUT
         value: development:test
+      # Payment processing (Stripe) - optional
+      - key: STRIPE_PUBLISHABLE_KEY
+        sync: false
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      # SMS/WhatsApp integration (Twilio) - optional
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_PHONE_NUMBER
+        sync: false
+      - key: TWILIO_WHATSAPP_NUMBER
+        sync: false
+      # App configuration
+      - key: APP_HOST
+        value: localservicehub.onrender.com
+      - key: APP_NAME
+        value: LocalServiceHub
+      # SolidQueue configuration (Rails 8 default job processor)
+      - key: SOLID_QUEUE_IN_PUMA
+        value: true
+      - key: JOB_CONCURRENCY
+        value: "1"
     region: oregon
     branch: main

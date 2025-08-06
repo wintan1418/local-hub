@@ -1,2 +1,2 @@
-web: bin/rails server -p 10000
-css: bin/rails tailwindcss:watch
+web: env RAILS_ENV=development bin/rails server -p 3000
+css: env RAILS_ENV=development bin/rails tailwindcss:watch

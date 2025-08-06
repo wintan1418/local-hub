@@ -1,24 +1,17 @@
-# This file is used to override docker-compose.yml settings for development
-# It's automatically loaded by docker-compose when present
+# This file provides development-specific overrides
+# Automatically loaded by docker-compose
 
 services:
   web:
-    build:
-      target: base  # Use base stage for development for faster rebuilds
+    # Override for development-specific settings
     environment:
-      - RAILS_ENV=development
-      - BUNDLE_WITHOUT=production
-    volumes:
-      # Mount source code for development
-      - .:/rails
-      # Cache bundle for faster rebuilds
-      - bundle_cache:/usr/local/bundle
-      # Cache node_modules
-      - node_modules:/rails/node_modules
-    command: ["./bin/rails", "server", "-b", "0.0.0.0"]
-    stdin_open: true
-    tty: true
-
-volumes:
-  bundle_cache:
-  node_modules:
+      - RAILS_LOG_LEVEL=debug
+      - RAILS_SERVE_STATIC_FILES=true
+    # For faster development iteration, you could mount source code:
+    # volumes:
+    #   - .:/rails
+    #   - bundle_cache:/usr/local/bundle
+    
+# Uncomment for development source code mounting
+# volumes:
+#   bundle_cache:
