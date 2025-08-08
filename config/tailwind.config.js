@@ -40,12 +40,14 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
     require('@tailwindcss/aspect-ratio'),
     containerPlugin
   ],
   // Disable modern features that might cause issues
   future: {
     hoverOnlyWhenSupported: false,
+  },
+  experimental: {
+    legacyVariableNames: true
   }
 }

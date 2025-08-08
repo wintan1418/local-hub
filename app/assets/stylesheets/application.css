@@ -1,4 +1,7 @@
 /* Application CSS for Propshaft */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* Custom application styles */
-/* Note: Tailwind CSS is handled separately in tailwind.css */

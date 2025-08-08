@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(bundle exec rails tailwindcss:build:*)",
+      "Bash(RAILS_ENV=production bundle exec rails assets:precompile)",
+      "Bash(SECRET_KEY_BASE=temporary_secret_for_testing RAILS_ENV=production bundle exec rails assets:precompile)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(bundle install:*)",
+      "Bash(RAILS_ENV=production bundle exec rails tailwindcss:build)",
+      "Bash(touch:*)",
+      "Bash(chmod:*)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker-compose:*)",
+      "Bash(curl:*)",
+      "Bash(RAILS_ENV=development bundle exec rails credentials:show)",
+      "Bash(docker build:*)",
+      "Bash(rails credentials:edit:*)",
+      "Bash(EDITOR=\"nano\" rails credentials:edit)",
+      "Bash(rm:*)",
+      "Bash(echo $RAILS_ENV)",
+      "Bash(RAILS_ENV=development bin/rails credentials:edit --wait)",
+      "Bash(openssl rand:*)",
+      "Bash(bundle update:*)",
+      "Bash(RAILS_ENV=development bin/rails runner \"puts ''Rails loads successfully!''; puts ''Stripe key configured: '' + (ENV[''STRIPE_SECRET_KEY''].present? ? ''Yes'' : ''No''); puts ''Twilio configured: '' + (ENV[''TWILIO_ACCOUNT_SID''].present? ? ''Yes'' : ''No'')\")",
+      "Bash(RAILS_ENV=development bin/rails runner \"puts ''Rails loads successfully!''; puts ''Stripe key configured: '' + (ENV[''STRIPE_SECRET_KEY''].present? ? ''Yes'' : ''No''); puts ''Twilio configured: '' + (ENV[''TWILIO_ACCOUNT_SID''].present? ? ''Yes'' : ''No'')\")",
+      "Bash(timeout:*)",
+      "Bash(unset RAILS_ENV)",
+      "Bash(export RAILS_ENV=development)",
+      "Bash(bin/rails:*)",
+      "Bash(rm:*)",
+      "Bash(pg_isready:*)",
+      "Bash(sudo service:*)",
+      "Bash(command -v:*)",
+      "Bash(pg_ctl:*)",
+      "Bash(RAILS_ENV=development bin/rails runner \"puts ''Rails loads successfully!''; puts ''Credentials accessible: '' + Rails.application.credentials.inspect\")"
+    ],
+    "deny": []
+  }
+}

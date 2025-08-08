@@ -19,7 +19,10 @@ RUN apt-get update -qq && \
     git \
     libpq-dev \
     libyaml-dev \
-    pkg-config && \
+    pkg-config \
+    ca-certificates \
+    gnupg \
+    lsb-release && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Set development environment
@@ -44,8 +47,8 @@ RUN if [ -f package.json ]; then npm install; fi
 # Create assets directory
 RUN mkdir -p app/assets/builds
 
-# Build Tailwind CSS
-RUN bundle exec rails tailwindcss:build
+# Build Tailwind CSS using npm instead of Rails task to avoid SassC issues
+RUN if [ -f package.json ]; then npm run build:css; fi
 
 # Create necessary directories
 RUN mkdir -p db log tmp/cache tmp/pids tmp/sockets
