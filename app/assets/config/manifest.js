@@ -10,3 +10,4 @@
 //= link controllers/smooth_scroll_controller.js
 //= link controllers/dropdown_controller.js
 //= link channels/consumer.js
+//= link channels/index.js
