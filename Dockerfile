@@ -57,11 +57,6 @@ RUN if [ "$RAILS_ENV" = "production" ]; then \
         bundle exec rails tailwindcss:build; \
     fi
 
-# Precompile assets for production
-RUN if [ "$RAILS_ENV" = "production" ]; then \
-        SECRET_KEY_BASE=dummy bundle exec rails assets:precompile; \
-    fi
-
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
