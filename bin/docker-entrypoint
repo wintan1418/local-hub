@@ -2,7 +2,16 @@
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  echo "Preparing database..."
+  echo "=== Database Preparation Debug ==="
+  echo "RAILS_ENV: $RAILS_ENV"
+  echo "DATABASE_URL exists: $([ -n "$DATABASE_URL" ] && echo "YES" || echo "NO")"
+  echo "DATABASE_URL preview: ${DATABASE_URL:0:50}..."
+  
+  # Wait a bit for database to be ready
+  echo "Waiting 10 seconds for database to be ready..."
+  sleep 10
+  
+  echo "Running database preparation..."
   ./bin/rails db:prepare
 fi
 

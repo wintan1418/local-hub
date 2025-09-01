@@ -55,5 +55,8 @@ services:
         value: "5"
       - key: RAILS_LOG_LEVEL
         value: info
+      # Force database configuration
+      - key: DATABASE_ADAPTER
+        value: postgresql
     region: oregon
     branch: main
