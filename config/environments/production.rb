@@ -6,6 +6,9 @@ Rails.application.configure do
   # Configure URL options for production
   config.action_mailer.default_url_options = { host: ENV.fetch("RENDER_EXTERNAL_URL") { "localhost" }, protocol: "https" }
   Rails.application.routes.default_url_options = { host: ENV.fetch("RENDER_EXTERNAL_URL") { "localhost" }, protocol: "https" }
+  
+  # Use environment variables for secrets in production
+  config.secret_key_base = ENV['SECRET_KEY_BASE']
 
   # Code is not reloaded between requests.
   config.enable_reloading = false
