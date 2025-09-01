@@ -33,7 +33,12 @@ test:
 # Production database configuration
 production:
   <<: *default
+  # Force use of DATABASE_URL in production
   url: <%= ENV['DATABASE_URL'] %>
+  # Add connection timeout and retry settings for Render
+  connect_timeout: 10
+  checkout_timeout: 5
+  reaping_frequency: 10
 
   # SolidCable database configuration
   cable:
