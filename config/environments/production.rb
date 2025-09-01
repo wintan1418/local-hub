@@ -9,6 +9,9 @@ Rails.application.configure do
   
   # Use environment variables for secrets in production
   config.secret_key_base = ENV['SECRET_KEY_BASE']
+  
+  # Disable credentials system in production
+  config.require_master_key = false
 
   # Code is not reloaded between requests.
   config.enable_reloading = false
