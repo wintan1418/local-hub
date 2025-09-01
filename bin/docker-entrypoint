@@ -2,27 +2,8 @@
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
-  echo "Waiting for database to be ready..."
-  
-  # Wait for database to be available
-  until pg_isready -h $(echo $DATABASE_URL | sed 's/.*@\([^:]*\).*/\1/') -p $(echo $DATABASE_URL | sed 's/.*:\([0-9]*\)\/.*/\1/') -U $(echo $DATABASE_URL | sed 's/.*:\/\/\([^:]*\):.*/\1/'); do
-    echo "Database is not ready yet. Waiting..."
-    sleep 2
-  done
-  
-  echo "Database is ready. Running migrations..."
-  
-  # Run database preparation with retry logic
-  for i in {1..5}; do
-    echo "Attempt $i to prepare database..."
-    if ./bin/rails db:prepare; then
-      echo "Database prepared successfully!"
-      break
-    else
-      echo "Database preparation failed. Retrying in 5 seconds..."
-      sleep 5
-    fi
-  done
+  echo "Preparing database..."
+  ./bin/rails db:prepare
 fi
 
 exec "${@}"
