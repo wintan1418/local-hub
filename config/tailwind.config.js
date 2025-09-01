@@ -49,5 +49,9 @@ module.exports = {
   },
   experimental: {
     legacyVariableNames: true
+  },
+  // Add this to fix CSS compilation issues
+  corePlugins: {
+    preflight: true,
   }
 }
