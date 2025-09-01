@@ -28,6 +28,9 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.public_file_server.enabled = true
   
+  # Disable Sass compression to avoid conflicts with Tailwind CSS
+  config.assets.css_compressor = nil
+  
   # Cache assets for far-future expiry since they are all digest stamped.
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
