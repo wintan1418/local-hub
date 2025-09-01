@@ -92,11 +92,8 @@ Rails.application.configure do
   config.active_record.attributes_for_inspect = [ :id ]
 
   # Enable DNS rebinding protection and other `Host` header attacks.
-  if ENV['RAILS_HOSTS'].present?
-    ENV['RAILS_HOSTS'].split(',').each do |host|
-      config.hosts << host.strip
-    end
-  end
+  config.hosts << "local-hub-1.onrender.com"
+  config.hosts << "localservicehub.onrender.com"
   config.hosts << /.*\.onrender\.com/
   
   # Skip DNS rebinding protection for the default health check endpoint.
