@@ -52,7 +52,7 @@ RUN mkdir -p app/assets/builds
 
 # Build Tailwind CSS - use dummy key for production builds
 RUN if [ "$RAILS_ENV" = "production" ]; then \
-        SECRET_KEY_BASE=dummy bundle exec rails tailwindcss:build; \
+        SECRET_KEY_BASE=dummy RAILS_MASTER_KEY=dummy bundle exec rails tailwindcss:build; \
     else \
         bundle exec rails tailwindcss:build; \
     fi

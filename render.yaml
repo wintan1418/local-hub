@@ -50,5 +50,10 @@ services:
         value: true
       - key: JOB_CONCURRENCY
         value: "1"
+      # Additional environment variables for production
+      - key: RAILS_LOG_LEVEL
+        value: info
+      - key: RAILS_SERVE_STATIC_FILES
+        value: true
     region: oregon
     branch: main

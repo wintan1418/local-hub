@@ -8,6 +8,7 @@ end
 # Only set Stripe API key if it exists
 if Rails.application.config.stripe[:secret_key].present?
   Stripe.api_key = Rails.application.config.stripe[:secret_key]
+  Rails.logger.info "Stripe client initialized successfully"
 else
   Rails.logger.warn "Stripe credentials not configured. Payment functionality will be disabled."
 end
