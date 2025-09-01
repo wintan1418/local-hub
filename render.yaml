@@ -7,10 +7,10 @@ databases:
 services:
   - type: web
     name: localservicehub
-    runtime: docker
+    runtime: ruby
     plan: free
-    dockerfilePath: ./Dockerfile
-    dockerContext: ./
+    buildCommand: bundle install && bundle exec rails assets:precompile
+    startCommand: bundle exec rails server -p $PORT -e production
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -45,18 +45,10 @@ services:
         value: localservicehub.onrender.com
       - key: APP_NAME
         value: LocalServiceHub
-      # SolidQueue configuration (Rails 8 default job processor)
-      - key: SOLID_QUEUE_IN_PUMA
-        value: true
-      - key: JOB_CONCURRENCY
-        value: "1"
       # Database configuration
       - key: RAILS_MAX_THREADS
         value: "5"
       - key: RAILS_LOG_LEVEL
         value: info
-      # Force database configuration
-      - key: DATABASE_ADAPTER
-        value: postgresql
     region: oregon
     branch: main
