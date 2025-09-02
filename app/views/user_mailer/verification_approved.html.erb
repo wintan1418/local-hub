@@ -1,0 +1,27 @@
+<h1>🎉 Your Account Has Been Verified!</h1>
+
+<p>Hello <%= @user.first_name || @user.email %>,</p>
+
+<p>Great news! Your service provider account has been successfully verified by our team.</p>
+
+<div style="background-color: #d1fae5; border: 1px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0;">
+  <p style="margin: 0; color: #065f46;"><strong>✅ Verification Complete</strong></p>
+  <p style="margin: 5px 0 0 0; color: #065f46;">You now have access to all provider features and your listings will be marked as verified.</p>
+</div>
+
+<p>As a verified provider, you can now:</p>
+<ul>
+  <li>Display the verified badge on your profile and services</li>
+  <li>Access premium features based on your subscription plan</li>
+  <li>Receive priority placement in search results</li>
+  <li>Build greater trust with potential customers</li>
+</ul>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= @dashboard_url %>" class="button">Go to Your Dashboard</a>
+</div>
+
+<p>Thank you for completing the verification process. We're excited to have you as part of the LocalServiceHub community!</p>
+
+<p>Best regards,<br>
+The LocalServiceHub Team</p>

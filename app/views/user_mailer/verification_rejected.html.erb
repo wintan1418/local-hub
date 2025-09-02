@@ -1,0 +1,37 @@
+<h1>Account Verification Requires Attention</h1>
+
+<p>Hello <%= @user.first_name || @user.email %>,</p>
+
+<p>We've reviewed your verification documents, but unfortunately we need some additional information or documentation before we can approve your account.</p>
+
+<div style="background-color: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; padding: 20px; margin: 20px 0;">
+  <p style="margin: 0; color: #92400e;"><strong>⚠️ Verification Status: Requires Attention</strong></p>
+  <% if @reason %>
+    <p style="margin: 10px 0 0 0; color: #92400e;"><strong>Reason:</strong> <%= @reason %></p>
+  <% end %>
+</div>
+
+<p>To complete your verification, please:</p>
+<ol>
+  <li>Review the reason provided above (if any)</li>
+  <li>Update or resubmit the required documentation</li>
+  <li>Ensure all documents are clear, current, and valid</li>
+  <li>Make sure all information matches across documents</li>
+</ol>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= @verification_url %>" class="button">Update Verification Documents</a>
+</div>
+
+<p>Common issues that require attention:</p>
+<ul>
+  <li>Documents that are blurry or partially obscured</li>
+  <li>Expired licenses or certifications</li>
+  <li>Missing required documentation</li>
+  <li>Information that doesn't match between documents</li>
+</ul>
+
+<p>If you have any questions about the verification process or need assistance, please don't hesitate to contact our support team.</p>
+
+<p>Best regards,<br>
+The LocalServiceHub Team</p>

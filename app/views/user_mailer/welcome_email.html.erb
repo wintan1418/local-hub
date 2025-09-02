@@ -1,0 +1,36 @@
+<h1>Welcome to <%= @app_name %>!</h1>
+
+<p>Hello <%= @user.first_name || @user.email %>,</p>
+
+<p>Welcome to LocalServiceHub, the premier platform for connecting service providers with customers in your local area.</p>
+
+<% if @user.provider? %>
+  <p>As a service provider, you can now:</p>
+  <ul>
+    <li>Create and manage your service listings</li>
+    <li>Receive and manage booking requests</li>
+    <li>Build your reputation through customer reviews</li>
+    <li>Access analytics and insights about your business</li>
+  </ul>
+  
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="<%= provider_dashboard_url %>" class="button">Go to Provider Dashboard</a>
+  </div>
+<% else %>
+  <p>As a customer, you can now:</p>
+  <ul>
+    <li>Browse and search local service providers</li>
+    <li>Book services that fit your schedule</li>
+    <li>Read reviews from other customers</li>
+    <li>Manage your bookings and history</li>
+  </ul>
+  
+  <div style="text-align: center; margin: 30px 0;">
+    <a href="<%= root_url %>" class="button">Start Browsing Services</a>
+  </div>
+<% end %>
+
+<p>If you have any questions or need assistance getting started, don't hesitate to reach out to our support team.</p>
+
+<p>Best regards,<br>
+The LocalServiceHub Team</p>

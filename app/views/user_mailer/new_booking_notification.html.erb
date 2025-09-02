@@ -1,0 +1,39 @@
+<h1>New Booking Received!</h1>
+
+<p>Hello <%= @provider.first_name || @provider.email %>,</p>
+
+<p>Great news! You've received a new booking for one of your services.</p>
+
+<div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 8px; padding: 20px; margin: 20px 0;">
+  <h3 style="margin-top: 0; color: #15803d;">New Booking Details</h3>
+  <p><strong>Service:</strong> <%= @service.title %></p>
+  <p><strong>Customer:</strong> <%= @customer.display_name %></p>
+  <p><strong>Date & Time:</strong> <%= @booking.scheduled_at.strftime("%A, %B %d, %Y at %I:%M %p") %></p>
+  <p><strong>Total Price:</strong> $<%= @booking.total_price %></p>
+  <p><strong>Booking ID:</strong> #<%= @booking.id %></p>
+</div>
+
+<p><strong>Customer Contact Information:</strong></p>
+<ul>
+  <li>Email: <%= @customer.email %></li>
+  <% if @customer.phone.present? %>
+    <li>Phone: <%= @customer.phone %></li>
+  <% end %>
+</ul>
+
+<p><strong>Next Steps:</strong></p>
+<ol>
+  <li>Review the booking details in your dashboard</li>
+  <li>Contact the customer to confirm any specific requirements</li>
+  <li>Prepare for the scheduled service</li>
+  <li>Mark the booking as completed when finished</li>
+</ol>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= provider_dashboard_url %>" class="button">View Booking Details</a>
+</div>
+
+<p>Remember to provide excellent service to build your reputation and receive positive reviews!</p>
+
+<p>Best regards,<br>
+The LocalServiceHub Team</p>

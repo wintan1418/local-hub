@@ -1,0 +1,43 @@
+<h1>Booking Confirmed!</h1>
+
+<p>Hello <%= @user.first_name || @user.email %>,</p>
+
+<p>Your booking has been confirmed! Here are the details:</p>
+
+<div style="background-color: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 20px; margin: 20px 0;">
+  <h3 style="margin-top: 0; color: #0c4a6e;">Booking Details</h3>
+  <p><strong>Service:</strong> <%= @service.title %></p>
+  <p><strong>Provider:</strong> <%= @provider.business_name || @provider.display_name %></p>
+  <p><strong>Date & Time:</strong> <%= @booking.scheduled_at.strftime("%A, %B %d, %Y at %I:%M %p") %></p>
+  <p><strong>Total Price:</strong> $<%= @booking.total_price %></p>
+  <p><strong>Booking ID:</strong> #<%= @booking.id %></p>
+</div>
+
+<p><strong>Provider Contact Information:</strong></p>
+<ul>
+  <li>Email: <%= @provider.email %></li>
+  <% if @provider.phone.present? %>
+    <li>Phone: <%= @provider.phone %></li>
+  <% end %>
+  <% if @provider.business_name.present? %>
+    <li>Business: <%= @provider.business_name %></li>
+  <% end %>
+</ul>
+
+<p><strong>What's Next?</strong></p>
+<ol>
+  <li>The provider will contact you to confirm final details</li>
+  <li>Be available at the scheduled time</li>
+  <li>After service completion, you'll be able to leave a review</li>
+</ol>
+
+<div style="text-align: center; margin: 30px 0;">
+  <a href="<%= customer_dashboard_url %>" class="button">View Booking Details</a>
+</div>
+
+<p><strong>Need to make changes?</strong> Contact the provider directly or reach out to our support team.</p>
+
+<p>We hope you have a great experience with your service!</p>
+
+<p>Best regards,<br>
+The LocalServiceHub Team</p>
