@@ -19,9 +19,6 @@ Rails.application.routes.draw do
   # Devise routes for user authentication
   devise_for :users
 
-  # Email confirmation routes
-  resources :email_confirmations, only: [ :show, :create ]
-  get 'confirm_email/:token', to: 'email_confirmations#show', as: :confirm_email
 
   # Password reset routes
   resources :password_resets, only: [ :new, :create, :show, :update ], param: :token
