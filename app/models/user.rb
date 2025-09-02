@@ -32,6 +32,10 @@ class User < ApplicationRecord
   # Notifications
   has_many :notifications, dependent: :destroy
 
+  # Callbacks for automatic emails
+  after_create :send_confirmation_email, if: -> { !email_confirmed? }
+  after_update :send_welcome_email_if_confirmed, if: :saved_change_to_confirmed_at?
+
   # CRM
   has_many :phone_verifications, dependent: :destroy
   has_one :notification_preference, dependent: :destroy
@@ -230,5 +234,11 @@ class User < ApplicationRecord
       password: new_password,
       password_reset_token: nil
     )
+  end
+
+  private
+
+  def send_welcome_email_if_confirmed
+    send_welcome_email if confirmed_at.present?
   end
 end
