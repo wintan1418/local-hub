@@ -168,7 +168,11 @@
                 </div>
               </div>
               <div class="text-sm text-gray-400">
-                Verified <%= time_ago_in_words(provider.verified_at) %> ago
+                <% if provider.verified_at %>
+                  Verified <%= time_ago_in_words(provider.verified_at) %> ago
+                <% else %>
+                  Recently verified
+                <% end %>
               </div>
             </div>
           </li>
