@@ -1,90 +1,421 @@
-<div class="max-w-6xl mx-auto p-6">
-  <div class="bg-white shadow rounded-lg overflow-hidden" style="height: 80vh; display: flex; flex-direction: column;">
-    <!-- Chat Header -->
-    <div class="border-b border-gray-200 p-4">
-      <div class="flex items-center space-x-3">
-        <%= link_to conversations_path, class: "text-blue-600 hover:text-blue-800" do %>
-          <i class="fas fa-arrow-left mr-2"></i>
+<div class="max-w-6xl mx-auto p-4">
+  <div class="bg-white shadow-xl rounded-xl overflow-hidden" style="height: 85vh; display: flex; flex-direction: column;">
+    <!-- Enhanced Chat Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4">
+      <div class="flex items-center space-x-4">
+        <%= link_to conversations_path, class: "text-white hover:text-blue-200 transition-colors p-2 rounded-lg hover:bg-white/10" do %>
+          <i class="fas fa-arrow-left text-lg"></i>
         <% end %>
         
-        <div class="flex-shrink-0">
+        <div class="flex-shrink-0 relative">
           <% if @other_user.profile_picture.attached? %>
-            <%= image_tag @other_user.profile_picture, class: "h-10 w-10 rounded-full object-cover" %>
+            <%= image_tag @other_user.profile_picture, class: "h-12 w-12 rounded-full object-cover ring-4 ring-white/30" %>
           <% else %>
-            <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-              <i class="fas fa-user text-gray-600"></i>
+            <div class="h-12 w-12 rounded-full bg-white/20 flex items-center justify-center ring-4 ring-white/30">
+              <i class="fas fa-user text-white text-lg"></i>
             </div>
+          <% end %>
+          <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 rounded-full border-2 border-white"></div>
+        </div>
+        
+        <div class="flex-1">
+          <h2 class="text-lg font-semibold text-white"><%= @other_user.display_name || @other_user.email.split('@').first.titleize %></h2>
+          <% if @other_user.provider? && @other_user.business_name.present? %>
+            <p class="text-sm text-blue-100"><%= @other_user.business_name %></p>
+          <% else %>
+            <p class="text-sm text-blue-100">Online now</p>
           <% end %>
         </div>
         
-        <div>
-          <h2 class="text-lg font-semibold text-gray-900"><%= @other_user.display_name %></h2>
-          <% if @other_user.provider? && @other_user.business_name.present? %>
-            <p class="text-sm text-gray-600"><%= @other_user.business_name %></p>
+        <div class="flex items-center space-x-2">
+          <button class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-colors">
+            <i class="fas fa-phone text-lg"></i>
+          </button>
+          <button class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-colors">
+            <i class="fas fa-video text-lg"></i>
+          </button>
+          <button class="p-2 text-white hover:text-blue-200 hover:bg-white/10 rounded-lg transition-colors">
+            <i class="fas fa-ellipsis-v text-lg"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pinned Messages Section -->
+    <% if @pinned_messages.any? %>
+      <div class="bg-yellow-50 border-b border-yellow-200 p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-medium text-yellow-800 flex items-center">
+            <i class="fas fa-thumbtack mr-2"></i>Pinned Messages
+          </h3>
+          <button onclick="togglePinnedMessages()" class="text-yellow-600 hover:text-yellow-800">
+            <i class="fas fa-chevron-down" id="pinned-chevron"></i>
+          </button>
+        </div>
+        <div id="pinned-messages" class="space-y-2 max-h-40 overflow-y-auto">
+          <% @pinned_messages.each do |pinned_message| %>
+            <div class="bg-white rounded-lg p-3 border border-yellow-200 cursor-pointer hover:bg-yellow-50" 
+                 onclick="scrollToMessage(<%= pinned_message.id %>)">
+              <div class="flex items-start space-x-2">
+                <div class="flex-shrink-0">
+                  <% if pinned_message.sender.profile_picture.attached? %>
+                    <%= image_tag pinned_message.sender.profile_picture, class: "h-6 w-6 rounded-full object-cover" %>
+                  <% else %>
+                    <div class="h-6 w-6 rounded-full bg-gray-300 flex items-center justify-center">
+                      <i class="fas fa-user text-gray-600 text-xs"></i>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center space-x-2">
+                    <span class="text-xs font-medium text-gray-900"><%= pinned_message.sender.email.split('@').first.titleize %></span>
+                    <span class="text-xs text-gray-500"><%= pinned_message.created_at.strftime('%H:%M') %></span>
+                  </div>
+                  <p class="text-sm text-gray-700 truncate">
+                    <%= truncate(pinned_message.content.presence || "Attachment", length: 60) %>
+                  </p>
+                </div>
+              </div>
+            </div>
           <% end %>
         </div>
       </div>
-    </div>
-    
-    <!-- Messages Container -->
-    <div id="messages-container" class="flex-1 overflow-y-auto p-4 space-y-1" style="background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMiIgZmlsbD0iI2Y5ZmFmYiIgZmlsbC1vcGFjaXR5PSIwLjQiLz4KPC9zdmc+'); background-size: 40px 40px;">
-      <% @messages.each do |message| %>
-        <%= render 'message', message: message, current_user: current_user %>
-      <% end %>
-    </div>
-    
-    <!-- Message Input -->
-    <div class="border-t border-gray-200 p-4">
-      <div id="typing-indicator" class="text-xs text-gray-500 mb-2 hidden">
-        <i class="fas fa-circle-notch fa-spin"></i> <span id="typing-user"></span> is typing...
-      </div>
-      <%= form_with url: create_message_conversation_path(@conversation), local: false, id: "message-form", class: "flex items-end space-x-3" do |form| %>
-        <div class="flex-1 relative">
-          <%= form.text_area :content, rows: 1, placeholder: "Type your message...", 
-              class: "w-full border border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none",
-              id: "message-input",
-              autocomplete: "off" %>
-          <button type="button" onclick="toggleEmojiPicker()" class="absolute right-2 top-2 text-gray-500 hover:text-gray-700">
-            <i class="fas fa-smile"></i>
+    <% end %>
+
+    <!-- Enhanced Messages Container -->
+    <div id="messages-container" class="flex-1 overflow-y-auto p-6 space-y-4" style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); background-attachment: fixed;">
+      <!-- Reply Preview -->
+      <div id="reply-preview" class="hidden bg-blue-50 border-l-4 border-blue-500 p-3 mx-4 rounded-r-lg">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-reply text-blue-500"></i>
+            <span class="text-sm font-medium text-blue-700">Replying to <span id="reply-sender"></span></span>
+          </div>
+          <button onclick="cancelReply()" class="text-blue-500 hover:text-blue-700">
+            <i class="fas fa-times"></i>
           </button>
-          <div id="emoji-picker" class="absolute bottom-full right-0 mb-2 bg-white border rounded-lg shadow-lg p-3 hidden z-10">
-            <div class="grid grid-cols-8 gap-1 text-lg">
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😀')">😀</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😃')">😃</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😄')">😄</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😁')">😁</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😊')">😊</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😍')">😍</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('🤔')">🤔</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('👍')">👍</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('👎')">👎</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('❤️')">❤️</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😂')">😂</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('😭')">😭</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('🎉')">🎉</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('🔥')">🔥</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('💪')">💪</span>
-              <span class="cursor-pointer hover:bg-gray-100 p-1 rounded" onclick="insertEmoji('🙏')">🙏</span>
-            </div>
+        </div>
+        <p class="text-sm text-blue-600 mt-1 truncate" id="reply-content"></p>
+      </div>
+      
+      <div class="space-y-4">
+        <% @messages.each do |message| %>
+          <%= render 'message', message: message, current_user: current_user %>
+        <% end %>
+      </div>
+      
+      <!-- Typing Indicator (hidden by default) -->
+      <div id="typing-indicator" class="hidden flex items-center space-x-2 p-3">
+        <div class="flex-shrink-0">
+          <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
+            <i class="fas fa-user text-gray-600 text-xs"></i>
           </div>
         </div>
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      <% end %>
+        <div class="bg-gray-200 text-gray-900 rounded-lg px-3 py-2 rounded-bl-sm">
+          <div class="flex space-x-1">
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Enhanced Message Input -->
+    <div class="border-t border-gray-200 bg-white p-4">
+      <!-- File Preview Area -->
+      <div id="file-preview-area" class="hidden mb-4 p-3 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div id="preview-icon" class="text-2xl"></div>
+            <div>
+              <p id="preview-name" class="text-sm font-medium text-gray-900"></p>
+              <p id="preview-size" class="text-xs text-gray-500"></p>
+            </div>
+          </div>
+          <button type="button" onclick="clearFilePreview()" class="text-red-500 hover:text-red-700">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+
+      <form action="<%= create_message_conversation_path(@conversation) %>" method="post" id="message-form" enctype="multipart/form-data">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <input type="hidden" id="reply-to-input" name="reply_to_id" value="">
+        <input type="hidden" id="edit-message-id" name="edit_message_id" value="">
+        <input type="hidden" id="action-type" name="action_type" value="create">
+        
+        <!-- Main Input Area -->
+        <div class="flex items-end space-x-3">
+          <!-- Attachment Button -->
+          <div class="flex flex-col space-y-2">
+            <button type="button" onclick="toggleAttachmentMenu()" 
+                    class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors relative">
+              <i class="fas fa-plus text-lg"></i>
+            </button>
+            
+            <!-- Attachment Menu -->
+            <div id="attachment-menu" class="hidden absolute bottom-16 left-0 bg-white rounded-lg shadow-xl border p-2 z-20">
+              <div class="flex flex-col space-y-1 w-48">
+                <button type="button" onclick="triggerFileInput('image')" 
+                        class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
+                  <i class="fas fa-image text-green-500"></i>
+                  <span class="text-sm font-medium">Photo</span>
+                </button>
+                <button type="button" onclick="triggerFileInput('document')" 
+                        class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
+                  <i class="fas fa-file-alt text-blue-500"></i>
+                  <span class="text-sm font-medium">Document</span>
+                </button>
+                <button type="button" onclick="startVoiceRecording()" 
+                        class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
+                  <i class="fas fa-microphone text-red-500"></i>
+                  <span class="text-sm font-medium">Voice Note</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Voice Recording Button -->
+          <button type="button" id="voice-btn" onclick="toggleVoiceRecording()" 
+                  class="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors hidden">
+            <i class="fas fa-microphone text-lg"></i>
+          </button>
+          
+          <!-- Message Input -->
+          <div class="flex-1 relative">
+            <textarea name="content" 
+                     rows="1" 
+                     placeholder="Type your message..." 
+                     class="w-full border border-gray-300 rounded-2xl px-4 py-3 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all"
+                     id="message-input"
+                     autocomplete="off"></textarea>
+            
+            <!-- Emoji Button -->
+            <button type="button" onclick="toggleEmojiPicker()" 
+                    class="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1 rounded transition-colors">
+              <i class="fas fa-smile text-lg"></i>
+            </button>
+            
+            <!-- Enhanced Emoji Picker -->
+            <div id="emoji-picker" class="absolute bottom-full right-0 mb-2 bg-white border rounded-xl shadow-2xl hidden z-30 w-80">
+              <div class="p-4">
+                <div class="flex space-x-2 mb-4 border-b">
+                  <button type="button" onclick="showEmojiCategory('recent')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">Recent</button>
+                  <button type="button" onclick="showEmojiCategory('people')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">😊</button>
+                  <button type="button" onclick="showEmojiCategory('nature')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">🌿</button>
+                  <button type="button" onclick="showEmojiCategory('food')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">🍔</button>
+                  <button type="button" onclick="showEmojiCategory('objects')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">⚽</button>
+                </div>
+                
+                <div class="emoji-category" id="recent-emojis">
+                  <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto">
+                    <!-- Recent emojis will be populated by JavaScript -->
+                  </div>
+                </div>
+                
+                <div class="emoji-category hidden" id="people-emojis">
+                  <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto text-xl">
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😀')">😀</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😃')">😃</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😄')">😄</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😁')">😁</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😆')">😆</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😅')">😅</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😂')">😂</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤣')">🤣</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😊')">😊</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😇')">😇</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🙂')">🙂</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🙃')">🙃</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😉')">😉</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😌')">😌</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😍')">😍</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥰')">🥰</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😘')">😘</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😗')">😗</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('☺️')">☺️</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😚')">😚</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😙')">😙</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥲')">🥲</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😋')">😋</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😛')">😛</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😜')">😜</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤪')">🤪</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😝')">😝</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤑')">🤑</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤗')">🤗</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤭')">🤭</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤫')">🤫</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤔')">🤔</span>
+                  </div>
+                </div>
+                
+                <div class="emoji-category hidden" id="nature-emojis">
+                  <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto text-xl">
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌱')">🌱</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌿')">🌿</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍀')">🍀</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌾')">🌾</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💐')">💐</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌷')">🌷</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌹')">🌹</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥀')">🥀</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌺')">🌺</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌸')">🌸</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌼')">🌼</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌻')">🌻</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌞')">🌞</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌝')">🌝</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌛')">🌛</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌜')">🌜</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌚')">🌚</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌕')">🌕</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌖')">🌖</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌗')">🌗</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌘')">🌘</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌑')">🌑</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌒')">🌒</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌓')">🌓</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌔')">🌔</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⭐')">⭐</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌟')">🌟</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💫')">💫</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('✨')">✨</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🔥')">🔥</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💥')">💥</span>
+                  </div>
+                </div>
+                
+                <div class="emoji-category hidden" id="food-emojis">
+                  <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto text-xl">
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍔')">🍔</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍕')">🍕</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌭')">🌭</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌮')">🌮</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌯')">🌯</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍿')">🍿</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧂')">🧂</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥓')">🥓</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥚')">🥚</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍳')">🍳</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧈')">🧈</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥞')">🥞</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧇')">🧇</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥖')">🥖</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍞')">🍞</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥨')">🥨</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥯')">🥯</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍪')">🍪</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎂')">🎂</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍰')">🍰</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧁')">🧁</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥧')">🥧</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍫')">🍫</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍬')">🍬</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍭')">🍭</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍮')">🍮</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍯')">🍯</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍼')">🍼</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥛')">🥛</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('☕')">☕</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍵')">🍵</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧃')">🧃</span>
+                  </div>
+                </div>
+                
+                <div class="emoji-category hidden" id="objects-emojis">
+                  <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto text-xl">
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⚽')">⚽</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏀')">🏀</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏈')">🏈</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⚾')">⚾</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥎')">🥎</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎾')">🎾</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏐')">🏐</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏉')">🏉</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥏')">🥏</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎱')">🎱</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🪀')">🪀</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏓')">🏓</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏸')">🏸</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥍')">🥍</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏒')">🏒</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥌')">🥌</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛷')">🛷</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⛸️')">⛸️</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛼')">🛼</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛹')">🛹</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛴')">🛴</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🚲')">🚲</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏎️')">🏎️</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏍️')">🏍️</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛺')">🛺</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛻')">🛻</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏕️')">🏕️</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⛺')">⛺</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎪')">🎪</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎨')">🎨</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎭')">🎭</span>
+                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎪')">🎪</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Send Button -->
+          <button type="submit" id="send-button" 
+                  class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-full hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+            <i class="fas fa-paper-plane text-lg"></i>
+          </button>
+        </div>
+        
+        <!-- Hidden File Inputs -->
+        <input type="file" id="image-input" name="attachments[]" accept="image/*" multiple class="hidden" onchange="handleFileSelect(this, 'image')">
+        <input type="file" id="document-input" name="attachments[]" accept=".pdf,.doc,.docx,.txt" multiple class="hidden" onchange="handleFileSelect(this, 'document')">
+        <input type="file" id="voice-input" name="attachments[]" accept="audio/*" class="hidden" onchange="handleFileSelect(this, 'voice')">
+      </form>
+      
+      <!-- Voice Recording UI -->
+      <div id="voice-recording" class="hidden mt-4 p-4 bg-red-50 rounded-lg border-2 border-red-200">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3">
+            <div class="w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
+            <span class="text-red-700 font-medium">Recording...</span>
+            <span id="recording-time" class="text-red-600">00:00</span>
+          </div>
+          <div class="flex items-center space-x-2">
+            <button type="button" onclick="stopVoiceRecording()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+              <i class="fas fa-stop mr-1"></i> Stop
+            </button>
+            <button type="button" onclick="cancelVoiceRecording()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+              <i class="fas fa-times mr-1"></i> Cancel
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
+// Global variables for voice recording
+let mediaRecorder;
+let recordedChunks = [];
+let isRecording = false;
+let recordingTimer;
+let recordingStartTime;
+let recentEmojis = JSON.parse(localStorage.getItem('recentEmojis') || '["😊", "👍", "❤️", "😂", "🔥", "💪", "🎉", "😍"]');
+
 document.addEventListener('DOMContentLoaded', function() {
   const messagesContainer = document.getElementById('messages-container');
   const messageForm = document.getElementById('message-form');
   const messageInput = document.getElementById('message-input');
-  const typingIndicator = document.getElementById('typing-indicator');
-  let typingTimer;
-  let isTyping = false;
-  let conversation;
+  const sendButton = document.getElementById('send-button');
+  
+  // Initialize recent emojis
+  populateRecentEmojis();
   
   // Scroll to bottom of messages
   function scrollToBottom() {
@@ -93,142 +424,174 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
   
-  // Wait for ActionCable to be available and initialize
-  function initializeChat() {
-    if (typeof window.App === 'undefined' || typeof window.App.cable === 'undefined') {
-      setTimeout(initializeChat, 100);
-      return;
-    }
-    
-    // Create ActionCable subscription directly
-    conversation = window.App.cable.subscriptions.create({
-      channel: "ConversationChannel",
-      conversation_id: <%= @conversation.id %>
-    }, {
-      received: function(data) {
-        if (data.typing !== undefined) {
-          // Handle typing indicator
-          const typingUser = document.getElementById('typing-user');
-          
-          if (data.typing && data.sender_id !== <%= current_user.id %>) {
-            if (typingUser) typingUser.textContent = data.sender_name;
-            if (typingIndicator) typingIndicator.classList.remove('hidden');
-          } else if (!data.typing) {
-            if (typingIndicator) typingIndicator.classList.add('hidden');
-          }
-        } else if (data.sender_id !== <%= current_user.id %>) {
-          // Handle incoming message
-          if (messagesContainer) {
-            messagesContainer.insertAdjacentHTML('beforeend', data.message);
-            scrollToBottom();
-          }
-        }
-      },
-      
-      speak: function(messageData) {
-        this.perform('speak', messageData);
-      },
-      
-      startTyping: function() {
-        this.perform('start_typing');
-      },
-      
-      stopTyping: function() {
-        this.perform('stop_typing');
-      }
-    });
-    
-    // Initial scroll to bottom
-    scrollToBottom();
-  }
+  // Initial scroll to bottom
+  scrollToBottom();
   
-  // Auto-resize textarea
+  // Auto-resize textarea with enhanced styling
   if (messageInput) {
     messageInput.addEventListener('input', function() {
       this.style.height = 'auto';
       this.style.height = Math.min(this.scrollHeight, 120) + 'px';
       
-      // Handle typing indicator
-      if (this.value.trim() && !isTyping && conversation) {
-        isTyping = true;
-        conversation.startTyping();
+      // Add visual feedback when typing
+      if (this.value.trim()) {
+        sendButton.classList.add('scale-110', 'shadow-xl');
+        sendButton.style.background = 'linear-gradient(135deg, #3b82f6, #8b5cf6)';
+      } else {
+        sendButton.classList.remove('scale-110', 'shadow-xl');
+        sendButton.style.background = 'linear-gradient(135deg, #6b7280, #9ca3af)';
       }
-      
-      clearTimeout(typingTimer);
-      typingTimer = setTimeout(() => {
-        if (isTyping && conversation) {
-          isTyping = false;
-          conversation.stopTyping();
-        }
-      }, 1000);
     });
     
-    // Handle Enter key
+    // Handle Enter key to submit
     messageInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        if (messageForm) {
-          messageForm.dispatchEvent(new Event('submit'));
+        if (messageInput.value.trim() || hasFiles()) {
+          submitMessage();
         }
       }
     });
-  }
-  
-  // Handle form submission
-  if (messageForm) {
-    messageForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const content = messageInput.value.trim();
-      if (!content || !conversation) return;
-      
-      // Stop typing indicator
-      if (isTyping) {
-        isTyping = false;
-        conversation.stopTyping();
-      }
-      
-      // Add message optimistically
-      const messageHtml = `
-        <div class="flex justify-end mb-3">
-          <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg bg-blue-600 text-white rounded-br-sm relative">
-            <p class="text-sm whitespace-pre-wrap">${content}</p>
-            <div class="flex items-center justify-end mt-1 space-x-1">
-              <p class="text-xs text-blue-100">Just now</p>
-              <div class="text-blue-100 text-xs">
-                <i class="fas fa-check"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-      messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
-      scrollToBottom();
-      
-      // Send via ActionCable
-      conversation.speak({
-        content: content,
-        conversation_id: <%= @conversation.id %>
-      });
-      
-      messageInput.value = '';
-      messageInput.style.height = 'auto';
-      toggleEmojiPicker(false);
+    
+    // Add focus effects
+    messageInput.addEventListener('focus', function() {
+      this.parentElement.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+    });
+    
+    messageInput.addEventListener('blur', function() {
+      this.parentElement.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
     });
   }
   
-  // Initialize chat
-  initializeChat();
+  // Enhanced send button click
+  if (sendButton) {
+    sendButton.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (messageInput && (messageInput.value.trim() || hasFiles())) {
+        submitMessage();
+      }
+    });
+  }
+  
+  // Submit message function with enhanced UX
+  function submitMessage() {
+    const content = messageInput.value.trim();
+    const hasFileAttachments = hasFiles();
+    
+    if (!content && !hasFileAttachments) {
+      messageInput.focus();
+      messageInput.classList.add('animate-pulse', 'border-red-300');
+      setTimeout(() => {
+        messageInput.classList.remove('animate-pulse', 'border-red-300');
+      }, 1000);
+      return;
+    }
+    
+    // Show sending state with animation
+    sendButton.disabled = true;
+    sendButton.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>';
+    sendButton.classList.add('cursor-not-allowed', 'opacity-75');
+    
+    // Add optimistic message to UI (optional)
+    if (content) {
+      addOptimisticMessage(content);
+    }
+    
+    // Submit form
+    messageForm.submit();
+  }
+  
+  // Check if form has file attachments
+  function hasFiles() {
+    const fileInputs = messageForm.querySelectorAll('input[type="file"]');
+    return Array.from(fileInputs).some(input => input.files && input.files.length > 0);
+  }
+  
+  // Add optimistic message (shows message immediately before server response)
+  function addOptimisticMessage(content) {
+    const messagesDiv = messagesContainer.querySelector('div');
+    const messageHtml = `
+      <div class="flex justify-end mb-3 opacity-70" id="optimistic-message">
+        <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg bg-blue-600 text-white rounded-br-sm relative">
+          <p class="text-sm whitespace-pre-wrap">${escapeHtml(content)}</p>
+          <div class="flex items-center justify-end mt-1 space-x-1">
+            <p class="text-xs text-blue-100">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
+            <div class="text-blue-100 text-xs">
+              <div class="animate-spin rounded-full h-3 w-3 border-b border-white"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    messagesDiv.insertAdjacentHTML('beforeend', messageHtml);
+    scrollToBottom();
+  }
+  
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
 });
 
-// Emoji picker functions
+// Enhanced Emoji Functions
 function toggleEmojiPicker(show) {
   const picker = document.getElementById('emoji-picker');
+  const attachmentMenu = document.getElementById('attachment-menu');
+  
+  // Close attachment menu if open
+  if (attachmentMenu && !attachmentMenu.classList.contains('hidden')) {
+    attachmentMenu.classList.add('hidden');
+  }
+  
   if (show === false) {
     picker.classList.add('hidden');
   } else {
     picker.classList.toggle('hidden');
+    if (!picker.classList.contains('hidden')) {
+      // Show recent emojis by default
+      showEmojiCategory('recent');
+    }
   }
+}
+
+function showEmojiCategory(category) {
+  // Hide all categories
+  document.querySelectorAll('.emoji-category').forEach(cat => {
+    cat.classList.add('hidden');
+  });
+  
+  // Remove active state from all tabs
+  document.querySelectorAll('.emoji-tab').forEach(tab => {
+    tab.classList.remove('border-blue-500', 'text-blue-600');
+    tab.classList.add('border-transparent', 'text-gray-500');
+  });
+  
+  // Show selected category
+  const selectedCategory = document.getElementById(category + '-emojis');
+  if (selectedCategory) {
+    selectedCategory.classList.remove('hidden');
+  }
+  
+  // Update active tab
+  const activeTab = document.querySelector(`[onclick="showEmojiCategory('${category}')"]`);
+  if (activeTab) {
+    activeTab.classList.remove('border-transparent', 'text-gray-500');
+    activeTab.classList.add('border-blue-500', 'text-blue-600');
+  }
+}
+
+function populateRecentEmojis() {
+  const recentContainer = document.getElementById('recent-emojis').querySelector('.grid');
+  recentContainer.innerHTML = '';
+  
+  recentEmojis.forEach(emoji => {
+    const span = document.createElement('span');
+    span.className = 'cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors text-xl';
+    span.textContent = emoji;
+    span.onclick = () => insertEmoji(emoji);
+    recentContainer.appendChild(span);
+  });
 }
 
 function insertEmoji(emoji) {
@@ -236,21 +599,571 @@ function insertEmoji(emoji) {
   const start = input.selectionStart;
   const end = input.selectionEnd;
   const text = input.value;
-  
+    
   input.value = text.substring(0, start) + emoji + text.substring(end);
   input.focus();
   input.setSelectionRange(start + emoji.length, start + emoji.length);
   
   // Trigger input event for auto-resize
   input.dispatchEvent(new Event('input'));
+  
+  // Add to recent emojis
+  addToRecentEmojis(emoji);
+  
+  // Close emoji picker
+  toggleEmojiPicker(false);
 }
 
-// Close emoji picker when clicking outside
+function addToRecentEmojis(emoji) {
+  // Remove emoji if it already exists
+  recentEmojis = recentEmojis.filter(e => e !== emoji);
+  
+  // Add to beginning
+  recentEmojis.unshift(emoji);
+  
+  // Keep only latest 16
+  recentEmojis = recentEmojis.slice(0, 16);
+  
+  // Save to localStorage
+  localStorage.setItem('recentEmojis', JSON.stringify(recentEmojis));
+  
+  // Update UI
+  populateRecentEmojis();
+}
+
+// File Upload Functions
+function toggleAttachmentMenu() {
+  const menu = document.getElementById('attachment-menu');
+  const emojiPicker = document.getElementById('emoji-picker');
+  
+  // Close emoji picker if open
+  if (emojiPicker && !emojiPicker.classList.contains('hidden')) {
+    emojiPicker.classList.add('hidden');
+  }
+  
+  menu.classList.toggle('hidden');
+}
+
+function triggerFileInput(type) {
+  const input = document.getElementById(type + '-input');
+  if (input) {
+    input.click();
+  }
+  toggleAttachmentMenu();
+}
+
+function handleFileSelect(input, type) {
+  const files = Array.from(input.files);
+  if (files.length > 0) {
+    showFilePreview(files[0], type);
+  }
+}
+
+function showFilePreview(file, type) {
+  const previewArea = document.getElementById('file-preview-area');
+  const previewIcon = document.getElementById('preview-icon');
+  const previewName = document.getElementById('preview-name');
+  const previewSize = document.getElementById('preview-size');
+  
+  previewArea.classList.remove('hidden');
+  previewName.textContent = file.name;
+  previewSize.textContent = formatFileSize(file.size);
+  
+  // Set appropriate icon
+  switch (type) {
+    case 'image':
+      previewIcon.innerHTML = '<i class="fas fa-image text-green-500"></i>';
+      break;
+    case 'document':
+      previewIcon.innerHTML = '<i class="fas fa-file-alt text-blue-500"></i>';
+      break;
+    case 'voice':
+      previewIcon.innerHTML = '<i class="fas fa-microphone text-red-500"></i>';
+      break;
+    default:
+      previewIcon.innerHTML = '<i class="fas fa-file text-gray-500"></i>';
+  }
+}
+
+function clearFilePreview() {
+  document.getElementById('file-preview-area').classList.add('hidden');
+  
+  // Clear all file inputs
+  document.querySelectorAll('input[type="file"]').forEach(input => {
+    input.value = '';
+  });
+}
+
+function formatFileSize(bytes) {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// Voice Recording Functions
+function startVoiceRecording() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert('Voice recording is not supported in your browser.');
+    return;
+  }
+  
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      mediaRecorder = new MediaRecorder(stream);
+      recordedChunks = [];
+      
+      mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+          recordedChunks.push(event.data);
+        }
+      };
+      
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+        const file = new File([blob], `voice-note-${Date.now()}.webm`, { type: 'audio/webm' });
+        
+        // Create a DataTransfer object to set files
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        
+        const voiceInput = document.getElementById('voice-input');
+        voiceInput.files = dataTransfer.files;
+        
+        showFilePreview(file, 'voice');
+        
+        // Stop all tracks
+        stream.getTracks().forEach(track => track.stop());
+      };
+      
+      mediaRecorder.start();
+      isRecording = true;
+      recordingStartTime = Date.now();
+      
+      // Show recording UI
+      document.getElementById('voice-recording').classList.remove('hidden');
+      
+      // Start timer
+      recordingTimer = setInterval(updateRecordingTime, 1000);
+      
+      toggleAttachmentMenu();
+    })
+    .catch(err => {
+      console.error('Error accessing microphone:', err);
+      alert('Could not access microphone. Please check your permissions.');
+    });
+}
+
+function stopVoiceRecording() {
+  if (mediaRecorder && isRecording) {
+    mediaRecorder.stop();
+    isRecording = false;
+    clearInterval(recordingTimer);
+    document.getElementById('voice-recording').classList.add('hidden');
+  }
+}
+
+function cancelVoiceRecording() {
+  if (mediaRecorder && isRecording) {
+    mediaRecorder.stop();
+    isRecording = false;
+    recordedChunks = [];
+    clearInterval(recordingTimer);
+    document.getElementById('voice-recording').classList.add('hidden');
+    
+    // Stop all tracks
+    mediaRecorder.stream.getTracks().forEach(track => track.stop());
+  }
+}
+
+function updateRecordingTime() {
+  if (isRecording) {
+    const elapsed = Math.floor((Date.now() - recordingStartTime) / 1000);
+    const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+    const seconds = (elapsed % 60).toString().padStart(2, '0');
+    document.getElementById('recording-time').textContent = `${minutes}:${seconds}`;
+    
+    // Stop recording after 60 seconds
+    if (elapsed >= 60) {
+      stopVoiceRecording();
+      alert('Recording stopped automatically after 1 minute.');
+    }
+  }
+}
+
+// Image Modal Functions
+function openImageModal(imageUrl) {
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50';
+  modal.innerHTML = `
+    <div class="relative max-w-4xl max-h-full p-4">
+      <img src="${imageUrl}" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" alt="Full size image">
+      <button onclick="this.parentElement.parentElement.remove()" 
+              class="absolute top-2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition-opacity">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `;
+  
+  modal.onclick = (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  };
+  
+  document.body.appendChild(modal);
+}
+
+// Close menus when clicking outside
 document.addEventListener('click', function(e) {
-  const picker = document.getElementById('emoji-picker');
-  const button = e.target.closest('.fa-smile');
-  if (!picker.contains(e.target) && !button) {
-    picker.classList.add('hidden');
+  const emojiPicker = document.getElementById('emoji-picker');
+  const emojiButton = e.target.closest('[onclick*="toggleEmojiPicker"]');
+  const attachmentMenu = document.getElementById('attachment-menu');
+  const attachmentButton = e.target.closest('[onclick*="toggleAttachmentMenu"]');
+  
+  // Close emoji picker
+  if (emojiPicker && !emojiPicker.contains(e.target) && !emojiButton) {
+    emojiPicker.classList.add('hidden');
+  }
+  
+  // Close attachment menu
+  if (attachmentMenu && !attachmentMenu.contains(e.target) && !attachmentButton) {
+    attachmentMenu.classList.add('hidden');
   }
 });
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+  // Ctrl/Cmd + E for emoji picker
+  if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+    e.preventDefault();
+    toggleEmojiPicker();
+  }
+  
+  // Ctrl/Cmd + Shift + A for attachment menu
+  if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'A') {
+    e.preventDefault();
+    toggleAttachmentMenu();
+  }
+  
+  // Escape to close menus
+  if (e.key === 'Escape') {
+    toggleEmojiPicker(false);
+    document.getElementById('attachment-menu').classList.add('hidden');
+    cancelReply();
+    cancelEdit();
+  }
+});
+
+// Message Action Functions
+let selectedMessageId = null;
+let replyToId = null;
+let editingMessageId = null;
+
+// Reply to message
+function replyToMessage(messageId, senderName, content) {
+  replyToId = messageId;
+  document.getElementById('reply-to-input').value = messageId;
+  
+  const replyPreview = document.getElementById('reply-preview');
+  const replyUser = document.getElementById('reply-sender');
+  const replyContent = document.getElementById('reply-content');
+  
+  replyUser.textContent = senderName;
+  replyContent.textContent = content;
+  replyPreview.classList.remove('hidden');
+  
+  document.getElementById('message-input').focus();
+}
+
+// Cancel reply
+function cancelReply() {
+  replyToId = null;
+  document.getElementById('reply-to-input').value = '';
+  document.getElementById('reply-preview').classList.add('hidden');
+}
+
+// Edit message
+function editMessage(messageId, currentContent) {
+  editingMessageId = messageId;
+  document.getElementById('edit-message-id').value = messageId;
+  document.getElementById('action-type').value = 'edit';
+  
+  const messageInput = document.getElementById('message-input');
+  messageInput.value = currentContent;
+  messageInput.focus();
+  
+  // Change send button to edit mode
+  const sendButton = document.getElementById('send-button');
+  sendButton.innerHTML = '<i class="fas fa-check text-lg"></i>';
+  sendButton.classList.remove('bg-gradient-to-r', 'from-blue-600', 'to-purple-600');
+  sendButton.classList.add('bg-green-600', 'hover:bg-green-700');
+  
+  // Show cancel edit button
+  showCancelEditButton();
+}
+
+// Cancel edit
+function cancelEdit() {
+  editingMessageId = null;
+  document.getElementById('edit-message-id').value = '';
+  document.getElementById('action-type').value = 'create';
+  document.getElementById('message-input').value = '';
+  
+  const sendButton = document.getElementById('send-button');
+  sendButton.innerHTML = '<i class="fas fa-paper-plane text-lg"></i>';
+  sendButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+  sendButton.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-purple-600');
+  
+  hideCancelEditButton();
+}
+
+// Show/hide cancel edit button
+function showCancelEditButton() {
+  const form = document.getElementById('message-form');
+  if (!document.getElementById('cancel-edit-btn')) {
+    const cancelBtn = document.createElement('button');
+    cancelBtn.type = 'button';
+    cancelBtn.id = 'cancel-edit-btn';
+    cancelBtn.onclick = cancelEdit;
+    cancelBtn.className = 'px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors';
+    cancelBtn.innerHTML = '<i class="fas fa-times mr-1"></i>Cancel';
+    
+    form.querySelector('.flex.items-end.space-x-3').appendChild(cancelBtn);
+  }
+}
+
+function hideCancelEditButton() {
+  const cancelBtn = document.getElementById('cancel-edit-btn');
+  if (cancelBtn) {
+    cancelBtn.remove();
+  }
+}
+
+// Delete message
+function deleteMessage(messageId) {
+  if (confirm('Are you sure you want to delete this message? This action cannot be undone.')) {
+    fetch(`/conversations/<%= @conversation.id %>/messages/${messageId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        // Refresh the page to show updated messages
+        location.reload();
+      } else {
+        alert('Failed to delete message');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to delete message');
+    });
+  }
+}
+
+// Toggle pin message
+function togglePinMessage(messageId) {
+  fetch(`/conversations/<%= @conversation.id %>/messages/${messageId}/pin`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+    }
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      // Refresh the page to show updated pinned status
+      location.reload();
+    } else {
+      alert('Failed to pin/unpin message');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Failed to pin/unpin message');
+  });
+}
+
+// Select message
+function selectMessage(messageId) {
+  // Remove previous selection
+  document.querySelectorAll('[id^="selection-"]').forEach(el => {
+    el.classList.remove('opacity-100');
+    el.classList.add('opacity-0');
+  });
+  
+  // Select current message
+  selectedMessageId = messageId;
+  const selection = document.getElementById(`selection-${messageId}`);
+  if (selection) {
+    selection.classList.remove('opacity-0');
+    selection.classList.add('opacity-100');
+  }
+}
+
+// Show message menu (right-click context menu)
+function showMessageMenu(event, messageId, isCurrentUser) {
+  event.preventDefault();
+  
+  // Remove existing menu
+  const existingMenu = document.getElementById('message-context-menu');
+  if (existingMenu) {
+    existingMenu.remove();
+  }
+  
+  // Create menu
+  const menu = document.createElement('div');
+  menu.id = 'message-context-menu';
+  menu.className = 'fixed bg-white rounded-lg shadow-xl border py-2 z-50';
+  menu.style.left = event.pageX + 'px';
+  menu.style.top = event.pageY + 'px';
+  
+  const menuItems = [];
+  
+  // Always show reply
+  menuItems.push({
+    icon: 'fas fa-reply',
+    text: 'Reply',
+    action: () => {
+      const messageEl = document.getElementById(`message-${messageId}`);
+      const sender = messageEl.querySelector('.font-medium')?.textContent || 'User';
+      const content = messageEl.querySelector('.message-content p')?.textContent || 'Message';
+      replyToMessage(messageId, sender, content);
+    }
+  });
+  
+  if (isCurrentUser) {
+    menuItems.push(
+      {
+        icon: 'fas fa-edit',
+        text: 'Edit',
+        action: () => {
+          const content = document.getElementById(`content-${messageId}`)?.querySelector('p')?.textContent || '';
+          editMessage(messageId, content);
+        }
+      },
+      {
+        icon: 'fas fa-trash',
+        text: 'Delete',
+        action: () => deleteMessage(messageId)
+      }
+    );
+  }
+  
+  menuItems.push({
+    icon: 'fas fa-thumbtack',
+    text: 'Pin/Unpin',
+    action: () => togglePinMessage(messageId)
+  });
+  
+  // Add menu items
+  menuItems.forEach(item => {
+    const menuItem = document.createElement('button');
+    menuItem.className = 'w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-3';
+    menuItem.innerHTML = `<i class="${item.icon} text-gray-600"></i><span>${item.text}</span>`;
+    menuItem.onclick = () => {
+      item.action();
+      menu.remove();
+    };
+    menu.appendChild(menuItem);
+  });
+  
+  document.body.appendChild(menu);
+  
+  // Remove menu on click outside
+  setTimeout(() => {
+    document.addEventListener('click', function removeMenu() {
+      menu.remove();
+      document.removeEventListener('click', removeMenu);
+    });
+  }, 0);
+}
+
+// Show more actions
+function showMoreActions(messageId) {
+  // For now, just trigger the context menu
+  const messageEl = document.getElementById(`message-${messageId}`);
+  const rect = messageEl.getBoundingClientRect();
+  const event = {
+    pageX: rect.right - 50,
+    pageY: rect.top + 20,
+    preventDefault: () => {}
+  };
+  showMessageMenu(event, messageId, true);
+}
+
+// Scroll to message
+function scrollToMessage(messageId) {
+  const messageEl = document.getElementById(`message-${messageId}`);
+  if (messageEl) {
+    messageEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    // Highlight the message briefly
+    messageEl.classList.add('bg-yellow-100');
+    setTimeout(() => {
+      messageEl.classList.remove('bg-yellow-100');
+    }, 2000);
+  }
+}
+
+// Toggle pinned messages visibility
+function togglePinnedMessages() {
+  const pinnedMessages = document.getElementById('pinned-messages');
+  const chevron = document.getElementById('pinned-chevron');
+  
+  if (pinnedMessages.classList.contains('hidden')) {
+    pinnedMessages.classList.remove('hidden');
+    chevron.classList.remove('fa-chevron-right');
+    chevron.classList.add('fa-chevron-down');
+  } else {
+    pinnedMessages.classList.add('hidden');
+    chevron.classList.remove('fa-chevron-down');
+    chevron.classList.add('fa-chevron-right');
+  }
+}
+
+// Enhance the submit message function to handle edit mode
+const originalSubmitMessage = submitMessage;
+function submitMessage() {
+  const actionType = document.getElementById('action-type').value;
+  const editMessageId = document.getElementById('edit-message-id').value;
+  
+  if (actionType === 'edit' && editMessageId) {
+    // Handle edit
+    const content = document.getElementById('message-input').value.trim();
+    
+    fetch(`/conversations/<%= @conversation.id %>/messages/${editMessageId}/edit`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ content: content })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === 'success') {
+        location.reload();
+      } else {
+        alert('Failed to edit message');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Failed to edit message');
+    });
+    
+    cancelEdit();
+  } else {
+    // Handle normal message creation
+    originalSubmitMessage();
+  }
+}
 </script>
