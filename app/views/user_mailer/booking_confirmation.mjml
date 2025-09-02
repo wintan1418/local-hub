@@ -1,0 +1,171 @@
+<mjml>
+  <mj-head>
+    <mj-title>Booking Confirmation - LocalServiceHub</mj-title>
+    <mj-preview>Your booking has been confirmed! Here are the details.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+      <mj-button background-color="#10b981" color="#ffffff" font-weight="600" border-radius="8px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <!-- Header -->
+    <mj-section background-color="#ffffff" padding="0">
+      <mj-column>
+        <mj-section background-color="#10b981" padding="40px 0">
+          <mj-column>
+            <mj-text align="center" color="#ffffff" font-size="32px" font-weight="bold">
+              LocalServiceHub
+            </mj-text>
+            <mj-text align="center" color="#d1fae5" font-size="18px" padding-top="10px">
+              Your Trusted Service Provider Platform
+            </mj-text>
+          </mj-column>
+        </mj-section>
+      </mj-column>
+    </mj-section>
+
+    <!-- Main Content -->
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <!-- Success Icon -->
+        <mj-image src="data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2310b981'/%3E%3Cpath d='m9 12 2 2 4-4' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Confirmed" width="80px" align="center" padding="0 0 20px 0" />
+        
+        <!-- Main Heading -->
+        <mj-text align="center" font-size="28px" font-weight="bold" color="#111827" padding="0 0 16px 0">
+          ✅ Booking Confirmed!
+        </mj-text>
+
+        <!-- Greeting -->
+        <mj-text font-size="18px" color="#374151" padding="0 0 24px 0">
+          Hello <%= @user.first_name || @user.email.split('@').first %>,
+        </mj-text>
+
+        <!-- Main Message -->
+        <mj-text font-size="16px" color="#374151" padding="0 0 24px 0">
+          Great news! Your booking has been confirmed. Here are the details of your upcoming service:
+        </mj-text>
+
+        <!-- Booking Details Card -->
+        <mj-section background-color="#f9fafb" border="2px solid #e5e7eb" border-radius="12px" padding="24px">
+          <mj-column>
+            <mj-text font-size="20px" font-weight="bold" color="#111827" padding="0 0 16px 0" align="center">
+              📋 Booking Details
+            </mj-text>
+            
+            <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+              <strong>Service:</strong> <%= @service.title %>
+            </mj-text>
+            
+            <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+              <strong>Provider:</strong> <%= @provider.business_name || @provider.full_name %>
+            </mj-text>
+            
+            <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+              <strong>Date & Time:</strong> <%= @booking.scheduled_at.strftime('%A, %B %d, %Y at %I:%M %p') %>
+            </mj-text>
+            
+            <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+              <strong>Total Price:</strong> $<%= number_with_precision(@booking.total_price, precision: 2) %>
+            </mj-text>
+            
+            <mj-text font-size="16px" color="#374151" padding="0 0 0px 0">
+              <strong>Booking ID:</strong> #<%= @booking.id %>
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <!-- Provider Info -->
+        <mj-text font-size="18px" font-weight="600" color="#111827" padding="32px 0 16px 0">
+          About Your Provider:
+        </mj-text>
+
+        <mj-section background-color="#eff6ff" border-radius="8px" padding="20px">
+          <mj-column>
+            <mj-text font-size="16px" color="#1e40af" padding="0 0 8px 0">
+              <strong><%= @provider.business_name || @provider.full_name %></strong>
+              <% if @provider.verified? %>
+                <span style="color: #10b981;">✓ Verified</span>
+              <% end %>
+            </mj-text>
+            
+            <% if @provider.bio.present? %>
+            <mj-text font-size="14px" color="#1e40af" padding="0">
+              <%= truncate(@provider.bio, length: 200) %>
+            </mj-text>
+            <% end %>
+          </mj-column>
+        </mj-section>
+
+        <!-- Next Steps -->
+        <mj-text font-size="18px" font-weight="600" color="#111827" padding="32px 0 16px 0">
+          What happens next:
+        </mj-text>
+
+        <mj-section background-color="#f9fafb" border-left="4px solid #10b981" padding="20px">
+          <mj-column>
+            <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+              📱 Your provider will contact you to confirm details
+            </mj-text>
+            <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+              📅 Add this appointment to your calendar
+            </mj-text>
+            <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+              💬 Use our messaging system for any questions
+            </mj-text>
+            <mj-text font-size="16px" color="#374151" padding="0 0 0px 0">
+              ⭐ Leave a review after service completion
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <!-- CTA Buttons -->
+        <mj-section padding="20px 0">
+          <mj-group>
+            <mj-column width="50%">
+              <mj-button href="#" background-color="#10b981" font-size="16px">
+                View Booking
+              </mj-button>
+            </mj-column>
+            <mj-column width="50%">
+              <mj-button href="#" background-color="#6b7280" font-size="16px">
+                Message Provider
+              </mj-button>
+            </mj-column>
+          </mj-group>
+        </mj-section>
+
+        <!-- Contact Info -->
+        <mj-section background-color="#fef3c7" border-radius="8px" padding="20px">
+          <mj-column>
+            <mj-text color="#92400e" font-size="14px" padding="0">
+              <strong>Need to make changes?</strong> Contact your provider directly through our messaging system or call our support team if you need to reschedule or cancel.
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <!-- Closing Message -->
+        <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
+          Thank you for choosing LocalServiceHub. We're here to ensure you have a great experience!
+        </mj-text>
+
+        <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
+          Best regards,<br>
+          <strong>The LocalServiceHub Team</strong>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#f3f4f6" padding="30px">
+      <mj-column>
+        <mj-text align="center" font-size="14px" color="#6b7280" padding="0 0 10px 0">
+          <strong>LocalServiceHub</strong> - Connecting you with trusted local service providers
+        </mj-text>
+        <mj-text align="center" font-size="12px" color="#9ca3af">
+          This email was sent from LocalServiceHub. If you have any questions, please contact our support team.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

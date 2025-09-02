@@ -61,6 +61,8 @@ class User < ApplicationRecord
   # Note: Using Devise's built-in confirmation system
 
   # Validations
+  validates :email, presence: true, uniqueness: { case_sensitive: false }, 
+            format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid email address" }
   validates :first_name, presence: true, if: :profile_required?
   validates :last_name, presence: true, if: :profile_required?
   validates :phone, presence: true, format: { with: /\A\d{10,15}\z/ }, if: :profile_required?
@@ -290,6 +292,42 @@ class User < ApplicationRecord
 
   def email_confirmed?
     confirmed?
+  end
+
+  def valid_email_domain?
+    return false if email.blank?
+    
+    # List of common email providers and business domains
+    allowed_domains = %w[
+      gmail.com googlemail.com yahoo.com yahoo.co.uk hotmail.com hotmail.co.uk
+      outlook.com outlook.co.uk live.com live.co.uk icloud.com me.com
+      aol.com aol.co.uk protonmail.com protonmail.ch
+    ]
+    
+    domain = email.split('@').last&.downcase
+    return true if allowed_domains.include?(domain)
+    
+    # Allow business domains (domains with valid MX records)
+    begin
+      require 'resolv'
+      mx_records = Resolv::DNS.open { |dns| dns.getresources(domain, Resolv::DNS::Resource::IN::MX) }
+      mx_records.any?
+    rescue
+      false
+    end
+  end
+
+  def disposable_email?
+    return false if email.blank?
+    
+    # List of known disposable email domains
+    disposable_domains = %w[
+      10minutemail.com guerrillamail.com mailinator.com tempmail.org
+      throwaway.email temp-mail.org getnada.com
+    ]
+    
+    domain = email.split('@').last&.downcase
+    disposable_domains.include?(domain)
   end
 
   def password_reset_expired?

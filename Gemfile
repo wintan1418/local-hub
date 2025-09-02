@@ -47,6 +47,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   # gem "rubocop-rails-omakase", require: false
+  
+  # Load environment variables from .env files
+  gem "dotenv-rails"
 end
 
 group :development do
@@ -63,6 +66,8 @@ gem "geocoder"
 gem "administrate"
 gem "faker"
 gem "twilio-ruby"
+gem "mjml-rails"
+gem "kaminari"
 
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]

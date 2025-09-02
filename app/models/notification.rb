@@ -171,9 +171,9 @@ class Notification < ApplicationRecord
 
   def self.create_booking_notification(booking, type, title, message)
     # Notify service provider
-    if booking.service.user != booking.user
+    if booking.service.provider != booking.customer
       create!(
-        user: booking.service.user,
+        user: booking.service.provider,
         notifiable: booking,
         notification_type: type,
         title: title,
@@ -182,9 +182,9 @@ class Notification < ApplicationRecord
     end
 
     # Notify customer (for updates/cancellations)
-    if type != "booking_created" && booking.user != booking.service.user
+    if type != "booking_created" && booking.customer != booking.service.provider
       create!(
-        user: booking.user,
+        user: booking.customer,
         notifiable: booking,
         notification_type: type,
         title: title,

@@ -111,11 +111,11 @@ puts "👥 Creating users..."
 
 # Create Admin users with specific roles
 admin_roles_data = [
-  { role: 'super_admin', name: 'Super Admin', email: 'superadmin@localservicehub.com' },
+  { role: 'super_admin', name: 'Main Admin', email: 'wintan1418@gmail.com' },
   { role: 'verification_admin', name: 'Verification Admin', email: 'verification@localservicehub.com' },
   { role: 'support_admin', name: 'Support Admin', email: 'support@localservicehub.com' },
   { role: 'content_admin', name: 'Content Admin', email: 'content@localservicehub.com' },
-  { role: 'super_admin', name: 'General Admin', email: 'admin@localservicehub.com' }
+  { role: 'super_admin', name: 'System Admin', email: 'admin@localservicehub.com' }
 ]
 
 admins = admin_roles_data.map do |admin_data|

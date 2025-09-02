@@ -61,19 +61,24 @@ class NotificationsController < ApplicationController
   private
 
   def notification_redirect_path(notification)
-    case notification.notifiable_type
-    when "Booking"
+    case notification.notification_type
+    when "verification_approved", "verification_rejected", "verification_pending"
+      if current_user.admin?
+        admin_verifications_path
+      else
+        provider_profile_path
+      end
+    when "booking_created", "booking_updated", "booking_cancelled"
       booking = notification.notifiable
       if current_user.provider?
         provider_dashboard_path
       else
         customer_dashboard_path
       end
-    when "ChatMessage"
+    when "message_received"
       message = notification.notifiable
       conversation_path(message.conversation)
-    when "Subscription"
-      subscription = notification.notifiable
+    when "payment_received", "payment_failed", "subscription_created", "subscription_cancelled"
       if current_user.provider?
         provider_subscriptions_path
       else

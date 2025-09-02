@@ -36,7 +36,8 @@
       "Bash(sudo service:*)",
       "Bash(command -v:*)",
       "Bash(pg_ctl:*)",
-      "Bash(RAILS_ENV=development bin/rails runner \"puts ''Rails loads successfully!''; puts ''Credentials accessible: '' + Rails.application.credentials.inspect\")"
+      "Bash(RAILS_ENV=development bin/rails runner \"puts ''Rails loads successfully!''; puts ''Credentials accessible: '' + Rails.application.credentials.inspect\")",
+      "Bash(mailcatcher:*)"
     ],
     "deny": []
   }
