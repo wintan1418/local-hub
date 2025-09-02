@@ -1,11 +1,11 @@
 class EmailConfirmationsController < ApplicationController
-  before_action :find_user_by_token, only: [:show]
+  before_action :find_user_by_token, only: [ :show ]
 
   def show
     if @user&.email_confirmation_token == params[:token]
       @user.confirm_email!
       @user.send_welcome_email
-      
+
       sign_in(@user) unless user_signed_in?
       redirect_to root_path, notice: 'Your email has been confirmed successfully! Welcome to LocalServiceHub.'
     else

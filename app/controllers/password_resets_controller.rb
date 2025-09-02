@@ -1,12 +1,12 @@
 class PasswordResetsController < ApplicationController
-  before_action :find_user_by_token, only: [:show, :update]
-  
+  before_action :find_user_by_token, only: [ :show, :update ]
+
   def new
   end
 
   def create
     @user = User.find_by(email: params[:email])
-    
+
     if @user
       @user.send_password_reset_email
       redirect_to new_user_session_path, notice: 'Password reset instructions have been sent to your email.'

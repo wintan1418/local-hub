@@ -20,11 +20,11 @@ Rails.application.routes.draw do
   devise_for :users
 
   # Email confirmation routes
-  resources :email_confirmations, only: [:show, :create]
+  resources :email_confirmations, only: [ :show, :create ]
   get 'confirm_email/:token', to: 'email_confirmations#show', as: :confirm_email
 
   # Password reset routes
-  resources :password_resets, only: [:new, :create, :show, :update], param: :token
+  resources :password_resets, only: [ :new, :create, :show, :update ], param: :token
   get 'password_reset/:token', to: 'password_resets#show', as: :edit_password_reset
   patch 'password_reset/:token', to: 'password_resets#update'
 

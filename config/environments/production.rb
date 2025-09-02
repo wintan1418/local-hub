@@ -6,10 +6,10 @@ Rails.application.configure do
   # Configure URL options for production
   config.action_mailer.default_url_options = { host: ENV.fetch("APP_HOST") { "localhost" }, protocol: "https" }
   Rails.application.routes.default_url_options = { host: ENV.fetch("APP_HOST") { "localhost" }, protocol: "https" }
-  
+
   # Use environment variables for secrets in production
   config.secret_key_base = ENV['SECRET_KEY_BASE']
-  
+
   # Disable credentials system in production - use environment variables instead
   config.require_master_key = false
 
@@ -27,10 +27,10 @@ Rails.application.configure do
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   config.public_file_server.enabled = true
-  
+
   # Disable Sass compression to avoid conflicts with Tailwind CSS
   config.assets.css_compressor = nil
-  
+
   # Cache assets for far-future expiry since they are all digest stamped.
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
 
@@ -96,7 +96,7 @@ Rails.application.configure do
   config.hosts << "local-hub-1.onrender.com"
   config.hosts << "localservicehub.onrender.com"
   config.hosts << /.*\.onrender\.com/
-  
+
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 end

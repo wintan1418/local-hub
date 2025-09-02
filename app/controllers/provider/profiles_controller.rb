@@ -32,10 +32,10 @@ class Provider::ProfilesController < ApplicationController
       params[:verification_documents].each do |document|
         @user.verification_documents.attach(document)
       end
-      
+
       # Send verification pending email
       UserMailer.verification_pending(@user).deliver_later
-      
+
       # Create notification for admins
       admin_users = User.where(user_role: 'admin')
       admin_users.each do |admin|
@@ -46,7 +46,7 @@ class Provider::ProfilesController < ApplicationController
           notification_type: "system_announcement"
         )
       end
-      
+
       redirect_to verification_provider_profile_path, notice: "Documents uploaded successfully. We will review them shortly."
     else
       redirect_to verification_provider_profile_path, alert: "Please select documents to upload."
