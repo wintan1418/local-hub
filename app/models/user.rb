@@ -33,7 +33,6 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
 
   # Callbacks for automatic emails
-  after_create :send_confirmation_email, if: -> { !email_confirmed? }
   after_update :send_welcome_email_if_confirmed, if: :saved_change_to_confirmed_at?
 
   # CRM
@@ -43,8 +42,7 @@ class User < ApplicationRecord
   has_many :crm_campaigns, dependent: :destroy
   has_many :campaign_recipients, dependent: :destroy
 
-  # Email confirmation token
-  has_secure_token :email_confirmation_token
+  # Note: Using Devise's built-in confirmation system
 
   # Validations
   validates :first_name, presence: true, if: :profile_required?
@@ -203,8 +201,8 @@ class User < ApplicationRecord
   end
 
   def send_confirmation_email
-    regenerate_email_confirmation_token
-    UserMailer.confirmation_instructions(self, email_confirmation_token).deliver_later
+    # Use Devise's built-in confirmation
+    send_confirmation_instructions
   end
 
   def send_password_reset_email
@@ -216,14 +214,11 @@ class User < ApplicationRecord
   end
 
   def confirm_email!
-    update(
-      confirmed_at: Time.current,
-      email_confirmation_token: nil
-    )
+    confirm!
   end
 
   def email_confirmed?
-    confirmed_at.present?
+    confirmed?
   end
 
   def password_reset_expired?
@@ -242,6 +237,6 @@ class User < ApplicationRecord
   private
 
   def send_welcome_email_if_confirmed
-    send_welcome_email if confirmed_at.present?
+    send_welcome_email if confirmed_at.present? && confirmed_at_previously_changed?
   end
 end
