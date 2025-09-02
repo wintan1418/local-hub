@@ -56,6 +56,12 @@ class Provider::ProfilesController < ApplicationController
     end
 
     if uploaded_count > 0
+      # Check if all documents are now uploaded
+      if @user.verification_documents_uploaded?
+        # Create notification that documents are under review
+        Notification.create_verification_notification(@user, :pending)
+      end
+      
       notice_message = "#{uploaded_count} document(s) uploaded successfully. We will review them shortly."
       redirect_to verification_provider_profile_path, notice: notice_message
     else

@@ -27,7 +27,10 @@ class Admin::VerificationsController < ApplicationController
         verified_at: Time.current
       )
       
-      # Send notification to provider
+      # Create notification for provider
+      Notification.create_verification_notification(@provider, :approved)
+      
+      # Send email notification to provider (will add this later)
       # ProviderMailer.verification_approved(@provider).deliver_later
       
       redirect_to admin_verifications_path, 
@@ -40,7 +43,7 @@ class Admin::VerificationsController < ApplicationController
 
   def reject
     @provider = User.provider.find(params[:id])
-    rejection_reason = params[:rejection_reason]
+    rejection_reason = params[:rejection_reason] || "Please review and resubmit your verification documents."
     
     @provider.update(verified: false, verified_at: nil)
     
@@ -60,7 +63,10 @@ class Admin::VerificationsController < ApplicationController
       @provider.government_id_file.purge if @provider.government_id_file.attached?
     end
     
-    # Send notification to provider
+    # Create notification for provider
+    Notification.create_verification_notification(@provider, :rejected, rejection_reason)
+    
+    # Send email notification to provider (will add this later)
     # ProviderMailer.verification_rejected(@provider, rejection_reason).deliver_later
     
     redirect_to admin_verifications_path, 

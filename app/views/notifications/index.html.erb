@@ -1,0 +1,230 @@
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900">Notifications</h1>
+          <p class="mt-1 text-sm text-gray-600">Stay updated with important alerts and messages</p>
+        </div>
+        <div class="flex space-x-3">
+          <% if @notifications.unread.any? %>
+            <%= link_to mark_all_as_read_notifications_path, method: :patch, 
+                class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors" do %>
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Mark All Read
+            <% end %>
+          <% end %>
+          
+          <button id="notification-settings-btn" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Total Notifications</dt>
+                <dd class="text-lg font-medium text-gray-900"><%= @notifications.count %></dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Unread</dt>
+                <dd class="text-lg font-medium text-gray-900"><%= @notifications.unread.count %></dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="p-5">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+              </div>
+            </div>
+            <div class="ml-5 w-0 flex-1">
+              <dl>
+                <dt class="text-sm font-medium text-gray-500 truncate">Read</dt>
+                <dd class="text-lg font-medium text-gray-900"><%= @notifications.read.count %></dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+      <% if @notifications.any? %>
+        <ul class="divide-y divide-gray-200">
+          <% @notifications.each do |notification| %>
+            <li class="<%= notification.read? ? 'bg-white' : 'bg-blue-50' %> hover:bg-gray-50 transition-colors">
+              <div class="px-4 py-4 sm:px-6">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-start space-x-3">
+                    <!-- Notification Icon -->
+                    <div class="flex-shrink-0">
+                      <div class="w-10 h-10 rounded-full flex items-center justify-center <%= notification_icon_class(notification) %>">
+                        <%= notification_icon(notification) %>
+                      </div>
+                    </div>
+                    
+                    <!-- Notification Content -->
+                    <div class="flex-1 min-w-0">
+                      <div class="flex items-center space-x-2">
+                        <h3 class="text-sm font-medium text-gray-900">
+                          <%= notification_title(notification) %>
+                        </h3>
+                        <% unless notification.read? %>
+                          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            New
+                          </span>
+                        <% end %>
+                      </div>
+                      
+                      <p class="mt-1 text-sm text-gray-600">
+                        <%= notification_message(notification) %>
+                      </p>
+                      
+                      <div class="mt-2 flex items-center text-xs text-gray-500 space-x-4">
+                        <span class="flex items-center">
+                          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <%= time_ago_in_words(notification.created_at) %> ago
+                        </span>
+                        
+                        <span class="flex items-center">
+                          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                          </svg>
+                          <%= notification_category(notification) %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Actions -->
+                  <div class="flex items-center space-x-2">
+                    <% if notification.notifiable.present? %>
+                      <%= link_to notification_path(notification), 
+                          class: "inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded text-blue-600 bg-blue-100 hover:bg-blue-200 transition-colors" do %>
+                        View
+                      <% end %>
+                    <% end %>
+                    
+                    <% unless notification.read? %>
+                      <%= link_to mark_as_read_notification_path(notification), method: :patch, remote: true,
+                          class: "inline-flex items-center px-3 py-1.5 border border-gray-300 text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 transition-colors" do %>
+                        Mark Read
+                      <% end %>
+                    <% end %>
+                    
+                    <%= link_to notification_path(notification), method: :delete, remote: true,
+                        confirm: "Are you sure you want to delete this notification?",
+                        class: "inline-flex items-center p-1.5 border border-transparent text-xs font-medium rounded text-red-600 hover:bg-red-50 transition-colors" do %>
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+        
+        <!-- Pagination -->
+        <% if respond_to?(:paginate) && @notifications.respond_to?(:current_page) %>
+          <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+            <%= paginate @notifications, theme: 'twitter_bootstrap_4' if @notifications.respond_to?(:current_page) %>
+          </div>
+        <% end %>
+      <% else %>
+        <!-- Empty State -->
+        <div class="text-center py-12">
+          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM9 17H4l5 5v-5zM12 8.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">No notifications</h3>
+          <p class="mt-1 text-sm text-gray-500">
+            You're all caught up! New notifications will appear here when you have activity.
+          </p>
+          <div class="mt-6">
+            <%= link_to user_dashboard_path, class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700" do %>
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+              </svg>
+              Go to Dashboard
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Auto-refresh notifications every 30 seconds
+  setInterval(function() {
+    if (document.hidden) return; // Don't refresh when tab is not visible
+    
+    fetch(window.location.href, {
+      headers: {
+        'Accept': 'text/html'
+      }
+    })
+    .then(response => response.text())
+    .then(html => {
+      // Update notification count in navbar if it exists
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const newUnreadCount = doc.querySelector('[data-unread-count]');
+      const currentUnreadCount = document.querySelector('[data-unread-count]');
+      
+      if (newUnreadCount && currentUnreadCount) {
+        currentUnreadCount.textContent = newUnreadCount.textContent;
+      }
+    })
+    .catch(error => console.log('Auto-refresh failed:', error));
+  }, 30000);
+</script>

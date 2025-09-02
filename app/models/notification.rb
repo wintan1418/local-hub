@@ -16,7 +16,10 @@ class Notification < ApplicationRecord
     subscription_created: "subscription_created",
     subscription_cancelled: "subscription_cancelled",
     review_received: "review_received",
-    system_announcement: "system_announcement"
+    system_announcement: "system_announcement",
+    verification_approved: "verification_approved",
+    verification_rejected: "verification_rejected",
+    verification_pending: "verification_pending"
   }
 
   scope :unread, -> { where(read_at: nil) }
@@ -53,6 +56,12 @@ class Notification < ApplicationRecord
       "fas fa-times-circle text-orange-500"
     when "review_received"
       "fas fa-star text-yellow-500"
+    when "verification_approved"
+      "fas fa-check-circle text-green-600"
+    when "verification_rejected"
+      "fas fa-times-circle text-red-500"
+    when "verification_pending"
+      "fas fa-clock text-yellow-500"
     when "system_announcement"
       "fas fa-bullhorn text-blue-600"
     else
@@ -131,6 +140,35 @@ class Notification < ApplicationRecord
         notification_type: "system_announcement",
         title: title,
         message: message
+      )
+    end
+  end
+
+  def self.create_verification_notification(user, type, custom_message = nil)
+    case type
+    when :approved
+      create!(
+        user: user,
+        notifiable: user,
+        notification_type: "verification_approved",
+        title: "Verification Approved! 🎉",
+        message: custom_message || "Congratulations! Your provider verification has been approved. You can now offer services with a verified badge."
+      )
+    when :rejected
+      create!(
+        user: user,
+        notifiable: user,
+        notification_type: "verification_rejected",
+        title: "Verification Requires Attention",
+        message: custom_message || "Your verification documents need to be updated. Please review and resubmit your documents."
+      )
+    when :pending
+      create!(
+        user: user,
+        notifiable: user,
+        notification_type: "verification_pending",
+        title: "Documents Under Review",
+        message: custom_message || "Thank you for submitting your verification documents. We're reviewing them and will notify you within 1-2 business days."
       )
     end
   end

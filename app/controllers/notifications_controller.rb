@@ -5,11 +5,9 @@ class NotificationsController < ApplicationController
     @notifications = current_user.notifications
                                .includes(:notifiable)
                                .order(created_at: :desc)
-                               .page(params[:page])
-                               .per(20)
+                               .limit(50) # Show latest 50 notifications
 
-    # Mark all as seen when viewing
-    current_user.notifications.unread.update_all(read_at: Time.current)
+    # Don't auto-mark as read - let users control this
 
     respond_to do |format|
       format.html
