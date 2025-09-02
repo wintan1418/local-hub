@@ -96,6 +96,9 @@ Rails.application.routes.draw do
   resources :conversations, only: [ :index, :show, :create ] do
     member do
       post :create_message
+      patch 'messages/:message_id/edit', to: 'conversations#edit_message', as: :edit_message
+      delete 'messages/:message_id', to: 'conversations#delete_message', as: :delete_message
+      patch 'messages/:message_id/pin', to: 'conversations#pin_message', as: :pin_message
     end
   end
 
