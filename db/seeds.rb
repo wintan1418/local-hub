@@ -109,20 +109,29 @@ cities = [
 # Create Users
 puts "👥 Creating users..."
 
-# Create Admin users (5)
-admins = 5.times.map do |i|
+# Create Admin users with specific roles
+admin_roles_data = [
+  { role: 'super_admin', name: 'Super Admin', email: 'superadmin@localservicehub.com' },
+  { role: 'verification_admin', name: 'Verification Admin', email: 'verification@localservicehub.com' },
+  { role: 'support_admin', name: 'Support Admin', email: 'support@localservicehub.com' },
+  { role: 'content_admin', name: 'Content Admin', email: 'content@localservicehub.com' },
+  { role: 'super_admin', name: 'General Admin', email: 'admin@localservicehub.com' }
+]
+
+admins = admin_roles_data.map do |admin_data|
   user = User.create!(
-    email: "admin#{i+1}@localservicehub.com",
+    email: admin_data[:email],
     password: 'password123',
     user_role: 'admin',
-    first_name: Faker::Name.first_name,
-    last_name: Faker::Name.last_name,
+    admin_role: admin_data[:role],
+    first_name: admin_data[:name].split(' ').first,
+    last_name: admin_data[:name].split(' ').last,
     phone: Faker::Number.number(digits: 10).to_s,
-    bio: "Experienced admin managing the LocalServiceHub platform.",
+    bio: "#{admin_data[:name]} managing the LocalServiceHub platform.",
     verified: true,
     verified_at: 1.year.ago
   )
-  puts "  ✅ Created admin: #{user.email}"
+  puts "  ✅ Created #{admin_data[:name]}: #{user.email} (#{admin_data[:role]})"
   user
 end
 
@@ -148,8 +157,13 @@ providers = 40.times.map do |i|
     city: location[:city],
     state: location[:state],
     zip_code: location[:zip],
-    verified: [ true, true, true, false ].sample, # 75% verified
-    verified_at: [ true, true, true, false ].sample ? rand(1..365).days.ago : nil
+    verified: [ true, true, false, false ].sample, # 50% verified
+    verified_at: [ true, true, false, false ].sample ? rand(1..365).days.ago : nil,
+    # Some providers have uploaded documents for verification review
+    business_license_document: [ true, true, false ].sample,
+    insurance_certificate_document: [ true, true, false ].sample,
+    professional_certifications_document: [ true, false, false ].sample,
+    government_id_document: [ true, false, false ].sample
   )
 
   # Create subscription for provider
@@ -292,6 +306,11 @@ puts "  • Verified Providers: #{User.where(user_role: 'provider', verified: tr
 
 puts "\n✅ Seeding completed successfully!"
 puts "\n📝 Sample login credentials:"
-puts "  Admin: admin1@localservicehub.com / password123"
-puts "  Provider: provider1@example.com / password123"
-puts "  Customer: customer1@example.com / password123"
+puts "  🔐 ADMIN ACCOUNTS:"
+puts "    Super Admin: superadmin@localservicehub.com / password123"
+puts "    Verification Admin: verification@localservicehub.com / password123"
+puts "    Support Admin: support@localservicehub.com / password123"
+puts "    Content Admin: content@localservicehub.com / password123"
+puts "    General Admin: admin@localservicehub.com / password123"
+puts "  👔 PROVIDER: provider1@example.com / password123"
+puts "  👤 CUSTOMER: customer1@example.com / password123"

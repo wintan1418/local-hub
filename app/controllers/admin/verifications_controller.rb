@@ -5,10 +5,6 @@ class Admin::VerificationsController < ApplicationController
   def index
     @pending_verifications = User.provider
                                 .where(verified: false)
-                                .joins(:business_license_file_attachment, 
-                                      :insurance_certificate_file_attachment,
-                                      :professional_certifications_file_attachment,
-                                      :government_id_file_attachment)
                                 .where(business_license_document: true,
                                       insurance_certificate_document: true,
                                       professional_certifications_document: true,
