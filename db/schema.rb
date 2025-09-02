@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_02_020006) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_02_182532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -93,9 +93,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_02_020006) do
     t.integer "message_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "reply_to_id"
+    t.boolean "pinned", default: false
+    t.datetime "deleted_at", precision: nil
+    t.datetime "edited_at", precision: nil
     t.index ["conversation_id", "created_at"], name: "index_chat_messages_on_conversation_id_and_created_at"
     t.index ["conversation_id"], name: "index_chat_messages_on_conversation_id"
     t.index ["created_at"], name: "index_chat_messages_on_created_at"
+    t.index ["deleted_at"], name: "index_chat_messages_on_deleted_at"
+    t.index ["pinned"], name: "index_chat_messages_on_pinned"
+    t.index ["reply_to_id"], name: "index_chat_messages_on_reply_to_id"
     t.index ["sender_id"], name: "index_chat_messages_on_sender_id"
   end
 
@@ -316,6 +323,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_02_020006) do
   add_foreign_key "bookings", "users", column: "customer_id"
   add_foreign_key "campaign_recipients", "crm_campaigns"
   add_foreign_key "campaign_recipients", "users"
+  add_foreign_key "chat_messages", "chat_messages", column: "reply_to_id"
   add_foreign_key "chat_messages", "conversations"
   add_foreign_key "chat_messages", "users", column: "sender_id"
   add_foreign_key "conversations", "users", column: "customer_id"
