@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :confirmable
 
   enum :user_role, { customer: 0, provider: 1, admin: 2 }, default: :customer
   validates :user_role, presence: true
@@ -38,6 +38,10 @@ class User < ApplicationRecord
   has_many :sms_logs, dependent: :destroy
   has_many :crm_campaigns, dependent: :destroy
   has_many :campaign_recipients, dependent: :destroy
+
+  # Email confirmation token
+  has_secure_token :email_confirmation_token
+  has_secure_token :password_reset_token
 
   # Validations
   validates :first_name, presence: true, if: :profile_required?
@@ -189,5 +193,42 @@ class User < ApplicationRecord
 
   def provider_profile_required?
     provider? && persisted? && created_at && created_at < 1.hour.ago
+  end
+
+  def send_welcome_email
+    UserMailer.welcome_email(self).deliver_later
+  end
+
+  def send_confirmation_email
+    regenerate_email_confirmation_token
+    UserMailer.confirmation_instructions(self, email_confirmation_token).deliver_later
+  end
+
+  def send_password_reset_email
+    regenerate_password_reset_token
+    UserMailer.password_reset_instructions(self, password_reset_token).deliver_later
+  end
+
+  def confirm_email!
+    update(
+      confirmed_at: Time.current,
+      email_confirmation_token: nil
+    )
+  end
+
+  def email_confirmed?
+    confirmed_at.present?
+  end
+
+  def password_reset_expired?
+    return true if password_reset_token.blank?
+    updated_at < 2.hours.ago
+  end
+
+  def reset_password!(new_password)
+    update(
+      password: new_password,
+      password_reset_token: nil
+    )
   end
 end
