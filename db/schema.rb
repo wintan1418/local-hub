@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_02_015543) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_02_015823) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -299,7 +299,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_02_015543) do
     t.boolean "government_id_document", default: false
     t.string "admin_role"
     t.datetime "confirmed_at"
+    t.string "confirmation_token"
+    t.datetime "confirmation_sent_at"
     t.index ["admin_role"], name: "index_users_on_admin_role"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id", unique: true
