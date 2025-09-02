@@ -6,6 +6,16 @@ class User < ApplicationRecord
 
   enum :user_role, { customer: 0, provider: 1, admin: 2 }, default: :customer
   validates :user_role, presence: true
+  
+  # Admin role constants
+  ADMIN_ROLES = {
+    'super_admin' => 'Super Admin',
+    'verification_admin' => 'Verification Admin',
+    'support_admin' => 'Support Admin',
+    'content_admin' => 'Content Admin'
+  }.freeze
+  
+  validates :admin_role, inclusion: { in: ADMIN_ROLES.keys }, allow_nil: true
 
   # Associations
   has_many :services, foreign_key: :provider_id, dependent: :destroy
@@ -19,6 +29,12 @@ class User < ApplicationRecord
   has_one_attached :profile_picture
   has_many_attached :verification_documents
   has_many_attached :portfolio_images
+  
+  # Individual document attachments
+  has_one_attached :business_license_file
+  has_one_attached :insurance_certificate_file
+  has_one_attached :professional_certifications_file
+  has_one_attached :government_id_file
 
   # Subscription
   has_one :subscription, -> { current }
@@ -84,9 +100,64 @@ class User < ApplicationRecord
   def verification_status
     if verified?
       "Verified on #{verified_at.strftime('%B %d, %Y')}"
+    elsif verification_documents_uploaded?
+      "Under Review"
     else
-      "Not verified"
+      "Pending Verification"
     end
+  end
+
+  def verification_progress
+    total_documents = 4
+    uploaded_documents = [
+      business_license_document?,
+      insurance_certificate_document?,
+      professional_certifications_document?,
+      government_id_document?
+    ].count(true)
+    
+    (uploaded_documents.to_f / total_documents * 100).round
+  end
+
+  def verification_documents_uploaded?
+    business_license_document? &&
+    insurance_certificate_document? &&
+    professional_certifications_document? &&
+    government_id_document?
+  end
+
+  def missing_documents
+    documents = []
+    documents << "Business License" unless business_license_document?
+    documents << "Insurance Certificate" unless insurance_certificate_document?
+    documents << "Professional Certifications" unless professional_certifications_document?
+    documents << "Government ID" unless government_id_document?
+    documents
+  end
+
+  # Admin role methods
+  def super_admin?
+    admin? && admin_role == 'super_admin'
+  end
+
+  def verification_admin?
+    admin? && (admin_role == 'verification_admin' || admin_role == 'super_admin')
+  end
+
+  def support_admin?
+    admin? && (admin_role == 'support_admin' || admin_role == 'super_admin')
+  end
+
+  def content_admin?
+    admin? && (admin_role == 'content_admin' || admin_role == 'super_admin')
+  end
+
+  def admin_role_display
+    ADMIN_ROLES[admin_role] || 'Admin'
+  end
+
+  def can_manage_verifications?
+    verification_admin?
   end
 
   def has_active_subscription?
