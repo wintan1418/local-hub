@@ -57,8 +57,9 @@
         </div>
       </div>
 
-      <!-- Upload Forms for Each Document Type -->
-      <div class="space-y-6">
+      <!-- Single Upload Form for All Documents -->
+      <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
+        <div class="space-y-6">
         <!-- Business License -->
         <div class="border rounded-lg p-6 <%= @user.business_license_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
           <div class="flex justify-between items-start mb-4">
@@ -90,13 +91,10 @@
             </div>
           <% end %>
 
-          <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
-            <div class="flex items-center space-x-4">
-              <%= form.file_field :business_license_file, accept: "image/*,application/pdf", 
-                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
-              <%= form.submit "Upload Business License", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors" %>
-            </div>
-          <% end %>
+          <div class="flex items-center space-x-4">
+            <%= form.file_field :business_license_file, accept: "image/*,application/pdf", 
+                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+          </div>
         </div>
 
         <!-- Insurance Certificate -->
@@ -130,13 +128,10 @@
             </div>
           <% end %>
 
-          <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
-            <div class="flex items-center space-x-4">
-              <%= form.file_field :insurance_certificate_file, accept: "image/*,application/pdf", 
-                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
-              <%= form.submit "Upload Insurance Certificate", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors" %>
-            </div>
-          <% end %>
+          <div class="flex items-center space-x-4">
+            <%= form.file_field :insurance_certificate_file, accept: "image/*,application/pdf", 
+                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+          </div>
         </div>
 
         <!-- Professional Certifications -->
@@ -170,13 +165,10 @@
             </div>
           <% end %>
 
-          <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
-            <div class="flex items-center space-x-4">
-              <%= form.file_field :professional_certifications_file, accept: "image/*,application/pdf", 
-                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
-              <%= form.submit "Upload Professional Certifications", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors" %>
-            </div>
-          <% end %>
+          <div class="flex items-center space-x-4">
+            <%= form.file_field :professional_certifications_file, accept: "image/*,application/pdf", 
+                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+          </div>
         </div>
 
         <!-- Government ID -->
@@ -210,15 +202,19 @@
             </div>
           <% end %>
 
-          <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
-            <div class="flex items-center space-x-4">
-              <%= form.file_field :government_id_file, accept: "image/*,application/pdf", 
-                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
-              <%= form.submit "Upload Government ID", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors" %>
-            </div>
-          <% end %>
+          <div class="flex items-center space-x-4">
+            <%= form.file_field :government_id_file, accept: "image/*,application/pdf", 
+                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+          </div>
         </div>
       </div>
+      
+      <!-- Upload All Button -->
+      <div class="mt-8 text-center">
+        <%= form.submit "Upload All Documents", 
+            class: "inline-flex items-center px-8 py-3 text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105" %>
+      </div>
+      <% end %>
 
       <!-- Summary -->
       <div class="mt-8 p-4 bg-blue-50 rounded-lg">

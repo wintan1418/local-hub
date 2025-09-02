@@ -1,0 +1,270 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-6">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Review Verification: <%= @provider.business_name %></h1>
+        <p class="mt-1 text-sm text-gray-600">Provider ID: <%= @provider.id %></p>
+      </div>
+      <%= link_to "Back to Verifications", admin_verifications_path, 
+          class: "text-sm text-blue-600 hover:text-blue-500" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Provider Information -->
+    <div class="lg:col-span-1">
+      <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center mb-4">
+          <% if @provider.profile_picture.attached? %>
+            <%= image_tag @provider.profile_picture, class: "h-16 w-16 rounded-full object-cover" %>
+          <% else %>
+            <div class="h-16 w-16 rounded-full bg-gray-300 flex items-center justify-center">
+              <span class="text-lg font-medium text-gray-700"><%= @provider.first_name[0] %><%= @provider.last_name[0] %></span>
+            </div>
+          <% end %>
+          <div class="ml-4">
+            <h3 class="text-lg font-medium text-gray-900"><%= @provider.display_name %></h3>
+            <p class="text-sm text-gray-500"><%= @provider.email %></p>
+          </div>
+        </div>
+        
+        <div class="space-y-3">
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Business Name</dt>
+            <dd class="text-sm text-gray-900"><%= @provider.business_name %></dd>
+          </div>
+          
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Phone</dt>
+            <dd class="text-sm text-gray-900"><%= @provider.phone %></dd>
+          </div>
+          
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Address</dt>
+            <dd class="text-sm text-gray-900"><%= @provider.complete_address %></dd>
+          </div>
+          
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Years of Experience</dt>
+            <dd class="text-sm text-gray-900"><%= @provider.years_experience %> years</dd>
+          </div>
+          
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Services Offered</dt>
+            <dd class="text-sm text-gray-900"><%= @provider.services.count %> services</dd>
+          </div>
+          
+          <div>
+            <dt class="text-sm font-medium text-gray-500">Verification Progress</dt>
+            <dd class="text-sm text-gray-900">
+              <div class="mt-1">
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-blue-600 h-2 rounded-full" style="width: <%= @provider.verification_progress %>%"></div>
+                </div>
+                <span class="text-xs text-gray-500"><%= @provider.verification_progress %>% complete</span>
+              </div>
+            </dd>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Documents Review -->
+    <div class="lg:col-span-2">
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900">Verification Documents</h3>
+          <p class="mt-1 text-sm text-gray-500">Review all uploaded documents for accuracy and authenticity</p>
+        </div>
+        
+        <div class="p-6 space-y-8">
+          <!-- Business License -->
+          <div class="border rounded-lg p-4 <%= @provider.business_license_file.attached? ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50' %>">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h4 class="font-medium text-gray-900 flex items-center">
+                  Business License
+                  <% if @provider.business_license_file.attached? %>
+                    <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                  <% else %>
+                    <svg class="ml-2 w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                  <% end %>
+                </h4>
+                <p class="text-sm text-gray-500">Valid business registration or license</p>
+              </div>
+            </div>
+            <% if @provider.business_license_file.attached? %>
+              <div class="bg-white border border-gray-200 rounded p-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <svg class="w-8 h-8 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm font-medium text-gray-900"><%= @provider.business_license_file.filename %></p>
+                      <p class="text-xs text-gray-500"><%= number_to_human_size(@provider.business_license_file.byte_size) %></p>
+                    </div>
+                  </div>
+                  <%= link_to "Download", rails_blob_path(@provider.business_license_file, disposition: "attachment"), 
+                      class: "text-blue-600 hover:text-blue-500 text-sm", target: "_blank" %>
+                </div>
+              </div>
+            <% else %>
+              <p class="text-sm text-red-600">Document not uploaded</p>
+            <% end %>
+          </div>
+
+          <!-- Insurance Certificate -->
+          <div class="border rounded-lg p-4 <%= @provider.insurance_certificate_file.attached? ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50' %>">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h4 class="font-medium text-gray-900 flex items-center">
+                  Insurance Certificate
+                  <% if @provider.insurance_certificate_file.attached? %>
+                    <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                  <% else %>
+                    <svg class="ml-2 w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                  <% end %>
+                </h4>
+                <p class="text-sm text-gray-500">Current liability insurance coverage</p>
+              </div>
+            </div>
+            <% if @provider.insurance_certificate_file.attached? %>
+              <div class="bg-white border border-gray-200 rounded p-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <svg class="w-8 h-8 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm font-medium text-gray-900"><%= @provider.insurance_certificate_file.filename %></p>
+                      <p class="text-xs text-gray-500"><%= number_to_human_size(@provider.insurance_certificate_file.byte_size) %></p>
+                    </div>
+                  </div>
+                  <%= link_to "Download", rails_blob_path(@provider.insurance_certificate_file, disposition: "attachment"), 
+                      class: "text-blue-600 hover:text-blue-500 text-sm", target: "_blank" %>
+                </div>
+              </div>
+            <% else %>
+              <p class="text-sm text-red-600">Document not uploaded</p>
+            <% end %>
+          </div>
+
+          <!-- Professional Certifications -->
+          <div class="border rounded-lg p-4 <%= @provider.professional_certifications_file.attached? ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50' %>">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h4 class="font-medium text-gray-900 flex items-center">
+                  Professional Certifications
+                  <% if @provider.professional_certifications_file.attached? %>
+                    <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                  <% else %>
+                    <svg class="ml-2 w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                  <% end %>
+                </h4>
+                <p class="text-sm text-gray-500">Trade licenses and professional certifications</p>
+              </div>
+            </div>
+            <% if @provider.professional_certifications_file.attached? %>
+              <div class="bg-white border border-gray-200 rounded p-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <svg class="w-8 h-8 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm font-medium text-gray-900"><%= @provider.professional_certifications_file.filename %></p>
+                      <p class="text-xs text-gray-500"><%= number_to_human_size(@provider.professional_certifications_file.byte_size) %></p>
+                    </div>
+                  </div>
+                  <%= link_to "Download", rails_blob_path(@provider.professional_certifications_file, disposition: "attachment"), 
+                      class: "text-blue-600 hover:text-blue-500 text-sm", target: "_blank" %>
+                </div>
+              </div>
+            <% else %>
+              <p class="text-sm text-red-600">Document not uploaded</p>
+            <% end %>
+          </div>
+
+          <!-- Government ID -->
+          <div class="border rounded-lg p-4 <%= @provider.government_id_file.attached? ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50' %>">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <h4 class="font-medium text-gray-900 flex items-center">
+                  Government ID
+                  <% if @provider.government_id_file.attached? %>
+                    <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                  <% else %>
+                    <svg class="ml-2 w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                    </svg>
+                  <% end %>
+                </h4>
+                <p class="text-sm text-gray-500">Valid government-issued photo ID</p>
+              </div>
+            </div>
+            <% if @provider.government_id_file.attached? %>
+              <div class="bg-white border border-gray-200 rounded p-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center">
+                    <svg class="w-8 h-8 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <div>
+                      <p class="text-sm font-medium text-gray-900"><%= @provider.government_id_file.filename %></p>
+                      <p class="text-xs text-gray-500"><%= number_to_human_size(@provider.government_id_file.byte_size) %></p>
+                    </div>
+                  </div>
+                  <%= link_to "Download", rails_blob_path(@provider.government_id_file, disposition: "attachment"), 
+                      class: "text-blue-600 hover:text-blue-500 text-sm", target: "_blank" %>
+                </div>
+              </div>
+            <% else %>
+              <p class="text-sm text-red-600">Document not uploaded</p>
+            <% end %>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+          <div class="flex justify-end space-x-3">
+            <%= button_to "Reject Verification", reject_admin_verification_path(@provider), 
+                method: :patch,
+                params: { reset_documents: true, rejection_reason: "Please re-upload clearer documents" },
+                class: "inline-flex items-center px-4 py-2 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500",
+                confirm: "Are you sure you want to reject this verification? This will reset all uploaded documents." %>
+            
+            <% if @provider.verification_documents_uploaded? %>
+              <%= button_to "Approve Verification", approve_admin_verification_path(@provider), 
+                  method: :patch,
+                  class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500",
+                  confirm: "Are you sure you want to approve this provider for verification?" %>
+            <% else %>
+              <button disabled class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-400 bg-gray-100 cursor-not-allowed">
+                Approve Verification
+              </button>
+            <% end %>
+          </div>
+          
+          <% unless @provider.verification_documents_uploaded? %>
+            <p class="text-sm text-red-600 mt-2 text-right">All required documents must be uploaded before approval</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

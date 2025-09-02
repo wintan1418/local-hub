@@ -1,0 +1,183 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Provider Verifications</h1>
+    <p class="mt-2 text-sm text-gray-600">Review and approve provider verification documents</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-yellow-50 overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">Pending Review</dt>
+              <dd class="text-lg font-medium text-gray-900"><%= @pending_verifications.count %></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-green-50 overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">Recently Verified</dt>
+              <dd class="text-lg font-medium text-gray-900"><%= @verified_users.count %></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-blue-50 overflow-hidden shadow rounded-lg">
+      <div class="p-5">
+        <div class="flex items-center">
+          <div class="flex-shrink-0">
+            <svg class="h-6 w-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+          <div class="ml-5 w-0 flex-1">
+            <dl>
+              <dt class="text-sm font-medium text-gray-500 truncate">Total Providers</dt>
+              <dd class="text-lg font-medium text-gray-900"><%= User.provider.count %></dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Verifications -->
+  <div class="bg-white shadow overflow-hidden sm:rounded-md mb-8">
+    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        Pending Verifications
+      </h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500">
+        Providers ready for verification review
+      </p>
+    </div>
+    
+    <% if @pending_verifications.any? %>
+      <ul class="divide-y divide-gray-200">
+        <% @pending_verifications.each do |provider| %>
+          <li class="px-4 py-4 hover:bg-gray-50">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-12 w-12">
+                  <% if provider.profile_picture.attached? %>
+                    <%= image_tag provider.profile_picture, class: "h-12 w-12 rounded-full object-cover" %>
+                  <% else %>
+                    <div class="h-12 w-12 rounded-full bg-gray-300 flex items-center justify-center">
+                      <span class="text-sm font-medium text-gray-700"><%= provider.first_name[0] %><%= provider.last_name[0] %></span>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="ml-4">
+                  <div class="flex items-center">
+                    <div class="text-sm font-medium text-gray-900">
+                      <%= provider.business_name %>
+                    </div>
+                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      Pending Review
+                    </span>
+                  </div>
+                  <div class="text-sm text-gray-500">
+                    <%= provider.display_name %> • <%= provider.email %>
+                  </div>
+                  <div class="text-xs text-gray-400 mt-1">
+                    Documents uploaded: <%= time_ago_in_words(provider.updated_at) %> ago
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span class="text-sm text-gray-500"><%= provider.verification_progress %>% Complete</span>
+                <%= link_to "Review", admin_verification_path(provider), 
+                    class: "inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors" %>
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="text-center py-12">
+        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="mt-2 text-sm font-medium text-gray-900">No pending verifications</h3>
+        <p class="mt-1 text-sm text-gray-500">All submitted verifications have been processed.</p>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Recently Verified -->
+  <div class="bg-white shadow overflow-hidden sm:rounded-md">
+    <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+      <h3 class="text-lg leading-6 font-medium text-gray-900">
+        Recently Verified Providers
+      </h3>
+      <p class="mt-1 max-w-2xl text-sm text-gray-500">
+        Latest approved verifications
+      </p>
+    </div>
+    
+    <% if @verified_users.any? %>
+      <ul class="divide-y divide-gray-200">
+        <% @verified_users.each do |provider| %>
+          <li class="px-4 py-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <div class="flex-shrink-0 h-10 w-10">
+                  <% if provider.profile_picture.attached? %>
+                    <%= image_tag provider.profile_picture, class: "h-10 w-10 rounded-full object-cover" %>
+                  <% else %>
+                    <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
+                      <span class="text-xs font-medium text-gray-700"><%= provider.first_name[0] %><%= provider.last_name[0] %></span>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="ml-3">
+                  <div class="flex items-center">
+                    <div class="text-sm font-medium text-gray-900">
+                      <%= provider.business_name %>
+                    </div>
+                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <svg class="mr-1 h-3 w-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                      </svg>
+                      Verified
+                    </span>
+                  </div>
+                  <div class="text-sm text-gray-500">
+                    <%= provider.display_name %>
+                  </div>
+                </div>
+              </div>
+              <div class="text-sm text-gray-400">
+                Verified <%= time_ago_in_words(provider.verified_at) %> ago
+              </div>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="text-center py-8">
+        <p class="text-sm text-gray-500">No recently verified providers</p>
+      </div>
+    <% end %>
+  </div>
+</div>

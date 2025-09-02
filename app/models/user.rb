@@ -6,6 +6,16 @@ class User < ApplicationRecord
 
   enum :user_role, { customer: 0, provider: 1, admin: 2 }, default: :customer
   validates :user_role, presence: true
+  
+  # Admin role constants
+  ADMIN_ROLES = {
+    'super_admin' => 'Super Admin',
+    'verification_admin' => 'Verification Admin',
+    'support_admin' => 'Support Admin',
+    'content_admin' => 'Content Admin'
+  }.freeze
+  
+  validates :admin_role, inclusion: { in: ADMIN_ROLES.keys }, allow_nil: true
 
   # Associations
   has_many :services, foreign_key: :provider_id, dependent: :destroy
@@ -118,6 +128,31 @@ class User < ApplicationRecord
     documents << "Professional Certifications" unless professional_certifications_document?
     documents << "Government ID" unless government_id_document?
     documents
+  end
+
+  # Admin role methods
+  def super_admin?
+    admin? && admin_role == 'super_admin'
+  end
+
+  def verification_admin?
+    admin? && (admin_role == 'verification_admin' || admin_role == 'super_admin')
+  end
+
+  def support_admin?
+    admin? && (admin_role == 'support_admin' || admin_role == 'super_admin')
+  end
+
+  def content_admin?
+    admin? && (admin_role == 'content_admin' || admin_role == 'super_admin')
+  end
+
+  def admin_role_display
+    ADMIN_ROLES[admin_role] || 'Admin'
+  end
+
+  def can_manage_verifications?
+    verification_admin?
   end
 
   def has_active_subscription?
