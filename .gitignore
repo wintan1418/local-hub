@@ -181,3 +181,5 @@ db/*.sqlite3-*
 .env.test.local
 .env.production.local
 ENV_SETUP.md
+
+/config/credentials/development.key

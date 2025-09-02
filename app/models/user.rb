@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+         :recoverable, :rememberable, :validatable, :confirmable
 
   enum :user_role, { customer: 0, provider: 1, admin: 2 }, default: :customer
   validates :user_role, presence: true
@@ -48,6 +48,9 @@ class User < ApplicationRecord
   # Notifications
   has_many :notifications, dependent: :destroy
 
+  # Callbacks for automatic emails
+  after_update :send_welcome_email_if_confirmed, if: :saved_change_to_confirmed_at?
+
   # CRM
   has_many :phone_verifications, dependent: :destroy
   has_one :notification_preference, dependent: :destroy
@@ -55,7 +58,11 @@ class User < ApplicationRecord
   has_many :crm_campaigns, dependent: :destroy
   has_many :campaign_recipients, dependent: :destroy
 
+  # Note: Using Devise's built-in confirmation system
+
   # Validations
+  validates :email, presence: true, uniqueness: { case_sensitive: false }, 
+            format: { with: URI::MailTo::EMAIL_REGEXP, message: "must be a valid email address" }
   validates :first_name, presence: true, if: :profile_required?
   validates :last_name, presence: true, if: :profile_required?
   validates :phone, presence: true, format: { with: /\A\d{10,15}\z/ }, if: :profile_required?
@@ -260,5 +267,85 @@ class User < ApplicationRecord
 
   def provider_profile_required?
     provider? && persisted? && created_at && created_at < 1.hour.ago
+  end
+
+  def send_welcome_email
+    UserMailer.welcome_email(self).deliver_later
+  end
+
+  def send_confirmation_email
+    # Use Devise's built-in confirmation
+    send_confirmation_instructions
+  end
+
+  def send_password_reset_email
+    # Use Devise's built-in reset_password_token
+    self.reset_password_token = Devise.friendly_token
+    self.reset_password_sent_at = Time.current
+    save(validate: false)
+    UserMailer.password_reset_instructions(self, reset_password_token).deliver_later
+  end
+
+  def confirm_email!
+    confirm!
+  end
+
+  def email_confirmed?
+    confirmed?
+  end
+
+  def valid_email_domain?
+    return false if email.blank?
+    
+    # List of common email providers and business domains
+    allowed_domains = %w[
+      gmail.com googlemail.com yahoo.com yahoo.co.uk hotmail.com hotmail.co.uk
+      outlook.com outlook.co.uk live.com live.co.uk icloud.com me.com
+      aol.com aol.co.uk protonmail.com protonmail.ch
+    ]
+    
+    domain = email.split('@').last&.downcase
+    return true if allowed_domains.include?(domain)
+    
+    # Allow business domains (domains with valid MX records)
+    begin
+      require 'resolv'
+      mx_records = Resolv::DNS.open { |dns| dns.getresources(domain, Resolv::DNS::Resource::IN::MX) }
+      mx_records.any?
+    rescue
+      false
+    end
+  end
+
+  def disposable_email?
+    return false if email.blank?
+    
+    # List of known disposable email domains
+    disposable_domains = %w[
+      10minutemail.com guerrillamail.com mailinator.com tempmail.org
+      throwaway.email temp-mail.org getnada.com
+    ]
+    
+    domain = email.split('@').last&.downcase
+    disposable_domains.include?(domain)
+  end
+
+  def password_reset_expired?
+    return true if reset_password_token.blank?
+    reset_password_sent_at.nil? || reset_password_sent_at < 2.hours.ago
+  end
+
+  def reset_password!(new_password)
+    update(
+      password: new_password,
+      reset_password_token: nil,
+      reset_password_sent_at: nil
+    )
+  end
+
+  private
+
+  def send_welcome_email_if_confirmed
+    send_welcome_email if confirmed_at.present? && confirmed_at_previously_changed?
   end
 end

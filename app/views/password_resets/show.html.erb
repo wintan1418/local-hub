@@ -1,0 +1,65 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Set new password
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Enter your new password below.
+      </p>
+    </div>
+    
+    <% if @user&.errors&.any? %>
+      <div class="rounded-md bg-red-50 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <i class="fas fa-exclamation-circle text-red-400"></i>
+          </div>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">
+              Please correct the following errors:
+            </h3>
+            <div class="mt-2 text-sm text-red-700">
+              <ul class="list-disc pl-5 space-y-1">
+                <% @user.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
+    <%= form_with url: password_reset_path(token: params[:token]), method: :patch, local: true, class: "mt-8 space-y-6" do |form| %>
+      <div class="space-y-4">
+        <div>
+          <%= form.label :password, "New Password", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.password_field :password, 
+                autocomplete: "new-password",
+                required: true,
+                placeholder: "Enter new password",
+                class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
+        </div>
+        
+        <div>
+          <%= form.label :password_confirmation, "Confirm Password", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.password_field :password_confirmation, 
+                autocomplete: "new-password",
+                required: true,
+                placeholder: "Confirm new password",
+                class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.submit "Reset Password",
+              class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" %>
+      </div>
+
+      <div class="text-center">
+        <%= link_to "Back to sign in", new_user_session_path, class: "text-orange-600 hover:text-orange-500" %>
+      </div>
+    <% end %>
+  </div>
+</div>

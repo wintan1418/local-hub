@@ -2,12 +2,68 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-      /* Email styles need to be inline */
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8fafc;
+      }
+      .email-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .header {
+        text-align: center;
+        border-bottom: 2px solid #ea580c;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #ea580c;
+      }
+      .button {
+        display: inline-block;
+        background-color: #ea580c;
+        color: white !important;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 6px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+        font-size: 14px;
+        color: #6b7280;
+      }
+      h1, h2, h3 { color: #1f2937; }
     </style>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="email-container">
+      <div class="header">
+        <div class="logo">LocalServiceHub</div>
+      </div>
+      
+      <%= yield %>
+      
+      <div class="footer">
+        <p>© <%= Date.current.year %> LocalServiceHub. All rights reserved.</p>
+        <p>You received this email because you have an account with us.</p>
+      </div>
+    </div>
   </body>
 </html>

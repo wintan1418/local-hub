@@ -111,11 +111,11 @@ puts "👥 Creating users..."
 
 # Create Admin users with specific roles
 admin_roles_data = [
-  { role: 'super_admin', name: 'Super Admin', email: 'superadmin@localservicehub.com' },
+  { role: 'super_admin', name: 'Main Admin', email: 'wintan1418@gmail.com' },
   { role: 'verification_admin', name: 'Verification Admin', email: 'verification@localservicehub.com' },
   { role: 'support_admin', name: 'Support Admin', email: 'support@localservicehub.com' },
   { role: 'content_admin', name: 'Content Admin', email: 'content@localservicehub.com' },
-  { role: 'super_admin', name: 'General Admin', email: 'admin@localservicehub.com' }
+  { role: 'super_admin', name: 'System Admin', email: 'admin@localservicehub.com' }
 ]
 
 admins = admin_roles_data.map do |admin_data|
@@ -129,9 +129,10 @@ admins = admin_roles_data.map do |admin_data|
     phone: Faker::Number.number(digits: 10).to_s,
     bio: "#{admin_data[:name]} managing the LocalServiceHub platform.",
     verified: true,
-    verified_at: 1.year.ago
+    verified_at: 1.year.ago,
+    confirmed_at: Time.current  # Auto-confirm admin accounts
   )
-  puts "  ✅ Created #{admin_data[:name]}: #{user.email} (#{admin_data[:role]})"
+  puts "  ✅ Created #{admin_data[:name]}: #{user.email} (#{admin_data[:role]}) - Auto-confirmed"
   user
 end
 
@@ -163,7 +164,8 @@ providers = 40.times.map do |i|
     business_license_document: [ true, true, false ].sample,
     insurance_certificate_document: [ true, true, false ].sample,
     professional_certifications_document: [ true, false, false ].sample,
-    government_id_document: [ true, false, false ].sample
+    government_id_document: [ true, false, false ].sample,
+    confirmed_at: Time.current  # Auto-confirm seed accounts
   )
 
   # Create subscription for provider
@@ -188,7 +190,8 @@ customers = 55.times.map do |i|
     user_role: 'customer',
     first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
-    phone: Faker::Number.number(digits: 10).to_s
+    phone: Faker::Number.number(digits: 10).to_s,
+    confirmed_at: Time.current  # Auto-confirm seed accounts
   )
   puts "  ✅ Created customer: #{user.email}"
   user

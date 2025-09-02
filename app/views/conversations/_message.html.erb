@@ -1,5 +1,19 @@
 <% is_current_user = message.sender == current_user %>
-<div class="flex <%= is_current_user ? 'justify-end' : 'justify-start' %> mb-3">
+<div class="group relative flex <%= is_current_user ? 'justify-end' : 'justify-start' %> mb-3 hover:bg-gray-50 hover:bg-opacity-50 rounded-lg p-2 transition-colors" 
+     id="message-<%= message.id %>" 
+     data-message-id="<%= message.id %>"
+     oncontextmenu="showMessageMenu(event, <%= message.id %>, <%= is_current_user %>); return false;"
+     onclick="selectMessage(<%= message.id %>)">
+  
+  <!-- Pinned indicator -->
+  <% if message.pinned? %>
+    <div class="absolute -top-2 <%= is_current_user ? 'right-4' : 'left-4' %> z-10">
+      <div class="bg-yellow-400 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center">
+        <i class="fas fa-thumbtack mr-1"></i>Pinned
+      </div>
+    </div>
+  <% end %>
+  
   <% unless is_current_user %>
     <div class="flex-shrink-0 mr-3">
       <% if message.sender.profile_picture.attached? %>
@@ -12,21 +26,153 @@
     </div>
   <% end %>
   
-  <div class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg <%= is_current_user ? 'bg-blue-600 text-white rounded-br-sm' : 'bg-gray-200 text-gray-900 rounded-bl-sm' %> relative">
-    <p class="text-sm whitespace-pre-wrap"><%= message.content %></p>
-    <div class="flex items-center <%= is_current_user ? 'justify-end' : 'justify-start' %> mt-1 space-x-1">
-      <p class="text-xs <%= is_current_user ? 'text-blue-100' : 'text-gray-500' %>">
-        <%= message.created_at.strftime('%H:%M') %>
-      </p>
-      <% if is_current_user %>
-        <div class="text-blue-100 text-xs">
-          <% if message.read_at.present? %>
-            <i class="fas fa-check-double"></i>
-          <% else %>
-            <i class="fas fa-check"></i>
-          <% end %>
+  <div class="max-w-xs lg:max-w-md <%= message.pinned? ? 'mt-4' : '' %> relative">
+    <!-- Reply thread indicator -->
+    <% if message.reply_to.present? %>
+      <div class="mb-2 pl-3 border-l-4 border-gray-300 bg-gray-50 rounded-lg p-2">
+        <div class="flex items-center space-x-2 mb-1">
+          <i class="fas fa-reply text-gray-500 text-xs"></i>
+          <span class="text-xs text-gray-600 font-medium"><%= message.reply_to.sender.email.split('@').first.titleize %></span>
         </div>
+        <p class="text-sm text-gray-700 truncate max-w-xs">
+          <% if message.reply_to.deleted? %>
+            <em class="text-gray-500">Message was deleted</em>
+          <% elsif message.reply_to.content.present? %>
+            <%= truncate(message.reply_to.content, length: 100) %>
+          <% elsif message.reply_to.attachments.any? %>
+            <i class="fas fa-paperclip mr-1"></i>Attachment
+          <% end %>
+        </p>
+      </div>
+    <% end %>
+    
+    <div class="px-4 py-2 rounded-lg <%= is_current_user ? 'bg-blue-600 text-white rounded-br-sm' : 'bg-gray-200 text-gray-900 rounded-bl-sm' %> relative message-bubble" data-message-id="<%= message.id %>">
+      <!-- Message Content -->
+      <% if message.content.present? %>
+        <% unless message.deleted? %>
+          <div class="message-content" id="content-<%= message.id %>">
+            <p class="text-sm whitespace-pre-wrap"><%= message.content %></p>
+          </div>
+        <% else %>
+          <p class="text-sm italic opacity-75">
+            <i class="fas fa-ban mr-1"></i><%= message.content %>
+          </p>
+        <% end %>
       <% end %>
+
+    <!-- Attachments -->
+    <% if message.attachments.any? %>
+      <div class="<%= message.content.present? ? 'mt-2' : '' %> space-y-2">
+        <% message.attachments.each do |attachment| %>
+          <% attachment_type = message.attachment_type(attachment) %>
+          <div class="rounded-md overflow-hidden border <%= is_current_user ? 'border-blue-300' : 'border-gray-300' %>">
+            <% case attachment_type %>
+            <% when :image %>
+              <%= image_tag attachment, class: "max-w-full h-auto max-h-64 object-cover cursor-pointer", onclick: "openImageModal('#{url_for(attachment)}')" %>
+            <% when :audio %>
+              <audio controls class="w-full">
+                <source src="<%= url_for(attachment) %>" type="<%= attachment.blob.content_type %>">
+                Your browser does not support the audio element.
+              </audio>
+            <% when :video %>
+              <video controls class="w-full max-h-64">
+                <source src="<%= url_for(attachment) %>" type="<%= attachment.blob.content_type %>">
+                Your browser does not support the video element.
+              </video>
+            <% else %>
+              <div class="p-3 bg-white <%= is_current_user ? 'bg-opacity-10' : 'bg-opacity-100' %> flex items-center space-x-3">
+                <div class="flex-shrink-0">
+                  <% case attachment_type %>
+                  <% when :pdf %>
+                    <i class="fas fa-file-pdf text-red-500 text-xl"></i>
+                  <% when :document %>
+                    <i class="fas fa-file-word text-blue-500 text-xl"></i>
+                  <% else %>
+                    <i class="fas fa-file text-gray-500 text-xl"></i>
+                  <% end %>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium <%= is_current_user ? 'text-white' : 'text-gray-900' %> truncate">
+                    <%= attachment.blob.filename %>
+                  </p>
+                  <p class="text-xs <%= is_current_user ? 'text-blue-100' : 'text-gray-500' %>">
+                    <%= number_to_human_size(attachment.blob.byte_size) %>
+                  </p>
+                </div>
+                <div class="flex-shrink-0">
+                  <%= link_to url_for(attachment), download: attachment.blob.filename, 
+                            class: "text-sm #{is_current_user ? 'text-blue-100 hover:text-white' : 'text-blue-600 hover:text-blue-800'} font-medium" do %>
+                    <i class="fas fa-download"></i>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+      <div class="flex items-center <%= is_current_user ? 'justify-end' : 'justify-start' %> mt-1 space-x-1">
+        <p class="text-xs <%= is_current_user ? 'text-blue-100' : 'text-gray-500' %>">
+          <%= message.created_at.strftime('%H:%M') %>
+          <% if message.edited? %>
+            <span class="italic ml-1">(edited)</span>
+          <% end %>
+        </p>
+        <% if is_current_user %>
+          <div class="text-blue-100 text-xs">
+            <% if message.read_at.present? %>
+              <i class="fas fa-check-double"></i>
+            <% else %>
+              <i class="fas fa-check"></i>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    
+    <!-- Message Action Buttons (visible on hover) -->
+    <div class="absolute <%= is_current_user ? '-left-12' : '-right-12' %> top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center space-x-1 bg-white rounded-lg shadow-lg border p-1">
+      <!-- Reply Button -->
+      <button onclick="replyToMessage(<%= message.id %>, '<%= j(message.sender.email.split('@').first.titleize) %>', '<%= j(truncate(message.content.presence || 'Attachment', length: 50)) %>')" 
+              class="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors tooltip" 
+              title="Reply">
+        <i class="fas fa-reply text-sm"></i>
+      </button>
+      
+      <% if is_current_user && message.can_modify?(current_user) %>
+        <!-- Edit Button -->
+        <button onclick="editMessage(<%= message.id %>, '<%= j(message.content) %>')" 
+                class="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors tooltip" 
+                title="Edit">
+          <i class="fas fa-edit text-sm"></i>
+        </button>
+        
+        <!-- Delete Button -->
+        <button onclick="deleteMessage(<%= message.id %>)" 
+                class="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors tooltip" 
+                title="Delete">
+          <i class="fas fa-trash text-sm"></i>
+        </button>
+      <% end %>
+      
+      <!-- Pin/Unpin Button -->
+      <button onclick="togglePinMessage(<%= message.id %>)" 
+              class="p-2 text-gray-600 hover:text-yellow-600 hover:bg-yellow-50 rounded transition-colors tooltip" 
+              title="<%= message.pinned? ? 'Unpin' : 'Pin' %>">
+        <i class="fas fa-thumbtack text-sm <%= 'text-yellow-500' if message.pinned? %>"></i>
+      </button>
+      
+      <!-- More Actions Button -->
+      <button onclick="showMoreActions(<%= message.id %>)" 
+              class="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded transition-colors tooltip" 
+              title="More">
+        <i class="fas fa-ellipsis-h text-sm"></i>
+      </button>
     </div>
   </div>
+  
+  <!-- Message selection indicator -->
+  <div class="absolute inset-0 border-2 border-blue-500 rounded-lg opacity-0 transition-opacity duration-200 pointer-events-none" 
+       id="selection-<%= message.id %>"></div>
 </div>

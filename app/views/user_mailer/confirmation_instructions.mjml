@@ -1,0 +1,109 @@
+<mjml>
+  <mj-head>
+    <mj-title>Confirm Your Email - LocalServiceHub</mj-title>
+    <mj-preview>Please confirm your email address to complete your registration.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+      <mj-button background-color="#3b82f6" color="#ffffff" font-weight="600" border-radius="8px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <!-- Header -->
+    <mj-section background-color="#ffffff" padding="0">
+      <mj-column>
+        <mj-section background-color="#3b82f6" padding="40px 0">
+          <mj-column>
+            <mj-text align="center" color="#ffffff" font-size="32px" font-weight="bold">
+              LocalServiceHub
+            </mj-text>
+            <mj-text align="center" color="#dbeafe" font-size="18px" padding-top="10px">
+              Your Trusted Service Provider Platform
+            </mj-text>
+          </mj-column>
+        </mj-section>
+      </mj-column>
+    </mj-section>
+
+    <!-- Main Content -->
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <!-- Email Icon -->
+        <mj-image src="data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z' stroke='%233b82f6' stroke-width='2' fill='none'/%3E%3Cl polyline='22,6 12,13 2,6' stroke='%233b82f6' stroke-width='2' fill='none'/%3E%3C/svg%3E" alt="Email" width="80px" align="center" padding="0 0 20px 0" />
+        
+        <!-- Main Heading -->
+        <mj-text align="center" font-size="28px" font-weight="bold" color="#111827" padding="0 0 16px 0">
+          📧 Confirm Your Email Address
+        </mj-text>
+
+        <!-- Greeting -->
+        <mj-text font-size="18px" color="#374151" padding="0 0 24px 0">
+          Hello <%= @user.first_name || @user.email.split('@').first %>,
+        </mj-text>
+
+        <!-- Main Message -->
+        <mj-text font-size="16px" color="#374151" padding="0 0 24px 0">
+          Thank you for signing up for LocalServiceHub! To complete your registration and start using your account, please confirm your email address by clicking the button below.
+        </mj-text>
+
+        <!-- Email Confirmation Info -->
+        <mj-section background-color="#eff6ff" border-radius="12px" padding="24px">
+          <mj-column>
+            <mj-text color="#1e40af" font-size="16px" padding="0">
+              <strong>Email Address:</strong> <%= @user.email %>
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <!-- CTA Button -->
+        <mj-button href="<%= @confirmation_url %>" background-color="#3b82f6" font-size="18px" padding="32px 0 24px 0">
+          Confirm My Email Address
+        </mj-button>
+
+        <!-- Alternative Link -->
+        <mj-text font-size="14px" color="#6b7280" align="center" padding="0 0 24px 0">
+          If the button doesn't work, you can copy and paste this link into your browser:
+        </mj-text>
+        <mj-text font-size="14px" color="#3b82f6" align="center" padding="0 0 24px 0">
+          <a href="<%= @confirmation_url %>" style="color: #3b82f6; text-decoration: underline;"><%= @confirmation_url %></a>
+        </mj-text>
+
+        <!-- Security Note -->
+        <mj-section background-color="#fef3c7" border-radius="8px" padding="20px">
+          <mj-column>
+            <mj-text color="#92400e" font-size="14px" padding="0">
+              <strong>Security Note:</strong> If you didn't create an account with LocalServiceHub, you can safely ignore this email. No account will be created without email confirmation.
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <!-- Expiration Info -->
+        <mj-text font-size="14px" color="#6b7280" padding="20px 0 0 0">
+          This confirmation link will expire in 24 hours. If you need a new confirmation link, you can request one by trying to log in to your account.
+        </mj-text>
+
+        <!-- Closing Message -->
+        <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
+          Welcome to LocalServiceHub! We're excited to have you join our community.
+        </mj-text>
+
+        <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
+          Best regards,<br>
+          <strong>The LocalServiceHub Team</strong>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#f3f4f6" padding="30px">
+      <mj-column>
+        <mj-text align="center" font-size="14px" color="#6b7280" padding="0 0 10px 0">
+          <strong>LocalServiceHub</strong> - Connecting you with trusted local service providers
+        </mj-text>
+        <mj-text align="center" font-size="12px" color="#9ca3af">
+          This email was sent from LocalServiceHub. If you have any questions, please contact our support team.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

@@ -1,0 +1,95 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="bg-white shadow-lg rounded-lg">
+    <!-- Header -->
+    <div class="px-6 py-4 border-b border-gray-200">
+      <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-gray-900">
+          <i class="fas fa-bell mr-2 text-blue-500"></i>
+          Notifications
+        </h2>
+        <% if @notifications.unread.any? %>
+          <%= link_to mark_all_as_read_notifications_path, method: :patch, 
+                      class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200" do %>
+            <i class="fas fa-check-double mr-1"></i>
+            Mark All as Read
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Notifications List -->
+    <div class="divide-y divide-gray-200">
+      <% if @notifications.any? %>
+        <% @notifications.each do |notification| %>
+          <div class="<%= notification.background_class %> p-4 hover:bg-gray-50 transition duration-200">
+            <div class="flex items-start space-x-3">
+              <!-- Icon -->
+              <div class="flex-shrink-0 mt-1">
+                <i class="<%= notification.icon_class %> text-lg"></i>
+              </div>
+
+              <!-- Content -->
+              <div class="flex-1 min-w-0">
+                <div class="flex items-start justify-between">
+                  <div class="flex-1">
+                    <%= link_to notification_path(notification), class: "block hover:bg-gray-25 -m-2 p-2 rounded" do %>
+                      <h3 class="text-sm font-semibold text-gray-900 mb-1">
+                        <%= notification.title %>
+                        <% unless notification.read? %>
+                          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-2">
+                            New
+                          </span>
+                        <% end %>
+                      </h3>
+                      <p class="text-sm text-gray-600 mb-2">
+                        <%= notification.message %>
+                      </p>
+                    <% end %>
+                    <div class="flex items-center justify-between">
+                      <p class="text-xs text-gray-500">
+                        <i class="fas fa-clock mr-1"></i>
+                        <%= time_ago_in_words(notification.created_at) %> ago
+                      </p>
+                      <div class="flex space-x-2">
+                        <% unless notification.read? %>
+                          <%= link_to mark_as_read_notification_path(notification), method: :patch,
+                                      class: "text-blue-500 hover:text-blue-700 text-xs font-medium" do %>
+                            <i class="fas fa-check mr-1"></i>Mark as Read
+                          <% end %>
+                        <% end %>
+                        <%= link_to notification_path(notification), method: :delete,
+                                    data: { confirm: "Are you sure?" },
+                                    class: "text-red-500 hover:text-red-700 text-xs font-medium" do %>
+                          <i class="fas fa-trash mr-1"></i>Delete
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <!-- Pagination -->
+        <% if defined?(Kaminari) && @notifications.respond_to?(:current_page) %>
+          <div class="px-6 py-4 bg-gray-50">
+            <%= paginate @notifications %>
+          </div>
+        <% end %>
+
+      <% else %>
+        <!-- Empty State -->
+        <div class="text-center py-12">
+          <div class="mx-auto h-24 w-24 text-gray-300">
+            <i class="fas fa-bell text-6xl"></i>
+          </div>
+          <h3 class="mt-4 text-lg font-medium text-gray-900">No notifications</h3>
+          <p class="mt-2 text-sm text-gray-500">
+            You're all caught up! New notifications will appear here.
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

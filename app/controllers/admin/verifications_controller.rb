@@ -27,8 +27,8 @@ class Admin::VerificationsController < ApplicationController
         verified_at: Time.current
       )
       
-      # Send notification to provider
-      # ProviderMailer.verification_approved(@provider).deliver_later
+      # Send notification and email to provider
+      Notification.create_verification_notification(@provider, :approved)
       
       redirect_to admin_verifications_path, 
                   notice: "#{@provider.business_name} has been successfully verified."
@@ -60,8 +60,8 @@ class Admin::VerificationsController < ApplicationController
       @provider.government_id_file.purge if @provider.government_id_file.attached?
     end
     
-    # Send notification to provider
-    # ProviderMailer.verification_rejected(@provider, rejection_reason).deliver_later
+    # Send notification and email to provider
+    Notification.create_verification_notification(@provider, :rejected, rejection_reason)
     
     redirect_to admin_verifications_path, 
                 notice: "Verification rejected for #{@provider.business_name}."

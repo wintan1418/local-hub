@@ -56,6 +56,20 @@ class Provider::ProfilesController < ApplicationController
     end
 
     if uploaded_count > 0
+      # Send verification pending email
+      UserMailer.verification_pending(@user).deliver_later
+
+      # Create notification for admins
+      admin_users = User.where(user_role: 'admin')
+      admin_users.each do |admin|
+        Notification.create!(
+          user: admin,
+          title: "New verification submission",
+          message: "#{@user.display_name} has submitted verification documents for review.",
+          notification_type: "system_announcement"
+        )
+      end
+
       notice_message = "#{uploaded_count} document(s) uploaded successfully. We will review them shortly."
       redirect_to verification_provider_profile_path, notice: notice_message
     else

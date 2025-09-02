@@ -16,7 +16,10 @@ class Notification < ApplicationRecord
     subscription_created: "subscription_created",
     subscription_cancelled: "subscription_cancelled",
     review_received: "review_received",
-    system_announcement: "system_announcement"
+    system_announcement: "system_announcement",
+    verification_approved: "verification_approved",
+    verification_rejected: "verification_rejected",
+    verification_pending: "verification_pending"
   }
 
   scope :unread, -> { where(read_at: nil) }
@@ -135,13 +138,42 @@ class Notification < ApplicationRecord
     end
   end
 
+  def self.create_verification_notification(user, type, reason = nil)
+    case type
+    when :approved
+      create!(
+        user: user,
+        notification_type: "verification_approved",
+        title: "Account Verified!",
+        message: "Congratulations! Your account has been successfully verified."
+      )
+      UserMailer.verification_approved(user).deliver_later
+    when :rejected
+      create!(
+        user: user,
+        notification_type: "verification_rejected",
+        title: "Verification Requires Attention",
+        message: reason || "Your verification documents need to be updated. Please check your email for details."
+      )
+      UserMailer.verification_rejected(user, reason).deliver_later
+    when :pending
+      create!(
+        user: user,
+        notification_type: "verification_pending",
+        title: "Verification Under Review",
+        message: "We've received your verification documents and they are being reviewed."
+      )
+      UserMailer.verification_pending(user).deliver_later
+    end
+  end
+
   private
 
   def self.create_booking_notification(booking, type, title, message)
     # Notify service provider
-    if booking.service.user != booking.user
+    if booking.service.provider != booking.customer
       create!(
-        user: booking.service.user,
+        user: booking.service.provider,
         notifiable: booking,
         notification_type: type,
         title: title,
@@ -150,9 +182,9 @@ class Notification < ApplicationRecord
     end
 
     # Notify customer (for updates/cancellations)
-    if type != "booking_created" && booking.user != booking.service.user
+    if type != "booking_created" && booking.customer != booking.service.provider
       create!(
-        user: booking.user,
+        user: booking.customer,
         notifiable: booking,
         notification_type: type,
         title: title,

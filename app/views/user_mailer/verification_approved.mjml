@@ -1,0 +1,120 @@
+<mjml>
+  <mj-head>
+    <mj-title>Account Verified - LocalServiceHub</mj-title>
+    <mj-preview>🎉 Great news! Your service provider account has been verified.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+      <mj-button background-color="#10b981" color="#ffffff" font-weight="600" border-radius="8px" />
+    </mj-attributes>
+    <mj-style inline="inline">
+      .verification-badge {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        padding: 16px 24px;
+        border-radius: 12px;
+        text-align: center;
+        margin: 24px 0;
+      }
+      .feature-list {
+        background-color: #f9fafb;
+        border-left: 4px solid #10b981;
+        padding: 20px;
+        margin: 20px 0;
+      }
+    </mj-style>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <!-- Header -->
+    <mj-section background-color="#3b82f6" padding="40px 0">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="32px" font-weight="bold">
+          LocalServiceHub
+        </mj-text>
+        <mj-text align="center" color="#dbeafe" font-size="18px" padding-top="10px">
+          Your Trusted Service Provider Platform
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Main Content -->
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <!-- Success Icon -->
+        <mj-image src="data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='10' fill='%2310b981'/%3E%3Cpath d='m9 12 2 2 4-4' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Success" width="80px" align="center" padding="0 0 20px 0" />
+        
+        <!-- Main Heading -->
+        <mj-text align="center" font-size="28px" font-weight="bold" color="#111827" padding="0 0 16px 0">
+          🎉 Your Account Has Been Verified!
+        </mj-text>
+
+        <!-- Greeting -->
+        <mj-text font-size="18px" color="#374151" padding="0 0 24px 0">
+          Hello <%= @user.first_name || @user.email.split('@').first %>,
+        </mj-text>
+
+        <!-- Main Message -->
+        <mj-text font-size="16px" color="#374151" padding="0 0 20px 0">
+          Great news! Your service provider account has been successfully verified by our team. You can now enjoy all the benefits of being a verified provider on LocalServiceHub.
+        </mj-text>
+
+        <!-- Verification Badge -->
+        <mj-text align="center" color="#065f46" font-size="20px" font-weight="bold" padding="20px 0 8px 0" background-color="#d1fae5">
+          ✅ Verification Complete
+        </mj-text>
+        <mj-text align="center" color="#065f46" font-size="16px" padding="0 0 20px 0" background-color="#d1fae5">
+          You now have access to all provider features and your listings will be marked as verified.
+        </mj-text>
+
+        <!-- Benefits List -->
+        <mj-text font-size="18px" font-weight="600" color="#111827" padding="32px 0 16px 0">
+          As a verified provider, you can now:
+        </mj-text>
+
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          🏆 Display the verified badge on your profile and services
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          🚀 Access premium features based on your subscription plan
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          📈 Receive priority placement in search results
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 20px 0">
+          🤝 Build greater trust with potential customers
+        </mj-text>
+
+        <!-- CTA Button -->
+        <mj-button href="<%= @dashboard_url %>" background-color="#10b981" font-size="18px" padding="32px 0 24px 0">
+          Go to Your Dashboard
+        </mj-button>
+
+        <!-- Closing Message -->
+        <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
+          Thank you for completing the verification process. We're excited to have you as part of the LocalServiceHub community!
+        </mj-text>
+
+        <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
+          Best regards,<br>
+          <strong>The LocalServiceHub Team</strong>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#f3f4f6" padding="30px">
+      <mj-column>
+        <mj-text align="center" font-size="14px" color="#6b7280" padding="0 0 10px 0">
+          <strong>LocalServiceHub</strong> - Connecting you with trusted local service providers
+        </mj-text>
+        <mj-text align="center" font-size="12px" color="#9ca3af">
+          This email was sent from LocalServiceHub. If you have any questions, please contact our support team.
+        </mj-text>
+        <mj-social font-size="15px" icon-size="30px" mode="horizontal" padding="20px 0 0 0" align="center">
+          <mj-social-element name="facebook" href="#" background-color="#3b82f6" />
+          <mj-social-element name="twitter" href="#" background-color="#1d4ed8" />
+          <mj-social-element name="linkedin" href="#" background-color="#0f766e" />
+        </mj-social>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

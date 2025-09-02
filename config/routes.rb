@@ -19,6 +19,12 @@ Rails.application.routes.draw do
   # Devise routes for user authentication
   devise_for :users
 
+
+  # Password reset routes
+  resources :password_resets, only: [ :new, :create, :show, :update ], param: :token
+  get 'password_reset/:token', to: 'password_resets#show', as: :edit_password_reset
+  patch 'password_reset/:token', to: 'password_resets#update'
+
   # User dashboard
   get "dashboard", to: "dashboard#index", as: :user_dashboard
 
@@ -90,6 +96,9 @@ Rails.application.routes.draw do
   resources :conversations, only: [ :index, :show, :create ] do
     member do
       post :create_message
+      patch 'messages/:message_id/edit', to: 'conversations#edit_message', as: :edit_message
+      delete 'messages/:message_id', to: 'conversations#delete_message', as: :delete_message
+      patch 'messages/:message_id/pin', to: 'conversations#pin_message', as: :pin_message
     end
   end
 

@@ -1,0 +1,177 @@
+<mjml>
+  <mj-head>
+    <mj-title>Welcome to LocalServiceHub!</mj-title>
+    <mj-preview>🎉 Welcome to LocalServiceHub! Let's get you started on your journey.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+      <mj-button background-color="#3b82f6" color="#ffffff" font-weight="600" border-radius="8px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <!-- Header -->
+    <mj-section background-color="#3b82f6" padding="40px 0">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="32px" font-weight="bold">
+          LocalServiceHub
+        </mj-text>
+        <mj-text align="center" color="#dbeafe" font-size="18px" padding-top="10px">
+          Your Trusted Service Provider Platform
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Main Content -->
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <!-- Welcome Icon -->
+        <mj-image src="data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' fill='%23fbbf24'/%3E%3C/svg%3E" alt="Welcome" width="80px" align="center" padding="0 0 20px 0" />
+        
+        <!-- Main Heading -->
+        <mj-text align="center" font-size="28px" font-weight="bold" color="#111827" padding="0 0 16px 0">
+          🎉 Welcome to LocalServiceHub!
+        </mj-text>
+
+        <!-- Greeting -->
+        <mj-text font-size="18px" color="#374151" padding="0 0 24px 0">
+          Hello <%= @user.first_name || @user.email.split('@').first %>,
+        </mj-text>
+
+        <!-- Main Welcome Message -->
+        <mj-text font-size="16px" color="#374151" padding="0 0 24px 0">
+          Welcome to LocalServiceHub! We're excited to have you join our community of trusted service providers and customers.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- User Type Specific Content -->
+    <% if @user.provider? %>
+    <!-- Provider Welcome -->
+    <mj-section background-color="#eff6ff" padding="24px 30px">
+      <mj-column>
+        <mj-text align="center" color="#1e40af" font-size="20px" font-weight="bold" padding="0 0 12px 0">
+          🔧 Welcome, Service Provider!
+        </mj-text>
+        <mj-text color="#1e40af" font-size="16px" padding="0">
+          You're all set to start offering your services to local customers. Complete your profile and verification to start receiving bookings.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Next Steps for Providers -->
+    <mj-section background-color="#ffffff" padding="20px 30px">
+      <mj-column>
+        <mj-text font-size="18px" font-weight="600" color="#111827" padding="0 0 16px 0">
+          Your next steps:
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          📝 Complete your provider profile with business details
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          📄 Upload verification documents to get verified
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          🛠️ Create your first service listing
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 16px 0">
+          💼 Choose a subscription plan that fits your needs
+        </mj-text>
+        
+        <mj-button href="#" background-color="#3b82f6" font-size="18px" padding="20px 0">
+          Complete Your Profile
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <% else %>
+    <!-- Customer Welcome -->
+    <mj-section background-color="#ecfdf5" padding="24px 30px">
+      <mj-column>
+        <mj-text align="center" color="#065f46" font-size="20px" font-weight="bold" padding="0 0 12px 0">
+          👤 Welcome, Valued Customer!
+        </mj-text>
+        <mj-text color="#065f46" font-size="16px" padding="0">
+          You now have access to thousands of trusted local service providers. Find the perfect match for any service you need.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Next Steps for Customers -->
+    <mj-section background-color="#ffffff" padding="20px 30px">
+      <mj-column>
+        <mj-text font-size="18px" font-weight="600" color="#111827" padding="0 0 16px 0">
+          Get started:
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          🔍 Browse services in your area
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          ⭐ Read reviews from other customers
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+          📅 Book services that fit your schedule
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 16px 0">
+          💬 Message providers directly through our platform
+        </mj-text>
+        
+        <mj-button href="#" background-color="#10b981" font-size="18px" padding="20px 0">
+          Browse Services
+        </mj-button>
+      </mj-column>
+    </mj-section>
+    <% end %>
+
+    <!-- Platform Features -->
+    <mj-section background-color="#f9fafb" padding="30px">
+      <mj-column>
+        <mj-text font-size="18px" font-weight="600" color="#111827" padding="0 0 16px 0" align="center">
+          What makes LocalServiceHub special:
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+          🔒 <strong>Verified Providers</strong> - All providers go through our verification process
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+          💬 <strong>Direct Messaging</strong> - Communicate directly with providers
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+          ⭐ <strong>Review System</strong> - Read and leave honest reviews
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 16px 0">
+          📱 <strong>Easy Booking</strong> - Simple, secure booking process
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Support Info -->
+    <mj-section background-color="#ffffff" padding="30px">
+      <mj-column>
+        <mj-text color="#374151" font-size="16px" padding="0 0 20px 0" align="center">
+          <strong>Need help getting started?</strong> Our support team is here to help! Reply to this email or visit our help center.
+        </mj-text>
+
+        <mj-text font-size="16px" color="#374151" padding="0" align="center">
+          Thank you for joining LocalServiceHub. We're here to help you succeed!<br><br>
+          <strong>The LocalServiceHub Team</strong>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#f3f4f6" padding="30px">
+      <mj-column>
+        <mj-text align="center" font-size="14px" color="#6b7280" padding="0 0 10px 0">
+          <strong>LocalServiceHub</strong> - Connecting you with trusted local service providers
+        </mj-text>
+        <mj-text align="center" font-size="12px" color="#9ca3af">
+          This email was sent from LocalServiceHub. If you have any questions, please contact our support team.
+        </mj-text>
+        <mj-social font-size="15px" icon-size="30px" mode="horizontal" padding="20px 0 0 0" align="center">
+          <mj-social-element name="facebook" href="#" background-color="#3b82f6" />
+          <mj-social-element name="twitter" href="#" background-color="#1d4ed8" />
+          <mj-social-element name="linkedin" href="#" background-color="#0f766e" />
+        </mj-social>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

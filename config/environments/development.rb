@@ -1,8 +1,8 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-  config.action_mailer.default_url_options = { host: "localhost", port: 10000 }
-  Rails.application.routes.default_url_options = { host: "localhost", port: 10000 }
+  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  Rails.application.routes.default_url_options = { host: "localhost", port: 3000 }
   # Settings specified here will take precedence over those in config/application.rb.
 
   # Make code changes take effect immediately without server restart.
@@ -33,8 +33,34 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # Email configuration for development
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.perform_deliveries = true
+  
+  # CHOOSE YOUR EMAIL TESTING METHOD:
+  
+  # OPTION 1: Testmail.app (Real email testing - RECOMMENDED)
+  # Uncomment these lines and replace with your Testmail.app credentials:
+  if ENV['USE_TESTMAIL'] == 'true'
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: 'smtp.testmail.app',
+      port: 587,
+      domain: 'testmail.app',
+      user_name: ENV['TESTMAIL_USERNAME'], # Your Testmail username
+      password: ENV['TESTMAIL_API_KEY'],   # Your Testmail API key
+      authentication: :plain,
+      enable_starttls_auto: true
+    }
+  else
+    # OPTION 2: Mailcatcher (Local email capture only)
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: 'localhost',
+      port: 1025,
+      domain: 'localhost'
+    }
+  end
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false

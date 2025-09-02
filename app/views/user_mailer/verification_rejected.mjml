@@ -1,0 +1,141 @@
+<mjml>
+  <mj-head>
+    <mj-title>Verification Needs Attention - LocalServiceHub</mj-title>
+    <mj-preview>Your verification documents need to be updated. Please review and resubmit.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+      <mj-button background-color="#f59e0b" color="#ffffff" font-weight="600" border-radius="8px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <!-- Header -->
+    <mj-section background-color="#ffffff" padding="0">
+      <mj-column>
+        <mj-section background-color="#dc2626" padding="40px 0">
+          <mj-column>
+            <mj-text align="center" color="#ffffff" font-size="32px" font-weight="bold">
+              LocalServiceHub
+            </mj-text>
+            <mj-text align="center" color="#fecaca" font-size="18px" padding-top="10px">
+              Your Trusted Service Provider Platform
+            </mj-text>
+          </mj-column>
+        </mj-section>
+      </mj-column>
+    </mj-section>
+
+    <!-- Main Content -->
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <!-- Warning Icon -->
+        <mj-image src="data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23f59e0b'/%3E%3Cpath d='M12 8v4m0 4h.01' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" alt="Attention" width="80px" align="center" padding="0 0 20px 0" />
+        
+        <!-- Main Heading -->
+        <mj-text align="center" font-size="28px" font-weight="bold" color="#111827" padding="0 0 16px 0">
+          ⚠️ Verification Requires Attention
+        </mj-text>
+
+        <!-- Greeting -->
+        <mj-text font-size="18px" color="#374151" padding="0 0 24px 0">
+          Hello <%= @user.first_name || @user.email.split('@').first %>,
+        </mj-text>
+
+        <!-- Main Message -->
+        <mj-text font-size="16px" color="#374151" padding="0 0 20px 0">
+          We've reviewed your verification documents and need some additional information or clearer documentation to complete your verification.
+        </mj-text>
+
+        <!-- Reason Section -->
+        <% if @reason.present? %>
+        <mj-section background-color="#fef3c7" border-radius="12px" padding="24px">
+          <mj-column>
+            <mj-text align="center" color="#92400e" font-size="18px" font-weight="bold" padding="0 0 12px 0">
+              📝 Review Comments
+            </mj-text>
+            <mj-text color="#92400e" font-size="16px" padding="0">
+              <%= @reason %>
+            </mj-text>
+          </mj-column>
+        </mj-section>
+        <% end %>
+
+        <!-- Next Steps -->
+        <mj-text font-size="18px" font-weight="600" color="#111827" padding="32px 0 16px 0">
+          What you need to do:
+        </mj-text>
+
+        <mj-section background-color="#f9fafb" border-left="4px solid #f59e0b" padding="20px">
+          <mj-column>
+            <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+              📄 Review the feedback provided above
+            </mj-text>
+            <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+              📸 Take new, clearer photos of your documents if needed
+            </mj-text>
+            <mj-text font-size="16px" color="#374151" padding="0 0 12px 0">
+              📤 Upload the updated documents through your profile
+            </mj-text>
+            <mj-text font-size="16px" color="#374151" padding="0 0 0px 0">
+              ⏱️ Resubmit for review - we typically respond within 24-48 hours
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <!-- Required Documents -->
+        <mj-text font-size="18px" font-weight="600" color="#111827" padding="32px 0 16px 0">
+          Required documents for verification:
+        </mj-text>
+
+        <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+          • <strong>Business License</strong> - Clear, current license document
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+          • <strong>Insurance Certificate</strong> - Valid liability insurance
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
+          • <strong>Professional Certifications</strong> - Industry-specific certifications
+        </mj-text>
+        <mj-text font-size="16px" color="#374151" padding="0 0 16px 0">
+          • <strong>Government ID</strong> - Driver's license or state ID
+        </mj-text>
+
+        <!-- CTA Button -->
+        <mj-button href="<%= @verification_url %>" background-color="#f59e0b" font-size="18px" padding="32px 0 24px 0">
+          Update Your Documents
+        </mj-button>
+
+        <!-- Support Info -->
+        <mj-section background-color="#eff6ff" border-radius="8px" padding="20px">
+          <mj-column>
+            <mj-text color="#1e40af" font-size="16px" padding="0">
+              <strong>Need help?</strong> Our support team is here to assist you. Reply to this email or contact us through your dashboard if you have any questions about the verification process.
+            </mj-text>
+          </mj-column>
+        </mj-section>
+
+        <!-- Closing Message -->
+        <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
+          We appreciate your patience and look forward to welcoming you as a verified provider on LocalServiceHub.
+        </mj-text>
+
+        <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
+          Best regards,<br>
+          <strong>The LocalServiceHub Verification Team</strong>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <!-- Footer -->
+    <mj-section background-color="#f3f4f6" padding="30px">
+      <mj-column>
+        <mj-text align="center" font-size="14px" color="#6b7280" padding="0 0 10px 0">
+          <strong>LocalServiceHub</strong> - Connecting you with trusted local service providers
+        </mj-text>
+        <mj-text align="center" font-size="12px" color="#9ca3af">
+          This email was sent from LocalServiceHub. If you have any questions, please contact our support team.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
