@@ -45,7 +45,6 @@ class User < ApplicationRecord
 
   # Email confirmation token
   has_secure_token :email_confirmation_token
-  has_secure_token :password_reset_token
 
   # Validations
   validates :first_name, presence: true, if: :profile_required?
@@ -209,8 +208,11 @@ class User < ApplicationRecord
   end
 
   def send_password_reset_email
-    regenerate_password_reset_token
-    UserMailer.password_reset_instructions(self, password_reset_token).deliver_later
+    # Use Devise's built-in reset_password_token
+    self.reset_password_token = Devise.friendly_token
+    self.reset_password_sent_at = Time.current
+    save(validate: false)
+    UserMailer.password_reset_instructions(self, reset_password_token).deliver_later
   end
 
   def confirm_email!
@@ -225,14 +227,15 @@ class User < ApplicationRecord
   end
 
   def password_reset_expired?
-    return true if password_reset_token.blank?
-    updated_at < 2.hours.ago
+    return true if reset_password_token.blank?
+    reset_password_sent_at.nil? || reset_password_sent_at < 2.hours.ago
   end
 
   def reset_password!(new_password)
     update(
       password: new_password,
-      password_reset_token: nil
+      reset_password_token: nil,
+      reset_password_sent_at: nil
     )
   end
 
