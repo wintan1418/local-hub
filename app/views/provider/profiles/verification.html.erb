@@ -10,12 +10,16 @@
       </div>
 
       <!-- Verification Status -->
-      <div class="mb-8 p-4 rounded-lg <%= @user.verified? ? 'bg-green-50 border border-green-200' : 'bg-yellow-50 border border-yellow-200' %>">
+      <div class="mb-8 p-4 rounded-lg <%= @user.verified? ? 'bg-green-50 border border-green-200' : (@user.verification_documents_uploaded? ? 'bg-blue-50 border border-blue-200' : 'bg-yellow-50 border border-yellow-200') %>">
         <div class="flex">
           <div class="flex-shrink-0">
             <% if @user.verified? %>
               <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+            <% elsif @user.verification_documents_uploaded? %>
+              <svg class="h-5 w-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.414-1.415L11 9.586V6z" clip-rule="evenodd" />
               </svg>
             <% else %>
               <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
@@ -23,89 +27,212 @@
               </svg>
             <% end %>
           </div>
-          <div class="ml-3">
-            <h3 class="text-sm font-medium <%= @user.verified? ? 'text-green-800' : 'text-yellow-800' %>">
+          <div class="ml-3 flex-1">
+            <h3 class="text-sm font-medium <%= @user.verified? ? 'text-green-800' : (@user.verification_documents_uploaded? ? 'text-blue-800' : 'text-yellow-800') %>">
               <%= @user.verification_status %>
             </h3>
-            <div class="mt-2 text-sm <%= @user.verified? ? 'text-green-700' : 'text-yellow-700' %>">
+            <div class="mt-2 text-sm <%= @user.verified? ? 'text-green-700' : (@user.verification_documents_uploaded? ? 'text-blue-700' : 'text-yellow-700') %>">
               <% if @user.verified? %>
                 <p>Your account is verified. Customers can see your verified status.</p>
+              <% elsif @user.verification_documents_uploaded? %>
+                <p>All documents have been uploaded and are under review. We'll notify you once verification is complete.</p>
               <% else %>
                 <p>Upload the required documents below to complete your verification.</p>
               <% end %>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Required Documents -->
-      <div class="mb-8">
-        <h4 class="text-md font-medium text-gray-900 mb-4">Required Documents</h4>
-        <div class="space-y-4">
-          <div class="border rounded-lg p-4">
-            <h5 class="font-medium text-gray-900">Business License</h5>
-            <p class="text-sm text-gray-500 mt-1">Upload a clear photo or scan of your business license</p>
-          </div>
-          <div class="border rounded-lg p-4">
-            <h5 class="font-medium text-gray-900">Insurance Certificate</h5>
-            <p class="text-sm text-gray-500 mt-1">Upload your current liability insurance certificate</p>
-          </div>
-          <div class="border rounded-lg p-4">
-            <h5 class="font-medium text-gray-900">Professional Certifications</h5>
-            <p class="text-sm text-gray-500 mt-1">Upload any relevant professional certifications or trade licenses</p>
-          </div>
-          <div class="border rounded-lg p-4">
-            <h5 class="font-medium text-gray-900">Government ID</h5>
-            <p class="text-sm text-gray-500 mt-1">Upload a valid government-issued photo ID (driver's license or passport)</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Upload Form -->
-      <div class="mb-8">
-        <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true) do |form| %>
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-2">Upload Documents</label>
-            <%= form.file_field :verification_documents, multiple: true, accept: "image/*,application/pdf", 
-                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
-            <p class="mt-1 text-sm text-gray-500">Accepted formats: JPG, PNG, PDF (Max 10MB per file)</p>
-          </div>
-          <%= form.submit "Upload Documents", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
-        <% end %>
-      </div>
-
-      <!-- Uploaded Documents -->
-      <% if @verification_documents.any? %>
-        <div>
-          <h4 class="text-md font-medium text-gray-900 mb-4">Uploaded Documents</h4>
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <% @verification_documents.each do |document| %>
-              <div class="border rounded-lg p-4">
-                <div class="aspect-w-3 aspect-h-2 mb-2">
-                  <% if document.content_type.start_with?('image/') %>
-                    <%= image_tag document, class: "object-cover rounded" %>
-                  <% else %>
-                    <div class="flex items-center justify-center h-full bg-gray-100 rounded">
-                      <svg class="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                    </div>
-                  <% end %>
+            
+            <!-- Progress Bar -->
+            <% unless @user.verified? %>
+              <div class="mt-3">
+                <div class="flex justify-between text-xs text-gray-600 mb-1">
+                  <span>Verification Progress</span>
+                  <span><%= @user.verification_progress %>%</span>
                 </div>
-                <p class="text-sm text-gray-900 truncate"><%= document.filename %></p>
-                <p class="text-xs text-gray-500">Uploaded <%= document.created_at.strftime("%b %d, %Y") %></p>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="<%= @user.verification_progress == 100 ? 'bg-blue-600' : 'bg-yellow-600' %> h-2 rounded-full" style="width: <%= @user.verification_progress %>%"></div>
+                </div>
               </div>
             <% end %>
           </div>
         </div>
-      <% else %>
-        <div class="text-center py-8">
-          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-          </svg>
-          <p class="mt-2 text-sm text-gray-500">No documents uploaded yet</p>
+      </div>
+
+      <!-- Upload Forms for Each Document Type -->
+      <div class="space-y-6">
+        <!-- Business License -->
+        <div class="border rounded-lg p-6 <%= @user.business_license_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex-1">
+              <div class="flex items-center">
+                <h5 class="font-medium text-gray-900">Business License</h5>
+                <% if @user.business_license_document? %>
+                  <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml-1 text-sm text-green-600 font-medium">Uploaded</span>
+                <% end %>
+              </div>
+              <p class="text-sm text-gray-500 mt-1">Upload a clear photo or scan of your business license</p>
+            </div>
+          </div>
+          
+          <% if @user.business_license_file.attached? %>
+            <div class="mb-4">
+              <div class="flex items-center p-3 bg-white border border-gray-200 rounded-lg">
+                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="text-sm text-gray-700"><%= @user.business_license_file.filename %></span>
+                <span class="ml-auto text-xs text-gray-500">
+                  <%= number_to_human_size(@user.business_license_file.byte_size) %>
+                </span>
+              </div>
+            </div>
+          <% end %>
+
+          <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
+            <div class="flex items-center space-x-4">
+              <%= form.file_field :business_license_file, accept: "image/*,application/pdf", 
+                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+              <%= form.submit "Upload Business License", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors" %>
+            </div>
+          <% end %>
         </div>
-      <% end %>
+
+        <!-- Insurance Certificate -->
+        <div class="border rounded-lg p-6 <%= @user.insurance_certificate_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex-1">
+              <div class="flex items-center">
+                <h5 class="font-medium text-gray-900">Insurance Certificate</h5>
+                <% if @user.insurance_certificate_document? %>
+                  <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml-1 text-sm text-green-600 font-medium">Uploaded</span>
+                <% end %>
+              </div>
+              <p class="text-sm text-gray-500 mt-1">Upload your current liability insurance certificate</p>
+            </div>
+          </div>
+          
+          <% if @user.insurance_certificate_file.attached? %>
+            <div class="mb-4">
+              <div class="flex items-center p-3 bg-white border border-gray-200 rounded-lg">
+                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="text-sm text-gray-700"><%= @user.insurance_certificate_file.filename %></span>
+                <span class="ml-auto text-xs text-gray-500">
+                  <%= number_to_human_size(@user.insurance_certificate_file.byte_size) %>
+                </span>
+              </div>
+            </div>
+          <% end %>
+
+          <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
+            <div class="flex items-center space-x-4">
+              <%= form.file_field :insurance_certificate_file, accept: "image/*,application/pdf", 
+                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+              <%= form.submit "Upload Insurance Certificate", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors" %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Professional Certifications -->
+        <div class="border rounded-lg p-6 <%= @user.professional_certifications_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex-1">
+              <div class="flex items-center">
+                <h5 class="font-medium text-gray-900">Professional Certifications</h5>
+                <% if @user.professional_certifications_document? %>
+                  <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml-1 text-sm text-green-600 font-medium">Uploaded</span>
+                <% end %>
+              </div>
+              <p class="text-sm text-gray-500 mt-1">Upload any relevant professional certifications or trade licenses</p>
+            </div>
+          </div>
+          
+          <% if @user.professional_certifications_file.attached? %>
+            <div class="mb-4">
+              <div class="flex items-center p-3 bg-white border border-gray-200 rounded-lg">
+                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="text-sm text-gray-700"><%= @user.professional_certifications_file.filename %></span>
+                <span class="ml-auto text-xs text-gray-500">
+                  <%= number_to_human_size(@user.professional_certifications_file.byte_size) %>
+                </span>
+              </div>
+            </div>
+          <% end %>
+
+          <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
+            <div class="flex items-center space-x-4">
+              <%= form.file_field :professional_certifications_file, accept: "image/*,application/pdf", 
+                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+              <%= form.submit "Upload Professional Certifications", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors" %>
+            </div>
+          <% end %>
+        </div>
+
+        <!-- Government ID -->
+        <div class="border rounded-lg p-6 <%= @user.government_id_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
+          <div class="flex justify-between items-start mb-4">
+            <div class="flex-1">
+              <div class="flex items-center">
+                <h5 class="font-medium text-gray-900">Government ID</h5>
+                <% if @user.government_id_document? %>
+                  <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
+                  <span class="ml-1 text-sm text-green-600 font-medium">Uploaded</span>
+                <% end %>
+              </div>
+              <p class="text-sm text-gray-500 mt-1">Upload a valid government-issued photo ID (driver's license or passport)</p>
+            </div>
+          </div>
+          
+          <% if @user.government_id_file.attached? %>
+            <div class="mb-4">
+              <div class="flex items-center p-3 bg-white border border-gray-200 rounded-lg">
+                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span class="text-sm text-gray-700"><%= @user.government_id_file.filename %></span>
+                <span class="ml-auto text-xs text-gray-500">
+                  <%= number_to_human_size(@user.government_id_file.byte_size) %>
+                </span>
+              </div>
+            </div>
+          <% end %>
+
+          <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
+            <div class="flex items-center space-x-4">
+              <%= form.file_field :government_id_file, accept: "image/*,application/pdf", 
+                  class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+              <%= form.submit "Upload Government ID", class: "px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+        <h4 class="text-sm font-medium text-blue-900 mb-2">Important Notes:</h4>
+        <ul class="text-sm text-blue-800 space-y-1">
+          <li>• All documents must be clear and legible</li>
+          <li>• Accepted formats: JPG, PNG, PDF (Max 10MB per file)</li>
+          <li>• Documents will be reviewed within 1-2 business days</li>
+          <li>• You'll receive an email notification when verification is complete</li>
+          <% unless @user.missing_documents.empty? %>
+            <li class="font-medium">• Missing documents: <%= @user.missing_documents.join(", ") %></li>
+          <% end %>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
