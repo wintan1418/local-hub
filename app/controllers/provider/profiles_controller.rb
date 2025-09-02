@@ -27,14 +27,39 @@ class Provider::ProfilesController < ApplicationController
 
   def upload_documents
     @user = current_user
+    uploaded_count = 0
+    errors = []
 
-    if params[:verification_documents].present?
-      params[:verification_documents].each do |document|
-        @user.verification_documents.attach(document)
-      end
-      redirect_to verification_provider_profile_path, notice: "Documents uploaded successfully. We will review them shortly."
+    # Handle individual document uploads
+    if params[:business_license_file].present?
+      @user.business_license_file.attach(params[:business_license_file])
+      @user.update(business_license_document: true)
+      uploaded_count += 1
+    end
+
+    if params[:insurance_certificate_file].present?
+      @user.insurance_certificate_file.attach(params[:insurance_certificate_file])
+      @user.update(insurance_certificate_document: true)
+      uploaded_count += 1
+    end
+
+    if params[:professional_certifications_file].present?
+      @user.professional_certifications_file.attach(params[:professional_certifications_file])
+      @user.update(professional_certifications_document: true)
+      uploaded_count += 1
+    end
+
+    if params[:government_id_file].present?
+      @user.government_id_file.attach(params[:government_id_file])
+      @user.update(government_id_document: true)
+      uploaded_count += 1
+    end
+
+    if uploaded_count > 0
+      notice_message = "#{uploaded_count} document(s) uploaded successfully. We will review them shortly."
+      redirect_to verification_provider_profile_path, notice: notice_message
     else
-      redirect_to verification_provider_profile_path, alert: "Please select documents to upload."
+      redirect_to verification_provider_profile_path, alert: "Please select at least one document to upload."
     end
   end
 

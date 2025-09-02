@@ -2,6 +2,35 @@
 
 A comprehensive local service marketplace platform built with Ruby on Rails.
 
+## Production Test Accounts
+
+For testing the application in production, use these credentials:
+
+### Admin Account
+- **Email:** admin.test@localservicehub.com
+- **Password:** TestAdmin123!
+- **Features:** User management, service approval, analytics, system settings
+
+### Consumer Account
+- **Email:** consumer.test@localservicehub.com
+- **Password:** TestConsumer123!
+- **Features:** Search services, book appointments, leave reviews, chat with providers
+
+### Provider Account
+- **Email:** provider.test@localservicehub.com
+- **Password:** TestProvider123!
+- **Features:** Create services, manage bookings, upload verification documents, view analytics
+
+To create these test users in production, run:
+```bash
+rails test_users:create
+```
+
+To remove test users:
+```bash
+rails test_users:remove
+```
+
 ## Features
 
 - **User Management**: Multi-role system (Customer, Provider, Admin)

@@ -80,6 +80,50 @@
       </div>
     </div>
 
+    <!-- Verification Stats (for verification admins) -->
+    <% if current_user.can_manage_verifications? %>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+              <i class="fas fa-clock text-xl"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Pending Verifications</p>
+              <p class="text-2xl font-bold text-gray-900"><%= User.provider.where(verified: false, business_license_document: true, insurance_certificate_document: true, professional_certifications_document: true, government_id_document: true).count %></p>
+              <p class="text-xs text-gray-500 mt-1">Ready for review</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+              <i class="fas fa-check-circle text-xl"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Verified Providers</p>
+              <p class="text-2xl font-bold text-gray-900"><%= User.provider.where(verified: true).count %></p>
+              <p class="text-xs text-gray-500 mt-1">Total approved</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+              <i class="fas fa-percentage text-xl"></i>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-600">Verification Rate</p>
+              <p class="text-2xl font-bold text-gray-900"><%= User.provider.count > 0 ? ((User.provider.where(verified: true).count.to_f / User.provider.count) * 100).round : 0 %>%</p>
+              <p class="text-xs text-gray-500 mt-1">Of all providers</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
     <!-- Secondary Stats -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div class="bg-white rounded-lg shadow p-6">
@@ -217,6 +261,12 @@
         <div class="bg-white rounded-lg shadow p-6">
           <h2 class="text-lg font-semibold mb-4 text-gray-900">Management</h2>
           <div class="space-y-3">
+            <% if current_user.can_manage_verifications? %>
+              <%= link_to admin_verifications_path, class: "block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 transition-colors" do %>
+                <i class="fas fa-shield-alt mr-2"></i>Provider Verifications
+              <% end %>
+            <% end %>
+            
             <button class="block w-full bg-orange-600 text-white text-center py-2 px-4 rounded-md hover:bg-orange-700 transition-colors">
               <i class="fas fa-users mr-2"></i>Manage Users
             </button>
