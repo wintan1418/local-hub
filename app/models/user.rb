@@ -206,6 +206,9 @@ class User < ApplicationRecord
 
   def unread_notifications_count
     notifications.unread.count
+  rescue ActiveRecord::StatementInvalid, PG::UndefinedTable
+    # Return 0 if notifications table doesn't exist yet
+    0
   end
 
   def total_unread_count
