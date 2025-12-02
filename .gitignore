@@ -183,3 +183,6 @@ db/*.sqlite3-*
 ENV_SETUP.md
 
 /config/credentials/development.key
+
+# Ignore Cursor MCP configuration (contains API keys)
+.cursor/mcp.json
