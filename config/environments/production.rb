@@ -69,18 +69,27 @@ Rails.application.configure do
   # config.active_job.queue_adapter = :resque
 
   # Email configuration for production
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.smtp_settings = {
-    address: ENV.fetch('SMTP_ADDRESS', 'smtp.gmail.com'),
-    port: ENV.fetch('SMTP_PORT', 587).to_i,
-    domain: ENV.fetch('SMTP_DOMAIN', 'gmail.com'),
-    user_name: ENV['SMTP_USERNAME'],
-    password: ENV['SMTP_PASSWORD'],
-    authentication: :plain,
-    enable_starttls_auto: true
-  }
+  # Only use SMTP if credentials are configured, otherwise use test delivery
+  if ENV['SMTP_USERNAME'].present? && ENV['SMTP_PASSWORD'].present?
+    config.action_mailer.raise_delivery_errors = true
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.smtp_settings = {
+      address: ENV.fetch('SMTP_ADDRESS', 'smtp.gmail.com'),
+      port: ENV.fetch('SMTP_PORT', 587).to_i,
+      domain: ENV.fetch('SMTP_DOMAIN', 'gmail.com'),
+      user_name: ENV['SMTP_USERNAME'],
+      password: ENV['SMTP_PASSWORD'],
+      authentication: :plain,
+      enable_starttls_auto: true
+    }
+  else
+    # Use test delivery method if SMTP credentials are not configured
+    # Emails will be logged but not actually sent (prevents SMTP errors)
+    config.action_mailer.delivery_method = :test
+    config.action_mailer.perform_deliveries = true
+    config.action_mailer.raise_delivery_errors = false
+  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
