@@ -275,25 +275,12 @@ class User < ApplicationRecord
     UserMailer.welcome_email(self).deliver_later
   end
 
-  def send_confirmation_email
-    # Use Devise's built-in confirmation
-    send_confirmation_instructions
-  end
-
   def send_password_reset_email
     # Use Devise's built-in reset_password_token
     self.reset_password_token = Devise.friendly_token
     self.reset_password_sent_at = Time.current
     save(validate: false)
     UserMailer.password_reset_instructions(self, reset_password_token).deliver_later
-  end
-
-  def confirm_email!
-    confirm!
-  end
-
-  def email_confirmed?
-    confirmed?
   end
 
   def valid_email_domain?
