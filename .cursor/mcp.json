@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "render": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-render"],
+      "env": {
+        "RENDER_API_KEY": "rnd_TfLbfyb7KE9SqvabWb9pWNBi0nhC"
+      }
+    }
+  }
+}
+
