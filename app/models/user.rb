@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :confirmable
 
+  # Explicitly declare attribute type for Rails 8 enum support
+  attribute :user_role, :integer, default: 0
   enum :user_role, { customer: 0, provider: 1, admin: 2 }, default: :customer
   validates :user_role, presence: true
   
