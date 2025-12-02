@@ -2,7 +2,7 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable, :confirmable
+         :recoverable, :rememberable, :validatable
 
   # Explicitly declare attribute types for Rails 8 support
   attribute :user_role, :integer, default: 0
@@ -52,7 +52,7 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
 
   # Callbacks for automatic emails
-  after_update :send_welcome_email_if_confirmed, if: :saved_change_to_confirmed_at?
+  after_create :send_welcome_email
 
   # CRM
   has_many :phone_verifications, dependent: :destroy
@@ -61,7 +61,6 @@ class User < ApplicationRecord
   has_many :crm_campaigns, dependent: :destroy
   has_many :campaign_recipients, dependent: :destroy
 
-  # Note: Using Devise's built-in confirmation system
 
   # Validations
   validates :email, presence: true, uniqueness: { case_sensitive: false }, 
@@ -348,7 +347,4 @@ class User < ApplicationRecord
 
   private
 
-  def send_welcome_email_if_confirmed
-    send_welcome_email if confirmed_at.present? && confirmed_at_previously_changed?
-  end
 end
