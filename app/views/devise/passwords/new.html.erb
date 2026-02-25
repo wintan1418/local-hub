@@ -1,16 +1,71 @@
-<h2>Forgot your password?</h2>
+<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
+  <div class="w-full max-w-md">
+    <%# Logo %>
+    <div class="text-center mb-10">
+      <a href="<%= root_path %>" class="inline-flex items-center gap-2.5 group">
+        <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-sm">
+          <i class="fas fa-map-marker-alt text-white text-sm"></i>
+        </div>
+        <span class="text-xl font-bold text-gray-900">Local<span class="text-orange-500">ServiceHub</span></span>
+      </a>
+    </div>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
+    <%# Card %>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10">
+      <div class="text-center mb-8">
+        <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-key text-orange-500 text-xl"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-gray-900">Forgot your password?</h1>
+        <p class="mt-2 text-sm text-gray-500">No worries — enter your email and we'll send you reset instructions.</p>
+      </div>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%# Error messages %>
+        <% if resource.errors.any? %>
+          <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="fas fa-exclamation-circle text-red-400"></i>
+              <h3 class="text-sm font-semibold text-red-700">Please fix the following:</h3>
+            </div>
+            <ul class="space-y-1 ml-6">
+              <% resource.errors.full_messages.each do |msg| %>
+                <li class="text-sm text-red-600 list-disc"><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="space-y-5">
+          <%# Email %>
+          <div>
+            <label for="user_email" class="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+            <div class="relative">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fas fa-envelope text-gray-400 text-sm"></i>
+              </div>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                  placeholder: "you@example.com",
+                  class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+            </div>
+          </div>
+
+          <%# Submit %>
+          <button type="submit"
+                  class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2">
+            <i class="fas fa-paper-plane"></i>
+            Send Reset Instructions
+          </button>
+        </div>
+      <% end %>
+
+      <%# Back to sign in %>
+      <div class="mt-6 text-center">
+        <a href="<%= new_session_path(resource_name) %>" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors">
+          <i class="fas fa-arrow-left text-xs"></i>
+          Back to sign in
+        </a>
+      </div>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

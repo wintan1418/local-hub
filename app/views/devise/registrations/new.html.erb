@@ -1,48 +1,185 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-white py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
-    <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Create your account</h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
-        Or
-        <a href="<%= new_session_path(resource_name) %>" class="font-medium text-orange-600 hover:text-orange-500">sign in to your account</a>
+<%
+  # Pre-select role from URL param (e.g. ?role=provider)
+  preselected_role = params[:role].to_s.downcase
+  preselected_role = nil unless %w[customer provider].include?(preselected_role)
+%>
+
+<div class="min-h-screen flex">
+  <%# ===== LEFT: Image Panel (hidden on mobile) ===== %>
+  <div class="hidden lg:flex lg:w-1/2 relative bg-gray-900 items-center justify-center overflow-hidden">
+    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80"
+         alt="Team collaboration"
+         class="absolute inset-0 w-full h-full object-cover opacity-30">
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/40 to-gray-900/80"></div>
+    <div class="relative z-10 max-w-md px-12 text-center">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-8">
+        <i class="fas fa-map-marker-alt text-2xl text-orange-400"></i>
+      </div>
+      <h2 class="text-3xl font-bold text-white mb-4">Join LocalServiceHub<br>today</h2>
+      <p class="text-gray-300 text-base leading-relaxed">Whether you need a service or provide one — we make it easy to connect with your local community.</p>
+
+      <%# Benefits list %>
+      <div class="mt-10 space-y-4 text-left">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-check text-orange-400 text-xs"></i>
+          </div>
+          <span class="text-sm text-gray-300">Free for customers — no hidden fees</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-check text-orange-400 text-xs"></i>
+          </div>
+          <span class="text-sm text-gray-300">Verified & trusted service providers</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-check text-orange-400 text-xs"></i>
+          </div>
+          <span class="text-sm text-gray-300">Secure payments powered by Stripe</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-check text-orange-400 text-xs"></i>
+          </div>
+          <span class="text-sm text-gray-300">Real reviews from real customers</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ===== RIGHT: Sign Up Form ===== %>
+  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
+    <div class="w-full max-w-md">
+      <%# Logo %>
+      <div class="text-center mb-10">
+        <a href="<%= root_path %>" class="inline-flex items-center gap-2.5 group">
+          <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-sm">
+            <i class="fas fa-map-marker-alt text-white text-sm"></i>
+          </div>
+          <span class="text-xl font-bold text-gray-900">Local<span class="text-orange-500">ServiceHub</span></span>
+        </a>
+      </div>
+
+      <%# Card %>
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10">
+        <div class="mb-8">
+          <h1 class="text-2xl font-bold text-gray-900">Create your account</h1>
+          <p class="mt-2 text-sm text-gray-500">
+            Already have an account?
+            <a href="<%= new_session_path(resource_name) %>" class="font-semibold text-orange-500 hover:text-orange-600 transition-colors">Sign in</a>
+          </p>
+        </div>
+
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+          <%# Error messages %>
+          <% if resource.errors.any? %>
+            <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100">
+              <div class="flex items-center gap-2 mb-2">
+                <i class="fas fa-exclamation-circle text-red-400"></i>
+                <h3 class="text-sm font-semibold text-red-700">Please fix the following:</h3>
+              </div>
+              <ul class="space-y-1 ml-6">
+                <% resource.errors.full_messages.each do |msg| %>
+                  <li class="text-sm text-red-600 list-disc"><%= msg %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="space-y-5">
+            <%# Role Selection — card-style toggle %>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2.5">I want to</label>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="relative cursor-pointer">
+                  <input type="radio" name="user[user_role]" value="customer"
+                         <%= 'checked' if preselected_role == 'customer' || (!preselected_role && !resource.user_role.present?) || resource.user_role == 'customer' %>
+                         class="peer sr-only" required>
+                  <div class="p-4 rounded-xl border-2 border-gray-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-gray-300 transition-all text-center">
+                    <div class="w-10 h-10 rounded-xl bg-gray-100 peer-checked:bg-orange-100 flex items-center justify-center mx-auto mb-2.5">
+                      <i class="fas fa-search text-gray-400 text-sm"></i>
+                    </div>
+                    <div class="text-sm font-semibold text-gray-900">Find Services</div>
+                    <div class="text-xs text-gray-500 mt-0.5">I need help</div>
+                  </div>
+                </label>
+                <label class="relative cursor-pointer">
+                  <input type="radio" name="user[user_role]" value="provider"
+                         <%= 'checked' if preselected_role == 'provider' || resource.user_role == 'provider' %>
+                         class="peer sr-only" required>
+                  <div class="p-4 rounded-xl border-2 border-gray-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-gray-300 transition-all text-center">
+                    <div class="w-10 h-10 rounded-xl bg-gray-100 peer-checked:bg-orange-100 flex items-center justify-center mx-auto mb-2.5">
+                      <i class="fas fa-briefcase text-gray-400 text-sm"></i>
+                    </div>
+                    <div class="text-sm font-semibold text-gray-900">Offer Services</div>
+                    <div class="text-xs text-gray-500 mt-0.5">I'm a provider</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <%# Email %>
+            <div>
+              <label for="user_email" class="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <i class="fas fa-envelope text-gray-400 text-sm"></i>
+                </div>
+                <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                    placeholder: "you@example.com",
+                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+              </div>
+            </div>
+
+            <%# Password %>
+            <div>
+              <label for="user_password" class="block text-sm font-medium text-gray-700 mb-1.5">
+                Password
+                <% if @minimum_password_length %>
+                  <span class="font-normal text-gray-400">(<%= @minimum_password_length %> characters min)</span>
+                <% end %>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <i class="fas fa-lock text-gray-400 text-sm"></i>
+                </div>
+                <%= f.password_field :password, autocomplete: "new-password",
+                    placeholder: "Create a password",
+                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+              </div>
+            </div>
+
+            <%# Password Confirmation %>
+            <div>
+              <label for="user_password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Confirm password</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <i class="fas fa-lock text-gray-400 text-sm"></i>
+                </div>
+                <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                    placeholder: "Confirm your password",
+                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+              </div>
+            </div>
+
+            <%# Submit %>
+            <button type="submit"
+                    class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2">
+              <i class="fas fa-user-plus"></i>
+              Create Account
+            </button>
+          </div>
+        <% end %>
+      </div>
+
+      <%# Footer %>
+      <p class="mt-8 text-center text-xs text-gray-400">
+        By creating an account, you agree to our
+        <a href="#" class="text-gray-500 hover:text-gray-700 underline">Terms of Service</a>
+        and
+        <a href="#" class="text-gray-500 hover:text-gray-700 underline">Privacy Policy</a>.
       </p>
     </div>
-    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <% if resource.errors.any? %>
-        <div class="mb-4 p-4 rounded bg-red-100 border border-red-300 text-red-700">
-          <h3 class="font-semibold mb-2">Please fix the following errors:</h3>
-          <ul class="list-disc pl-5">
-            <% resource.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-      <div class="rounded-md shadow-sm -space-y-px">
-        <div class="mb-6">
-          <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
-        </div>
-        <div class="mb-6">
-          <%= f.label :password, class: "block text-sm font-medium text-gray-700" %>
-          <% if @minimum_password_length %>
-            <em class="text-xs text-gray-500">(<%= @minimum_password_length %> characters minimum)</em>
-          <% end %>
-          <%= f.password_field :password, autocomplete: "new-password", placeholder: "Password", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
-        </div>
-        <div class="mb-6">
-          <%= f.label :password_confirmation, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Confirm password", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
-        </div>
-        <div class="mb-8">
-          <%= f.label :user_role, class: "block text-sm font-medium text-gray-700" %>
-          <%= f.select :user_role, options_for_select(User.user_roles.keys.map { |r| [r.titleize, r] }), { prompt: "Select a role" }, { required: true, class: "block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50" } %>
-          <p class="text-xs text-gray-500 mt-1">Choose your role: Customer, Provider, or Admin.</p>
-        </div>
-      </div>
-      <div>
-        <%= f.submit "Sign up", class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" %>
-      </div>
-    <% end %>
   </div>
 </div>
