@@ -3,421 +3,478 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Primary Meta Tags -->
     <title><%= content_for?(:page_title) ? yield(:page_title) : 'LocalServiceHub - Find Trusted Local Service Providers' %></title>
     <meta name="description" content="<%= content_for?(:page_description) ? yield(:page_description) : 'Connect with trusted local service providers for all your needs. Book appointments, read reviews, and get the best service in your area.' %>">
-    
+
     <!-- Canonical URL -->
     <link rel="canonical" href="<%= request.original_url %>" />
-    
+
     <!-- CSRF and CSP -->
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <!-- Essential meta tags -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#ea580c">
 
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css", rel: "stylesheet" %>
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
+
     <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <!-- JavaScript -->
     <%= javascript_importmap_tags %>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Custom head content -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
     <%= yield(:head) if content_for?(:head) %>
   </head>
 
-  <body class="bg-gradient-to-br from-orange-50 to-white min-h-screen font-sans antialiased text-gray-800" data-controller="smooth-scroll" style="font-family: 'Inter', 'Poppins', sans-serif;">
-    <!-- Clean Navigation -->
-    <nav class="bg-white/95 backdrop-blur-xl border-b border-gray-100/50 sticky top-0 z-50" data-controller="mobile-menu" data-mobile-menu-open-class="mobile-menu-open">
+  <body class="min-h-screen font-sans antialiased text-gray-800 bg-white" style="font-family: 'Inter', system-ui, sans-serif;">
+
+    <%# ========== NAVIGATION ========== %>
+    <nav class="sticky top-0 z-50 bg-white border-b border-gray-200/80 shadow-sm" data-controller="mobile-menu" data-mobile-menu-open-class="mobile-menu-open">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <div class="flex-shrink-0 flex items-center">
-              <%= link_to root_path, class: "text-2xl font-bold text-orange-600 hover:text-orange-700 transition-colors duration-200" do %>
-                LocalServiceHub
+
+          <%# Left: Logo + Nav Links %>
+          <div class="flex items-center gap-8">
+            <%# Logo %>
+            <%= link_to root_path, class: "flex items-center gap-2 group" do %>
+              <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center group-hover:bg-orange-600 transition-colors">
+                <i class="fas fa-map-marker-alt text-white text-sm"></i>
+              </div>
+              <span class="text-lg font-bold text-gray-900 hidden sm:inline">Local<span class="text-orange-500">ServiceHub</span></span>
+            <% end %>
+
+            <%# Desktop Nav Links %>
+            <div class="hidden md:flex items-center gap-1">
+              <%
+                nav_links = [
+                  { name: 'Home', path: root_path, active: request.path == '/' },
+                  { name: 'Services', path: services_path, active: request.path.start_with?('/services') },
+                  { name: 'Leaderboard', path: leaderboard_index_path, active: request.path.start_with?('/leaderboard') },
+                  { name: 'About', path: about_path, active: request.path.start_with?('/about') },
+                  { name: 'Contact', path: contact_path, active: request.path.start_with?('/contact') }
+                ]
+              %>
+              <% nav_links.each do |link| %>
+                <%= link_to link[:name], link[:path],
+                    class: "px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150 #{link[:active] ? 'bg-orange-50 text-orange-600' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'}" %>
               <% end %>
             </div>
-            <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <%= link_to 'Home', root_path, 
-                        class: "#{request.path == '/' ? 'border-orange-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200" %>
-                        
-              <%= link_to 'Services', services_path, 
-                        class: "#{request.path.start_with?('/services') ? 'border-orange-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200" %>
-                        
-              <%= link_to 'Leaderboard', leaderboard_index_path, 
-                        class: "#{request.path.start_with?('/leaderboard') ? 'border-orange-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200" %>
-                        
-              <%= link_to 'About', about_path, 
-                        class: "#{request.path.start_with?('/about') ? 'border-orange-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors duration-200" %>
-            </div>
           </div>
-          <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+
+          <%# Right: Actions %>
+          <div class="flex items-center gap-3">
             <% if user_signed_in? %>
-              <!-- Notification Bell -->
-              <%= link_to notifications_path, class: "relative p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 rounded-full" do %>
-                <span class="sr-only">View notifications</span>
-                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                </svg>
-                <% if current_user.unread_notifications_count > 0 %>
-                  <span class="absolute -top-1 -right-1 h-5 w-5 bg-red-500 text-white text-xs font-medium rounded-full flex items-center justify-center">
-                    <%= current_user.unread_notifications_count > 99 ? '99+' : current_user.unread_notifications_count %>
+              <%# Messages %>
+              <%= link_to conversations_path, class: "relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors", title: "Messages" do %>
+                <i class="fas fa-comment-dots text-lg"></i>
+                <% if current_user.total_unread_messages > 0 %>
+                  <span class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    <%= current_user.total_unread_messages > 9 ? '9+' : current_user.total_unread_messages %>
                   </span>
                 <% end %>
               <% end %>
-              <div class="flex items-center space-x-4">
-                <div class="relative">
-                  <button type="button" class="flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500" onclick="toggleDropdown()">
-                    <span class="sr-only">Open user menu</span>
-                    <div class="h-8 w-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-medium">
-                      <%= current_user.email.first.upcase %>
-                    </div>
-                    <span class="ml-2 text-gray-700 font-medium"><%= current_user.email.split('@').first %></span>
-                    <svg class="ml-1 h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                  </button>
-                  
-                  <div id="user-dropdown" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden z-50">
-                    <div class="py-1">
-                      <% case current_user.user_role %>
-                      <% when "customer" %>
-                        <%= link_to customer_dashboard_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                          <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-                        <% end %>
-                      <% when "provider" %>
-                        <%= link_to provider_dashboard_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                          <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-                        <% end %>
-                        <%= link_to new_provider_service_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                          <i class="fas fa-plus mr-2"></i>Add Service
-                        <% end %>
-                      <% when "admin" %>
-                        <%= link_to admin_dashboard_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                          <i class="fas fa-cogs mr-2"></i>Admin Dashboard
-                        <% end %>
-                      <% else %>
-                        <%= link_to customer_dashboard_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                          <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
-                        <% end %>
+
+              <%# Notifications %>
+              <%= link_to notifications_path, class: "relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition-colors", title: "Notifications" do %>
+                <i class="fas fa-bell text-lg"></i>
+                <% if current_user.unread_notifications_count > 0 %>
+                  <span class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                    <%= current_user.unread_notifications_count > 9 ? '9+' : current_user.unread_notifications_count %>
+                  </span>
+                <% end %>
+              <% end %>
+
+              <%# Divider %>
+              <div class="hidden sm:block w-px h-6 bg-gray-200"></div>
+
+              <%# User Dropdown %>
+              <div class="relative">
+                <button type="button" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-gray-50 transition-colors" onclick="toggleDropdown()" aria-haspopup="true">
+                  <div class="h-8 w-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold text-sm shadow-sm">
+                    <%= current_user.display_name.first.upcase %>
+                  </div>
+                  <div class="hidden sm:block text-left">
+                    <div class="text-sm font-medium text-gray-900 leading-tight"><%= current_user.display_name %></div>
+                    <div class="text-xs text-gray-500 leading-tight capitalize"><%= current_user.user_role %></div>
+                  </div>
+                  <svg class="hidden sm:block h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </button>
+
+                <%# Dropdown Menu %>
+                <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-50">
+                  <%# User Info Header %>
+                  <div class="px-4 py-3 border-b border-gray-100">
+                    <p class="text-sm font-semibold text-gray-900"><%= current_user.display_name %></p>
+                    <p class="text-xs text-gray-500 truncate"><%= current_user.email %></p>
+                  </div>
+
+                  <%# Navigation Links %>
+                  <div class="py-1">
+                    <% case current_user.user_role %>
+                    <% when "customer" %>
+                      <%= link_to customer_dashboard_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                        <i class="fas fa-th-large text-gray-400 w-4 text-center"></i>Dashboard
                       <% end %>
-                      <%= link_to conversations_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                        <i class="fas fa-comments mr-2"></i>Messages
-                        <% if current_user.total_unread_messages > 0 %>
-                          <span class="bg-red-500 text-white text-xs font-medium px-1.5 py-0.5 rounded-full ml-1">
-                            <%= current_user.total_unread_messages %>
-                          </span>
-                        <% end %>
+                    <% when "provider" %>
+                      <%= link_to provider_dashboard_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                        <i class="fas fa-th-large text-gray-400 w-4 text-center"></i>Dashboard
                       <% end %>
-                      <%= link_to notifications_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                        <i class="fas fa-bell mr-2"></i>Notifications
-                        <% if current_user.unread_notifications_count > 0 %>
-                          <span class="bg-red-500 text-white text-xs font-medium px-1.5 py-0.5 rounded-full ml-1">
-                            <%= current_user.unread_notifications_count %>
-                          </span>
-                        <% end %>
+                      <%= link_to new_provider_service_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                        <i class="fas fa-plus text-gray-400 w-4 text-center"></i>Add Service
                       <% end %>
-                      <div class="border-t border-gray-100"></div>
-                      <%= link_to settings_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" do %>
-                        <i class="fas fa-cog mr-2"></i>Settings
+                    <% when "admin" %>
+                      <%= link_to admin_dashboard_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                        <i class="fas fa-gauge-high text-gray-400 w-4 text-center"></i>Admin Panel
                       <% end %>
-                      <%= link_to destroy_user_session_path, class: "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100", data: { "turbo-method": :delete } do %>
-                        <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+                    <% else %>
+                      <%= link_to customer_dashboard_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                        <i class="fas fa-th-large text-gray-400 w-4 text-center"></i>Dashboard
                       <% end %>
-                    </div>
+                    <% end %>
+
+                    <%= link_to conversations_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                      <i class="fas fa-comment-dots text-gray-400 w-4 text-center"></i>
+                      Messages
+                      <% if current_user.total_unread_messages > 0 %>
+                        <span class="ml-auto bg-red-500 text-white text-xs font-medium px-1.5 py-0.5 rounded-full"><%= current_user.total_unread_messages %></span>
+                      <% end %>
+                    <% end %>
+
+                    <%= link_to notifications_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                      <i class="fas fa-bell text-gray-400 w-4 text-center"></i>
+                      Notifications
+                      <% if current_user.unread_notifications_count > 0 %>
+                        <span class="ml-auto bg-red-500 text-white text-xs font-medium px-1.5 py-0.5 rounded-full"><%= current_user.unread_notifications_count %></span>
+                      <% end %>
+                    <% end %>
+                  </div>
+
+                  <div class="border-t border-gray-100"></div>
+
+                  <div class="py-1">
+                    <%= link_to settings_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors" do %>
+                      <i class="fas fa-cog text-gray-400 w-4 text-center"></i>Settings
+                    <% end %>
+                    <%= link_to destroy_user_session_path, class: "flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors", data: { "turbo-method": :delete } do %>
+                      <i class="fas fa-sign-out-alt text-red-400 w-4 text-center"></i>Sign Out
+                    <% end %>
                   </div>
                 </div>
               </div>
+
             <% else %>
-              <%= link_to 'Sign In', new_user_session_path, 
-                        class: 'text-gray-500 hover:text-gray-700 text-sm font-medium transition-colors duration-200' %>
-              <%= link_to 'Get Started', new_user_registration_path, 
-                        class: 'bg-orange-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-200' %>
+              <%# Signed-out actions %>
+              <%= link_to 'Sign In', new_user_session_path,
+                  class: 'hidden sm:inline-flex text-sm font-medium text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-50 transition-colors' %>
+              <%= link_to 'Get Started', new_user_registration_path,
+                  class: 'bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm' %>
             <% end %>
-          </div>
-          <div class="-mr-2 flex items-center sm:hidden">
-            <!-- Mobile menu button -->
-            <button type="button" 
-                    class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500 transition-colors duration-200" 
-                    aria-controls="mobile-menu" 
-                    aria-expanded="false" 
+
+            <%# Mobile menu button %>
+            <button type="button"
+                    class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-gray-500 hover:text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500 transition-colors"
+                    aria-controls="mobile-menu"
+                    aria-expanded="false"
                     data-action="click->mobile-menu#toggle"
                     data-mobile-menu-target="button">
-              <span class="sr-only">Open main menu</span>
-              <!-- Icon when menu is closed. -->
-              <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-              <!-- Icon when menu is open. -->
-              <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              <span class="sr-only">Open menu</span>
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
               </svg>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Mobile menu, show/hide based on menu state. -->
-      <div class="sm:hidden hidden transform transition-transform duration-300 ease-in-out" 
-           id="mobile-menu" 
-           data-mobile-menu-target="menu">
-        <div class="pt-2 pb-3 space-y-1 bg-white shadow-lg">
-          <%= link_to 'Home', root_path, 
-                    class: "#{request.path == '/' ? 'block pl-3 pr-4 py-3 text-base font-medium text-orange-700 bg-orange-50 border-l-4 border-orange-500' : 'block pl-3 pr-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent hover:border-orange-500'} transition-colors duration-200",
-                    data: { action: 'click->mobile-menu#close', turbo: false } %>
-                    
-          <%= link_to 'Services', services_path, 
-                    class: "#{request.path.start_with?('/services') ? 'block pl-3 pr-4 py-3 text-base font-medium text-orange-700 bg-orange-50 border-l-4 border-orange-500' : 'block pl-3 pr-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent hover:border-orange-500'} transition-colors duration-200",
-                    data: { action: 'click->mobile-menu#close', turbo: false } %>
-                    
-          <%= link_to 'Leaderboard', leaderboard_index_path, 
-                    class: "#{request.path.start_with?('/leaderboard') ? 'block pl-3 pr-4 py-3 text-base font-medium text-orange-700 bg-orange-50 border-l-4 border-orange-500' : 'block pl-3 pr-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent hover:border-orange-500'} transition-colors duration-200",
-                    data: { action: 'click->mobile-menu#close', turbo: false } %>
-                    
-          <%= link_to 'About', about_path, 
-                    class: "#{request.path.start_with?('/about') ? 'block pl-3 pr-4 py-3 text-base font-medium text-orange-700 bg-orange-50 border-l-4 border-orange-500' : 'block pl-3 pr-4 py-3 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 border-l-4 border-transparent hover:border-orange-500'} transition-colors duration-200",
-                    data: { action: 'click->mobile-menu#close', turbo: false } %>
-                    
-          <div class="pt-4 pb-3 border-t border-gray-200">
-            <div class="mt-3 space-y-1">
-              <%= link_to 'Get Started', new_user_registration_path, 
-                        class: 'block w-full text-left px-4 py-2 text-base font-medium text-orange-600 hover:bg-orange-50 hover:text-orange-800 transition-colors duration-200',
-                        data: { action: 'click->mobile-menu#close', turbo: false } %>
-            </div>
+      <%# ===== MOBILE MENU ===== %>
+      <div class="md:hidden hidden" id="mobile-menu" data-mobile-menu-target="menu">
+        <div class="bg-white border-t border-gray-100 shadow-lg">
+
+          <%# Mobile Nav Links %>
+          <div class="px-2 pt-3 pb-2 space-y-1">
+            <%
+              mobile_links = [
+                { name: 'Home', path: root_path, icon: 'fa-house', active: request.path == '/' },
+                { name: 'Services', path: services_path, icon: 'fa-grid-2', active: request.path.start_with?('/services') },
+                { name: 'Leaderboard', path: leaderboard_index_path, icon: 'fa-trophy', active: request.path.start_with?('/leaderboard') },
+                { name: 'About', path: about_path, icon: 'fa-info-circle', active: request.path.start_with?('/about') },
+                { name: 'Contact', path: contact_path, icon: 'fa-envelope', active: request.path.start_with?('/contact') }
+              ]
+            %>
+            <% mobile_links.each do |link| %>
+              <%= link_to link[:path],
+                  class: "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors #{link[:active] ? 'bg-orange-50 text-orange-600' : 'text-gray-700 hover:bg-gray-50'}",
+                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                <i class="fas <%= link[:icon] %> w-5 text-center text-sm <%= link[:active] ? 'text-orange-500' : 'text-gray-400' %>"></i>
+                <%= link[:name] %>
+              <% end %>
+            <% end %>
           </div>
+
+          <% if user_signed_in? %>
+            <div class="border-t border-gray-100 px-2 pt-3 pb-4">
+              <%# User Info %>
+              <div class="flex items-center gap-3 px-3 py-2 mb-2">
+                <div class="h-10 w-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold shadow-sm">
+                  <%= current_user.display_name.first.upcase %>
+                </div>
+                <div>
+                  <div class="text-sm font-semibold text-gray-900"><%= current_user.display_name %></div>
+                  <div class="text-xs text-gray-500"><%= current_user.email %></div>
+                </div>
+              </div>
+
+              <%# Quick Links %>
+              <% dashboard_path = case current_user.user_role
+                                  when "provider" then provider_dashboard_path
+                                  when "admin" then admin_dashboard_path
+                                  else customer_dashboard_path
+                                  end %>
+              <%= link_to dashboard_path,
+                  class: "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors",
+                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                <i class="fas fa-th-large w-5 text-center text-sm text-gray-400"></i>Dashboard
+              <% end %>
+              <%= link_to conversations_path,
+                  class: "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors",
+                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                <i class="fas fa-comment-dots w-5 text-center text-sm text-gray-400"></i>
+                Messages
+                <% if current_user.total_unread_messages > 0 %>
+                  <span class="ml-auto bg-red-500 text-white text-xs font-medium px-1.5 py-0.5 rounded-full"><%= current_user.total_unread_messages %></span>
+                <% end %>
+              <% end %>
+              <%= link_to settings_path,
+                  class: "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors",
+                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                <i class="fas fa-cog w-5 text-center text-sm text-gray-400"></i>Settings
+              <% end %>
+
+              <div class="mt-2 px-3">
+                <%= link_to destroy_user_session_path,
+                    class: "flex items-center justify-center gap-2 w-full py-2.5 rounded-lg text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 transition-colors",
+                    data: { "turbo-method": :delete } do %>
+                  <i class="fas fa-sign-out-alt text-sm"></i>Sign Out
+                <% end %>
+              </div>
+            </div>
+          <% else %>
+            <div class="border-t border-gray-100 px-4 py-4 space-y-2">
+              <%= link_to new_user_session_path,
+                  class: "block w-full text-center py-2.5 rounded-lg text-sm font-medium text-gray-700 border border-gray-200 hover:bg-gray-50 transition-colors",
+                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                Sign In
+              <% end %>
+              <%= link_to new_user_registration_path,
+                  class: "block w-full text-center py-2.5 rounded-lg text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-colors",
+                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                Get Started
+              <% end %>
+            </div>
+          <% end %>
         </div>
       </div>
     </nav>
 
-    <!-- Enhanced Flash Messages -->
+    <%# ========== FLASH MESSAGES ========== %>
     <% if notice %>
-      <div class="fixed top-4 right-4 z-50 max-w-md" id="notice-flash">
-        <div class="bg-white border border-green-200 rounded-xl shadow-2xl p-4 transform transition-all duration-500 translate-x-0 opacity-100">
-          <div class="flex items-start">
-            <div class="flex-shrink-0">
-              <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-              </div>
+      <div class="fixed top-20 right-4 z-[60] max-w-sm" id="notice-flash">
+        <div class="bg-white border border-green-200 rounded-xl shadow-2xl p-4">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+              </svg>
             </div>
-            <div class="ml-3 flex-1">
-              <p class="text-sm font-medium text-gray-900">Success!</p>
-              <p class="text-sm text-gray-700 mt-1">
-                <%= notice %>
-              </p>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900">Success</p>
+              <p class="text-sm text-gray-600 mt-0.5"><%= notice %></p>
             </div>
-            <button type="button" onclick="dismissFlash('notice-flash')" class="ml-4 flex-shrink-0 bg-white rounded-md text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500">
-              <span class="sr-only">Dismiss</span>
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            <button type="button" onclick="dismissFlash('notice-flash')" class="flex-shrink-0 text-gray-400 hover:text-gray-600">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>
             </button>
           </div>
-          <div class="mt-2">
-            <div class="bg-green-200 h-1 rounded-full overflow-hidden">
-              <div class="bg-green-500 h-full rounded-full animate-progress"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <% end %>
-    
-    <% if alert %>
-      <div class="fixed top-4 right-4 z-50 max-w-md" id="alert-flash">
-        <div class="bg-white border border-red-200 rounded-xl shadow-2xl p-4 transform transition-all duration-500 translate-x-0 opacity-100">
-          <div class="flex items-start">
-            <div class="flex-shrink-0">
-              <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                <svg class="w-5 h-5 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-              </div>
-            </div>
-            <div class="ml-3 flex-1">
-              <p class="text-sm font-medium text-gray-900">Error!</p>
-              <p class="text-sm text-gray-700 mt-1">
-                <%= alert %>
-              </p>
-            </div>
-            <button type="button" onclick="dismissFlash('alert-flash')" class="ml-4 flex-shrink-0 bg-white rounded-md text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
-              <span class="sr-only">Dismiss</span>
-              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-          </div>
-          <div class="mt-2">
-            <div class="bg-red-200 h-1 rounded-full overflow-hidden">
-              <div class="bg-red-500 h-full rounded-full animate-progress"></div>
-            </div>
+          <div class="mt-3 bg-green-100 h-1 rounded-full overflow-hidden">
+            <div class="bg-green-500 h-full rounded-full animate-progress"></div>
           </div>
         </div>
       </div>
     <% end %>
 
+    <% if alert %>
+      <div class="fixed top-20 right-4 z-[60] max-w-sm" id="alert-flash">
+        <div class="bg-white border border-red-200 rounded-xl shadow-2xl p-4">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900">Error</p>
+              <p class="text-sm text-gray-600 mt-0.5"><%= alert %></p>
+            </div>
+            <button type="button" onclick="dismissFlash('alert-flash')" class="flex-shrink-0 text-gray-400 hover:text-gray-600">
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+          <div class="mt-3 bg-red-100 h-1 rounded-full overflow-hidden">
+            <div class="bg-red-500 h-full rounded-full animate-progress"></div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# ========== PAGE CONTENT ========== %>
     <%= yield %>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white pt-12 pb-8">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div class="col-span-1">
-            <h3 class="text-lg font-bold mb-4">LocalServiceHub</h3>
-            <p class="text-gray-400 text-sm">Connecting you with trusted local service providers for all your needs.</p>
-            <div class="flex space-x-4 mt-4">
-              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
-              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+    <%# ========== FOOTER ========== %>
+    <footer class="bg-gray-900 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+          <%# Brand %>
+          <div class="col-span-2 md:col-span-1">
+            <div class="flex items-center gap-2 mb-4">
+              <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
+                <i class="fas fa-map-marker-alt text-white text-sm"></i>
+              </div>
+              <span class="text-lg font-bold">Local<span class="text-orange-400">ServiceHub</span></span>
+            </div>
+            <p class="text-gray-400 text-sm leading-relaxed">Connecting you with trusted local service providers for all your needs.</p>
+            <div class="flex gap-3 mt-5">
+              <a href="#" class="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-facebook-f text-sm"></i>
+              </a>
+              <a href="#" class="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-twitter text-sm"></i>
+              </a>
+              <a href="#" class="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-instagram text-sm"></i>
+              </a>
+              <a href="#" class="w-9 h-9 rounded-lg bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors">
+                <i class="fab fa-linkedin-in text-sm"></i>
+              </a>
             </div>
           </div>
+
+          <%# Services %>
           <div>
-            <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Services</h4>
-            <ul class="space-y-2">
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Home Cleaning</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Handyman</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Moving & Storage</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Beauty & Wellness</a></li>
+            <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Services</h4>
+            <ul class="space-y-3">
+              <li><%= link_to "Home Cleaning", services_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
+              <li><%= link_to "Plumbing", services_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
+              <li><%= link_to "Electrical", services_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
+              <li><%= link_to "All Services", services_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
             </ul>
           </div>
+
+          <%# Company %>
           <div>
-            <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Company</h4>
-            <ul class="space-y-2">
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">About Us</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Careers</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Press</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Blog</a></li>
+            <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Company</h4>
+            <ul class="space-y-3">
+              <li><%= link_to "About Us", about_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
+              <li><%= link_to "Leaderboard", leaderboard_index_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
+              <li><%= link_to "Browse Services", services_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
             </ul>
           </div>
+
+          <%# Support %>
           <div>
-            <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-4">Support</h4>
-            <ul class="space-y-2">
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Help Center</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Safety Center</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Community Guidelines</a></li>
-              <li><a href="#" class="text-gray-400 hover:text-white text-sm">Contact Us</a></li>
+            <h4 class="text-sm font-semibold text-white uppercase tracking-wider mb-4">Support</h4>
+            <ul class="space-y-3">
+              <li><%= link_to "Contact Us", contact_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
+              <li><%= link_to "Sign Up", new_user_registration_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
+              <li><%= link_to "Sign In", new_user_session_path, class: "text-gray-400 hover:text-white text-sm transition-colors" %></li>
             </ul>
           </div>
         </div>
-        <div class="mt-8 pt-8 border-t border-gray-700">
-          <div class="flex flex-col sm:flex-row justify-between items-center text-gray-400 text-sm">
-            <p>&copy; <%= Date.current.year %> LocalServiceHub. All rights reserved.</p>
-            <p class="mt-2 sm:mt-0">
-              Powered by 
-              <%= link_to "Wintech", "mailto:wintan1418@gmail.com", class: "text-orange-400 hover:text-orange-300 font-medium transition-colors" %>
-            </p>
-          </div>
+
+        <div class="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-2">
+          <p class="text-gray-500 text-sm">&copy; <%= Date.current.year %> LocalServiceHub. All rights reserved.</p>
+          <p class="text-gray-500 text-sm">
+            Powered by
+            <%= link_to "Wintech", "mailto:wintan1418@gmail.com", class: "text-orange-400 hover:text-orange-300 font-medium transition-colors" %>
+          </p>
         </div>
       </div>
     </footer>
-    
+
     <script>
+      // Dropdown toggle
       function toggleDropdown() {
-        const dropdown = document.getElementById('user-dropdown');
-        if (dropdown) {
-          dropdown.classList.toggle('hidden');
-        }
+        const dd = document.getElementById('user-dropdown');
+        if (dd) dd.classList.toggle('hidden');
       }
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function(event) {
-        const dropdown = document.getElementById('user-dropdown');
-        const button = event.target.closest('button[onclick="toggleDropdown()"]');
-        
-        // If clicking outside dropdown and not on the toggle button
-        if (dropdown && !dropdown.contains(event.target) && !button) {
-          dropdown.classList.add('hidden');
+
+      // Close dropdown on outside click
+      document.addEventListener('click', function(e) {
+        const dd = document.getElementById('user-dropdown');
+        if (dd && !dd.contains(e.target) && !e.target.closest('button[onclick="toggleDropdown()"]')) {
+          dd.classList.add('hidden');
         }
       });
-      
-      // Handle sign out with proper form submission
+
+      // Sign-out form submission
       document.addEventListener('DOMContentLoaded', function() {
         const signOutLink = document.querySelector('a[href*="sign_out"]');
         if (signOutLink) {
-          signOutLink.addEventListener('click', function(event) {
-            event.preventDefault();
-            
-            // Create a form and submit it
+          signOutLink.addEventListener('click', function(e) {
+            e.preventDefault();
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = this.href;
-            
-            const methodInput = document.createElement('input');
-            methodInput.type = 'hidden';
-            methodInput.name = '_method';
-            methodInput.value = 'delete';
-            form.appendChild(methodInput);
-            
-            const tokenInput = document.createElement('input');
-            tokenInput.type = 'hidden';
-            tokenInput.name = 'authenticity_token';
-            tokenInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            form.appendChild(tokenInput);
-            
+            const m = document.createElement('input'); m.type='hidden'; m.name='_method'; m.value='delete'; form.appendChild(m);
+            const t = document.createElement('input'); t.type='hidden'; t.name='authenticity_token'; t.value=document.querySelector('meta[name="csrf-token"]').content; form.appendChild(t);
             document.body.appendChild(form);
             form.submit();
           });
         }
-      });
-      
-      // Initialize AOS
-      AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true,
-        offset: 100
-      });
 
-      // Flash message functions
-      function dismissFlash(id) {
-        const flash = document.getElementById(id);
-        if (flash) {
-          flash.style.transform = 'translateX(100%)';
-          flash.style.opacity = '0';
-          setTimeout(() => flash.remove(), 300);
+        // AOS
+        if (typeof AOS !== 'undefined') {
+          AOS.init({ duration: 800, easing: 'ease-in-out', once: true, offset: 100 });
         }
-      }
 
-      // Auto-dismiss flash messages
-      document.addEventListener('DOMContentLoaded', function() {
-        const flashes = ['notice-flash', 'alert-flash'];
-        flashes.forEach(id => {
-          const flash = document.getElementById(id);
-          if (flash) {
-            setTimeout(() => dismissFlash(id), 5000); // Auto-dismiss after 5 seconds
-          }
+        // Flash auto-dismiss
+        ['notice-flash', 'alert-flash'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) setTimeout(function() { dismissFlash(id); }, 5000);
         });
       });
-    </script>
-    
-    <style>
-      @keyframes progress {
-        0% { width: 0%; }
-        100% { width: 100%; }
-      }
-      
-      .animate-progress {
-        animation: progress 5s linear forwards;
-      }
 
-      /* Simple Navigation Styles - No Complex Animations */
+      function dismissFlash(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.style.transform = 'translateX(120%)';
+          el.style.opacity = '0';
+          el.style.transition = 'all 0.3s ease';
+          setTimeout(function() { el.remove(); }, 300);
+        }
+      }
+    </script>
+
+    <style>
+      @keyframes progress { 0% { width: 0; } 100% { width: 100%; } }
+      .animate-progress { animation: progress 5s linear forwards; }
     </style>
   </body>
 </html>

@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   # Static pages
   get "about", to: "static_pages#about", as: :about
+  get "contact", to: "static_pages#contact", as: :contact
+  post "contact", to: "static_pages#send_contact", as: :send_contact
 
   # Additional home page routes for anchor links
   get "home#services", to: "home#index"

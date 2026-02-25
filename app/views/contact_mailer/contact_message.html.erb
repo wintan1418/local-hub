@@ -1,0 +1,23 @@
+<h2>New Contact Form Submission</h2>
+
+<table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+  <tr>
+    <td style="padding: 8px 12px; font-weight: bold; color: #374151; border-bottom: 1px solid #e5e7eb; width: 120px;">Name</td>
+    <td style="padding: 8px 12px; color: #1f2937; border-bottom: 1px solid #e5e7eb;"><%= @name %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px 12px; font-weight: bold; color: #374151; border-bottom: 1px solid #e5e7eb;">Email</td>
+    <td style="padding: 8px 12px; color: #1f2937; border-bottom: 1px solid #e5e7eb;"><%= @email %></td>
+  </tr>
+  <tr>
+    <td style="padding: 8px 12px; font-weight: bold; color: #374151; border-bottom: 1px solid #e5e7eb;">Subject</td>
+    <td style="padding: 8px 12px; color: #1f2937; border-bottom: 1px solid #e5e7eb;"><%= @subject %></td>
+  </tr>
+</table>
+
+<h3 style="margin-top: 24px; color: #374151;">Message</h3>
+<div style="padding: 16px; background-color: #f9fafb; border-radius: 8px; color: #1f2937; white-space: pre-wrap; line-height: 1.6;"><%= @message %></div>
+
+<p style="margin-top: 24px; font-size: 13px; color: #6b7280;">
+  You can reply directly to this email to respond to <strong><%= @name %></strong> at <strong><%= @email %></strong>.
+</p>

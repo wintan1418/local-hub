@@ -1,917 +1,510 @@
-<!-- Clean Hero Section with Background -->
-<section class="relative min-h-screen flex items-center overflow-hidden" id="hero">
-  <!-- Clean Background Image -->
-  <div class="absolute inset-0 z-0">
-    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=2070&auto=format&fit=crop" 
-         alt="Professional home services" 
-         class="w-full h-full object-cover">
-    <!-- Simple overlay for readability -->
-    <div class="absolute inset-0 bg-black/50"></div>
-  </div>
-  
-  <!-- Content -->
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    
-    <!-- Badge -->
-    <div class="inline-flex items-center px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-medium mb-8 border border-white/20">
-      <span class="w-2 h-2 bg-green-400 rounded-full mr-3"></span>
-      50,000+ Happy Customers • 4.9★ Rating
-    </div>
-    
-    <!-- Main Headline -->
-    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-      Find Your Perfect
-      <span class="text-orange-400">Service Provider</span>
-    </h1>
-    
-    <!-- Subtitle -->
-    <p class="text-xl text-gray-200 mb-10 max-w-3xl mx-auto">
-      Connect with verified professionals in your area. From emergency repairs to dream renovations.
-    </p>
-    
-    <!-- Search Bar -->
-    <div class="max-w-2xl mx-auto mb-10">
-      <div class="bg-white/10 backdrop-blur-lg rounded-2xl p-3 border border-white/20">
-        <form class="flex flex-col sm:flex-row gap-3">
-          <input type="text" placeholder="What service do you need?" 
-                 class="flex-1 px-6 py-4 bg-transparent text-white placeholder-gray-300 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-orange-500/50">
-          <input type="text" placeholder="Your location" 
-                 class="flex-1 px-6 py-4 bg-transparent text-white placeholder-gray-300 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-orange-500/50">
-          <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition-colors">
-            Search
-          </button>
-        </form>
-      </div>
-    </div>
-    
-    <!-- CTA Buttons -->
-    <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-      <%= link_to services_path, class: "bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition-colors" do %>
-        Browse Services
-      <% end %>
-      
-      <button class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold border border-white/20 hover:bg-white/20 transition-colors">
-        <i class="fas fa-play mr-2 text-orange-400"></i>
-        Watch Demo
-      </button>
-    </div>
-    
-    <!-- Trust Indicators -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-2xl mx-auto">
-      <div class="text-center">
-        <div class="text-3xl font-bold text-white">50,000+</div>
-        <div class="text-gray-300">Happy Customers</div>
-      </div>
-      <div class="text-center">
-        <div class="text-3xl font-bold text-white">5,000+</div>
-        <div class="text-gray-300">Verified Pros</div>
-      </div>
-      <div class="text-center">
-        <div class="text-3xl font-bold text-white">4.9<span class="text-orange-400">★</span></div>
-        <div class="text-gray-300">Average Rating</div>
-      </div>
-    </div>
-  </div>
-</section>
+<%
+  # Hero slideshow images
+  hero_images = [
+    "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1920&q=80",
+    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1920&q=80",
+    "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80",
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80"
+  ]
 
-<!-- Interactive Service Categories with 3D Effects -->
-<section class="py-20 bg-gradient-to-br from-gray-50 via-white to-blue-50 relative overflow-hidden">
-  <!-- Animated Background Elements -->
-  <div class="absolute inset-0 overflow-hidden">
-    <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-200/30 to-yellow-200/30 rounded-full blur-3xl animate-pulse"></div>
-    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
-  </div>
-  
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <!-- Section Header with Magnetic Effect -->
-    <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="1000">
-      <div class="inline-flex items-center px-4 py-2 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold mb-4">
-        <span class="w-2 h-2 bg-orange-500 rounded-full mr-2 animate-pulse"></span>
-        Popular Services
-      </div>
-      <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 mb-6" style="font-family: 'Poppins', sans-serif;">
-        Find Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-600">Perfect Match</span>
-      </h2>
-      <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-        Discover verified professionals for every need. From emergency fixes to dream projects.
-      </p>
-    </div>
-    
-    <!-- 3D Service Grid with Hover Effects -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
-      <% [
-        { name: "Plumbing", image: "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?q=80&w=400", gradient: "from-blue-500 to-blue-700", color: "blue", icon: "fa-wrench", delay: 0 },
-        { name: "Electrical", image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=400", gradient: "from-yellow-500 to-orange-500", color: "yellow", icon: "fa-bolt", delay: 100 },
-        { name: "Cleaning", image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=400", gradient: "from-green-500 to-emerald-600", color: "green", icon: "fa-sparkles", delay: 200 },
-        { name: "Painting", image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=400", gradient: "from-purple-500 to-pink-500", color: "purple", icon: "fa-paint-roller", delay: 300 },
-        { name: "Landscaping", image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=400", gradient: "from-emerald-500 to-green-600", color: "emerald", icon: "fa-leaf", delay: 400 },
-        { name: "Moving", image: "https://images.unsplash.com/photo-1600518464441-9154a4dea21b?q=80&w=400", gradient: "from-orange-500 to-red-500", color: "orange", icon: "fa-truck", delay: 500 }
-      ].each do |service| %>
-        <%= link_to services_path(category: service[:name]), 
-            class: "service-card-3d group", 
-            "data-aos": "zoom-in", 
-            "data-aos-delay": service[:delay], 
-            "data-aos-duration": "600",
-            "data-service": service[:name].downcase do %>
-          <div class="relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-3xl transition-all duration-700 transform hover:-translate-y-4 border border-gray-100 hover:border-white aspect-square">
-            <!-- Background Image with Parallax Effect -->
-            <div class="absolute inset-0 overflow-hidden">
-              <img src="<%= service[:image] %>&auto=format&fit=crop" 
-                   alt="<%= service[:name] %> service" 
-                   class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000">
-              <div class="absolute inset-0 bg-gradient-to-br <%= service[:gradient] %> opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
-            </div>
-            
-            <!-- Content Overlay -->
-            <div class="relative z-10 h-full flex flex-col justify-between p-4">
-              <!-- Service Icon -->
-              <div class="self-start">
-                <div class="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center group-hover:bg-white/90 group-hover:scale-110 transition-all duration-300">
-                  <i class="fas <%= service[:icon] %> text-white group-hover:text-<%= service[:color] %>-600 text-xl transition-colors duration-300"></i>
-                </div>
-              </div>
-              
-              <!-- Service Name -->
-              <div class="self-end text-center">
-                <h3 class="text-lg font-bold text-white mb-2 group-hover:text-white transition-colors duration-300">
-                  <%= service[:name] %>
-                </h3>
-                <div class="w-0 group-hover:w-8 h-1 bg-white rounded-full mx-auto transition-all duration-500"></div>
-              </div>
-            </div>
-            
-            <!-- Hover Overlay -->
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            <!-- Action Button -->
-            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-              <span class="bg-white text-gray-900 px-6 py-2 rounded-full font-semibold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                Explore <%= service[:name] %>
-              </span>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-    
-    <!-- Enhanced CTA -->
-    <div class="text-center" data-aos="fade-up" data-aos-delay="600" data-aos-duration="1000">
-      <%= link_to services_path, class: "group inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-500 to-yellow-500 text-white rounded-2xl font-bold text-lg hover:from-orange-600 hover:to-yellow-600 transform hover:-translate-y-1 transition-all duration-300 shadow-xl hover:shadow-2xl" do %>
-        <span class="flex items-center">
-          View All Services
-          <i class="fas fa-grid-3x3 ml-2 group-hover:rotate-12 transition-transform duration-300"></i>
-        </span>
-      <% end %>
-    </div>
-  </div>
-</section>
+  # Category images mapped by slug
+  category_images = {
+    "home-cleaning"     => "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80",
+    "plumbing"          => "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&q=80",
+    "electrical"        => "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&q=80",
+    "landscaping"       => "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+    "moving"            => "https://images.unsplash.com/photo-1600518464441-9154a4dea21b?w=600&q=80",
+    "handyman"          => "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&q=80",
+    "painting"          => "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&q=80",
+    "pet-care"          => "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=80",
+    "tutoring"          => "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80",
+    "personal-training" => "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80"
+  }
 
-<!-- How It Works - Interactive Timeline -->
-<section id="how-it-works" class="py-20 bg-gray-900 text-white relative overflow-hidden">
-  <!-- Animated Grid Background -->
+  # Service fallback images by category slug
+  service_images = {
+    "home-cleaning"     => "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80",
+    "plumbing"          => "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800&q=80",
+    "electrical"        => "https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?w=800&q=80",
+    "landscaping"       => "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80",
+    "moving"            => "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
+    "handyman"          => "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800&q=80",
+    "painting"          => "https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=800&q=80",
+    "pet-care"          => "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80",
+    "tutoring"          => "https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80",
+    "personal-training" => "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80"
+  }
+%>
+
+<%# ========== HERO WITH IMAGE SLIDER ========== %>
+<section class="relative min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden" id="hero"
+         data-controller="hero-slider">
+  <%# Sliding background images %>
   <div class="absolute inset-0">
-    <div class="grid-pattern opacity-10"></div>
-  </div>
-  
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-    <div class="text-center mb-16" data-aos="fade-up" data-aos-duration="1000">
-      <h2 class="text-4xl sm:text-5xl font-black mb-6" style="font-family: 'Poppins', sans-serif;">
-        How <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-yellow-400">LocalServiceHub</span> Works
-      </h2>
-      <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-        Getting help has never been easier. Three simple steps to find your perfect service provider.
-      </p>
-    </div>
-    
-    <!-- Interactive Timeline -->
-    <div class="relative">
-      <!-- Connection Line -->
-      <div class="hidden lg:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 transform -translate-y-1/2 z-0">
-        <div class="progress-line h-full bg-gradient-to-r from-orange-400 to-yellow-400"></div>
+    <% hero_images.each_with_index do |img, i| %>
+      <div class="hero-slide absolute inset-0 transition-opacity duration-1000 <%= i == 0 ? 'opacity-100' : 'opacity-0' %>"
+           data-hero-slider-target="slide">
+        <img src="<%= img %>" alt="" class="w-full h-full object-cover" loading="<%= i == 0 ? 'eager' : 'lazy' %>">
       </div>
-      
-      <div class="grid lg:grid-cols-3 gap-8 relative z-10">
-        <% [
-          {
-            step: "01",
-            title: "Search & Compare",
-            description: "Browse verified professionals in your area. Compare prices, reviews, and availability in real-time.",
-            icon: "fa-search",
-            color: "blue",
-            delay: 0
-          },
-          {
-            step: "02", 
-            title: "Book Instantly",
-            description: "Schedule service at your convenience. Chat with providers and get instant confirmation.",
-            icon: "fa-calendar-check",
-            color: "green", 
-            delay: 200
-          },
-          {
-            step: "03",
-            title: "Get It Done", 
-            description: "Relax while professionals handle your needs. Pay securely and leave reviews.",
-            icon: "fa-check-circle",
-            color: "orange",
-            delay: 400
-          }
-        ].each_with_index do |step, index| %>
-          <div class="step-card group" data-aos="fade-up" data-aos-delay="<%= step[:delay] %>" data-aos-duration="800">
-            <div class="relative bg-gray-800/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-700/50 hover:border-<%= step[:color] %>-500/50 transition-all duration-500 transform hover:-translate-y-2">
-              <!-- Step Number -->
-              <div class="absolute -top-6 left-8 w-12 h-12 bg-gradient-to-r from-<%= step[:color] %>-500 to-<%= step[:color] %>-600 rounded-2xl flex items-center justify-center font-black text-xl text-white shadow-lg">
-                <%= step[:step] %>
+    <% end %>
+    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/75 to-gray-900/50"></div>
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-orange-500/20 border border-orange-500/30 mb-6">
+          <span class="w-2 h-2 bg-orange-400 rounded-full mr-2"></span>
+          <span class="text-orange-300 text-sm font-medium">Trusted Local Service Marketplace</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
+          Find trusted pros<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400">for any job.</span>
+        </h1>
+
+        <p class="mt-6 text-lg text-gray-300 max-w-xl leading-relaxed">
+          Connect with verified, reviewed professionals in your area. Book with confidence and get the job done right.
+        </p>
+
+        <%# Functional search bar %>
+        <div class="mt-8">
+          <%= form_tag services_path, method: :get, class: "flex flex-col sm:flex-row gap-3" do %>
+            <div class="relative flex-1">
+              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <i class="fas fa-search text-gray-400"></i>
               </div>
-              
-              <!-- Icon -->
-              <div class="w-16 h-16 bg-<%= step[:color] %>-500/20 rounded-2xl flex items-center justify-center mb-6 mx-auto group-hover:bg-<%= step[:color] %>-500/30 transition-colors duration-300">
-                <i class="fas <%= step[:icon] %> text-<%= step[:color] %>-400 text-2xl group-hover:scale-110 transition-transform duration-300"></i>
-              </div>
-              
-              <!-- Content -->
-              <h3 class="text-2xl font-bold mb-4 text-center group-hover:text-<%= step[:color] %>-400 transition-colors duration-300">
-                <%= step[:title] %>
-              </h3>
-              <p class="text-gray-400 text-center leading-relaxed">
-                <%= step[:description] %>
-              </p>
-              
-              <!-- Progress Indicator -->
-              <div class="mt-6 flex justify-center">
-                <div class="w-12 h-1 bg-gray-700 rounded-full overflow-hidden">
-                  <div class="h-full bg-gradient-to-r from-<%= step[:color] %>-500 to-<%= step[:color] %>-400 rounded-full transform -translate-x-full group-hover:translate-x-0 transition-transform duration-1000"></div>
-                </div>
-              </div>
+              <%= text_field_tag :query, nil,
+                  placeholder: "What service do you need?",
+                  class: "w-full pl-11 pr-4 py-4 bg-white rounded-xl text-gray-900 placeholder-gray-400 text-base focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-lg" %>
             </div>
+            <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold text-base transition-colors shadow-lg shadow-orange-500/25 whitespace-nowrap">
+              Search
+            </button>
+          <% end %>
+        </div>
+
+        <%# Quick category links %>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <span class="text-gray-400 text-sm py-1">Popular:</span>
+          <% @categories.limit(5).each do |category| %>
+            <%= link_to category.name, services_path(category_id: category.id),
+                class: "inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white transition-colors" %>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Right side - stats cards (visible on lg+) %>
+      <div class="hidden lg:block">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div class="text-3xl font-bold text-white"><%= number_with_delimiter(@total_providers) %>+</div>
+            <div class="text-sm text-gray-300 mt-1">Service Providers</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div class="text-3xl font-bold text-white"><%= number_with_delimiter(@total_services) %>+</div>
+            <div class="text-sm text-gray-300 mt-1">Services Listed</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div class="text-3xl font-bold text-white"><%= number_with_delimiter(@total_bookings) %>+</div>
+            <div class="text-sm text-gray-300 mt-1">Bookings Made</div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+            <div class="text-3xl font-bold text-white"><%= number_with_delimiter(@total_customers) %>+</div>
+            <div class="text-sm text-gray-300 mt-1">Happy Customers</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# Mobile stats row %>
+    <div class="lg:hidden grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 border-t border-white/10 pt-8">
+      <div>
+        <div class="text-2xl font-bold text-white"><%= number_with_delimiter(@total_providers) %>+</div>
+        <div class="text-xs text-gray-400 mt-1">Providers</div>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-white"><%= number_with_delimiter(@total_services) %>+</div>
+        <div class="text-xs text-gray-400 mt-1">Services</div>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-white"><%= number_with_delimiter(@total_bookings) %>+</div>
+        <div class="text-xs text-gray-400 mt-1">Bookings</div>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-white"><%= number_with_delimiter(@total_customers) %>+</div>
+        <div class="text-xs text-gray-400 mt-1">Customers</div>
+      </div>
+    </div>
+  </div>
+
+  <%# Slide indicators %>
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2">
+    <% hero_images.size.times do |i| %>
+      <button class="w-2 h-2 rounded-full transition-all duration-300 <%= i == 0 ? 'bg-white w-6' : 'bg-white/40' %>"
+              data-hero-slider-target="dot"
+              data-action="click->hero-slider#goTo"
+              data-index="<%= i %>"></button>
+    <% end %>
+  </div>
+</section>
+
+<%# ========== CATEGORIES WITH IMAGES ========== %>
+<section class="py-20 bg-white" id="services">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Browse by Category</h2>
+      <p class="mt-4 text-lg text-gray-500">Whatever you need done, we have the right professional for the job.</p>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <% @categories.each do |category| %>
+        <%= link_to services_path(category_id: category.id),
+            class: "group relative rounded-2xl overflow-hidden aspect-[4/3]" do %>
+          <%# Category image %>
+          <img src="<%= category_images[category.slug] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80' %>"
+               alt="<%= category.name %>"
+               class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+               loading="lazy">
+          <%# Gradient overlay %>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <%# Content %>
+          <div class="absolute inset-0 flex flex-col justify-end p-4">
+            <div class="flex items-center gap-2 mb-1">
+              <i class="<%= category.icon.presence || 'fas fa-concierge-bell' %> text-white text-sm"></i>
+            </div>
+            <h3 class="text-white font-bold text-sm sm:text-base"><%= category.name %></h3>
+            <span class="text-gray-300 text-xs"><%= category.services.count %> services</span>
           </div>
         <% end %>
-      </div>
+      <% end %>
     </div>
-    
-    <!-- Interactive Demo Button -->
-    <div class="text-center mt-16" data-aos="fade-up" data-aos-delay="600">
-      <button class="group bg-gradient-to-r from-orange-500 to-yellow-500 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:from-orange-600 hover:to-yellow-600 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl">
-        <span class="flex items-center">
-          <i class="fas fa-play mr-3 group-hover:scale-110 transition-transform duration-300"></i>
-          Watch Interactive Demo
-        </span>
-      </button>
+
+    <div class="text-center mt-10">
+      <%= link_to services_path, class: "inline-flex items-center text-orange-600 font-semibold hover:text-orange-700 transition-colors" do %>
+        View all services
+        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <% end %>
     </div>
   </div>
 </section>
 
-<!-- Social Proof & Statistics -->
-<section class="py-20 bg-white relative overflow-hidden">
+<%# ========== HOW IT WORKS (fixed layout, no overlapping line) ========== %>
+<section class="py-20 bg-gray-50" id="how-it-works">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Animated Statistics -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-      <% [
-        { value: "50000", label: "Happy Customers", suffix: "+", icon: "fa-users", color: "blue" },
-        { value: "5000", label: "Verified Pros", suffix: "+", icon: "fa-shield-check", color: "green" },
-        { value: "4.9", label: "Average Rating", suffix: "★", icon: "fa-star", color: "yellow" },
-        { value: "99", label: "Success Rate", suffix: "%", icon: "fa-check-circle", color: "orange" }
-      ].each_with_index do |stat, index| %>
-        <div class="text-center group" data-aos="zoom-in" data-aos-delay="<%= index * 100 %>" data-aos-duration="800">
-          <div class="w-16 h-16 bg-<%= stat[:color] %>-100 text-<%= stat[:color] %>-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-            <i class="fas <%= stat[:icon] %> text-2xl"></i>
-          </div>
-          <div class="text-4xl font-black text-gray-900 mb-2">
-            <span class="counter" data-target="<%= stat[:value] %>">0</span><%= stat[:suffix] %>
-          </div>
-          <div class="text-gray-600 font-medium"><%= stat[:label] %></div>
-        </div>
-      <% end %>
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">How It Works</h2>
+      <p class="mt-4 text-lg text-gray-500">Get help in three simple steps. It's that easy.</p>
     </div>
-    
-    <!-- Interactive Testimonials Slider -->
-    <div class="testimonials-section" data-aos="fade-up" data-aos-duration="1000">
-      <div class="text-center mb-12">
-        <h2 class="text-4xl font-black text-gray-900 mb-4" style="font-family: 'Poppins', sans-serif;">
-          What Our Customers Say
-        </h2>
-        <p class="text-xl text-gray-600">Real stories from real people</p>
-      </div>
-      
-      <div class="testimonial-slider relative">
-        <div class="testimonial-track">
+
+    <div class="max-w-4xl mx-auto">
+      <%# Desktop: steps with dashed line connecting the numbers %>
+      <div class="hidden md:block relative">
+        <%# Connector line - positioned at the center of the step numbers %>
+        <div class="absolute top-8 left-[calc(16.67%)] right-[calc(16.67%)] flex items-center" aria-hidden="true">
+          <div class="w-full border-t-2 border-dashed border-orange-200"></div>
+        </div>
+
+        <div class="relative grid grid-cols-3 gap-12">
           <% [
-            { name: "Sarah Johnson", role: "Homeowner", avatar: "SJ", review: "Found an amazing plumber within minutes. Fixed my emergency leak same day. The platform made everything so easy!", rating: 5 },
-            { name: "Mike Chen", role: "Business Owner", avatar: "MC", review: "We use LocalServiceHub for all our office maintenance. Reliable providers, fair prices, and excellent customer service.", rating: 5 },
-            { name: "Emily Rodriguez", role: "Property Manager", avatar: "ER", review: "Managing multiple properties is so much easier now. All my trusted contractors in one place with seamless booking.", rating: 5 }
-          ].each do |testimonial| %>
-            <div class="testimonial-card">
-              <div class="bg-gray-50 rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2">
-                <!-- Rating Stars -->
-                <div class="flex justify-center mb-6">
-                  <% testimonial[:rating].times do %>
-                    <i class="fas fa-star text-yellow-400 text-xl"></i>
-                  <% end %>
-                </div>
-                
-                <!-- Review Text -->
-                <blockquote class="text-gray-700 text-lg italic text-center mb-6 leading-relaxed">
-                  "<%= testimonial[:review] %>"
-                </blockquote>
-                
-                <!-- User Info -->
-                <div class="flex items-center justify-center">
-                  <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
-                    <%= testimonial[:avatar] %>
-                  </div>
-                  <div class="text-center">
-                    <div class="font-bold text-gray-900"><%= testimonial[:name] %></div>
-                    <div class="text-gray-600 text-sm"><%= testimonial[:role] %></div>
-                  </div>
-                </div>
+            { num: 1, title: "Search & Compare", desc: "Browse verified professionals in your area. Compare ratings, prices, and reviews to find the perfect match.", icon: "fa-search" },
+            { num: 2, title: "Book Instantly", desc: "Schedule a service at a time that works for you. Chat directly with providers and get instant confirmation.", icon: "fa-calendar-check" },
+            { num: 3, title: "Get It Done", desc: "Sit back while a trusted pro handles the work. Pay securely through the platform and leave a review.", icon: "fa-check-double" }
+          ].each do |step| %>
+            <div class="text-center">
+              <div class="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-500 text-white text-xl font-bold mb-6 ring-4 ring-gray-50 z-10">
+                <%= step[:num] %>
               </div>
+              <h3 class="text-xl font-bold text-gray-900 mb-3"><%= step[:title] %></h3>
+              <p class="text-gray-500 leading-relaxed text-sm"><%= step[:desc] %></p>
             </div>
           <% end %>
         </div>
-        
-        <!-- Navigation Dots -->
-        <div class="flex justify-center mt-8 space-x-2">
-          <button class="testimonial-dot active w-3 h-3 rounded-full bg-orange-500 hover:bg-orange-600 transition-colors duration-200"></button>
-          <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors duration-200"></button>
-          <button class="testimonial-dot w-3 h-3 rounded-full bg-gray-300 hover:bg-gray-400 transition-colors duration-200"></button>
-        </div>
+      </div>
+
+      <%# Mobile: vertical timeline %>
+      <div class="md:hidden space-y-8">
+        <% [
+          { num: 1, title: "Search & Compare", desc: "Browse verified professionals in your area. Compare ratings, prices, and reviews to find the perfect match." },
+          { num: 2, title: "Book Instantly", desc: "Schedule a service at a time that works for you. Chat directly with providers and get instant confirmation." },
+          { num: 3, title: "Get It Done", desc: "Sit back while a trusted pro handles the work. Pay securely through the platform and leave a review." }
+        ].each do |step| %>
+          <div class="flex gap-4">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 rounded-full bg-orange-500 text-white flex items-center justify-center text-lg font-bold"><%= step[:num] %></div>
+            </div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-900 mb-1"><%= step[:title] %></h3>
+              <p class="text-gray-500 leading-relaxed text-sm"><%= step[:desc] %></p>
+            </div>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Final CTA with Interactive Elements -->
-<section class="py-20 bg-gradient-to-br from-orange-600 via-orange-700 to-yellow-600 text-white relative overflow-hidden">
-  <!-- Animated Background Elements -->
-  <div class="absolute inset-0">
-    <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 animate-pulse"></div>
-    <div class="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2 animate-pulse" style="animation-delay: 1s;"></div>
+<%# ========== FEATURED SERVICES WITH IMAGES ========== %>
+<% if @featured_services.any? %>
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-end justify-between mb-12">
+      <div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Recently Added</h2>
+        <p class="mt-3 text-lg text-gray-500">Fresh services from our newest providers.</p>
+      </div>
+      <div class="hidden sm:block">
+        <%= link_to services_path, class: "inline-flex items-center text-orange-600 font-semibold hover:text-orange-700 transition-colors" do %>
+          See all
+          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @featured_services.each do |service| %>
+        <%= link_to service_path(service), class: "group block rounded-2xl border border-gray-100 bg-white overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-200" do %>
+          <%# Service image %>
+          <div class="aspect-[16/10] relative overflow-hidden bg-gray-100">
+            <% if service.images.attached? %>
+              <%= image_tag service.images.first, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300", loading: "lazy" %>
+            <% else %>
+              <img src="<%= service_images[service.category&.slug] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80' %>"
+                   alt="<%= service.title %>"
+                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                   loading="lazy">
+            <% end %>
+            <%# Price badge %>
+            <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-1 shadow-sm">
+              <span class="text-base font-bold text-gray-900">$<%= number_with_precision(service.base_price, precision: 0) %></span>
+              <span class="text-xs text-gray-500"><%= service.hourly? ? "/hr" : "" %></span>
+            </div>
+          </div>
+
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-700">
+                <%= service.category&.name || "Uncategorized" %>
+              </span>
+              <% if service.provider&.verified? %>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                  <i class="fas fa-check-circle mr-1"></i>Verified
+                </span>
+              <% end %>
+            </div>
+
+            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1"><%= service.title %></h3>
+            <p class="text-sm text-gray-500 mt-1 line-clamp-2"><%= service.description %></p>
+
+            <div class="mt-4 flex items-center gap-2 pt-4 border-t border-gray-50">
+              <div class="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-xs font-semibold text-orange-600">
+                <%= service.provider&.display_name&.first&.upcase || "?" %>
+              </div>
+              <span class="text-sm text-gray-600 font-medium"><%= service.provider&.display_name %></span>
+              <% if service.provider&.verified? %>
+                <i class="fas fa-check-circle text-blue-500 text-xs"></i>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="text-center mt-8 sm:hidden">
+      <%= link_to services_path, class: "inline-flex items-center text-orange-600 font-semibold hover:text-orange-700 transition-colors" do %>
+        View all services
+        <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      <% end %>
+    </div>
   </div>
-  
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-    <div data-aos="zoom-in" data-aos-duration="1000">
-      <h2 class="text-4xl sm:text-5xl font-black mb-6" style="font-family: 'Poppins', sans-serif;">
-        Ready to Transform Your Home?
-      </h2>
-      <p class="text-xl mb-8 text-orange-100">
-        Join thousands of happy customers who've found their perfect service provider
-      </p>
-      
-      <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+</section>
+<% end %>
+
+<%# ========== WHY CHOOSE US ========== %>
+<section class="py-20 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">Why Choose LocalServiceHub</h2>
+      <p class="mt-4 text-lg text-gray-500">Built for trust, designed for simplicity.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <% [
+        { icon: "fa-shield-alt", color_bg: "bg-blue-50", color_text: "text-blue-600", title: "Verified Professionals", desc: "Every provider goes through our verification process including document checks and identity verification." },
+        { icon: "fa-lock", color_bg: "bg-green-50", color_text: "text-green-600", title: "Secure Payments", desc: "Pay safely through Stripe-powered payments. Your financial information is always protected." },
+        { icon: "fa-star", color_bg: "bg-amber-50", color_text: "text-amber-600", title: "Honest Reviews", desc: "Real reviews from real customers. Only people who booked a service can leave a rating." },
+        { icon: "fa-comments", color_bg: "bg-purple-50", color_text: "text-purple-600", title: "Direct Messaging", desc: "Chat directly with providers before booking. Discuss details, ask questions, and build trust." }
+      ].each do |item| %>
+        <div class="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-md transition-shadow duration-200">
+          <div class="w-12 h-12 rounded-xl <%= item[:color_bg] %> <%= item[:color_text] %> flex items-center justify-center mb-4">
+            <i class="fas <%= item[:icon] %> text-xl"></i>
+          </div>
+          <h3 class="text-base font-bold text-gray-900 mb-2"><%= item[:title] %></h3>
+          <p class="text-sm text-gray-500 leading-relaxed"><%= item[:desc] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# ========== TESTIMONIALS ========== %>
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900">What Our Customers Say</h2>
+      <p class="mt-4 text-lg text-gray-500">Real stories from people who found the help they needed.</p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <% [
+        { name: "Sarah Johnson", role: "Homeowner", review: "Found an amazing plumber within minutes. Fixed my emergency leak the same day. The booking process was seamless.", rating: 5 },
+        { name: "Mike Chen", role: "Business Owner", review: "We use LocalServiceHub for all our office maintenance. Reliable providers, fair prices, and great communication.", rating: 5 },
+        { name: "Emily Rodriguez", role: "Property Manager", review: "Managing multiple properties is so much easier now. All my trusted contractors in one place with easy scheduling.", rating: 5 }
+      ].each do |testimonial| %>
+        <div class="bg-gray-50 rounded-2xl p-8">
+          <div class="flex gap-1 mb-4">
+            <% testimonial[:rating].times do %>
+              <i class="fas fa-star text-amber-400"></i>
+            <% end %>
+          </div>
+          <blockquote class="text-gray-700 leading-relaxed mb-6">"<%= testimonial[:review] %>"</blockquote>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-semibold text-sm">
+              <%= testimonial[:name].split.map(&:first).join %>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-gray-900"><%= testimonial[:name] %></div>
+              <div class="text-xs text-gray-500"><%= testimonial[:role] %></div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# ========== CTA FOR PROVIDERS (with image) ========== %>
+<section class="relative overflow-hidden">
+  <div class="grid lg:grid-cols-2">
+    <%# Image side %>
+    <div class="relative hidden lg:block min-h-[500px]">
+      <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&q=80"
+           alt="Service professional at work"
+           class="absolute inset-0 w-full h-full object-cover"
+           loading="lazy">
+      <div class="absolute inset-0 bg-gradient-to-r from-transparent to-gray-900/20"></div>
+    </div>
+
+    <%# Content side %>
+    <div class="bg-gray-900 py-20 px-8 sm:px-12 lg:px-16">
+      <p class="text-orange-400 font-semibold text-sm tracking-wide uppercase mb-4">For Service Providers</p>
+      <h2 class="text-3xl sm:text-4xl font-bold text-white leading-tight">Grow your business with LocalServiceHub</h2>
+      <p class="mt-4 text-lg text-gray-400 leading-relaxed">Join our network of trusted professionals. Get discovered by new customers, manage bookings, and build your reputation.</p>
+
+      <ul class="mt-8 space-y-4">
+        <% [
+          "Get found by customers searching in your area",
+          "Manage bookings and schedule from one dashboard",
+          "Build credibility with verified badges and real reviews",
+          "Start free — upgrade only when you're ready"
+        ].each do |benefit| %>
+          <li class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i class="fas fa-check text-xs"></i>
+            </div>
+            <span class="text-gray-300"><%= benefit %></span>
+          </li>
+        <% end %>
+      </ul>
+
+      <div class="mt-10 flex flex-col sm:flex-row gap-4">
         <% if user_signed_in? %>
-          <%= link_to services_path, class: "group bg-white text-orange-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-xl" do %>
-            <span class="flex items-center justify-center">
+          <% if current_user.provider? %>
+            <%= link_to provider_dashboard_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors" do %>
+              Go to Dashboard
+              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <% end %>
+          <% else %>
+            <%= link_to services_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors" do %>
               Browse Services
-              <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
-            </span>
+              <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            <% end %>
           <% end %>
         <% else %>
-          <%= link_to new_user_registration_path(role: 'customer'), class: "group bg-white text-orange-600 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-xl" do %>
-            Get Started Free
-          <% end %>
-          <%= link_to new_user_registration_path(role: 'provider'), class: "group bg-transparent border-2 border-white text-white px-8 py-4 rounded-2xl font-bold text-lg hover:bg-white hover:text-orange-600 transform hover:scale-105 transition-all duration-300" do %>
+          <%= link_to new_user_registration_path(role: 'provider'), class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors" do %>
             Become a Provider
+            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          <% end %>
+          <%= link_to about_path, class: "inline-flex items-center justify-center text-gray-300 hover:text-white px-6 py-3 rounded-xl font-semibold border border-gray-600 hover:border-gray-500 transition-colors" do %>
+            Learn More
           <% end %>
         <% end %>
-      </div>
-      
-      <!-- Trust Indicators -->
-      <div class="flex justify-center items-center space-x-8 text-orange-200">
-        <div class="flex items-center">
-          <i class="fas fa-shield-check text-2xl mr-2"></i>
-          <span>100% Secure</span>
-        </div>
-        <div class="flex items-center">
-          <i class="fas fa-clock text-2xl mr-2"></i>
-          <span>24/7 Support</span>
-        </div>
-        <div class="flex items-center">
-          <i class="fas fa-money-back text-2xl mr-2"></i>
-          <span>Money Back</span>
-        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Advanced CSS and JavaScript -->
-<style>
-  /* Enhanced Animations and Effects */
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-  
-  :root {
-    --primary-orange: #f97316;
-    --primary-yellow: #facc15;
-    --text-dark: #1f2937;
-    --text-light: #6b7280;
-  }
+<%# ========== FINAL CTA ========== %>
+<section class="py-20 bg-gradient-to-r from-orange-500 to-amber-500">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-3xl sm:text-4xl font-bold text-white">Ready to get started?</h2>
+    <p class="mt-4 text-lg text-orange-100">Join thousands of customers and providers who trust LocalServiceHub.</p>
 
-  /* Background Slider */
-  .background-slider {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
+    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+      <% if user_signed_in? %>
+        <%= link_to services_path, class: "inline-flex items-center justify-center bg-white text-orange-600 px-8 py-4 rounded-xl font-semibold text-base hover:bg-gray-50 transition-colors shadow-lg" do %>
+          Browse Services
+        <% end %>
+      <% else %>
+        <%= link_to new_user_registration_path(role: 'customer'), class: "inline-flex items-center justify-center bg-white text-orange-600 px-8 py-4 rounded-xl font-semibold text-base hover:bg-gray-50 transition-colors shadow-lg" do %>
+          Sign Up Free
+        <% end %>
+        <%= link_to new_user_session_path, class: "inline-flex items-center justify-center bg-transparent text-white px-8 py-4 rounded-xl font-semibold text-base border-2 border-white/50 hover:border-white hover:bg-white/10 transition-colors" do %>
+          Sign In
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
 
-  .slide {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    transition: opacity 2s ease-in-out;
-    animation: kenBurns 20s ease-in-out infinite;
-  }
-
-  .slide.active {
-    opacity: 1;
-  }
-
-  @keyframes kenBurns {
-    0% { transform: scale(1.1) translateX(0) translateY(0); }
-    25% { transform: scale(1.15) translateX(-2%) translateY(-1%); }
-    50% { transform: scale(1.2) translateX(2%) translateY(1%); }
-    75% { transform: scale(1.15) translateX(-1%) translateY(2%); }
-    100% { transform: scale(1.1) translateX(0) translateY(0); }
-  }
-
-  /* Particles Canvas */
-  #particles-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* Floating Elements */
-  .floating-element {
-    position: absolute;
-    animation: float 6s ease-in-out infinite;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
-  }
-
-  /* Typewriter Effect */
-  .typewriter-text {
-    display: inline-block;
-    min-width: 300px;
-    text-align: left;
-  }
-
-  .typewriter-cursor {
-    display: inline-block;
-    animation: blink 1s infinite;
-  }
-
-  @keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
-  }
-
-  /* Counter Animation */
-  .counter {
-    transition: all 0.3s ease;
-  }
-
-  /* Service Cards 3D */
-  .service-card-3d {
-    perspective: 1000px;
-  }
-
-  .service-card-3d:hover {
-    transform: rotateY(5deg) rotateX(5deg);
-  }
-
-  /* Scroll Indicator */
-  .scroll-indicator {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-  }
-
-  .scroll-indicator:hover {
-    opacity: 1;
-  }
-
-  .scroll-wheel {
-    width: 24px;
-    height: 40px;
-    border: 2px solid white;
-    border-radius: 20px;
-    position: relative;
-  }
-
-  .scroll-wheel::before {
-    content: '';
-    position: absolute;
-    top: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 8px;
-    background: white;
-    border-radius: 1px;
-    animation: scrollWheel 2s infinite;
-  }
-
-  @keyframes scrollWheel {
-    0% { top: 6px; opacity: 1; }
-    100% { top: 20px; opacity: 0; }
-  }
-
-  .scroll-text {
-    color: white;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  /* Grid Pattern */
-  .grid-pattern {
-    background-image: 
-      linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
-    background-size: 50px 50px;
-  }
-
-  /* Step Cards */
-  .step-card {
-    position: relative;
-  }
-
-  /* Service Cards Stack */
-  .service-cards-stack {
-    position: relative;
-    width: 300px;
-    height: 400px;
-    margin: 0 auto;
-  }
-
-  .service-card {
-    position: absolute;
-    width: 100%;
-    transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-    animation: cardFloat var(--delay) infinite;
-  }
-
-  .service-card:nth-child(1) {
-    top: 0;
-    left: 0;
-    z-index: 3;
-    transform: rotate(-2deg);
-  }
-
-  .service-card:nth-child(2) {
-    top: 20px;
-    left: 10px;
-    z-index: 2;
-    transform: rotate(3deg);
-    opacity: 0.8;
-  }
-
-  @keyframes cardFloat {
-    0%, 100% { transform: translateY(0) rotate(-2deg); }
-    50% { transform: translateY(-10px) rotate(2deg); }
-  }
-
-  /* Floating Notifications */
-  .floating-notification {
-    position: absolute;
-    animation: slideInRight 3s infinite;
-    animation-delay: 2s;
-  }
-
-  @keyframes slideInRight {
-    0% { transform: translateX(100px); opacity: 0; }
-    15% { transform: translateX(0); opacity: 1; }
-    85% { transform: translateX(0); opacity: 1; }
-    100% { transform: translateX(100px); opacity: 0; }
-  }
-
-  /* Testimonial Slider */
-  .testimonial-slider {
-    position: relative;
-    overflow: hidden;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .testimonial-track {
-    display: flex;
-    transition: transform 0.5s ease;
-    width: 300%;
-  }
-
-  .testimonial-card {
-    flex: 1;
-    padding: 0 20px;
-  }
-
-  .testimonial-dot.active {
-    background-color: #f97316 !important;
-  }
-
-  /* Advanced Hover Effects */
-  .magnetic-button {
-    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  .magnetic-button:hover {
-    transform: translate3d(0, -8px, 0);
-  }
-
-  /* Glassmorphism Effects */
-  .glass-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1);
-  }
-
-  /* Progress Animations */
-  .progress-line {
-    width: 0;
-    animation: progressGrow 3s ease-in-out forwards;
-    animation-delay: 1s;
-  }
-
-  @keyframes progressGrow {
-    to { width: 100%; }
-  }
-
-  /* Responsive Design Enhancements */
-  @media (max-width: 768px) {
-    .service-cards-stack {
-      width: 250px;
-      height: 320px;
-    }
-
-    .floating-element {
-      display: none;
-    }
-  }
-
-  /* Dark mode support */
-  @media (prefers-color-scheme: dark) {
-    .service-card-3d {
-      filter: brightness(0.9);
-    }
-  }
-
-  /* Performance Optimizations */
-  .service-card-3d,
-  .step-card,
-  .testimonial-card {
-    will-change: transform;
-    backface-visibility: hidden;
-  }
-
-  /* Interactive Elements */
-  .interactive-element {
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .interactive-element:active {
-    transform: scale(0.98);
-  }
-</style>
-
+<%# ========== HERO SLIDER SCRIPT ========== %>
 <script>
-  // Advanced JavaScript for Interactions
-  document.addEventListener('DOMContentLoaded', function() {
-    
-    // Background Slider
-    const slides = document.querySelectorAll('.slide');
-    let currentSlide = 0;
-    
-    function nextSlide() {
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
-    }
-    
-    setInterval(nextSlide, 5000);
-    
-    // Particles Animation
-    const canvas = document.getElementById('particles-canvas');
-    const ctx = canvas.getContext('2d');
-    
-    function resizeCanvas() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-    
-    function createParticles() {
-      const particles = [];
-      const particleCount = 50;
-      
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          size: Math.random() * 2 + 1,
-          opacity: Math.random() * 0.5 + 0.2
-        });
-      }
-      
-      return particles;
-    }
-    
-    let particles = [];
-    
-    function animateParticles() {
-      if (!canvas.getContext) return;
-      
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      particles.forEach(particle => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-        
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-        
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(249, 115, 22, ${particle.opacity})`;
-        ctx.fill();
-      });
-      
-      requestAnimationFrame(animateParticles);
-    }
-    
-    if (canvas) {
-      resizeCanvas();
-      particles = createParticles();
-      animateParticles();
-      
-      window.addEventListener('resize', () => {
-        resizeCanvas();
-        particles = createParticles();
-      });
-    }
-    
-    // Typewriter Effect
-    const typewriterText = document.querySelector('.typewriter-text');
-    const words = ['Our Priority.', 'Our Passion.', 'Our Promise.', 'Your Success.'];
-    let wordIndex = 0;
-    let charIndex = 0;
-    let isDeleting = false;
-    
-    function typeEffect() {
-      const currentWord = words[wordIndex];
-      
-      if (isDeleting) {
-        typewriterText.textContent = currentWord.substring(0, charIndex - 1);
-        charIndex--;
-      } else {
-        typewriterText.textContent = currentWord.substring(0, charIndex + 1);
-        charIndex++;
-      }
-      
-      let typeSpeed = isDeleting ? 100 : 150;
-      
-      if (!isDeleting && charIndex === currentWord.length) {
-        typeSpeed = 2000;
-        isDeleting = true;
-      } else if (isDeleting && charIndex === 0) {
-        isDeleting = false;
-        wordIndex = (wordIndex + 1) % words.length;
-        typeSpeed = 500;
-      }
-      
-      setTimeout(typeEffect, typeSpeed);
-    }
-    
-    if (typewriterText) {
-      typeEffect();
-    }
-    
-    // Counter Animation
-    const counters = document.querySelectorAll('.counter');
-    const animateCounters = () => {
-      counters.forEach(counter => {
-        const target = parseInt(counter.getAttribute('data-target'));
-        const count = parseInt(counter.innerText);
-        const increment = target / 200;
-        
-        if (count < target) {
-          counter.innerText = Math.ceil(count + increment);
-          setTimeout(animateCounters, 10);
-        } else {
-          counter.innerText = target;
-        }
-      });
-    };
-    
-    // Trigger counter animation when in view
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          animateCounters();
-          observer.unobserve(entry.target);
-        }
-      });
-    });
-    
-    counters.forEach(counter => {
-      observer.observe(counter);
-    });
-    
-    // Testimonial Slider
-    const testimonialTrack = document.querySelector('.testimonial-track');
-    const testimonialDots = document.querySelectorAll('.testimonial-dot');
-    let currentTestimonial = 0;
-    
-    function updateTestimonial(index) {
-      if (testimonialTrack) {
-        testimonialTrack.style.transform = `translateX(-${index * 33.333}%)`;
-        testimonialDots.forEach((dot, i) => {
-          dot.classList.toggle('active', i === index);
-        });
-      }
-    }
-    
-    testimonialDots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        currentTestimonial = index;
-        updateTestimonial(currentTestimonial);
-      });
-    });
-    
-    // Auto-advance testimonials
-    setInterval(() => {
-      currentTestimonial = (currentTestimonial + 1) % testimonialDots.length;
-      updateTestimonial(currentTestimonial);
-    }, 5000);
-    
-    // Magnetic Button Effect
-    document.querySelectorAll('.magnetic-button').forEach(button => {
-      button.addEventListener('mousemove', (e) => {
-        const rect = button.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        
-        button.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px)`;
-      });
-      
-      button.addEventListener('mouseleave', () => {
-        button.style.transform = 'translate(0, 0)';
-      });
-    });
-    
-    // Service Card Hover Effect
-    document.querySelectorAll('.service-card-3d').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        const serviceName = card.getAttribute('data-service');
-        card.style.transform = 'translateY(-10px) rotateY(5deg) rotateX(5deg)';
-      });
-      
-      card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0) rotateY(0) rotateX(0)';
-      });
-    });
-    
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
-    });
-    
-    // Performance optimization
-    let ticking = false;
-    
-    function updateAnimations() {
-      // Update animations here
-      ticking = false;
-    }
-    
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(updateAnimations);
-        ticking = true;
-      }
+document.addEventListener('DOMContentLoaded', function() {
+  const slides = document.querySelectorAll('[data-hero-slider-target="slide"]');
+  const dots = document.querySelectorAll('[data-hero-slider-target="dot"]');
+  if (!slides.length) return;
+
+  let current = 0;
+  let interval;
+
+  function goTo(index) {
+    slides[current].classList.remove('opacity-100');
+    slides[current].classList.add('opacity-0');
+    dots[current].classList.remove('bg-white', 'w-6');
+    dots[current].classList.add('bg-white/40');
+
+    current = index % slides.length;
+
+    slides[current].classList.remove('opacity-0');
+    slides[current].classList.add('opacity-100');
+    dots[current].classList.remove('bg-white/40');
+    dots[current].classList.add('bg-white', 'w-6');
+  }
+
+  function next() { goTo(current + 1); }
+
+  function startAutoplay() {
+    interval = setInterval(next, 5000);
+  }
+
+  dots.forEach(function(dot) {
+    dot.addEventListener('click', function() {
+      clearInterval(interval);
+      goTo(parseInt(this.dataset.index));
+      startAutoplay();
     });
   });
+
+  startAutoplay();
+});
 </script>

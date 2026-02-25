@@ -4,6 +4,7 @@ class Service < ApplicationRecord
   has_many :service_areas, dependent: :destroy
   has_many :availabilities, dependent: :destroy
   has_many :bookings, dependent: :destroy
+  has_many :reviews, through: :bookings
 
   has_many_attached :images
 

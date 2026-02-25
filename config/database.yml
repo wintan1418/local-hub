@@ -21,14 +21,18 @@ default: &default
 
 development:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] || 'postgresql://postgres:password@localhost:5432/localservicehub_development' %>
+  database: localservicehub_development
+  username: <%= ENV.fetch('DB_USERNAME', 'wintan') %>
+  host: <%= ENV.fetch('DB_HOST', '') %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  url: <%= ENV['TEST_DATABASE_URL'] || 'postgresql://postgres:password@localhost:5432/localservicehub_test' %>
+  database: localservicehub_test
+  username: <%= ENV.fetch('DB_USERNAME', 'wintan') %>
+  host: <%= ENV.fetch('DB_HOST', '') %>
 
 # Production database configuration
 production:
