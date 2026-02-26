@@ -37,7 +37,10 @@
       "Bash(command -v:*)",
       "Bash(pg_ctl:*)",
       "Bash(RAILS_ENV=development bin/rails runner \"puts ''Rails loads successfully!''; puts ''Credentials accessible: '' + Rails.application.credentials.inspect\")",
-      "Bash(mailcatcher:*)"
+      "Bash(mailcatcher:*)",
+      "Bash(whoami && psql -U wintan -d postgres -c \"SELECT 1\" 2>&1 || true)",
+      "Bash(bundle list 2>&1 | grep -i \"sprockets\\\\|propshaft\")",
+      "Bash(git commit -m \"$\\(cat <<'EOF'\nReplace loud orange CTA gradients with soft bg-orange-50 and add section breathing room\nEOF\n\\)\" && git push)"
     ],
     "deny": []
   }
