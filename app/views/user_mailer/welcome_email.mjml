@@ -1,7 +1,7 @@
 <mjml>
   <mj-head>
-    <mj-title>Welcome to LocalServiceHub!</mj-title>
-    <mj-preview>🎉 Welcome to LocalServiceHub! Let's get you started on your journey.</mj-preview>
+    <mj-title>Welcome to Radius!</mj-title>
+    <mj-preview>🎉 Welcome to Radius! Let's get you started on your journey.</mj-preview>
     <mj-attributes>
       <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" />
       <mj-text font-size="16px" color="#374151" line-height="1.6" />
@@ -13,7 +13,7 @@
     <mj-section background-color="#3b82f6" padding="40px 0">
       <mj-column>
         <mj-text align="center" color="#ffffff" font-size="32px" font-weight="bold">
-          LocalServiceHub
+          Radius
         </mj-text>
         <mj-text align="center" color="#dbeafe" font-size="18px" padding-top="10px">
           Your Trusted Service Provider Platform
@@ -29,7 +29,7 @@
         
         <!-- Main Heading -->
         <mj-text align="center" font-size="28px" font-weight="bold" color="#111827" padding="0 0 16px 0">
-          🎉 Welcome to LocalServiceHub!
+          🎉 Welcome to Radius!
         </mj-text>
 
         <!-- Greeting -->
@@ -39,7 +39,7 @@
 
         <!-- Main Welcome Message -->
         <mj-text font-size="16px" color="#374151" padding="0 0 24px 0">
-          Welcome to LocalServiceHub! We're excited to have you join our community of trusted service providers and customers.
+          Welcome to Radius! We're excited to have you join our community of trusted service providers and customers.
         </mj-text>
       </mj-column>
     </mj-section>
@@ -126,7 +126,7 @@
     <mj-section background-color="#f9fafb" padding="30px">
       <mj-column>
         <mj-text font-size="18px" font-weight="600" color="#111827" padding="0 0 16px 0" align="center">
-          What makes LocalServiceHub special:
+          What makes Radius special:
         </mj-text>
         <mj-text font-size="16px" color="#374151" padding="0 0 8px 0">
           🔒 <strong>Verified Providers</strong> - All providers go through our verification process
@@ -151,8 +151,8 @@
         </mj-text>
 
         <mj-text font-size="16px" color="#374151" padding="0" align="center">
-          Thank you for joining LocalServiceHub. We're here to help you succeed!<br><br>
-          <strong>The LocalServiceHub Team</strong>
+          Thank you for joining Radius. We're here to help you succeed!<br><br>
+          <strong>The Radius Team</strong>
         </mj-text>
       </mj-column>
     </mj-section>
@@ -161,10 +161,10 @@
     <mj-section background-color="#f3f4f6" padding="30px">
       <mj-column>
         <mj-text align="center" font-size="14px" color="#6b7280" padding="0 0 10px 0">
-          <strong>LocalServiceHub</strong> - Connecting you with trusted local service providers
+          <strong>Radius</strong> - Connecting you with trusted local service providers
         </mj-text>
         <mj-text align="center" font-size="12px" color="#9ca3af">
-          This email was sent from LocalServiceHub. If you have any questions, please contact our support team.
+          This email was sent from Radius. If you have any questions, please contact our support team.
         </mj-text>
         <mj-social font-size="15px" icon-size="30px" mode="horizontal" padding="20px 0 0 0" align="center">
           <mj-social-element name="facebook" href="#" background-color="#3b82f6" />

@@ -1,4 +1,4 @@
-# LocalServiceHub
+# Radius
 
 A comprehensive local service marketplace platform built with Ruby on Rails.
 
@@ -7,17 +7,17 @@ A comprehensive local service marketplace platform built with Ruby on Rails.
 For testing the application in production, use these credentials:
 
 ### Admin Account
-- **Email:** admin.test@localservicehub.com
+- **Email:** admin.test@radiusapp.com
 - **Password:** TestAdmin123!
 - **Features:** User management, service approval, analytics, system settings
 
 ### Consumer Account
-- **Email:** consumer.test@localservicehub.com
+- **Email:** consumer.test@radiusapp.com
 - **Password:** TestConsumer123!
 - **Features:** Search services, book appointments, leave reviews, chat with providers
 
 ### Provider Account
-- **Email:** provider.test@localservicehub.com
+- **Email:** provider.test@radiusapp.com
 - **Password:** TestProvider123!
 - **Features:** Create services, manage bookings, upload verification documents, view analytics
 
@@ -57,8 +57,8 @@ rails test_users:remove
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/localservicehub.git
-   cd localservicehub
+   git clone https://github.com/yourusername/local-hub.git
+   cd local-hub
    ```
 
 2. **Install dependencies**
@@ -99,7 +99,7 @@ Create a `.env` file in the root directory with the following variables:
 
 ```bash
 # Database
-DATABASE_URL=postgresql://username:password@localhost:5432/localservicehub_development
+DATABASE_URL=postgresql://username:password@localhost:5432/radius_development
 
 # Rails
 RAILS_ENV=development
@@ -133,7 +133,7 @@ SMTP_PASSWORD=your_app_password_here
 
 # Application
 APP_HOST=localhost:3000
-APP_NAME=LocalServiceHub
+APP_NAME=Radius
 ```
 
 ### Getting API Keys

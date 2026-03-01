@@ -1,18 +1,81 @@
-<div class="max-w-5xl mx-auto mt-10 p-6 bg-white rounded shadow">
-  <h1 class="text-3xl font-bold mb-6 text-orange-600">Find Local Services</h1>
-  <%= render partial: 'search' %>
-
-  <%= form_with url: services_path, method: :get, local: true, class: "flex flex-col md:flex-row gap-4 mb-8" do |f| %>
-    <%= f.text_field :query, value: @query, placeholder: "Search by keyword...", class: "flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-200 focus:border-orange-500" %>
-    <%= f.select :category_id, options_for_select([['All Categories', '']] + @categories.map { |c| [c.name, c.id] }, @category_id), {}, class: "px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-200 focus:border-orange-500" %>
-    <%= f.submit "Search", class: "px-6 py-2 bg-orange-600 text-white rounded hover:bg-orange-700" %>
-  <% end %>
-
-  <% if @services.any? %>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <%= render partial: 'service_card', collection: @services, as: :service %>
+<%# ===== HERO SEARCH ===== %>
+<section class="bg-gray-50 border-b border-gray-100 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl mx-auto text-center mb-8">
+      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Find Local Services</h1>
+      <p class="mt-3 text-lg text-gray-500">Browse verified professionals ready to help in your area.</p>
     </div>
-  <% else %>
-    <div class="text-gray-500 text-center py-12">No services found. Try adjusting your search.</div>
-  <% end %>
-</div> 
+
+    <%= form_with url: services_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-3 max-w-3xl mx-auto" do |f| %>
+      <div class="relative flex-1">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <i class="fas fa-search text-gray-400 text-sm"></i>
+        </div>
+        <%= f.text_field :query, value: @query,
+            placeholder: "What service do you need?",
+            class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+      </div>
+
+      <%= f.select :category_id,
+          options_for_select([['All Categories', '']] + @categories.map { |c| [c.name, c.id] }, @category_id),
+          {}, class: "px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm bg-white" %>
+
+      <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-colors shadow-sm whitespace-nowrap">
+        <i class="fas fa-search mr-2"></i>Search
+      </button>
+    <% end %>
+
+    <%# Active filter chips %>
+    <% if @query.present? || @category_id.present? %>
+      <div class="flex flex-wrap items-center gap-2 mt-4 max-w-3xl mx-auto">
+        <span class="text-sm text-gray-500">Filters:</span>
+        <% if @query.present? %>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-orange-50 text-orange-700">
+            "<%= @query %>"
+            <%= link_to services_path(category_id: @category_id), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
+              <i class="fas fa-times text-xs"></i>
+            <% end %>
+          </span>
+        <% end %>
+        <% if @category_id.present? %>
+          <% active_cat = @categories.find { |c| c.id.to_s == @category_id.to_s } %>
+          <% if active_cat %>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-orange-50 text-orange-700">
+              <i class="fas fa-tag text-xs"></i>
+              <%= active_cat.name %>
+              <%= link_to services_path(query: @query), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
+                <i class="fas fa-times text-xs"></i>
+              <% end %>
+            </span>
+          <% end %>
+        <% end %>
+        <%= link_to "Clear all", services_path, class: "text-sm text-gray-500 hover:text-gray-700 underline" %>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<%# ===== RESULTS ===== %>
+<section class="py-12 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <% if @services.any? %>
+      <p class="text-sm text-gray-500 mb-8">
+        Showing <%= @services.size %> service<%= @services.size == 1 ? '' : 's' %>
+        <% if @query.present? || @category_id.present? %> matching your search<% end %>
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <%= render partial: 'service_card', collection: @services, as: :service %>
+      </div>
+    <% else %>
+      <div class="text-center py-20">
+        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center">
+          <i class="fas fa-search text-gray-400 text-2xl"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">No services found</h3>
+        <p class="text-gray-500 mb-6">Try adjusting your search terms or removing filters.</p>
+        <%= link_to "Browse all services", services_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-colors shadow-sm" %>
+      </div>
+    <% end %>
+  </div>
+</section>

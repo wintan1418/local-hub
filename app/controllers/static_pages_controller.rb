@@ -1,7 +1,7 @@
 class StaticPagesController < ApplicationController
   def about
-    @page_title = "About Us | LocalServiceHub"
-    @page_description = "Learn more about LocalServiceHub and our mission to connect you with trusted local service providers."
+    @page_title = "About Us | Radius"
+    @page_description = "Learn more about Radius and our mission to connect you with trusted local service providers."
     @total_providers = User.provider.count
     @total_customers = User.customer.count
     @total_services = Service.count
@@ -11,8 +11,8 @@ class StaticPagesController < ApplicationController
   end
 
   def contact
-    @page_title = "Contact Us | LocalServiceHub"
-    @page_description = "Get in touch with LocalServiceHub. We'd love to hear from you."
+    @page_title = "Contact Us | Radius"
+    @page_description = "Get in touch with Radius. We'd love to hear from you."
   end
 
   def send_contact

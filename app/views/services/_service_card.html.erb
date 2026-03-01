@@ -1,43 +1,54 @@
-<div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-  <div class="relative h-48 bg-gray-200">
+<%
+  fallback_images = {
+    "home-cleaning"     => "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80",
+    "plumbing"          => "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800&q=80",
+    "electrical"        => "https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?w=800&q=80",
+    "landscaping"       => "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80",
+    "moving"            => "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
+    "handyman"          => "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800&q=80",
+    "painting"          => "https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=800&q=80",
+    "pet-care"          => "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80",
+    "tutoring"          => "https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80",
+    "personal-training" => "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80"
+  }
+  image_url = fallback_images[service.category&.slug] || "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80"
+%>
+
+<%= link_to service_path(service), class: "group block rounded-2xl border border-gray-100 bg-white overflow-hidden hover:shadow-lg hover:border-gray-200 transition-all duration-200" do %>
+  <%# Image with price badge %>
+  <div class="aspect-[16/10] relative overflow-hidden bg-gray-100">
     <% if service.images.attached? %>
-      <% cover = service.images.sample %>
-      <%= image_tag cover.variant(resize_to_fill: [400, 192]), class: "w-full h-full object-cover" %>
-      <% if service.images.size > 1 %>
-        <div class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
-          <% service.images.each_with_index do |img, idx| %>
-            <span class="w-2 h-2 rounded-full <%= img == cover ? 'bg-orange-500' : 'bg-gray-300' %> inline-block"></span>
-          <% end %>
-        </div>
-      <% end %>
+      <%= image_tag service.images.first, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-300", loading: "lazy", alt: service.title %>
     <% else %>
-      <% default_images = {
-        "Plumbing" => "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?q=80&w=800&auto=format&fit=crop",
-        "Electrical" => "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=800&auto=format&fit=crop",
-        "Cleaning" => "https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=800&auto=format&fit=crop",
-        "Painting" => "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=800&auto=format&fit=crop",
-        "Landscaping" => "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=800&auto=format&fit=crop",
-        "Moving" => "https://images.unsplash.com/photo-1600518464441-9154a4dea21b?q=80&w=800&auto=format&fit=crop",
-        "Carpentry" => "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=800&auto=format&fit=crop",
-        "HVAC" => "https://images.unsplash.com/photo-1621873495884-845a939892d7?q=80&w=800&auto=format&fit=crop"
-      } %>
-      <% category_name = service.category&.name || "General" %>
-      <% image_url = default_images[category_name] || "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=800&auto=format&fit=crop" %>
-      <img src="<%= image_url %>" alt="<%= service.title %>" class="w-full h-full object-cover">
+      <img src="<%= image_url %>" alt="<%= service.title %>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy">
     <% end %>
+    <div class="absolute top-3 right-3 bg-white/95 backdrop-blur-sm rounded-lg px-3 py-1 shadow-sm">
+      <span class="text-base font-bold text-gray-900">$<%= number_with_precision(service.base_price, precision: 0) %></span>
+      <% if service.hourly? %><span class="text-xs text-gray-500">/hr</span><% end %>
+    </div>
   </div>
-  <div class="p-6">
-    <div class="flex items-center justify-between mb-2">
-      <span class="text-lg font-bold text-orange-700">
-        $<%= number_to_currency(service.base_price, precision: 2) %>
+
+  <%# Card body %>
+  <div class="p-5">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-700">
+        <%= service.category&.name || "Uncategorized" %>
       </span>
-      <span class="text-xs bg-orange-100 text-orange-800 rounded px-2 py-1"><%= service.category.name %></span>
+      <% if service.provider&.verified? %>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+          <i class="fas fa-check-circle mr-1"></i>Verified
+        </span>
+      <% end %>
     </div>
-    <h3 class="text-xl font-semibold mb-2 text-gray-900"><%= service.title %></h3>
-    <p class="text-gray-600 mb-4 line-clamp-2"><%= service.description %></p>
-    <div class="flex items-center justify-between">
-      <span class="text-sm text-gray-500"><%= service.provider.email %></span>
-      <%= link_to 'View Details', service_path(service), class: "ml-2 px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 text-sm" %>
+
+    <h3 class="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1"><%= service.title %></h3>
+    <p class="text-sm text-gray-500 mt-1 line-clamp-2"><%= service.description %></p>
+
+    <div class="mt-4 flex items-center gap-2 pt-4 border-t border-gray-50">
+      <div class="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-xs font-semibold text-orange-600">
+        <%= service.provider&.display_name&.first&.upcase || "?" %>
+      </div>
+      <span class="text-sm text-gray-600 font-medium"><%= service.provider&.display_name %></span>
     </div>
   </div>
-</div> 
+<% end %>

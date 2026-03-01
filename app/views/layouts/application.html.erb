@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Primary Meta Tags -->
-    <title><%= content_for?(:page_title) ? yield(:page_title) : 'LocalServiceHub - Find Trusted Local Service Providers' %></title>
+    <title><%= content_for?(:page_title) ? yield(:page_title) : 'Radius - Find Trusted Local Service Providers' %></title>
     <meta name="description" content="<%= content_for?(:page_description) ? yield(:page_description) : 'Connect with trusted local service providers for all your needs. Book appointments, read reviews, and get the best service in your area.' %>">
 
     <!-- Canonical URL -->
@@ -51,9 +51,9 @@
             <%# Logo %>
             <%= link_to root_path, class: "flex items-center gap-2 group" do %>
               <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center group-hover:bg-orange-600 transition-colors">
-                <i class="fas fa-map-marker-alt text-white text-sm"></i>
+                <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
               </div>
-              <span class="text-lg font-bold text-gray-900 hidden sm:inline">Local<span class="text-orange-500">ServiceHub</span></span>
+              <span class="text-lg font-bold text-gray-900 hidden sm:inline">Rad<span class="text-orange-500">ius</span></span>
             <% end %>
 
             <%# Desktop Nav Links %>
@@ -355,9 +355,9 @@
           <div class="col-span-2 md:col-span-1">
             <div class="flex items-center gap-2 mb-4">
               <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center">
-                <i class="fas fa-map-marker-alt text-white text-sm"></i>
+                <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
               </div>
-              <span class="text-lg font-bold">Local<span class="text-orange-400">ServiceHub</span></span>
+              <span class="text-lg font-bold">Rad<span class="text-orange-400">ius</span></span>
             </div>
             <p class="text-gray-400 text-sm leading-relaxed">Connecting you with trusted local service providers for all your needs.</p>
             <div class="flex gap-3 mt-5">
@@ -409,7 +409,7 @@
         </div>
 
         <div class="mt-12 pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-2">
-          <p class="text-gray-500 text-sm">&copy; <%= Date.current.year %> LocalServiceHub. All rights reserved.</p>
+          <p class="text-gray-500 text-sm">&copy; <%= Date.current.year %> Radius. All rights reserved.</p>
           <p class="text-gray-500 text-sm">
             Powered by
             <%= link_to "Wintech", "mailto:wintan1418@gmail.com", class: "text-orange-400 hover:text-orange-300 font-medium transition-colors" %>

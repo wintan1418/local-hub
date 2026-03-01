@@ -1,12 +1,12 @@
 databases:
-  - name: localservicehub-db
-    databaseName: localservicehub_production
-    user: localservicehub
+  - name: radius-db
+    databaseName: radius_production
+    user: radius
     region: oregon
 
 services:
   - type: web
-    name: localservicehub
+    name: radius
     runtime: ruby
     plan: free
     buildCommand: bundle install && bundle exec rails assets:precompile
@@ -14,7 +14,7 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: localservicehub-db
+          name: radius-db
           property: connectionString
       - key: RAILS_MASTER_KEY
         sync: false
@@ -42,9 +42,9 @@ services:
         sync: false
       # App configuration
       - key: APP_HOST
-        value: localservicehub.onrender.com
+        value: radius.onrender.com
       - key: APP_NAME
-        value: LocalServiceHub
+        value: Radius
       # Database configuration
       - key: RAILS_MAX_THREADS
         value: "5"

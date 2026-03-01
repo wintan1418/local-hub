@@ -6,7 +6,7 @@ class ContactMailer < ApplicationMailer
     @message = message
 
     mail(
-      to: ENV.fetch("SUPPORT_EMAIL", "support@localservicehub.com"),
+      to: ENV.fetch("SUPPORT_EMAIL", "support@radiusapp.com"),
       reply_to: email,
       subject: "Contact Form: #{@subject}"
     )

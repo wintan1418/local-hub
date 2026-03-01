@@ -1,4 +1,4 @@
-# 📧 Testmail.app Setup Guide for LocalServiceHub
+# 📧 Testmail.app Setup Guide for Radius
 
 ## 🚀 Quick Setup
 

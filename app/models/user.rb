@@ -85,6 +85,14 @@ class User < ApplicationRecord
     end
   end
 
+  # Geocoding
+  geocoded_by :complete_address
+  after_validation :geocode, if: ->(user) {
+    user.provider? &&
+    (user.address_changed? || user.city_changed? || user.state_changed? || user.zip_code_changed?) &&
+    user.address.present? && user.city.present? && user.state.present? && user.zip_code.present?
+  }
+
   # Scopes
   scope :verified, -> { where(verified: true) }
   scope :unverified, -> { where(verified: false) }

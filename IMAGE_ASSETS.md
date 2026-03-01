@@ -1,4 +1,4 @@
-# LocalServiceHub Image Assets
+# Radius Image Assets
 
 ## Homepage Images
 

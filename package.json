@@ -1,5 +1,5 @@
 {
-  "name": "localservicehub",
+  "name": "radius",
   "private": true,
   "dependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.2",

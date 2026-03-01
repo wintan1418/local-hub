@@ -112,10 +112,10 @@ puts "👥 Creating users..."
 # Create Admin users with specific roles
 admin_roles_data = [
   { role: 'super_admin', name: 'Main Admin', email: 'wintan1418@gmail.com' },
-  { role: 'verification_admin', name: 'Verification Admin', email: 'verification@localservicehub.com' },
-  { role: 'support_admin', name: 'Support Admin', email: 'support@localservicehub.com' },
-  { role: 'content_admin', name: 'Content Admin', email: 'content@localservicehub.com' },
-  { role: 'super_admin', name: 'System Admin', email: 'admin@localservicehub.com' }
+  { role: 'verification_admin', name: 'Verification Admin', email: 'verification@radiusapp.com' },
+  { role: 'support_admin', name: 'Support Admin', email: 'support@radiusapp.com' },
+  { role: 'content_admin', name: 'Content Admin', email: 'content@radiusapp.com' },
+  { role: 'super_admin', name: 'System Admin', email: 'admin@radiusapp.com' }
 ]
 
 admins = admin_roles_data.map do |admin_data|
@@ -127,7 +127,7 @@ admins = admin_roles_data.map do |admin_data|
     first_name: admin_data[:name].split(' ').first,
     last_name: admin_data[:name].split(' ').last,
     phone: Faker::Number.number(digits: 10).to_s,
-    bio: "#{admin_data[:name]} managing the LocalServiceHub platform.",
+    bio: "#{admin_data[:name]} managing the Radius platform.",
     verified: true,
     verified_at: 1.year.ago,
     confirmed_at: Time.current  # Auto-confirm admin accounts
@@ -310,10 +310,10 @@ puts "  • Verified Providers: #{User.where(user_role: 'provider', verified: tr
 puts "\n✅ Seeding completed successfully!"
 puts "\n📝 Sample login credentials:"
 puts "  🔐 ADMIN ACCOUNTS:"
-puts "    Super Admin: superadmin@localservicehub.com / password123"
-puts "    Verification Admin: verification@localservicehub.com / password123"
-puts "    Support Admin: support@localservicehub.com / password123"
-puts "    Content Admin: content@localservicehub.com / password123"
-puts "    General Admin: admin@localservicehub.com / password123"
+puts "    Super Admin: superadmin@radiusapp.com / password123"
+puts "    Verification Admin: verification@radiusapp.com / password123"
+puts "    Support Admin: support@radiusapp.com / password123"
+puts "    Content Admin: content@radiusapp.com / password123"
+puts "    General Admin: admin@radiusapp.com / password123"
 puts "  👔 PROVIDER: provider1@example.com / password123"
 puts "  👤 CUSTOMER: customer1@example.com / password123"

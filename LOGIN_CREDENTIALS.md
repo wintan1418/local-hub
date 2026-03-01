@@ -1,4 +1,4 @@
-# LocalServiceHub - Login Credentials
+# Radius - Login Credentials
 
 All users have the password: **password123**
 
@@ -7,11 +7,11 @@ These users have full admin access to the platform.
 
 | Email | Role | Status |
 |-------|------|--------|
-| admin1@localservicehub.com | Admin | Verified |
-| admin2@localservicehub.com | Admin | Verified |
-| admin3@localservicehub.com | Admin | Verified |
-| admin4@localservicehub.com | Admin | Verified |
-| admin5@localservicehub.com | Admin | Verified |
+| admin1@radiusapp.com | Admin | Verified |
+| admin2@radiusapp.com | Admin | Verified |
+| admin3@radiusapp.com | Admin | Verified |
+| admin4@radiusapp.com | Admin | Verified |
+| admin5@radiusapp.com | Admin | Verified |
 
 ## 🛠️ Provider Users (40 total)
 Service providers with subscriptions and business profiles.

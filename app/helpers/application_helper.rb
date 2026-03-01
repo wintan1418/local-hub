@@ -28,7 +28,7 @@ module ApplicationHelper
 
   # Generates meta tags for social sharing
   def social_meta_tags(title: nil, description: nil, image: nil, url: nil)
-    title ||= content_for(:page_title) || "LocalServiceHub"
+    title ||= content_for(:page_title) || "Radius"
     description ||= content_for(:page_description) || "Find and book trusted local service providers"
     image ||= content_for(:og_image) || asset_url("og-default.jpg")
     url ||= request.original_url

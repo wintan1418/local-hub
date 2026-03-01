@@ -1,6 +1,6 @@
 <mjml>
   <mj-head>
-    <mj-title>Confirm Your Email - LocalServiceHub</mj-title>
+    <mj-title>Confirm Your Email - Radius</mj-title>
     <mj-preview>Please confirm your email address to complete your registration.</mj-preview>
     <mj-attributes>
       <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" />
@@ -15,7 +15,7 @@
         <mj-section background-color="#3b82f6" padding="40px 0">
           <mj-column>
             <mj-text align="center" color="#ffffff" font-size="32px" font-weight="bold">
-              LocalServiceHub
+              Radius
             </mj-text>
             <mj-text align="center" color="#dbeafe" font-size="18px" padding-top="10px">
               Your Trusted Service Provider Platform
@@ -43,7 +43,7 @@
 
         <!-- Main Message -->
         <mj-text font-size="16px" color="#374151" padding="0 0 24px 0">
-          Thank you for signing up for LocalServiceHub! To complete your registration and start using your account, please confirm your email address by clicking the button below.
+          Thank you for signing up for Radius! To complete your registration and start using your account, please confirm your email address by clicking the button below.
         </mj-text>
 
         <!-- Email Confirmation Info -->
@@ -72,7 +72,7 @@
         <mj-section background-color="#fef3c7" border-radius="8px" padding="20px">
           <mj-column>
             <mj-text color="#92400e" font-size="14px" padding="0">
-              <strong>Security Note:</strong> If you didn't create an account with LocalServiceHub, you can safely ignore this email. No account will be created without email confirmation.
+              <strong>Security Note:</strong> If you didn't create an account with Radius, you can safely ignore this email. No account will be created without email confirmation.
             </mj-text>
           </mj-column>
         </mj-section>
@@ -84,12 +84,12 @@
 
         <!-- Closing Message -->
         <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
-          Welcome to LocalServiceHub! We're excited to have you join our community.
+          Welcome to Radius! We're excited to have you join our community.
         </mj-text>
 
         <mj-text font-size="16px" color="#374151" padding="24px 0 0 0">
           Best regards,<br>
-          <strong>The LocalServiceHub Team</strong>
+          <strong>The Radius Team</strong>
         </mj-text>
       </mj-column>
     </mj-section>
@@ -98,10 +98,10 @@
     <mj-section background-color="#f3f4f6" padding="30px">
       <mj-column>
         <mj-text align="center" font-size="14px" color="#6b7280" padding="0 0 10px 0">
-          <strong>LocalServiceHub</strong> - Connecting you with trusted local service providers
+          <strong>Radius</strong> - Connecting you with trusted local service providers
         </mj-text>
         <mj-text align="center" font-size="12px" color="#9ca3af">
-          This email was sent from LocalServiceHub. If you have any questions, please contact our support team.
+          This email was sent from Radius. If you have any questions, please contact our support team.
         </mj-text>
       </mj-column>
     </mj-section>

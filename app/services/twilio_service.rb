@@ -4,7 +4,7 @@ class TwilioService
       return { success: false, error: "Twilio not configured" } unless twilio_configured?
 
       verification = PhoneVerification.generate_for(user, phone)
-      message = "Your LocalServiceHub verification code is: #{verification.code}. Valid for 10 minutes."
+      message = "Your Radius verification code is: #{verification.code}. Valid for 10 minutes."
 
       result = send_sms(phone, message, :verification, user)
 

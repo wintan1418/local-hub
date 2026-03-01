@@ -9,7 +9,7 @@ namespace :stripe do
       begin
         # Create product
         product = Stripe::Product.create({
-          name: "LocalServiceHub #{plan.name} Plan",
+          name: "Radius #{plan.name} Plan",
           description: "#{plan.name} subscription plan for service providers",
           metadata: {
             plan_id: plan.id

@@ -124,6 +124,7 @@ Rails.application.routes.draw do
   # API routes
   namespace :api do
     resources :providers, only: [ :index ]
+    resources :nearby_providers, only: [ :index ]
   end
 
   # Webhooks

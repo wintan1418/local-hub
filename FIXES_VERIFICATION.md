@@ -51,7 +51,7 @@
 
 ## All Systems Ready 🚀
 
-Your LocalServiceHub now has:
+Your Radius now has:
 - ✅ Working customer and provider dashboards
 - ✅ Functional subscription management with plan features
 - ✅ Proper sign out flow to homepage
@@ -64,7 +64,7 @@ Your LocalServiceHub now has:
 ## Quick Test Login Credentials:
 - **Customer**: customer1@example.com / password123
 - **Provider**: provider1@example.com / password123  
-- **Admin**: admin1@localservicehub.com / password123
+- **Admin**: admin1@radiusapp.com / password123
 
 ## Next Steps:
 1. Test all fixed functionality
