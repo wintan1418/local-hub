@@ -156,20 +156,20 @@
           <div class="space-y-2">
             <% if current_user.provider? %>
               <% if @booking.pending? %>
-                <%= link_to confirm_provider_booking_path(@booking), data: { turbo_method: :patch }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition-all" do %>
+                <%= button_to confirm_provider_booking_path(@booking), method: :patch, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition-all cursor-pointer" do %>
                   <i class="fas fa-check mr-2 text-xs"></i>Accept Booking
                 <% end %>
-                <%= link_to cancel_provider_booking_path(@booking), data: { turbo_method: :patch, turbo_confirm: "Reject this booking?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-all" do %>
+                <%= button_to cancel_provider_booking_path(@booking), method: :patch, data: { turbo_confirm: "Reject this booking?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-all cursor-pointer" do %>
                   <i class="fas fa-times mr-2 text-xs"></i>Reject
                 <% end %>
               <% elsif @booking.confirmed? %>
-                <%= link_to complete_provider_booking_path(@booking), data: { turbo_method: :patch, turbo_confirm: "Mark as completed?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-sky-500 text-white hover:bg-sky-600 transition-all" do %>
+                <%= button_to complete_provider_booking_path(@booking), method: :patch, data: { turbo_confirm: "Mark as completed?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-sky-500 text-white hover:bg-sky-600 transition-all cursor-pointer" do %>
                   <i class="fas fa-check-double mr-2 text-xs"></i>Mark Completed
                 <% end %>
               <% end %>
             <% elsif current_user.customer? %>
               <% if @booking.pending? %>
-                <%= link_to booking_path(@booking), data: { turbo_method: :delete, turbo_confirm: "Cancel this booking?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-all" do %>
+                <%= button_to booking_path(@booking), method: :delete, data: { turbo_confirm: "Cancel this booking?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-all cursor-pointer" do %>
                   <i class="fas fa-times mr-2 text-xs"></i>Cancel Booking
                 <% end %>
               <% end %>

@@ -117,9 +117,11 @@
                       </span>
                       <p class="text-sm font-medium mt-1 text-slate-900">$<%= booking.total_price %></p>
                       <% if booking.status == 'pending' %>
-                        <%= link_to booking_path(booking), data: { turbo_method: :delete, turbo_confirm: "Cancel this booking?" }, class: "mt-2 text-xs text-red-600 hover:text-red-700" do %>
-                          <i class="fas fa-times mr-1"></i>Cancel
-                        <% end %>
+                        <div onclick="event.stopPropagation(); event.preventDefault();">
+                          <%= button_to booking_path(booking), method: :delete, data: { turbo_confirm: "Cancel this booking?" }, class: "mt-2 text-xs text-red-600 hover:text-red-700 cursor-pointer" do %>
+                            <i class="fas fa-times mr-1"></i>Cancel
+                          <% end %>
+                        </div>
                       <% elsif booking.status == 'completed' && !booking.review %>
                         <%= link_to new_booking_review_path(booking), class: "mt-2 inline-flex items-center text-xs font-semibold text-orange-600 hover:text-orange-700" do %>
                           <i class="fas fa-star mr-1"></i>Leave Review
@@ -143,46 +145,40 @@
           </div>
         </div>
 
-        <!-- Recent Services -->
-        <div class="bg-white rounded-lg shadow mt-6">
-          <div class="p-6 border-b border-slate-200">
-            <h2 class="text-lg font-semibold text-slate-900">Recommended Services</h2>
+        <!-- Recommended Services -->
+        <div class="bg-white rounded-xl border border-slate-100 mt-6">
+          <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="text-sm font-bold text-slate-900">Recommended Services</h2>
+            <%= link_to services_path, class: "text-xs font-semibold text-orange-600 hover:text-orange-700" do %>Browse all<% end %>
           </div>
-          <div class="p-6">
-            <% if @services.any? %>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <% @services.limit(4).each do |service| %>
-                  <div class="border border-slate-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                    <div class="flex items-start space-x-3">
-                      <% if service.images.any? %>
-                        <%= image_tag service.images.first, class: "h-16 w-16 rounded-lg object-cover flex-shrink-0" %>
-                      <% else %>
-                        <div class="h-16 w-16 rounded-lg bg-slate-200 flex items-center justify-center flex-shrink-0">
-                          <i class="fas fa-image text-slate-400"></i>
-                        </div>
-                      <% end %>
-                      <div class="flex-1 min-w-0">
-                        <h3 class="font-medium text-slate-900 truncate"><%= service.title %></h3>
-                        <p class="text-sm text-slate-600"><%= service.category.name %></p>
-                        <p class="text-sm text-slate-500 mt-1"><%= truncate(service.description, length: 60) %></p>
-                        <div class="flex items-center justify-between mt-2">
-                          <span class="text-sm font-medium text-slate-900">$<%= service.base_price %></span>
-                          <%= link_to service_path(service), class: "text-xs text-orange-600 hover:text-orange-700 font-medium" do %>
-                            View Details
-                          <% end %>
-                        </div>
+          <% if @services.any? %>
+            <div class="divide-y divide-slate-50">
+              <% @services.limit(4).each do |service| %>
+                <%= link_to service_path(service), class: "flex items-center gap-4 px-6 py-4 hover:bg-slate-50/50 transition-colors" do %>
+                  <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-concierge-bell text-slate-400 text-sm"></i>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="text-sm font-semibold text-slate-900 truncate"><%= service.title %></div>
+                    <div class="text-xs text-slate-400"><%= service.category.name %> &middot; <%= service.provider.display_name %></div>
+                  </div>
+                  <div class="text-right flex-shrink-0">
+                    <div class="text-sm font-bold text-slate-900">$<%= number_with_precision(service.base_price, precision: 0) %></div>
+                    <% if service.provider.average_rating > 0 %>
+                      <div class="flex items-center gap-0.5 justify-end">
+                        <i class="fas fa-star text-amber-400 text-[8px]"></i>
+                        <span class="text-[10px] text-slate-400"><%= service.provider.average_rating %></span>
                       </div>
-                    </div>
+                    <% end %>
                   </div>
                 <% end %>
-              </div>
-            <% else %>
-              <div class="text-center py-8">
-                <i class="fas fa-search text-3xl text-slate-400 mb-3"></i>
-                <p class="text-slate-500">No services found. Try adjusting your search criteria.</p>
-              </div>
-            <% end %>
-          </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="p-8 text-center">
+              <p class="text-sm text-slate-400">No services found.</p>
+            </div>
+          <% end %>
         </div>
       </div>
 
