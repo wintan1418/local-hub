@@ -60,7 +60,8 @@
       "WebFetch(domain:www.angi.com)",
       "WebFetch(domain:dribbble.com)",
       "WebFetch(domain:webflow.com)",
-      "WebFetch(domain:www.awwwards.com)"
+      "WebFetch(domain:www.awwwards.com)",
+      "Bash(git push:*)"
     ],
     "deny": []
   }

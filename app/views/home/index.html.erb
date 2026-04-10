@@ -177,25 +177,38 @@
 </section>
 
 <%# ================================================================
-    FEATURED SERVICES
+    FEATURED SERVICES — with animated border + fire emoji
     ================================================================ %>
 <% if @featured_services.any? %>
-<section class="py-20 bg-gradient-to-b from-slate-50/80 to-white">
+<section class="py-24 bg-gradient-to-b from-slate-50/80 to-white relative overflow-hidden">
+  <%# Subtle decorative element %>
+  <div class="absolute top-0 right-0 w-72 h-72 bg-orange-100/40 rounded-full blur-[100px] -translate-y-1/2"></div>
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-12" data-aos="fade-up">
+    <div class="flex items-end justify-between mb-14" data-aos="fade-up">
       <div>
-        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Popular right now</h2>
-        <p class="mt-2 text-slate-500 text-lg">Services customers are booking this week.</p>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></span>
+          Trending
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Popular right now</h2>
+        <p class="mt-2 text-slate-500">Services customers are booking this week.</p>
       </div>
       <div class="hidden sm:block">
-        <%= link_to services_path, class: "group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors" do %>
-          See all <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+        <%= link_to services_path, class: "btn-shine group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all hover:shadow-lg hover:shadow-slate-900/20" do %>
+          See all services <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
         <% end %>
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <%= render partial: 'services/service_card', collection: @featured_services, as: :service %>
+    </div>
+
+    <div class="text-center mt-10 sm:hidden">
+      <%= link_to services_path, class: "inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-slate-900 text-white" do %>
+        See all services <i class="fas fa-arrow-right text-xs ml-1"></i>
+      <% end %>
     </div>
   </div>
 </section>
@@ -250,56 +263,76 @@
 </section>
 
 <%# ================================================================
-    TOP PROVIDERS
+    TOP PROVIDERS — Ranked cards with visual flair
     ================================================================ %>
 <% if @top_providers.present? && @top_providers.any? %>
-<section class="py-20 bg-white">
+<%
+  rank_styles = [
+    { ring: "ring-amber-200", glow: "shadow-amber-500/10", badge_bg: "bg-gradient-to-br from-amber-400 to-orange-500", badge_shadow: "shadow-amber-500/30", label: "1st", emoji: "fa-crown" },
+    { ring: "ring-slate-200", glow: "shadow-slate-500/5", badge_bg: "bg-gradient-to-br from-slate-300 to-slate-400", badge_shadow: "shadow-slate-400/20", label: "2nd", emoji: "fa-medal" },
+    { ring: "ring-orange-200", glow: "shadow-orange-500/5", badge_bg: "bg-gradient-to-br from-orange-300 to-orange-500", badge_shadow: "shadow-orange-400/20", label: "3rd", emoji: "fa-medal" },
+    { ring: "ring-slate-100", glow: "", badge_bg: "bg-slate-200", badge_shadow: "", label: "4th", emoji: "fa-award" }
+  ]
+%>
+<section class="py-24 bg-white relative overflow-hidden">
+  <div class="absolute bottom-0 left-0 w-96 h-96 bg-amber-100/30 rounded-full blur-[120px] translate-y-1/2"></div>
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-12" data-aos="fade-up">
+    <div class="flex items-end justify-between mb-14" data-aos="fade-up">
       <div>
-        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Top rated this month</h2>
-        <p class="mt-2 text-slate-500 text-lg">Pros with the best track records.</p>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wider mb-4">
+          <i class="fas fa-trophy text-amber-500 text-[10px]"></i>
+          Leaderboard
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Top rated this month</h2>
+        <p class="mt-2 text-slate-500">Highest rated pros based on verified reviews.</p>
       </div>
       <div class="hidden sm:block">
-        <%= link_to leaderboard_index_path, class: "group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors" do %>
-          View all <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+        <%= link_to leaderboard_index_path, class: "group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900 transition-all" do %>
+          Full leaderboard <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
         <% end %>
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
       <% @top_providers.each_with_index do |provider, index| %>
-        <%= link_to leaderboard_path(provider), class: "group block bg-white rounded-xl border border-slate-100 p-5 hover:shadow-xl hover:shadow-slate-900/[0.05] hover:-translate-y-1 transition-all duration-300", data: { aos: "fade-up", "aos-delay": index * 60 } do %>
-          <div class="flex items-center gap-4">
-            <div class="relative flex-shrink-0">
+        <% rs = rank_styles[index] || rank_styles[3] %>
+        <%= link_to leaderboard_path(provider), class: "tilt-card group block bg-white rounded-2xl border border-slate-100 p-6 transition-all duration-300 relative overflow-hidden", data: { aos: "fade-up", "aos-delay": index * 80 } do %>
+          <%# Rank badge %>
+          <div class="absolute top-4 right-4 w-8 h-8 rounded-full <%= rs[:badge_bg] %> flex items-center justify-center shadow-lg <%= rs[:badge_shadow] %>">
+            <i class="fas <%= rs[:emoji] %> text-white text-[10px]"></i>
+          </div>
+
+          <%# Avatar %>
+          <div class="flex justify-center mb-4">
+            <div class="relative">
               <% if provider.profile_picture.attached? %>
-                <%= image_tag provider.profile_picture, class: "w-14 h-14 rounded-xl object-cover ring-2 ring-slate-100" %>
+                <%= image_tag provider.profile_picture, class: "w-20 h-20 rounded-2xl object-cover ring-4 #{rs[:ring]} shadow-lg #{rs[:glow]}" %>
               <% else %>
-                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center text-lg font-bold text-slate-400">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center text-2xl font-black text-slate-300 ring-4 <%= rs[:ring] %> shadow-lg <%= rs[:glow] %>">
                   <%= provider.display_name.first.upcase %>
                 </div>
               <% end %>
-              <% if index == 0 %>
-                <div class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
-                  <i class="fas fa-trophy text-white text-[8px]"></i>
-                </div>
-              <% end %>
             </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors text-sm truncate"><%= provider.business_name || provider.full_name %></h3>
-              <div class="flex items-center gap-1 mt-1">
-                <% 5.times do |i| %><i class="fas fa-star text-[10px] <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
-                <span class="text-xs font-semibold text-slate-700 ml-1"><%= provider.average_rating %></span>
-                <span class="text-slate-300 mx-1">&middot;</span>
-                <span class="text-xs text-slate-400"><%= provider.total_completed_bookings %> jobs</span>
-              </div>
-              <% badge = provider.provider_badge %>
-              <% if badge && badge[:name] != "New" %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-<%= badge[:color] %>-50 text-<%= badge[:color] %>-700 mt-2">
-                  <i class="<%= badge[:icon] %> mr-1"></i><%= badge[:name] %>
-                </span>
-              <% end %>
+          </div>
+
+          <%# Info %>
+          <div class="text-center">
+            <h3 class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors text-sm truncate"><%= provider.business_name || provider.full_name %></h3>
+
+            <div class="flex items-center justify-center gap-1 mt-2">
+              <% 5.times do |i| %><i class="fas fa-star text-xs <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
+              <span class="text-sm font-black text-slate-900 ml-1.5"><%= provider.average_rating %></span>
             </div>
+
+            <div class="text-xs text-slate-400 mt-1.5"><%= provider.total_completed_bookings %> jobs completed</div>
+
+            <% badge = provider.provider_badge %>
+            <% if badge && badge[:name] != "New" %>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-<%= badge[:color] %>-50 text-<%= badge[:color] %>-700 mt-3">
+                <i class="<%= badge[:icon] %> mr-1"></i><%= badge[:name] %>
+              </span>
+            <% end %>
           </div>
         <% end %>
       <% end %>
@@ -309,33 +342,69 @@
 <% end %>
 
 <%# ================================================================
-    TESTIMONIALS
+    TESTIMONIALS — Featured review + grid
     ================================================================ %>
-<section class="py-20 bg-slate-50/50">
+<section class="py-24 bg-slate-50/50 relative overflow-hidden">
+  <div class="absolute top-0 left-1/2 w-96 h-96 bg-violet-100/30 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2"></div>
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-12" data-aos="fade-up">
-      <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Loved by thousands</h2>
-      <p class="mt-2 text-slate-500 text-lg">Don't take our word for it.</p>
+    <div class="text-center mb-14" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-violet-600 text-xs font-bold uppercase tracking-wider mb-4">
+        <i class="fas fa-heart text-[10px]"></i>
+        Customer love
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Loved by thousands</h2>
+      <p class="mt-2 text-slate-500">Real reviews from real customers. Zero fluff.</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-5" data-aos="fade-up" data-aos-delay="100">
-      <% [
-        { name: "Sarah J.", role: "Homeowner", review: "Found an amazing plumber within minutes. Fixed my emergency leak the same day. Seamless booking and felt safe the entire time.", rating: 5, avatar: "https://i.pravatar.cc/64?u=sarah1" },
-        { name: "Mike C.", role: "Business Owner", review: "We use Radius for all our office maintenance needs. Reliable providers, transparent pricing, great communication.", rating: 5, avatar: "https://i.pravatar.cc/64?u=mike2" },
-        { name: "Emily R.", role: "Property Manager", review: "Managing multiple properties is so much easier. All my trusted contractors in one place with scheduling and payment.", rating: 4, avatar: "https://i.pravatar.cc/64?u=emily3" }
-      ].each do |t| %>
-        <div class="tilt-card group bg-white rounded-2xl border border-slate-100 p-7 transition-all duration-300">
-          <div class="flex gap-0.5 mb-4">
-            <% t[:rating].times do %><i class="fas fa-star text-amber-400 text-sm"></i><% end %>
-            <% (5 - t[:rating]).times do %><i class="fas fa-star text-slate-200 text-sm"></i><% end %>
-          </div>
-          <p class="text-slate-600 text-sm leading-relaxed mb-6">"<%= t[:review] %>"</p>
-          <div class="flex items-center gap-3">
-            <img src="<%= t[:avatar] %>" alt="" class="w-10 h-10 rounded-full ring-2 ring-slate-100">
-            <div>
-              <div class="text-sm font-bold text-slate-900"><%= t[:name] %></div>
-              <div class="text-xs text-slate-400"><%= t[:role] %></div>
+    <%# Featured review — large, highlighted %>
+    <div class="mb-8" data-aos="fade-up" data-aos-delay="50">
+      <div class="tilt-card bg-white rounded-2xl border border-slate-100 p-8 sm:p-10 relative overflow-hidden">
+        <div class="absolute top-6 right-8 text-8xl font-serif text-slate-100 leading-none select-none">&ldquo;</div>
+        <div class="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
+          <div>
+            <div class="flex gap-0.5 mb-4">
+              <% 5.times do %><i class="fas fa-star text-amber-400"></i><% end %>
             </div>
+            <p class="text-slate-700 text-lg sm:text-xl leading-relaxed font-medium">"I was skeptical at first, but Radius completely changed how I find help for my home. The plumber I booked was at my door in 2 hours — on a Sunday. Verified, professional, and fairly priced. I've now booked 6 different pros through the platform."</p>
+          </div>
+          <div class="flex md:flex-col items-center gap-4 md:text-center">
+            <img src="https://i.pravatar.cc/96?u=featured1" alt="" class="w-16 h-16 rounded-2xl ring-4 ring-amber-100 shadow-lg">
+            <div>
+              <div class="font-bold text-slate-900">Sarah Johnson</div>
+              <div class="text-sm text-slate-400">Homeowner</div>
+              <div class="text-xs text-amber-600 font-semibold mt-1">6 bookings</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# Secondary reviews %>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-aos="fade-up" data-aos-delay="100">
+      <% [
+        { name: "Mike C.", role: "Business Owner", review: "We use Radius for all our office maintenance. The providers are consistently reliable and the pricing is transparent. Saved us hours of calling around.", rating: 5, avatar: "https://i.pravatar.cc/64?u=mike2", bookings: "12 bookings" },
+        { name: "Emily R.", role: "Property Manager", review: "Managing 8 rental properties used to be a nightmare. Now all my contractors are in one place — scheduling, payments, everything.", rating: 5, avatar: "https://i.pravatar.cc/64?u=emily3", bookings: "23 bookings" },
+        { name: "David K.", role: "New Homeowner", review: "Just bought my first house and needed everything done. Radius made it easy to find a painter, electrician, and landscaper — all vetted.", rating: 4, avatar: "https://i.pravatar.cc/64?u=david4", bookings: "4 bookings" }
+      ].each do |t| %>
+        <div class="tilt-card group bg-white rounded-2xl border border-slate-100 p-6 transition-all duration-300">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex gap-0.5">
+              <% t[:rating].times do %><i class="fas fa-star text-amber-400 text-sm"></i><% end %>
+              <% (5 - t[:rating]).times do %><i class="fas fa-star text-slate-200 text-sm"></i><% end %>
+            </div>
+            <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Verified</span>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">"<%= t[:review] %>"</p>
+          <div class="flex items-center justify-between pt-4 border-t border-slate-50">
+            <div class="flex items-center gap-3">
+              <img src="<%= t[:avatar] %>" alt="" class="w-9 h-9 rounded-full ring-2 ring-slate-100">
+              <div>
+                <div class="text-sm font-bold text-slate-900"><%= t[:name] %></div>
+                <div class="text-xs text-slate-400"><%= t[:role] %></div>
+              </div>
+            </div>
+            <span class="text-[10px] text-slate-400 font-medium"><%= t[:bookings] %></span>
           </div>
         </div>
       <% end %>
@@ -357,44 +426,110 @@
 </section>
 
 <%# ================================================================
-    PROVIDER CTA
+    PROVIDER CTA — Split layout with image
     ================================================================ %>
-<section class="py-24 relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-rose-600"></div>
-  <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px;"></div>
+<section class="py-24 bg-slate-900 relative overflow-hidden">
+  <div class="absolute inset-0">
+    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/[0.08] rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-500/[0.06] rounded-full blur-[100px]"></div>
+  </div>
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px;"></div>
 
-  <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight" data-aos="fade-up">Are you a service pro?</h2>
-    <p class="mt-2 text-white/40 text-sm font-medium tracking-widest uppercase" data-aos="fade-up" data-aos-delay="50">Join the network</p>
-    <p class="mt-4 text-white/80 text-lg" data-aos="fade-up" data-aos-delay="100">Join <%= number_with_delimiter(@total_providers) %>+ professionals growing their business on Radius. Free to start, no commitment.</p>
-    <div class="mt-10 flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
-      <% if user_signed_in? && current_user.provider? %>
-        <%= link_to provider_dashboard_path, class: "group bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02] active:scale-[0.98] transition-all" do %>
-          Go to Dashboard <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-        <% end %>
-      <% elsif !user_signed_in? %>
-        <%= link_to new_user_registration_path(role: 'provider'), class: "group bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02] active:scale-[0.98] transition-all" do %>
-          Get Started Free <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-        <% end %>
-        <%= link_to about_path, class: "text-white/90 hover:text-white px-8 py-4 rounded-xl font-bold text-sm border-2 border-white/30 hover:border-white/60 transition-all" do %>
-          Learn More
-        <% end %>
-      <% end %>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <%# Left: Image with floating stats %>
+      <div class="hidden lg:block relative" data-aos="fade-right">
+        <div class="rounded-2xl overflow-hidden shadow-2xl shadow-black/30">
+          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80" alt="Service professional" class="w-full h-[480px] object-cover" loading="lazy">
+        </div>
+        <%# Floating stat card %>
+        <div class="absolute -bottom-6 -right-6 glass-card rounded-xl p-4 shadow-xl bg-white/90">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
+              <i class="fas fa-chart-line text-emerald-600 text-sm"></i>
+            </div>
+            <div>
+              <div class="text-lg font-black text-slate-900">+47%</div>
+              <div class="text-xs text-slate-500">avg. revenue growth</div>
+            </div>
+          </div>
+        </div>
+        <%# Floating stat card 2 %>
+        <div class="absolute -top-4 -left-4 glass-card rounded-xl p-4 shadow-xl bg-white/90">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+              <i class="fas fa-users text-amber-600 text-sm"></i>
+            </div>
+            <div>
+              <div class="text-lg font-black text-slate-900"><%= number_with_delimiter(@total_customers) %>+</div>
+              <div class="text-xs text-slate-500">potential customers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# Right: Content %>
+      <div data-aos="fade-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider mb-6">
+          <i class="fas fa-rocket text-[10px]"></i>
+          For Professionals
+        </div>
+        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">Grow your business<br>with Radius</h2>
+        <p class="mt-5 text-slate-400 text-lg leading-relaxed">Join <%= number_with_delimiter(@total_providers) %>+ pros who use Radius to find new customers, manage bookings, and build their reputation.</p>
+
+        <div class="mt-8 space-y-4">
+          <% [
+            { icon: "fa-magnifying-glass-location", text: "Get discovered by customers in your area", color: "sky" },
+            { icon: "fa-calendar-check", text: "Manage bookings from a single dashboard", color: "emerald" },
+            { icon: "fa-badge-check", text: "Build trust with verified badges and real reviews", color: "amber" },
+            { icon: "fa-gift", text: "Start free — upgrade only when you're ready", color: "violet" }
+          ].each do |benefit| %>
+            <div class="flex items-center gap-4">
+              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-<%= benefit[:color] %>-500/10 flex items-center justify-center">
+                <i class="fas <%= benefit[:icon] %> text-<%= benefit[:color] %>-400 text-sm"></i>
+              </div>
+              <span class="text-slate-300 text-sm font-medium"><%= benefit[:text] %></span>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-10 flex flex-wrap gap-4">
+          <% if user_signed_in? && current_user.provider? %>
+            <%= link_to provider_dashboard_path, class: "btn-shine group bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm transition-all hover:shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98]" do %>
+              Go to Dashboard <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            <% end %>
+          <% elsif !user_signed_in? %>
+            <%= link_to new_user_registration_path(role: 'provider'), class: "btn-shine group bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm transition-all hover:shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98]" do %>
+              Get Started Free <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+            <% end %>
+            <%= link_to about_path, class: "group text-white/70 hover:text-white px-8 py-4 rounded-xl font-bold text-sm border border-white/10 hover:border-white/30 transition-all" do %>
+              Learn More
+            <% end %>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <%# ================================================================
-    FINAL CTA
+    FINAL CTA — Clean, confident
     ================================================================ %>
 <% unless user_signed_in? %>
-<section class="py-24 bg-white">
-  <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Ready to get started?</h2>
-    <p class="mt-3 text-slate-500 text-lg">It's free. No credit card required.</p>
-    <div class="mt-8">
-      <%= link_to new_user_registration_path(role: 'customer'), class: "group inline-flex items-center bg-slate-900 hover:bg-slate-800 text-white px-10 py-4 rounded-xl font-bold text-sm transition-all hover:shadow-xl hover:shadow-slate-900/20 hover:scale-[1.02] active:scale-[0.98]" do %>
+<section class="py-24 bg-white relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-white via-white to-orange-50/30"></div>
+  <div class="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center mx-auto mb-8 shadow-xl shadow-orange-500/20">
+      <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
+    </div>
+    <h2 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">Ready to find your pro?</h2>
+    <p class="mt-4 text-slate-500 text-lg">It's free. No credit card required. Takes 30 seconds.</p>
+    <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+      <%= link_to new_user_registration_path(role: 'customer'), class: "btn-shine group inline-flex items-center justify-center bg-slate-900 hover:bg-slate-800 text-white px-10 py-4 rounded-xl font-bold text-sm transition-all hover:shadow-xl hover:shadow-slate-900/20 hover:scale-[1.02] active:scale-[0.98]" do %>
         Create Free Account <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+      <% end %>
+      <%= link_to new_user_session_path, class: "group inline-flex items-center justify-center text-slate-600 hover:text-slate-900 px-10 py-4 rounded-xl font-bold text-sm border border-slate-200 hover:border-slate-300 bg-white transition-all" do %>
+        Sign In
       <% end %>
     </div>
   </div>
