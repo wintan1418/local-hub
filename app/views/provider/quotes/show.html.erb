@@ -54,7 +54,7 @@
       <%# Actions %>
       <div class="px-6 sm:px-8 py-5 flex items-center gap-3">
         <% if @quote.draft? %>
-          <%= link_to send_quote_provider_quote_path(@quote), method: :patch, data: { confirm: "Send this quote to #{@quote.customer.display_name}?" }, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
+          <%= link_to send_quote_provider_quote_path(@quote), data: { turbo_method: :patch, turbo_confirm: "Send this quote to #{@quote.customer.display_name}?" }, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
             <i class="fas fa-paper-plane mr-2 text-xs"></i>Send to Customer
           <% end %>
           <%= link_to edit_provider_quote_path(@quote), class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>

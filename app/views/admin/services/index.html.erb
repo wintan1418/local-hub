@@ -47,7 +47,7 @@
               <td class="px-6 py-4 text-sm font-semibold text-slate-900">$<%= number_with_precision(service.base_price, precision: 0) %></td>
               <td class="px-6 py-4 text-right">
                 <%= link_to service_path(service), class: "text-xs font-semibold text-slate-500 hover:text-slate-700 mr-3" do %>View<% end %>
-                <%= link_to admin_service_path(service), method: :delete, data: { confirm: "Remove this service?" }, class: "text-xs font-semibold text-red-500 hover:text-red-700" do %>Remove<% end %>
+                <%= link_to admin_service_path(service), data: { turbo_method: :delete, turbo_confirm: "Remove this service?" }, class: "text-xs font-semibold text-red-500 hover:text-red-700" do %>Remove<% end %>
               </td>
             </tr>
           <% end %>

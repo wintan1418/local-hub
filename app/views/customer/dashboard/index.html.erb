@@ -117,7 +117,7 @@
                       </span>
                       <p class="text-sm font-medium mt-1 text-slate-900">$<%= booking.total_price %></p>
                       <% if booking.status == 'pending' %>
-                        <%= link_to booking_path(booking), method: :delete, data: { confirm: "Cancel this booking?" }, class: "mt-2 text-xs text-red-600 hover:text-red-700" do %>
+                        <%= link_to booking_path(booking), data: { turbo_method: :delete, turbo_confirm: "Cancel this booking?" }, class: "mt-2 text-xs text-red-600 hover:text-red-700" do %>
                           <i class="fas fa-times mr-1"></i>Cancel
                         <% end %>
                       <% elsif booking.status == 'completed' && !booking.review %>

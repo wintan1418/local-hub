@@ -55,11 +55,11 @@
       <%# Actions %>
       <% if @quote.sent? && @quote.customer == current_user %>
         <div class="px-6 sm:px-8 py-6 flex flex-col sm:flex-row gap-3">
-          <%= link_to approve_quote_path(@quote), method: :patch, data: { confirm: "Approve this quote and create a booking?" },
+          <%= link_to approve_quote_path(@quote), data: { turbo_method: :patch, turbo_confirm: "Approve this quote and create a booking?" },
               class: "flex-1 inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-bold bg-emerald-500 hover:bg-emerald-600 text-white transition-all" do %>
             <i class="fas fa-check mr-2"></i>Approve & Book
           <% end %>
-          <%= link_to reject_quote_path(@quote), method: :patch, data: { confirm: "Decline this quote?" },
+          <%= link_to reject_quote_path(@quote), data: { turbo_method: :patch, turbo_confirm: "Decline this quote?" },
               class: "flex-1 inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>
             <i class="fas fa-times mr-2"></i>Decline
           <% end %>

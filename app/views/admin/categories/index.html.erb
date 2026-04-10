@@ -52,7 +52,7 @@
             <div class="flex items-center gap-3">
               <span class="text-xs text-slate-400"><%= category.services.count %> services</span>
               <% if category.services.count == 0 %>
-                <%= link_to admin_category_path(category), method: :delete, data: { confirm: "Delete #{category.name}?" },
+                <%= link_to admin_category_path(category), data: { turbo_method: :delete, turbo_confirm: "Delete #{category.name}?" },
                     class: "text-xs font-semibold text-red-500 hover:text-red-700" do %>
                   <i class="fas fa-trash"></i>
                 <% end %>
