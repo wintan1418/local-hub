@@ -5,8 +5,8 @@ module Provider
 
     def index
       @services = current_user.services.includes(:category)
-      @bookings = Booking.includes(:service, :customer).where(service: @services).order(scheduled_at: :asc)
-      @recent_bookings = @bookings.limit(5)
+      @bookings = Booking.includes(:service, :customer).where(service: @services).order(created_at: :desc)
+      @recent_bookings = @bookings.limit(10)
       @pending_bookings = @bookings.where(status: "pending")
       @confirmed_bookings = @bookings.where(status: "confirmed")
       @completed_bookings = @bookings.where(status: "completed")

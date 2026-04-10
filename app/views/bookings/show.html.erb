@@ -1,0 +1,242 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <%# Back link %>
+    <% if current_user.customer? %>
+      <%= link_to customer_dashboard_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
+        <i class="fas fa-arrow-left text-xs"></i> Back to Dashboard
+      <% end %>
+    <% elsif current_user.provider? %>
+      <%= link_to provider_dashboard_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
+        <i class="fas fa-arrow-left text-xs"></i> Back to Dashboard
+      <% end %>
+    <% end %>
+
+    <div class="grid lg:grid-cols-3 gap-6">
+      <%# ===== Main Content ===== %>
+      <div class="lg:col-span-2 space-y-6">
+        <%# Status header %>
+        <div class="bg-white rounded-xl border border-slate-100 p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h1 class="text-xl font-black text-slate-900">Booking #<%= @booking.id %></h1>
+              <p class="text-sm text-slate-500 mt-1">Created <%= time_ago_in_words(@booking.created_at) %> ago</p>
+            </div>
+            <% status_styles = {
+              "pending" => "bg-amber-50 text-amber-700 border-amber-200",
+              "confirmed" => "bg-emerald-50 text-emerald-700 border-emerald-200",
+              "completed" => "bg-sky-50 text-sky-700 border-sky-200",
+              "cancelled" => "bg-red-50 text-red-700 border-red-200"
+            } %>
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border <%= status_styles[@booking.status] %>">
+              <%= @booking.status.titleize %>
+            </span>
+          </div>
+
+          <% if @booking.paid? %>
+            <div class="flex items-center gap-2 text-sm text-emerald-600 bg-emerald-50 rounded-lg px-4 py-2">
+              <i class="fas fa-check-circle"></i>
+              <span class="font-semibold">Payment received via Stripe</span>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Service details %>
+        <div class="bg-white rounded-xl border border-slate-100 p-6">
+          <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Service</h2>
+          <%= link_to service_path(@booking.service), class: "flex items-center gap-4 group" do %>
+            <div class="w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
+              <i class="fas fa-concierge-bell text-slate-400 text-lg"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-base font-bold text-slate-900 group-hover:text-orange-600 transition-colors"><%= @booking.service.title %></h3>
+              <p class="text-sm text-slate-500"><%= @booking.service.category.name %></p>
+              <p class="text-xs text-slate-400 mt-1 line-clamp-1"><%= @booking.service.description %></p>
+            </div>
+            <i class="fas fa-arrow-right text-slate-300 group-hover:text-orange-400 transition-colors"></i>
+          <% end %>
+        </div>
+
+        <%# Schedule & price %>
+        <div class="bg-white rounded-xl border border-slate-100 p-6">
+          <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Details</h2>
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="p-4 rounded-lg bg-slate-50">
+              <div class="text-xs text-slate-400 mb-1">Scheduled Date</div>
+              <div class="text-sm font-bold text-slate-900"><%= @booking.scheduled_at.strftime("%B %d, %Y") %></div>
+              <div class="text-xs text-slate-500"><%= @booking.scheduled_at.strftime("%I:%M %p") %></div>
+            </div>
+            <div class="p-4 rounded-lg bg-slate-50">
+              <div class="text-xs text-slate-400 mb-1">Total Price</div>
+              <div class="text-2xl font-black text-slate-900">$<%= number_with_precision(@booking.total_price, precision: 2) %></div>
+              <div class="text-xs text-slate-500"><%= @booking.service.price_type&.titleize %></div>
+            </div>
+          </div>
+        </div>
+
+        <%# Review section %>
+        <% if @booking.completed? %>
+          <div class="bg-white rounded-xl border border-slate-100 p-6">
+            <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Review</h2>
+            <% if @booking.review %>
+              <div class="flex items-start gap-3">
+                <div class="flex gap-0.5 mt-0.5">
+                  <% 5.times do |i| %><i class="fas fa-star text-sm <%= i < @booking.review.rating ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
+                </div>
+                <div>
+                  <p class="text-sm text-slate-700 leading-relaxed"><%= @booking.review.comment %></p>
+                  <p class="text-xs text-slate-400 mt-2">Reviewed <%= time_ago_in_words(@booking.review.created_at) %> ago</p>
+                </div>
+              </div>
+            <% elsif current_user.customer? %>
+              <div class="text-center py-4">
+                <p class="text-sm text-slate-500 mb-3">How was the service? Your feedback helps the community.</p>
+                <%= link_to new_booking_review_path(@booking), class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
+                  <i class="fas fa-star mr-2 text-xs"></i>Leave a Review
+                <% end %>
+              </div>
+            <% else %>
+              <p class="text-sm text-slate-400 text-center py-2">No review yet.</p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <%# ===== Sidebar ===== %>
+      <div class="space-y-6">
+        <%# Provider/Customer info (depending on who's viewing) %>
+        <div class="bg-white rounded-xl border border-slate-100 p-6">
+          <% if current_user.customer? %>
+            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Your Provider</h3>
+            <% provider = @booking.service.provider %>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-lg font-bold text-slate-400">
+                <%= provider.display_name.first.upcase %>
+              </div>
+              <div>
+                <%= link_to provider.business_name || provider.display_name, provider_path(provider), class: "text-sm font-bold text-slate-900 hover:text-orange-600 transition-colors" %>
+                <div class="flex items-center gap-1 mt-0.5">
+                  <% 5.times do |i| %><i class="fas fa-star text-[9px] <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
+                  <span class="text-xs text-slate-500 ml-1"><%= provider.average_rating %></span>
+                </div>
+              </div>
+            </div>
+          <% else %>
+            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Customer</h3>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-lg font-bold text-slate-400">
+                <%= @booking.customer.display_name.first.upcase %>
+              </div>
+              <div>
+                <div class="text-sm font-bold text-slate-900"><%= @booking.customer.display_name %></div>
+                <div class="text-xs text-slate-500"><%= @booking.customer.email %></div>
+              </div>
+            </div>
+          <% end %>
+
+          <%# Chat button %>
+          <% other_user = current_user.customer? ? @booking.service.provider : @booking.customer %>
+          <%= form_with url: conversations_path, method: :post, local: true, class: "w-full" do |form| %>
+            <%= form.hidden_field :user_id, value: other_user.id %>
+            <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all cursor-pointer">
+              <i class="fas fa-comments mr-2 text-xs"></i>Message <%= current_user.customer? ? 'Provider' : 'Customer' %>
+            </button>
+          <% end %>
+
+          <%# View profile %>
+          <% if current_user.customer? %>
+            <%= link_to provider_path(@booking.service.provider), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all mt-2" do %>
+              <i class="fas fa-user mr-2 text-xs"></i>View Profile
+            <% end %>
+          <% end %>
+        </div>
+
+        <%# Actions %>
+        <div class="bg-white rounded-xl border border-slate-100 p-6">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Actions</h3>
+          <div class="space-y-2">
+            <% if current_user.provider? %>
+              <% if @booking.pending? %>
+                <%= link_to confirm_provider_booking_path(@booking), method: :patch, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition-all" do %>
+                  <i class="fas fa-check mr-2 text-xs"></i>Accept Booking
+                <% end %>
+                <%= link_to cancel_provider_booking_path(@booking), method: :patch, data: { confirm: "Reject this booking?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-all" do %>
+                  <i class="fas fa-times mr-2 text-xs"></i>Reject
+                <% end %>
+              <% elsif @booking.confirmed? %>
+                <%= link_to complete_provider_booking_path(@booking), method: :patch, data: { confirm: "Mark as completed?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-sky-500 text-white hover:bg-sky-600 transition-all" do %>
+                  <i class="fas fa-check-double mr-2 text-xs"></i>Mark Completed
+                <% end %>
+              <% end %>
+            <% elsif current_user.customer? %>
+              <% if @booking.pending? %>
+                <%= link_to booking_path(@booking), method: :delete, data: { confirm: "Cancel this booking?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-all" do %>
+                  <i class="fas fa-times mr-2 text-xs"></i>Cancel Booking
+                <% end %>
+              <% end %>
+            <% end %>
+
+            <%# Invoice %>
+            <% if @booking.completed? && @booking.invoice.present? %>
+              <%= link_to booking_invoice_path(@booking), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>
+                <i class="fas fa-file-invoice mr-2 text-xs"></i>View Invoice
+              <% end %>
+            <% end %>
+
+            <%# Rebook %>
+            <% if current_user.customer? && (@booking.completed? || @booking.cancelled?) %>
+              <%= link_to service_path(@booking.service), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-all" do %>
+                <i class="fas fa-redo mr-2 text-xs"></i>Book Again
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Timeline %>
+        <div class="bg-white rounded-xl border border-slate-100 p-6">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Timeline</h3>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i class="fas fa-plus text-slate-400 text-[8px]"></i>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-slate-900">Booking created</div>
+                <div class="text-[10px] text-slate-400"><%= @booking.created_at.strftime("%b %d, %Y at %I:%M %p") %></div>
+              </div>
+            </div>
+            <% if @booking.confirmed? || @booking.completed? %>
+              <div class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-check text-emerald-600 text-[8px]"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-semibold text-slate-900">Confirmed by provider</div>
+                </div>
+              </div>
+            <% end %>
+            <% if @booking.completed? %>
+              <div class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-check-double text-sky-600 text-[8px]"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-semibold text-slate-900">Job completed</div>
+                </div>
+              </div>
+            <% end %>
+            <% if @booking.cancelled? %>
+              <div class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-times text-red-600 text-[8px]"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-semibold text-slate-900">Booking cancelled</div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

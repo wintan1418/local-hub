@@ -1,6 +1,14 @@
 class BookingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_customer!
+  before_action :ensure_customer!, only: [:create, :payment_success]
+
+  def show
+    @booking = Booking.includes(service: :provider).find(params[:id])
+    # Allow customer or provider to view
+    unless @booking.customer == current_user || @booking.service.provider == current_user || current_user.admin?
+      redirect_to root_path, alert: "Access denied."
+    end
+  end
 
   def create
     @service = Service.find(params[:service_id])
@@ -11,14 +19,12 @@ class BookingsController < ApplicationController
     @booking.paid = false
 
     if @booking.save
-      # Create Stripe checkout session
       result = StripeService.create_booking_checkout(@booking)
 
       if result && result[:checkout_url]
         redirect_to result[:checkout_url], allow_other_host: true
       else
-        # Stripe not configured or error — proceed without payment
-        redirect_to customer_dashboard_path, notice: "Booking created! Payment will be collected later."
+        redirect_to booking_path(@booking), notice: "Booking created! Payment will be collected later."
       end
     else
       redirect_to service_path(@service), alert: @booking.errors.full_messages.to_sentence
@@ -44,7 +50,7 @@ class BookingsController < ApplicationController
       end
     end
 
-    redirect_to customer_dashboard_path, notice: "Booking confirmed and payment received! Your provider will be in touch."
+    redirect_to booking_path(@booking), notice: "Booking confirmed and payment received!"
   end
 
   def destroy

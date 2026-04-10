@@ -114,7 +114,7 @@ Rails.application.routes.draw do
   resources :services, only: [ :index, :show ] do
     resources :bookings, only: [ :create ]
   end
-  resources :bookings, only: [ :destroy ] do
+  resources :bookings, only: [ :show, :destroy ] do
     resource :review, only: [ :new, :create ]
     resource :invoice, only: [ :show ]
     member do

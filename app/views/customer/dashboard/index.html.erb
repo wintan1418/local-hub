@@ -86,16 +86,12 @@
             <% if @upcoming_bookings.any? %>
               <div class="space-y-4">
                 <% @upcoming_bookings.each do |booking| %>
-                  <div class="flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                  <%= link_to booking_path(booking), class: "flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors block" do %>
                     <div class="flex items-center space-x-4">
                       <div class="flex-shrink-0">
-                        <% if booking.service.images.any? %>
-                          <%= image_tag booking.service.images.first, class: "h-12 w-12 rounded-lg object-cover" %>
-                        <% else %>
-                          <div class="h-12 w-12 rounded-lg bg-orange-100 flex items-center justify-center">
-                            <i class="fas fa-tools text-orange-600"></i>
-                          </div>
-                        <% end %>
+                        <div class="h-12 w-12 rounded-lg bg-orange-100 flex items-center justify-center">
+                          <i class="fas fa-tools text-orange-600"></i>
+                        </div>
                       </div>
                       <div>
                         <h3 class="font-medium text-slate-900"><%= booking.service.title %></h3>
@@ -130,13 +126,9 @@
                         <% end %>
                       <% end %>
                     </div>
-                  </div>
+                  <% end %>
                 <% end %>
               </div>
-              <div class="mt-6 text-center">
-                <button class="text-orange-600 hover:text-orange-700 font-medium text-sm">
-                  View All Bookings <i class="fas fa-arrow-right ml-1"></i>
-                </button>
               </div>
             <% else %>
               <div class="text-center py-12">
