@@ -1,367 +1,196 @@
 <div class="min-h-screen bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Header -->
-    <div class="mb-8">
+  <%# ===== DARK HEADER ===== %>
+  <div class="bg-slate-900 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px;"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-orange-500/[0.06] rounded-full blur-[100px]"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-3xl font-bold text-slate-900">Admin Dashboard</h1>
-          <p class="mt-1 text-sm text-slate-600">Platform overview and management</p>
+          <div class="flex items-center gap-3 mb-1">
+            <div class="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
+              <i class="fas fa-gauge-high text-white text-sm"></i>
+            </div>
+            <h1 class="text-2xl font-black text-white">Admin Dashboard</h1>
+          </div>
+          <p class="text-slate-400 text-sm">Platform overview &middot; <%= Date.current.strftime("%B %d, %Y") %></p>
         </div>
-        <div class="flex space-x-3">
-          <%= link_to admin_categories_path, class: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center" do %>
-            <i class="fas fa-plus mr-2"></i>Add Category
+        <div class="flex gap-2">
+          <%= link_to admin_categories_path, class: "inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold bg-white/[0.08] border border-white/[0.1] text-white hover:bg-white/[0.15] transition-colors" do %>
+            <i class="fas fa-plus mr-2 text-xs"></i>Add Category
           <% end %>
-          <%= link_to admin_users_path, class: "bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors flex items-center" do %>
-            <i class="fas fa-users mr-2"></i>All Users
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <!-- Key Metrics -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-            <i class="fas fa-users text-xl"></i>
-          </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-slate-600">Total Users</p>
-            <p class="text-2xl font-bold text-slate-900"><%= number_with_delimiter(@total_users) %></p>
-            <p class="text-xs text-slate-500 mt-1">+<%= @new_users_this_month %> this month</p>
-          </div>
         </div>
       </div>
 
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-green-100 text-green-600">
-            <i class="fas fa-dollar-sign text-xl"></i>
-          </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-slate-600">Total Revenue</p>
-            <p class="text-2xl font-bold text-slate-900">$<%= number_with_delimiter(@total_revenue) %></p>
-            <p class="text-xs text-slate-500 mt-1">$<%= number_with_delimiter(@this_month_revenue) %> this month</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-            <i class="fas fa-calendar-check text-xl"></i>
-          </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-slate-600">Total Bookings</p>
-            <p class="text-2xl font-bold text-slate-900"><%= number_with_delimiter(@total_bookings) %></p>
-            <p class="text-xs text-slate-500 mt-1"><%= @pending_bookings %> pending</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-            <i class="fas fa-star text-xl"></i>
-          </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-slate-600">Platform Rating</p>
-            <div class="flex items-center">
-              <p class="text-2xl font-bold text-slate-900"><%= @avg_platform_rating %></p>
-              <div class="ml-2 flex text-yellow-400">
-                <% 5.times do |i| %>
-                  <i class="fas fa-star <%= i < @avg_platform_rating ? 'text-yellow-400' : 'text-slate-300' %>"></i>
-                <% end %>
+      <%# Stat cards row — inside the dark header %>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+        <% [
+          { label: "Total Users", value: number_with_delimiter(@total_users), sub: "+#{@new_users_this_month} this month", icon: "fa-users", color: "sky" },
+          { label: "Revenue", value: "$#{number_with_delimiter(@total_revenue)}", sub: "$#{number_with_delimiter(@this_month_revenue)} this month", icon: "fa-dollar-sign", color: "emerald" },
+          { label: "Bookings", value: number_with_delimiter(@total_bookings), sub: "#{@pending_bookings} pending", icon: "fa-calendar-check", color: "violet" },
+          { label: "Rating", value: @avg_platform_rating, sub: "#{@total_reviews} reviews", icon: "fa-star", color: "amber" }
+        ].each do |stat| %>
+          <div class="bg-white/[0.06] backdrop-blur-sm border border-white/[0.08] rounded-xl p-5 hover:bg-white/[0.1] transition-colors">
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-9 h-9 rounded-lg bg-<%= stat[:color] %>-500/20 flex items-center justify-center">
+                <i class="fas <%= stat[:icon] %> text-<%= stat[:color] %>-400 text-sm"></i>
               </div>
+              <span class="text-xs font-medium text-slate-400 uppercase tracking-wider"><%= stat[:label] %></span>
             </div>
-            <p class="text-xs text-slate-500 mt-1"><%= @total_reviews %> reviews</p>
+            <div class="text-2xl font-black text-white"><%= stat[:value] %></div>
+            <div class="text-xs text-slate-500 mt-1"><%= stat[:sub] %></div>
           </div>
-        </div>
+        <% end %>
       </div>
     </div>
+  </div>
 
-    <!-- Verification Stats (for verification admins) -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <%# ===== QUICK ACTIONS — Icon grid ===== %>
+    <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mb-8">
+      <% [
+        { name: "Users", icon: "fa-users", path: admin_users_path, color: "sky" },
+        { name: "Services", icon: "fa-concierge-bell", path: admin_services_path, color: "violet" },
+        { name: "Categories", icon: "fa-tags", path: admin_categories_path, color: "amber" },
+        { name: "Verifications", icon: "fa-shield-alt", path: admin_verifications_path, color: "emerald" },
+        { name: "Providers", icon: "fa-user-tie", path: admin_users_path(role: 'provider'), color: "orange" },
+        { name: "Bookings", icon: "fa-calendar", path: admin_dashboard_path, color: "rose" }
+      ].each do |action| %>
+        <%= link_to action[:path], class: "group flex flex-col items-center p-4 rounded-xl bg-white border border-slate-100 hover:border-#{action[:color]}-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" do %>
+          <div class="w-10 h-10 rounded-xl bg-<%= action[:color] %>-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+            <i class="fas <%= action[:icon] %> text-<%= action[:color] %>-500 text-sm"></i>
+          </div>
+          <span class="text-xs font-semibold text-slate-700"><%= action[:name] %></span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%# ===== VERIFICATION BANNER (if applicable) ===== %>
     <% if current_user.can_manage_verifications? %>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <div class="flex items-center">
-            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-              <i class="fas fa-clock text-xl"></i>
+      <% pending_verifications = User.provider.where(verified: false, business_license_document: true, insurance_certificate_document: true, professional_certifications_document: true, government_id_document: true).count %>
+      <% if pending_verifications > 0 %>
+        <div class="mb-8 bg-amber-50 border border-amber-200 rounded-xl p-5 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
+              <i class="fas fa-clock text-amber-600"></i>
             </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-slate-600">Pending Verifications</p>
-              <p class="text-2xl font-bold text-slate-900"><%= User.provider.where(verified: false, business_license_document: true, insurance_certificate_document: true, professional_certifications_document: true, government_id_document: true).count %></p>
-              <p class="text-xs text-slate-500 mt-1">Ready for review</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <div class="flex items-center">
-            <div class="p-3 rounded-full bg-green-100 text-green-600">
-              <i class="fas fa-check-circle text-xl"></i>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-slate-600">Verified Providers</p>
-              <p class="text-2xl font-bold text-slate-900"><%= User.provider.where(verified: true).count %></p>
-              <p class="text-xs text-slate-500 mt-1">Total approved</p>
+            <div>
+              <div class="text-sm font-bold text-amber-900"><%= pending_verifications %> provider<%= pending_verifications == 1 ? '' : 's' %> awaiting verification</div>
+              <div class="text-xs text-amber-600">Documents uploaded and ready for review</div>
             </div>
           </div>
+          <%= link_to admin_verifications_path, class: "inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold bg-amber-600 text-white hover:bg-amber-700 transition-colors" do %>
+            Review Now <i class="fas fa-arrow-right ml-2 text-xs"></i>
+          <% end %>
         </div>
-
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <div class="flex items-center">
-            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-              <i class="fas fa-percentage text-xl"></i>
-            </div>
-            <div class="ml-4">
-              <p class="text-sm font-medium text-slate-600">Verification Rate</p>
-              <p class="text-2xl font-bold text-slate-900"><%= User.provider.count > 0 ? ((User.provider.where(verified: true).count.to_f / User.provider.count) * 100).round : 0 %>%</p>
-              <p class="text-xs text-slate-500 mt-1">Of all providers</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <% end %>
     <% end %>
 
-    <!-- Secondary Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <h3 class="text-lg font-semibold text-slate-900 mb-4">User Breakdown</h3>
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-user-circle mr-2 text-blue-600"></i>Customers
-            </span>
-            <span class="text-sm font-medium text-slate-900"><%= @total_customers %></span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-user-tie mr-2 text-green-600"></i>Providers
-            </span>
-            <span class="text-sm font-medium text-slate-900"><%= @total_providers %></span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-user-shield mr-2 text-orange-600"></i>Admins
-            </span>
-            <span class="text-sm font-medium text-slate-900"><%= User.where(user_role: 'admin').count %></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <h3 class="text-lg font-semibold text-slate-900 mb-4">Booking Status</h3>
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-clock mr-2 text-yellow-600"></i>Pending
-            </span>
-            <span class="text-sm font-medium text-slate-900"><%= @pending_bookings %></span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-check-circle mr-2 text-green-600"></i>Confirmed
-            </span>
-            <span class="text-sm font-medium text-slate-900"><%= @confirmed_bookings %></span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-flag-checkered mr-2 text-blue-600"></i>Completed
-            </span>
-            <span class="text-sm font-medium text-slate-900"><%= @completed_bookings %></span>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <h3 class="text-lg font-semibold text-slate-900 mb-4">Platform Stats</h3>
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-cog mr-2 text-purple-600"></i>Total Services
-            </span>
-            <span class="text-sm font-medium text-slate-900"><%= @total_services %></span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-tags mr-2 text-orange-600"></i>Categories
-            </span>
-            <span class="text-sm font-medium text-slate-900"><%= @total_categories %></span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm text-slate-600">
-              <i class="fas fa-plus mr-2 text-green-600"></i>New Services
-            </span>
-            <span class="text-sm font-medium text-slate-900">+<%= @new_services_this_month %> this month</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Recent Activity -->
+    <div class="grid lg:grid-cols-3 gap-6">
+      <%# ===== LEFT: Recent bookings ===== %>
       <div class="lg:col-span-2">
         <div class="bg-white rounded-xl border border-slate-100">
-          <div class="p-6 border-b border-slate-200">
-            <h2 class="text-lg font-semibold text-slate-900">Recent Bookings</h2>
+          <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="text-sm font-bold text-slate-900">Recent Bookings</h2>
+            <div class="flex gap-2">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700"><%= @pending_bookings %> pending</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700"><%= @confirmed_bookings %> confirmed</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-sky-50 text-sky-700"><%= @completed_bookings %> completed</span>
+            </div>
           </div>
-          <div class="p-6">
-            <% if @recent_bookings.any? %>
-              <div class="space-y-4">
-                <% @recent_bookings.each do |booking| %>
-                  <div class="flex items-center justify-between p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-                    <div class="flex items-center space-x-4">
-                      <div class="flex-shrink-0">
-                        <div class="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
-                          <i class="fas fa-calendar text-orange-600"></i>
-                        </div>
-                      </div>
-                      <div>
-                        <h3 class="font-medium text-slate-900"><%= booking.service.title %></h3>
-                        <p class="text-sm text-slate-600">
-                          <i class="fas fa-user mr-1"></i>
-                          <%= booking.customer.email %> → <%= booking.service.provider.email %>
-                        </p>
-                        <p class="text-sm text-slate-500">
-                          <i class="fas fa-clock mr-1"></i>
-                          <%= booking.scheduled_at.strftime("%B %d, %Y at %I:%M %p") %>
-                        </p>
-                      </div>
+
+          <% if @recent_bookings.any? %>
+            <div class="divide-y divide-slate-50">
+              <% @recent_bookings.each do |booking| %>
+                <div class="px-6 py-3.5 flex items-center justify-between hover:bg-slate-50/50 transition-colors">
+                  <div class="flex items-center gap-3 min-w-0">
+                    <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                      <i class="fas fa-calendar text-slate-400 text-xs"></i>
                     </div>
-                    <div class="text-right">
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                        <%= case booking.status
-                            when 'pending' then 'bg-yellow-100 text-yellow-800'
-                            when 'confirmed' then 'bg-green-100 text-green-800'
-                            when 'completed' then 'bg-blue-100 text-blue-800'
-                            when 'cancelled' then 'bg-red-100 text-red-800'
-                            end %>">
-                        <%= booking.status.titleize %>
-                      </span>
-                      <p class="text-sm font-medium mt-1 text-slate-900">$<%= booking.total_price %></p>
+                    <div class="min-w-0">
+                      <div class="text-sm font-semibold text-slate-900 truncate"><%= booking.service.title %></div>
+                      <div class="text-xs text-slate-400"><%= booking.customer.display_name %> &rarr; <%= booking.service.provider.display_name %> &middot; <%= time_ago_in_words(booking.created_at) %> ago</div>
                     </div>
                   </div>
-                <% end %>
-              </div>
-            <% else %>
-              <div class="text-center py-8">
-                <i class="fas fa-calendar-alt text-3xl text-slate-400 mb-3"></i>
-                <p class="text-slate-500">No bookings yet.</p>
-              </div>
-            <% end %>
-          </div>
+                  <div class="flex items-center gap-3 flex-shrink-0">
+                    <span class="text-sm font-bold text-slate-900">$<%= booking.total_price %></span>
+                    <% status_colors = { "pending" => "amber", "confirmed" => "emerald", "completed" => "sky", "cancelled" => "red" } %>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[booking.status] %>-50 text-<%= status_colors[booking.status] %>-700"><%= booking.status.titleize %></span>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="p-8 text-center">
+              <i class="fas fa-calendar-alt text-2xl text-slate-300 mb-2"></i>
+              <p class="text-sm text-slate-400">No bookings yet.</p>
+            </div>
+          <% end %>
         </div>
       </div>
 
-      <!-- Sidebar -->
+      <%# ===== RIGHT: Sidebar ===== %>
       <div class="space-y-6">
-        <!-- Management Actions -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <h2 class="text-lg font-semibold mb-4 text-slate-900">Management</h2>
+        <%# Breakdown %>
+        <div class="bg-white rounded-xl border border-slate-100 p-5">
+          <h3 class="text-sm font-bold text-slate-900 mb-4">Platform Breakdown</h3>
           <div class="space-y-3">
-            <% if current_user.can_manage_verifications? %>
-              <%= link_to admin_verifications_path, class: "block w-full bg-blue-600 text-white text-center py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors" do %>
-                <i class="fas fa-shield-alt mr-2"></i>Provider Verifications
-              <% end %>
-            <% end %>
-            
-            <%= link_to admin_users_path, class: "block w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-2 px-4 rounded-lg transition-colors" do %>
-              <i class="fas fa-users mr-2"></i>Manage Users
-            <% end %>
-            <%= link_to admin_services_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
-              <i class="fas fa-cog mr-2"></i>Manage Services
-            <% end %>
-            <%= link_to admin_categories_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
-              <i class="fas fa-tags mr-2"></i>Manage Categories
-            <% end %>
-            <%= link_to admin_users_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
-              <i class="fas fa-chart-bar mr-2"></i>Analytics
+            <% [
+              { label: "Customers", value: @total_customers, icon: "fa-user", color: "sky" },
+              { label: "Providers", value: @total_providers, icon: "fa-user-tie", color: "emerald" },
+              { label: "Services", value: @total_services, icon: "fa-concierge-bell", color: "violet" },
+              { label: "Categories", value: @total_categories, icon: "fa-tags", color: "amber" },
+              { label: "Reviews", value: @total_reviews, icon: "fa-star", color: "rose" }
+            ].each do |item| %>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <i class="fas <%= item[:icon] %> text-<%= item[:color] %>-400 text-xs w-4 text-center"></i>
+                  <span class="text-sm text-slate-600"><%= item[:label] %></span>
+                </div>
+                <span class="text-sm font-black text-slate-900"><%= number_with_delimiter(item[:value]) %></span>
+              </div>
             <% end %>
           </div>
         </div>
 
-        <!-- Recent Users -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
+        <%# Recent users %>
+        <div class="bg-white rounded-xl border border-slate-100 p-5">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-slate-900">Recent Users</h2>
-            <span class="text-sm text-slate-500"><%= @total_users %> total</span>
+            <h3 class="text-sm font-bold text-slate-900">New Users</h3>
+            <%= link_to admin_users_path, class: "text-xs font-semibold text-orange-600 hover:text-orange-700" do %>View all<% end %>
           </div>
-          <% if @recent_users.any? %>
-            <div class="space-y-3">
-              <% @recent_users.each do |user| %>
-                <div class="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg">
-                  <div class="flex-shrink-0">
-                    <div class="h-8 w-8 rounded-full bg-slate-100 flex items-center justify-center">
-                      <i class="fas fa-user text-slate-600 text-sm"></i>
-                    </div>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-slate-900 truncate"><%= user.email %></p>
-                    <p class="text-xs text-slate-500">
-                      <span class="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium 
-                        <%= case user.user_role
-                            when 'customer' then 'bg-blue-100 text-blue-800'
-                            when 'provider' then 'bg-green-100 text-green-800'
-                            when 'admin' then 'bg-orange-100 text-orange-800'
-                            end %>">
-                        <%= user.user_role&.titleize || 'Unknown' %>
-                      </span>
-                    </p>
-                  </div>
-                  <div class="text-right">
-                    <p class="text-xs text-slate-500"><%= time_ago_in_words(user.created_at) %> ago</p>
-                  </div>
+          <div class="space-y-2.5">
+            <% @recent_users.each do |user| %>
+              <%= link_to admin_user_path(user), class: "flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 transition-colors" do %>
+                <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-400">
+                  <%= user.display_name.first.upcase %>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-semibold text-slate-900 truncate"><%= user.display_name %></div>
+                  <div class="text-[10px] text-slate-400"><%= user.user_role&.titleize %> &middot; <%= time_ago_in_words(user.created_at) %> ago</div>
                 </div>
               <% end %>
-            </div>
-          <% else %>
-            <div class="text-center py-6">
-              <i class="fas fa-user-plus text-3xl text-slate-400 mb-3"></i>
-              <p class="text-slate-500 text-sm">No users yet.</p>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
         </div>
 
-        <!-- Recent Services -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
+        <%# Recent services %>
+        <div class="bg-white rounded-xl border border-slate-100 p-5">
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-slate-900">Recent Services</h2>
-            <span class="text-sm text-slate-500"><%= @total_services %> total</span>
+            <h3 class="text-sm font-bold text-slate-900">New Services</h3>
+            <%= link_to admin_services_path, class: "text-xs font-semibold text-orange-600 hover:text-orange-700" do %>View all<% end %>
           </div>
-          <% if @recent_services.any? %>
-            <div class="space-y-3">
-              <% @recent_services.each do |service| %>
-                <div class="flex items-center space-x-3 p-3 border border-slate-200 rounded-lg">
-                  <div class="flex-shrink-0">
-                    <% if service.images.any? %>
-                      <%= image_tag service.images.first, class: "h-8 w-8 rounded object-cover" %>
-                    <% else %>
-                      <div class="h-8 w-8 rounded bg-slate-200 flex items-center justify-center">
-                        <i class="fas fa-cog text-slate-400 text-sm"></i>
-                      </div>
-                    <% end %>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-slate-900 truncate"><%= service.title %></p>
-                    <p class="text-xs text-slate-500">
-                      by <%= service.provider.email.split('@').first %>
-                    </p>
-                  </div>
-                  <div class="text-right">
-                    <p class="text-xs font-medium text-slate-900">$<%= service.base_price %></p>
-                    <p class="text-xs text-slate-500"><%= service.category.name %></p>
-                  </div>
+          <div class="space-y-2.5">
+            <% @recent_services.limit(5).each do |service| %>
+              <div class="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 transition-colors">
+                <div class="flex-1 min-w-0">
+                  <div class="text-xs font-semibold text-slate-900 truncate"><%= service.title %></div>
+                  <div class="text-[10px] text-slate-400"><%= service.provider.display_name %> &middot; <%= service.category.name %></div>
                 </div>
-              <% end %>
-            </div>
-          <% else %>
-            <div class="text-center py-6">
-              <i class="fas fa-plus-circle text-3xl text-slate-400 mb-3"></i>
-              <p class="text-slate-500 text-sm">No services yet.</p>
-            </div>
-          <% end %>
+                <span class="text-xs font-bold text-slate-900">$<%= number_with_precision(service.base_price, precision: 0) %></span>
+              </div>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
