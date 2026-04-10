@@ -77,12 +77,29 @@ class User < ApplicationRecord
 
   # OmniAuth
   def self.from_omniauth(auth)
-    where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
-      user.email = auth.info.email
-      user.password = Devise.friendly_token[0, 20]
-      user.first_name = auth.info.first_name
-      user.last_name = auth.info.last_name
+    # First try to find by provider + uid
+    user = find_by(provider: auth.provider, uid: auth.uid)
+    return user if user
+
+    # Then try to find existing user by email and link the OAuth
+    user = find_by(email: auth.info.email)
+    if user
+      user.update(provider: auth.provider, uid: auth.uid)
+      # Auto-confirm if not yet confirmed
+      user.update(confirmed_at: Time.current) if user.confirmed_at.nil?
+      return user
     end
+
+    # Otherwise create a new user
+    create(
+      email: auth.info.email,
+      password: Devise.friendly_token[0, 20],
+      first_name: auth.info.first_name,
+      last_name: auth.info.last_name,
+      provider: auth.provider,
+      uid: auth.uid,
+      confirmed_at: Time.current
+    )
   end
 
   # Geocoding
