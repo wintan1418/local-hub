@@ -53,7 +53,7 @@
           </p>
         </div>
 
-        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { data: { turbo: false } }) do |f| %>
           <%# Error messages %>
           <% if flash[:alert] && flash[:alert] != "You need to sign in or sign up before continuing." %>
             <div class="mb-6 flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-100">
