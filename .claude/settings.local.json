@@ -61,7 +61,8 @@
       "WebFetch(domain:dribbble.com)",
       "WebFetch(domain:webflow.com)",
       "WebFetch(domain:www.awwwards.com)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(grep -r \"before_action\\\\|def \" /home/wintan/local-hub/app/controllers/customer -type f --include=\"*.rb\")"
     ],
     "deny": []
   }
