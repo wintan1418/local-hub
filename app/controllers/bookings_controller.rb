@@ -1,6 +1,19 @@
 class BookingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :ensure_customer!, only: [:create, :payment_success]
+  before_action :ensure_customer!, only: [ :create, :payment_success ]
+
+  def index
+    if current_user.customer?
+      @bookings = current_user.bookings.includes(service: [:provider, :category]).order(created_at: :desc)
+    elsif current_user.provider?
+      @bookings = Booking.joins(:service).where(services: { provider_id: current_user.id }).includes(service: [:category], customer: []).order(created_at: :desc)
+    else
+      redirect_to root_path and return
+    end
+
+    @bookings = @bookings.where(status: params[:status]) if params[:status].present?
+    @bookings = @bookings.page(params[:page]).per(15)
+  end
 
   def show
     @booking = Booking.includes(service: :provider).find(params[:id])

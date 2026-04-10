@@ -6,6 +6,14 @@ class Booking < ApplicationRecord
 
   enum :status, { pending: 0, confirmed: 1, completed: 2, cancelled: 3 }
   validates :scheduled_at, :total_price, presence: true
+  validate :within_provider_availability, on: :create
+
+  def within_provider_availability
+    return unless scheduled_at.present? && service.present?
+    unless service.available_on?(scheduled_at)
+      errors.add(:scheduled_at, "is outside the provider's available hours")
+    end
+  end
 
   # Callbacks for automatic emails and notifications
   after_create :send_booking_notifications

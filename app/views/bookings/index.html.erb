@@ -1,0 +1,99 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-2xl font-black text-slate-900">All Bookings</h1>
+        <p class="text-sm text-slate-500 mt-1"><%= @bookings.total_count %> total bookings</p>
+      </div>
+      <% if current_user.customer? %>
+        <%= link_to services_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
+          <i class="fas fa-search mr-2 text-xs"></i>Find Services
+        <% end %>
+      <% end %>
+    </div>
+
+    <%# Status filter tabs %>
+    <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
+      <% [
+        ["All", nil],
+        ["Pending", "pending"],
+        ["Confirmed", "confirmed"],
+        ["Completed", "completed"],
+        ["Cancelled", "cancelled"]
+      ].each do |label, status| %>
+        <%= link_to bookings_path(status: status), class: "inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors #{params[:status] == status ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}" do %>
+          <%= label %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if @bookings.any? %>
+      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+        <div class="divide-y divide-slate-50">
+          <% @bookings.each do |booking| %>
+            <%= link_to booking_path(booking), class: "flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors" do %>
+              <div class="flex items-center gap-4 min-w-0">
+                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-calendar text-slate-400 text-sm"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-bold text-slate-900 truncate"><%= booking.service.title %></div>
+                  <div class="text-xs text-slate-400">
+                    <% if current_user.customer? %>
+                      <%= booking.service.provider.display_name %>
+                    <% else %>
+                      <%= booking.customer.display_name %>
+                    <% end %>
+                    &middot; <%= booking.scheduled_at.strftime("%b %d, %Y at %-I:%M %p") %>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-3 flex-shrink-0">
+                <span class="text-sm font-bold text-slate-900">$<%= number_with_precision(booking.total_price, precision: 0) %></span>
+                <% status_colors = { "pending" => "amber", "confirmed" => "emerald", "completed" => "sky", "cancelled" => "red" } %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[booking.status] %>-50 text-<%= status_colors[booking.status] %>-700"><%= booking.status.titleize %></span>
+                <% if booking.paid? %>
+                  <span class="text-[10px] font-bold text-emerald-600"><i class="fas fa-check-circle"></i></span>
+                <% end %>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Pagination %>
+      <% if @bookings.total_pages > 1 %>
+        <div class="mt-6 flex justify-center">
+          <nav class="flex items-center gap-1">
+            <% if @bookings.prev_page %>
+              <%= link_to bookings_path(status: params[:status], page: @bookings.prev_page), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50" do %><i class="fas fa-chevron-left text-xs"></i><% end %>
+            <% end %>
+            <% (1..@bookings.total_pages).each do |p| %>
+              <% if p == @bookings.current_page %>
+                <span class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center text-sm font-medium"><%= p %></span>
+              <% elsif (p - @bookings.current_page).abs <= 2 || p == 1 || p == @bookings.total_pages %>
+                <%= link_to bookings_path(status: params[:status], page: p), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 text-sm" do %><%= p %><% end %>
+              <% elsif (p - @bookings.current_page).abs == 3 %>
+                <span class="w-9 h-9 flex items-center justify-center text-slate-400 text-sm">&hellip;</span>
+              <% end %>
+            <% end %>
+            <% if @bookings.next_page %>
+              <%= link_to bookings_path(status: params[:status], page: @bookings.next_page), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50" do %><i class="fas fa-chevron-right text-xs"></i><% end %>
+            <% end %>
+          </nav>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="bg-white rounded-xl border border-slate-100 p-12 text-center">
+        <i class="fas fa-calendar-alt text-3xl text-slate-300 mb-3"></i>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">No bookings found</h3>
+        <p class="text-sm text-slate-500 mb-6"><%= params[:status].present? ? "No #{params[:status]} bookings." : "You haven't made any bookings yet." %></p>
+        <% if current_user.customer? %>
+          <%= link_to services_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white" do %>
+            <i class="fas fa-search mr-2 text-xs"></i>Browse Services
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
