@@ -57,7 +57,7 @@
   <body class="min-h-screen font-sans antialiased text-slate-800 bg-white" style="font-family: 'Inter', system-ui, sans-serif;">
 
     <%# ========== NAVIGATION ========== %>
-    <nav class="sticky top-0 z-50 bg-white border-b border-slate-200/80 shadow-sm" data-controller="mobile-menu" data-mobile-menu-open-class="mobile-menu-open">
+    <nav class="sticky top-0 z-50 bg-white border-b border-slate-200/80 shadow-sm">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
 
@@ -202,18 +202,14 @@
 
             <%# Mobile menu button %>
             <button type="button"
+                    id="mobile-menu-btn"
                     class="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-orange-500 transition-colors"
-                    aria-controls="mobile-menu"
-                    aria-expanded="false"
-                    data-action="click->mobile-menu#toggle"
-                    data-mobile-menu-target="button">
+                    onclick="toggleMobileMenu()">
               <span class="sr-only">Open menu</span>
-              <%# Hamburger icon (visible when closed) %>
-              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg id="menu-icon-open" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
               </svg>
-              <%# Close icon (hidden, shown when open) %>
-              <svg class="h-6 w-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg id="menu-icon-close" class="h-6 w-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>
             </button>
@@ -222,7 +218,7 @@
       </div>
 
       <%# ===== MOBILE MENU ===== %>
-      <div class="md:hidden hidden" id="mobile-menu" data-mobile-menu-target="menu">
+      <div class="md:hidden hidden" id="mobile-menu">
         <div class="bg-white border-t border-slate-100 shadow-lg">
 
           <%# Mobile Nav Links %>
@@ -239,7 +235,7 @@
             <% mobile_links.each do |link| %>
               <%= link_to link[:path],
                   class: "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium transition-colors #{link[:active] ? 'bg-orange-50 text-orange-600' : 'text-slate-700 hover:bg-slate-50'}",
-                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                  data: { turbo: false }, onclick: 'closeMobileMenu()' do %>
                 <i class="fas <%= link[:icon] %> w-5 text-center text-sm <%= link[:active] ? 'text-orange-500' : 'text-slate-400' %>"></i>
                 <%= link[:name] %>
               <% end %>
@@ -267,12 +263,12 @@
                                   end %>
               <%= link_to dashboard_path,
                   class: "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors",
-                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                  data: { turbo: false }, onclick: 'closeMobileMenu()' do %>
                 <i class="fas fa-th-large w-5 text-center text-sm text-slate-400"></i>Dashboard
               <% end %>
               <%= link_to conversations_path,
                   class: "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors",
-                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                  data: { turbo: false }, onclick: 'closeMobileMenu()' do %>
                 <i class="fas fa-comment-dots w-5 text-center text-sm text-slate-400"></i>
                 Messages
                 <% if current_user.total_unread_messages > 0 %>
@@ -281,7 +277,7 @@
               <% end %>
               <%= link_to settings_path,
                   class: "flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors",
-                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                  data: { turbo: false }, onclick: 'closeMobileMenu()' do %>
                 <i class="fas fa-cog w-5 text-center text-sm text-slate-400"></i>Settings
               <% end %>
 
@@ -297,12 +293,12 @@
             <div class="border-t border-slate-100 px-4 py-4 space-y-2">
               <%= link_to new_user_session_path,
                   class: "block w-full text-center py-2.5 rounded-lg text-sm font-medium text-slate-700 border border-slate-200 hover:bg-slate-50 transition-colors",
-                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                  data: { turbo: false }, onclick: 'closeMobileMenu()' do %>
                 Sign In
               <% end %>
               <%= link_to new_user_registration_path,
                   class: "block w-full text-center py-2.5 rounded-lg text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-colors",
-                  data: { action: 'click->mobile-menu#close', turbo: false } do %>
+                  data: { turbo: false }, onclick: 'closeMobileMenu()' do %>
                 Get Started
               <% end %>
             </div>
@@ -440,6 +436,32 @@
     </footer>
 
     <script>
+      // Mobile menu toggle
+      function toggleMobileMenu() {
+        var menu = document.getElementById('mobile-menu');
+        var iconOpen = document.getElementById('menu-icon-open');
+        var iconClose = document.getElementById('menu-icon-close');
+        if (!menu) return;
+        var isHidden = menu.classList.contains('hidden');
+        if (isHidden) {
+          menu.classList.remove('hidden');
+          if (iconOpen) iconOpen.classList.add('hidden');
+          if (iconClose) iconClose.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        } else {
+          closeMobileMenu();
+        }
+      }
+      function closeMobileMenu() {
+        var menu = document.getElementById('mobile-menu');
+        var iconOpen = document.getElementById('menu-icon-open');
+        var iconClose = document.getElementById('menu-icon-close');
+        if (menu) menu.classList.add('hidden');
+        if (iconOpen) iconOpen.classList.remove('hidden');
+        if (iconClose) iconClose.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
       // Dropdown toggle
       function toggleDropdown() {
         const dd = document.getElementById('user-dropdown');
