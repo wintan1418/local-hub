@@ -10,6 +10,14 @@ class StaticPagesController < ApplicationController
     @categories_count = Category.count
   end
 
+  def how_it_works
+    @page_title = "How It Works | Radius"
+    @page_description = "See how Radius connects customers with verified local professionals in 3 simple steps."
+    @total_providers = User.provider.count
+    @total_bookings = Booking.count
+    @total_reviews = Review.count
+  end
+
   def contact
     @page_title = "Contact Us | Radius"
     @page_description = "Get in touch with Radius. We'd love to hear from you."

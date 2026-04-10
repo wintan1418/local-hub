@@ -10,6 +10,7 @@ Rails.application.routes.draw do
 
   # Static pages
   get "about", to: "static_pages#about", as: :about
+  get "how-it-works", to: "static_pages#how_it_works", as: :how_it_works
   get "contact", to: "static_pages#contact", as: :contact
   post "contact", to: "static_pages#send_contact", as: :send_contact
 
