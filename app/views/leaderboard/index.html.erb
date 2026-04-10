@@ -1,6 +1,6 @@
-<div class="min-h-screen bg-gray-50">
+<div class="min-h-screen bg-slate-50">
   <%# Hero %>
-  <section class="bg-gray-900 text-white">
+  <section class="bg-slate-900 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <div class="text-center max-w-2xl mx-auto">
         <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-orange-500/20 border border-orange-500/30 mb-6">
@@ -8,14 +8,14 @@
           <span class="text-orange-300 text-sm font-medium">Leaderboard</span>
         </div>
         <h1 class="text-4xl sm:text-5xl font-bold">Top Providers</h1>
-        <p class="mt-4 text-lg text-gray-400">Discover the highest-rated service providers in your area</p>
+        <p class="mt-4 text-lg text-slate-400">Discover the highest-rated service providers in your area</p>
       </div>
     </div>
   </section>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <%# Filters %>
-    <div class="bg-white rounded-xl border border-gray-100 p-5 mb-8">
+    <div class="bg-white rounded-xl border border-slate-100 p-5 mb-8">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div class="flex flex-wrap gap-2">
           <% [
@@ -25,7 +25,7 @@
             { key: 'recent', icon: 'fa-clock', label: 'Most Active' }
           ].each do |tab| %>
             <%= link_to leaderboard_index_path(filter: tab[:key], category_id: params[:category_id]),
-                class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-colors #{@filter == tab[:key] ? 'bg-orange-500 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}" do %>
+                class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-colors #{@filter == tab[:key] ? 'bg-orange-500 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}" do %>
               <i class="fas <%= tab[:icon] %> mr-2 text-xs"></i><%= tab[:label] %>
             <% end %>
           <% end %>
@@ -36,10 +36,10 @@
             <%= form.hidden_field :filter, value: @filter %>
             <%= form.collection_select :category_id, @categories, :id, :name,
                 { prompt: "All Categories", selected: @category_id },
-                { class: "px-4 py-2 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white", onchange: "this.form.submit();" } %>
+                { class: "px-4 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white", onchange: "this.form.submit();" } %>
           <% end %>
           <% if @selected_category %>
-            <%= link_to leaderboard_index_path(filter: @filter), class: "text-sm text-gray-400 hover:text-gray-600" do %>
+            <%= link_to leaderboard_index_path(filter: @filter), class: "text-sm text-slate-400 hover:text-slate-600" do %>
               <i class="fas fa-times"></i>
             <% end %>
           <% end %>
@@ -50,16 +50,16 @@
     <%# Provider list %>
     <div class="space-y-4">
       <% @providers.each_with_index do |provider, index| %>
-        <%= link_to leaderboard_path(provider), class: "group block bg-white rounded-xl border border-gray-100 hover:shadow-lg hover:border-gray-200 transition-all duration-200 p-6" do %>
+        <%= link_to leaderboard_path(provider), class: "group block bg-white rounded-xl border border-slate-100 hover:shadow-lg hover:border-slate-200 transition-all duration-200 p-6" do %>
           <div class="flex items-center gap-5">
             <%# Rank %>
             <div class="flex-shrink-0">
               <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold
                   <%= case index
                       when 0 then 'bg-amber-50 text-amber-600'
-                      when 1 then 'bg-gray-100 text-gray-500'
+                      when 1 then 'bg-slate-100 text-slate-500'
                       when 2 then 'bg-orange-50 text-orange-500'
-                      else 'bg-gray-50 text-gray-400'
+                      else 'bg-slate-50 text-slate-400'
                       end %>">
                 <% if index < 3 %>
                   <i class="fas fa-trophy text-lg"></i>
@@ -83,7 +83,7 @@
             <%# Info %>
             <div class="flex-grow min-w-0">
               <div class="flex items-center gap-2 mb-1 flex-wrap">
-                <h3 class="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors truncate">
+                <h3 class="text-lg font-semibold text-slate-900 group-hover:text-orange-600 transition-colors truncate">
                   <%= provider.business_name || provider.full_name %>
                 </h3>
                 <% badge = provider.provider_badge %>
@@ -98,41 +98,41 @@
               </div>
 
               <% if provider.bio.present? %>
-                <p class="text-sm text-gray-500 mb-3 line-clamp-1"><%= provider.bio %></p>
+                <p class="text-sm text-slate-500 mb-3 line-clamp-1"><%= provider.bio %></p>
               <% end %>
 
               <%# Stats row %>
               <div class="flex flex-wrap gap-6 text-sm">
                 <div class="flex items-center gap-1.5">
                   <i class="fas fa-star text-amber-400 text-xs"></i>
-                  <span class="font-semibold text-gray-900">
+                  <span class="font-semibold text-slate-900">
                     <%= provider.respond_to?(:avg_rating) ? (provider.avg_rating&.round(1) || 0) : provider.average_rating %>
                   </span>
-                  <span class="text-gray-400">rating</span>
+                  <span class="text-slate-400">rating</span>
                 </div>
                 <div class="flex items-center gap-1.5">
                   <i class="fas fa-check-circle text-green-500 text-xs"></i>
-                  <span class="font-semibold text-gray-900">
+                  <span class="font-semibold text-slate-900">
                     <%= provider.respond_to?(:completed_count) ? provider.completed_count : provider.total_completed_bookings %>
                   </span>
-                  <span class="text-gray-400">completed</span>
+                  <span class="text-slate-400">completed</span>
                 </div>
                 <div class="flex items-center gap-1.5">
                   <i class="fas fa-comment text-blue-400 text-xs"></i>
-                  <span class="font-semibold text-gray-900"><%= provider.total_reviews %></span>
-                  <span class="text-gray-400">reviews</span>
+                  <span class="font-semibold text-slate-900"><%= provider.total_reviews %></span>
+                  <span class="text-slate-400">reviews</span>
                 </div>
                 <% if @filter == 'revenue' && provider.respond_to?(:total_revenue) %>
                   <div class="flex items-center gap-1.5">
                     <i class="fas fa-dollar-sign text-green-500 text-xs"></i>
-                    <span class="font-semibold text-gray-900">$<%= number_with_delimiter(provider.total_revenue.to_i) %></span>
-                    <span class="text-gray-400">earned</span>
+                    <span class="font-semibold text-slate-900">$<%= number_with_delimiter(provider.total_revenue.to_i) %></span>
+                    <span class="text-slate-400">earned</span>
                   </div>
                 <% else %>
                   <div class="flex items-center gap-1.5">
                     <i class="fas fa-chart-line text-orange-400 text-xs"></i>
-                    <span class="font-semibold text-gray-900"><%= provider.completion_rate %>%</span>
-                    <span class="text-gray-400">success</span>
+                    <span class="font-semibold text-slate-900"><%= provider.completion_rate %>%</span>
+                    <span class="text-slate-400">success</span>
                   </div>
                 <% end %>
               </div>
@@ -140,8 +140,8 @@
 
             <%# Arrow %>
             <div class="flex-shrink-0 hidden sm:block">
-              <div class="w-10 h-10 rounded-xl bg-gray-50 group-hover:bg-orange-50 flex items-center justify-center transition-colors">
-                <i class="fas fa-chevron-right text-gray-400 group-hover:text-orange-500 text-sm transition-colors"></i>
+              <div class="w-10 h-10 rounded-xl bg-slate-50 group-hover:bg-orange-50 flex items-center justify-center transition-colors">
+                <i class="fas fa-chevron-right text-slate-400 group-hover:text-orange-500 text-sm transition-colors"></i>
               </div>
             </div>
           </div>
@@ -150,11 +150,11 @@
 
       <% if @providers.empty? %>
         <div class="text-center py-20">
-          <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-xl flex items-center justify-center">
-            <i class="fas fa-trophy text-gray-400 text-2xl"></i>
+          <div class="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-xl flex items-center justify-center">
+            <i class="fas fa-trophy text-slate-400 text-2xl"></i>
           </div>
-          <h3 class="text-lg font-semibold text-gray-900 mb-2">No providers found</h3>
-          <p class="text-gray-500">Try adjusting your filters or check back later.</p>
+          <h3 class="text-lg font-semibold text-slate-900 mb-2">No providers found</h3>
+          <p class="text-slate-500">Try adjusting your filters or check back later.</p>
         </div>
       <% end %>
     </div>

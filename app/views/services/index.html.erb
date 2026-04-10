@@ -1,24 +1,24 @@
 <%# ===== HERO SEARCH ===== %>
-<section class="bg-gray-50 border-b border-gray-100 py-12">
+<section class="bg-slate-50 border-b border-slate-100 py-12">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="max-w-2xl mx-auto text-center mb-8">
-      <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Find Local Services</h1>
-      <p class="mt-3 text-lg text-gray-500">Browse verified professionals ready to help in your area.</p>
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">Find Local Services</h1>
+      <p class="mt-3 text-lg text-slate-500">Browse verified professionals ready to help in your area.</p>
     </div>
 
     <%= form_with url: services_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-3 max-w-3xl mx-auto" do |f| %>
       <div class="relative flex-1">
         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <i class="fas fa-search text-gray-400 text-sm"></i>
+          <i class="fas fa-search text-slate-400 text-sm"></i>
         </div>
         <%= f.text_field :query, value: @query,
             placeholder: "What service do you need?",
-            class: "w-full pl-11 pr-4 py-3 rounded-lg border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-shadow text-sm" %>
+            class: "w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-shadow text-sm" %>
       </div>
 
       <%= f.select :category_id,
           options_for_select([['All Categories', '']] + @categories.map { |c| [c.name, c.id] }, @category_id),
-          {}, class: "px-4 py-3 rounded-lg border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-sm bg-white" %>
+          {}, class: "px-4 py-3 rounded-lg border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-sm bg-white" %>
 
       <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold text-sm transition-colors shadow-sm whitespace-nowrap">
         <i class="fas fa-search mr-2"></i>Search
@@ -28,7 +28,7 @@
     <%# Active filter chips %>
     <% if @query.present? || @category_id.present? %>
       <div class="flex flex-wrap items-center gap-2 mt-4 max-w-3xl mx-auto">
-        <span class="text-sm text-gray-500">Filters:</span>
+        <span class="text-sm text-slate-500">Filters:</span>
         <% if @query.present? %>
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-orange-50 text-orange-700">
             "<%= @query %>"
@@ -49,7 +49,7 @@
             </span>
           <% end %>
         <% end %>
-        <%= link_to "Clear all", services_path, class: "text-sm text-gray-500 hover:text-gray-700 underline" %>
+        <%= link_to "Clear all", services_path, class: "text-sm text-slate-500 hover:text-slate-700 underline" %>
       </div>
     <% end %>
   </div>
@@ -61,11 +61,11 @@
     <% if @services.any? %>
       <%# Sort bar + count %>
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
-        <p class="text-sm text-gray-500">
+        <p class="text-sm text-slate-500">
           Showing <%= @services.total_count %> service<%= @services.total_count == 1 ? '' : 's' %>
           <% if @query.present? || @category_id.present? %> matching your search<% end %>
         </p>
-        <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+        <div class="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
           <% sort_options = [
             ["Newest", "newest", "fas fa-clock"],
             ["Price: Low", "price_low", "fas fa-arrow-down"],
@@ -74,7 +74,7 @@
           ] %>
           <% sort_options.each do |label, value, icon| %>
             <%= link_to services_path(query: @query, category_id: @category_id, sort: value),
-                class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors #{@sort == value ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}" do %>
+                class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors #{@sort == value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}" do %>
               <i class="<%= icon %> text-[10px]"></i><%= label %>
             <% end %>
           <% end %>
@@ -91,7 +91,7 @@
           <nav class="flex items-center gap-1">
             <% if @services.prev_page %>
               <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: @services.prev_page),
-                  class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors" do %>
+                  class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors" do %>
                 <i class="fas fa-chevron-left text-xs"></i>
               <% end %>
             <% end %>
@@ -101,17 +101,17 @@
                 <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-orange-500 text-white text-sm font-medium"><%= page_num %></span>
               <% elsif page_num == 1 || page_num == @services.total_pages || (page_num - @services.current_page).abs <= 2 %>
                 <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: page_num),
-                    class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium" do %>
+                    class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors text-sm font-medium" do %>
                   <%= page_num %>
                 <% end %>
               <% elsif page_num == 2 || page_num == @services.total_pages - 1 %>
-                <span class="inline-flex items-center justify-center w-10 h-10 text-gray-400 text-sm">&hellip;</span>
+                <span class="inline-flex items-center justify-center w-10 h-10 text-slate-400 text-sm">&hellip;</span>
               <% end %>
             <% end %>
 
             <% if @services.next_page %>
               <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: @services.next_page),
-                  class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors" do %>
+                  class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors" do %>
                 <i class="fas fa-chevron-right text-xs"></i>
               <% end %>
             <% end %>
@@ -121,11 +121,11 @@
 
     <% else %>
       <div class="text-center py-20">
-        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-xl flex items-center justify-center">
-          <i class="fas fa-search text-gray-400 text-2xl"></i>
+        <div class="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-xl flex items-center justify-center">
+          <i class="fas fa-search text-slate-400 text-2xl"></i>
         </div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">No services found</h3>
-        <p class="text-gray-500 mb-6">Try adjusting your search terms or removing filters.</p>
+        <h3 class="text-lg font-semibold text-slate-900 mb-2">No services found</h3>
+        <p class="text-slate-500 mb-6">Try adjusting your search terms or removing filters.</p>
         <%= link_to "Browse all services", services_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold text-sm transition-colors shadow-sm" %>
       </div>
     <% end %>

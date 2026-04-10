@@ -1,10 +1,10 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="bg-white shadow rounded-lg">
+  <div class="bg-white rounded-xl border border-slate-100">
     <div class="px-4 py-5 sm:p-6">
       <div class="flex justify-between items-center mb-6">
         <div>
-          <h3 class="text-lg leading-6 font-medium text-gray-900">Verification Documents</h3>
-          <p class="mt-1 text-sm text-gray-500">Upload documents to verify your business and increase customer trust</p>
+          <h3 class="text-lg leading-6 font-medium text-slate-900">Verification Documents</h3>
+          <p class="mt-1 text-sm text-slate-500">Upload documents to verify your business and increase customer trust</p>
         </div>
         <%= link_to "Back to Profile", provider_profile_path, class: "text-sm text-blue-600 hover:text-blue-500" %>
       </div>
@@ -44,11 +44,11 @@
             <!-- Progress Bar -->
             <% unless @user.verified? %>
               <div class="mt-3">
-                <div class="flex justify-between text-xs text-gray-600 mb-1">
+                <div class="flex justify-between text-xs text-slate-600 mb-1">
                   <span>Verification Progress</span>
                   <span><%= @user.verification_progress %>%</span>
                 </div>
-                <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="w-full bg-slate-200 rounded-full h-2">
                   <div class="<%= @user.verification_progress == 100 ? 'bg-blue-600' : 'bg-yellow-600' %> h-2 rounded-full" style="width: <%= @user.verification_progress %>%"></div>
                 </div>
               </div>
@@ -61,11 +61,11 @@
       <%= form_with(url: upload_documents_provider_profile_path, method: :post, local: true, multipart: true) do |form| %>
         <div class="space-y-6">
         <!-- Business License -->
-        <div class="border rounded-lg p-6 <%= @user.business_license_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
+        <div class="border rounded-lg p-6 <%= @user.business_license_document? ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200' %>">
           <div class="flex justify-between items-start mb-4">
             <div class="flex-1">
               <div class="flex items-center">
-                <h5 class="font-medium text-gray-900">Business License</h5>
+                <h5 class="font-medium text-slate-900">Business License</h5>
                 <% if @user.business_license_document? %>
                   <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -73,18 +73,18 @@
                   <span class="ml-1 text-sm text-green-600 font-medium">Uploaded</span>
                 <% end %>
               </div>
-              <p class="text-sm text-gray-500 mt-1">Upload a clear photo or scan of your business license</p>
+              <p class="text-sm text-slate-500 mt-1">Upload a clear photo or scan of your business license</p>
             </div>
           </div>
           
           <% if @user.business_license_file.attached? %>
             <div class="mb-4">
-              <div class="flex items-center p-3 bg-white border border-gray-200 rounded-lg">
-                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center p-3 bg-white border border-slate-200 rounded-lg">
+                <svg class="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span class="text-sm text-gray-700"><%= @user.business_license_file.filename %></span>
-                <span class="ml-auto text-xs text-gray-500">
+                <span class="text-sm text-slate-700"><%= @user.business_license_file.filename %></span>
+                <span class="ml-auto text-xs text-slate-500">
                   <%= number_to_human_size(@user.business_license_file.byte_size) %>
                 </span>
               </div>
@@ -93,16 +93,16 @@
 
           <div class="flex items-center space-x-4">
             <%= form.file_field :business_license_file, accept: "image/*,application/pdf", 
-                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+                class: "block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
           </div>
         </div>
 
         <!-- Insurance Certificate -->
-        <div class="border rounded-lg p-6 <%= @user.insurance_certificate_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
+        <div class="border rounded-lg p-6 <%= @user.insurance_certificate_document? ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200' %>">
           <div class="flex justify-between items-start mb-4">
             <div class="flex-1">
               <div class="flex items-center">
-                <h5 class="font-medium text-gray-900">Insurance Certificate</h5>
+                <h5 class="font-medium text-slate-900">Insurance Certificate</h5>
                 <% if @user.insurance_certificate_document? %>
                   <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -110,18 +110,18 @@
                   <span class="ml-1 text-sm text-green-600 font-medium">Uploaded</span>
                 <% end %>
               </div>
-              <p class="text-sm text-gray-500 mt-1">Upload your current liability insurance certificate</p>
+              <p class="text-sm text-slate-500 mt-1">Upload your current liability insurance certificate</p>
             </div>
           </div>
           
           <% if @user.insurance_certificate_file.attached? %>
             <div class="mb-4">
-              <div class="flex items-center p-3 bg-white border border-gray-200 rounded-lg">
-                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center p-3 bg-white border border-slate-200 rounded-lg">
+                <svg class="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span class="text-sm text-gray-700"><%= @user.insurance_certificate_file.filename %></span>
-                <span class="ml-auto text-xs text-gray-500">
+                <span class="text-sm text-slate-700"><%= @user.insurance_certificate_file.filename %></span>
+                <span class="ml-auto text-xs text-slate-500">
                   <%= number_to_human_size(@user.insurance_certificate_file.byte_size) %>
                 </span>
               </div>
@@ -130,16 +130,16 @@
 
           <div class="flex items-center space-x-4">
             <%= form.file_field :insurance_certificate_file, accept: "image/*,application/pdf", 
-                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+                class: "block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
           </div>
         </div>
 
         <!-- Professional Certifications -->
-        <div class="border rounded-lg p-6 <%= @user.professional_certifications_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
+        <div class="border rounded-lg p-6 <%= @user.professional_certifications_document? ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200' %>">
           <div class="flex justify-between items-start mb-4">
             <div class="flex-1">
               <div class="flex items-center">
-                <h5 class="font-medium text-gray-900">Professional Certifications</h5>
+                <h5 class="font-medium text-slate-900">Professional Certifications</h5>
                 <% if @user.professional_certifications_document? %>
                   <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -147,18 +147,18 @@
                   <span class="ml-1 text-sm text-green-600 font-medium">Uploaded</span>
                 <% end %>
               </div>
-              <p class="text-sm text-gray-500 mt-1">Upload any relevant professional certifications or trade licenses</p>
+              <p class="text-sm text-slate-500 mt-1">Upload any relevant professional certifications or trade licenses</p>
             </div>
           </div>
           
           <% if @user.professional_certifications_file.attached? %>
             <div class="mb-4">
-              <div class="flex items-center p-3 bg-white border border-gray-200 rounded-lg">
-                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center p-3 bg-white border border-slate-200 rounded-lg">
+                <svg class="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span class="text-sm text-gray-700"><%= @user.professional_certifications_file.filename %></span>
-                <span class="ml-auto text-xs text-gray-500">
+                <span class="text-sm text-slate-700"><%= @user.professional_certifications_file.filename %></span>
+                <span class="ml-auto text-xs text-slate-500">
                   <%= number_to_human_size(@user.professional_certifications_file.byte_size) %>
                 </span>
               </div>
@@ -167,16 +167,16 @@
 
           <div class="flex items-center space-x-4">
             <%= form.file_field :professional_certifications_file, accept: "image/*,application/pdf", 
-                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+                class: "block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
           </div>
         </div>
 
         <!-- Government ID -->
-        <div class="border rounded-lg p-6 <%= @user.government_id_document? ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' %>">
+        <div class="border rounded-lg p-6 <%= @user.government_id_document? ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200' %>">
           <div class="flex justify-between items-start mb-4">
             <div class="flex-1">
               <div class="flex items-center">
-                <h5 class="font-medium text-gray-900">Government ID</h5>
+                <h5 class="font-medium text-slate-900">Government ID</h5>
                 <% if @user.government_id_document? %>
                   <svg class="ml-2 w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
@@ -184,18 +184,18 @@
                   <span class="ml-1 text-sm text-green-600 font-medium">Uploaded</span>
                 <% end %>
               </div>
-              <p class="text-sm text-gray-500 mt-1">Upload a valid government-issued photo ID (driver's license or passport)</p>
+              <p class="text-sm text-slate-500 mt-1">Upload a valid government-issued photo ID (driver's license or passport)</p>
             </div>
           </div>
           
           <% if @user.government_id_file.attached? %>
             <div class="mb-4">
-              <div class="flex items-center p-3 bg-white border border-gray-200 rounded-lg">
-                <svg class="w-5 h-5 text-gray-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="flex items-center p-3 bg-white border border-slate-200 rounded-lg">
+                <svg class="w-5 h-5 text-slate-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <span class="text-sm text-gray-700"><%= @user.government_id_file.filename %></span>
-                <span class="ml-auto text-xs text-gray-500">
+                <span class="text-sm text-slate-700"><%= @user.government_id_file.filename %></span>
+                <span class="ml-auto text-xs text-slate-500">
                   <%= number_to_human_size(@user.government_id_file.byte_size) %>
                 </span>
               </div>
@@ -204,7 +204,7 @@
 
           <div class="flex items-center space-x-4">
             <%= form.file_field :government_id_file, accept: "image/*,application/pdf", 
-                class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
+                class: "block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
           </div>
         </div>
       </div>

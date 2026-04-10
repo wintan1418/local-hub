@@ -6,17 +6,17 @@
 
 <div class="min-h-screen flex">
   <%# ===== LEFT: Image Panel (hidden on mobile) ===== %>
-  <div class="hidden lg:flex lg:w-1/2 relative bg-gray-900 items-center justify-center overflow-hidden">
+  <div class="hidden lg:flex lg:w-1/2 relative bg-slate-900 items-center justify-center overflow-hidden">
     <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80"
          alt="Team collaboration"
          class="absolute inset-0 w-full h-full object-cover opacity-30">
-    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/40 to-gray-900/80"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/40 to-slate-900/80"></div>
     <div class="relative z-10 max-w-md px-12 text-center">
-      <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-8">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center mx-auto mb-8">
         <svg class="w-8 h-8 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
       </div>
       <h2 class="text-3xl font-bold text-white mb-4">Join Radius<br>today</h2>
-      <p class="text-gray-300 text-base leading-relaxed">Whether you need a service or provide one — we make it easy to connect with your local community.</p>
+      <p class="text-slate-300 text-base leading-relaxed">Whether you need a service or provide one — we make it easy to connect with your local community.</p>
 
       <%# Benefits list %>
       <div class="mt-10 space-y-4 text-left">
@@ -24,32 +24,32 @@
           <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
             <i class="fas fa-check text-orange-400 text-xs"></i>
           </div>
-          <span class="text-sm text-gray-300">Free for customers — no hidden fees</span>
+          <span class="text-sm text-slate-300">Free for customers — no hidden fees</span>
         </div>
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
             <i class="fas fa-check text-orange-400 text-xs"></i>
           </div>
-          <span class="text-sm text-gray-300">Verified & trusted service providers</span>
+          <span class="text-sm text-slate-300">Verified & trusted service providers</span>
         </div>
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
             <i class="fas fa-check text-orange-400 text-xs"></i>
           </div>
-          <span class="text-sm text-gray-300">Secure payments powered by Stripe</span>
+          <span class="text-sm text-slate-300">Secure payments powered by Stripe</span>
         </div>
         <div class="flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
             <i class="fas fa-check text-orange-400 text-xs"></i>
           </div>
-          <span class="text-sm text-gray-300">Real reviews from real customers</span>
+          <span class="text-sm text-slate-300">Real reviews from real customers</span>
         </div>
       </div>
     </div>
   </div>
 
   <%# ===== RIGHT: Sign Up Form ===== %>
-  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
+  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-slate-50">
     <div class="w-full max-w-md">
       <%# Logo %>
       <div class="text-center mb-10">
@@ -57,15 +57,15 @@
           <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-sm">
             <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
           </div>
-          <span class="text-xl font-bold text-gray-900">Rad<span class="text-orange-500">ius</span></span>
+          <span class="text-xl font-bold text-slate-900">Rad<span class="text-orange-500">ius</span></span>
         </a>
       </div>
 
       <%# Card %>
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 sm:p-10">
         <div class="mb-8">
-          <h1 class="text-2xl font-bold text-gray-900">Create your account</h1>
-          <p class="mt-2 text-sm text-gray-500">
+          <h1 class="text-2xl font-bold text-slate-900">Create your account</h1>
+          <p class="mt-2 text-sm text-slate-500">
             Already have an account?
             <a href="<%= new_session_path(resource_name) %>" class="font-semibold text-orange-500 hover:text-orange-600 transition-colors">Sign in</a>
           </p>
@@ -90,30 +90,30 @@
           <div class="space-y-5">
             <%# Role Selection — card-style toggle %>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-2.5">I want to</label>
+              <label class="block text-sm font-medium text-slate-700 mb-2.5">I want to</label>
               <div class="grid grid-cols-2 gap-3">
                 <label class="relative cursor-pointer">
                   <input type="radio" name="user[user_role]" value="customer"
                          <%= 'checked' if preselected_role == 'customer' || (!preselected_role && !resource.user_role.present?) || resource.user_role == 'customer' %>
                          class="peer sr-only" required>
-                  <div class="p-4 rounded-xl border-2 border-gray-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-gray-300 transition-all text-center">
-                    <div class="w-10 h-10 rounded-xl bg-gray-100 peer-checked:bg-orange-100 flex items-center justify-center mx-auto mb-2.5">
-                      <i class="fas fa-search text-gray-400 text-sm"></i>
+                  <div class="p-4 rounded-xl border-2 border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-slate-300 transition-all text-center">
+                    <div class="w-10 h-10 rounded-xl bg-slate-100 peer-checked:bg-orange-100 flex items-center justify-center mx-auto mb-2.5">
+                      <i class="fas fa-search text-slate-400 text-sm"></i>
                     </div>
-                    <div class="text-sm font-semibold text-gray-900">Find Services</div>
-                    <div class="text-xs text-gray-500 mt-0.5">I need help</div>
+                    <div class="text-sm font-semibold text-slate-900">Find Services</div>
+                    <div class="text-xs text-slate-500 mt-0.5">I need help</div>
                   </div>
                 </label>
                 <label class="relative cursor-pointer">
                   <input type="radio" name="user[user_role]" value="provider"
                          <%= 'checked' if preselected_role == 'provider' || resource.user_role == 'provider' %>
                          class="peer sr-only" required>
-                  <div class="p-4 rounded-xl border-2 border-gray-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-gray-300 transition-all text-center">
-                    <div class="w-10 h-10 rounded-xl bg-gray-100 peer-checked:bg-orange-100 flex items-center justify-center mx-auto mb-2.5">
-                      <i class="fas fa-briefcase text-gray-400 text-sm"></i>
+                  <div class="p-4 rounded-xl border-2 border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-slate-300 transition-all text-center">
+                    <div class="w-10 h-10 rounded-xl bg-slate-100 peer-checked:bg-orange-100 flex items-center justify-center mx-auto mb-2.5">
+                      <i class="fas fa-briefcase text-slate-400 text-sm"></i>
                     </div>
-                    <div class="text-sm font-semibold text-gray-900">Offer Services</div>
-                    <div class="text-xs text-gray-500 mt-0.5">I'm a provider</div>
+                    <div class="text-sm font-semibold text-slate-900">Offer Services</div>
+                    <div class="text-xs text-slate-500 mt-0.5">I'm a provider</div>
                   </div>
                 </label>
               </div>
@@ -121,45 +121,45 @@
 
             <%# Email %>
             <div>
-              <label for="user_email" class="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+              <label for="user_email" class="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-envelope text-gray-400 text-sm"></i>
+                  <i class="fas fa-envelope text-slate-400 text-sm"></i>
                 </div>
                 <%= f.email_field :email, autofocus: true, autocomplete: "email",
                     placeholder: "you@example.com",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
               </div>
             </div>
 
             <%# Password %>
             <div>
-              <label for="user_password" class="block text-sm font-medium text-gray-700 mb-1.5">
+              <label for="user_password" class="block text-sm font-medium text-slate-700 mb-1.5">
                 Password
                 <% if @minimum_password_length %>
-                  <span class="font-normal text-gray-400">(<%= @minimum_password_length %> characters min)</span>
+                  <span class="font-normal text-slate-400">(<%= @minimum_password_length %> characters min)</span>
                 <% end %>
               </label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-lock text-gray-400 text-sm"></i>
+                  <i class="fas fa-lock text-slate-400 text-sm"></i>
                 </div>
                 <%= f.password_field :password, autocomplete: "new-password",
                     placeholder: "Create a password",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
               </div>
             </div>
 
             <%# Password Confirmation %>
             <div>
-              <label for="user_password_confirmation" class="block text-sm font-medium text-gray-700 mb-1.5">Confirm password</label>
+              <label for="user_password_confirmation" class="block text-sm font-medium text-slate-700 mb-1.5">Confirm password</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-lock text-gray-400 text-sm"></i>
+                  <i class="fas fa-lock text-slate-400 text-sm"></i>
                 </div>
                 <%= f.password_field :password_confirmation, autocomplete: "new-password",
                     placeholder: "Confirm your password",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
               </div>
             </div>
 
@@ -174,23 +174,23 @@
 
         <%# Divider %>
         <div class="relative my-8">
-          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
-          <div class="relative flex justify-center"><span class="bg-white px-4 text-xs text-gray-400 uppercase tracking-wider">or sign up with</span></div>
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
+          <div class="relative flex justify-center"><span class="bg-white px-4 text-xs text-slate-400 uppercase tracking-wider">or sign up with</span></div>
         </div>
 
         <%# Google Sign Up %>
-        <%= button_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: "w-full inline-flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700" do %>
+        <%= button_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: "w-full inline-flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700" do %>
           <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
           Continue with Google
         <% end %>
       </div>
 
       <%# Footer %>
-      <p class="mt-8 text-center text-xs text-gray-400">
+      <p class="mt-8 text-center text-xs text-slate-400">
         By creating an account, you agree to our
-        <a href="#" class="text-gray-500 hover:text-gray-700 underline">Terms of Service</a>
+        <a href="#" class="text-slate-500 hover:text-slate-700 underline">Terms of Service</a>
         and
-        <a href="#" class="text-gray-500 hover:text-gray-700 underline">Privacy Policy</a>.
+        <a href="#" class="text-slate-500 hover:text-slate-700 underline">Privacy Policy</a>.
       </p>
     </div>
   </div>

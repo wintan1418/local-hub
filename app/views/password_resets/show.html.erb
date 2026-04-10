@@ -1,10 +1,10 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8">
     <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-slate-900">
         Set new password
       </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
+      <p class="mt-2 text-center text-sm text-slate-600">
         Enter your new password below.
       </p>
     </div>
@@ -34,21 +34,21 @@
     <%= form_with url: password_reset_path(token: params[:token]), method: :patch, local: true, class: "mt-8 space-y-6" do |form| %>
       <div class="space-y-4">
         <div>
-          <%= form.label :password, "New Password", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.label :password, "New Password", class: "block text-sm font-medium text-slate-700" %>
           <%= form.password_field :password, 
                 autocomplete: "new-password",
                 required: true,
                 placeholder: "Enter new password",
-                class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
+                class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-slate-300 placeholder-gray-500 text-slate-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
         </div>
         
         <div>
-          <%= form.label :password_confirmation, "Confirm Password", class: "block text-sm font-medium text-gray-700" %>
+          <%= form.label :password_confirmation, "Confirm Password", class: "block text-sm font-medium text-slate-700" %>
           <%= form.password_field :password_confirmation, 
                 autocomplete: "new-password",
                 required: true,
                 placeholder: "Confirm new password",
-                class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
+                class: "mt-1 appearance-none relative block w-full px-3 py-2 border border-slate-300 placeholder-gray-500 text-slate-900 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm" %>
         </div>
       </div>
 

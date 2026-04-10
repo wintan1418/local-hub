@@ -61,17 +61,17 @@
                   <% if pinned_message.sender.profile_picture.attached? %>
                     <%= image_tag pinned_message.sender.profile_picture, class: "h-6 w-6 rounded-full object-cover" %>
                   <% else %>
-                    <div class="h-6 w-6 rounded-full bg-gray-300 flex items-center justify-center">
-                      <i class="fas fa-user text-gray-600 text-xs"></i>
+                    <div class="h-6 w-6 rounded-full bg-slate-300 flex items-center justify-center">
+                      <i class="fas fa-user text-slate-600 text-xs"></i>
                     </div>
                   <% end %>
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center space-x-2">
-                    <span class="text-xs font-medium text-gray-900"><%= pinned_message.sender.email.split('@').first.titleize %></span>
-                    <span class="text-xs text-gray-500"><%= pinned_message.created_at.strftime('%H:%M') %></span>
+                    <span class="text-xs font-medium text-slate-900"><%= pinned_message.sender.email.split('@').first.titleize %></span>
+                    <span class="text-xs text-slate-500"><%= pinned_message.created_at.strftime('%H:%M') %></span>
                   </div>
-                  <p class="text-sm text-gray-700 truncate">
+                  <p class="text-sm text-slate-700 truncate">
                     <%= truncate(pinned_message.content.presence || "Attachment", length: 60) %>
                   </p>
                 </div>
@@ -107,30 +107,30 @@
       <!-- Typing Indicator (hidden by default) -->
       <div id="typing-indicator" class="hidden flex items-center space-x-2 p-3">
         <div class="flex-shrink-0">
-          <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center">
-            <i class="fas fa-user text-gray-600 text-xs"></i>
+          <div class="h-8 w-8 rounded-full bg-slate-300 flex items-center justify-center">
+            <i class="fas fa-user text-slate-600 text-xs"></i>
           </div>
         </div>
-        <div class="bg-gray-200 text-gray-900 rounded-lg px-3 py-2 rounded-bl-sm">
+        <div class="bg-slate-200 text-slate-900 rounded-lg px-3 py-2 rounded-bl-sm">
           <div class="flex space-x-1">
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
-            <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+            <div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+            <div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+            <div class="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
           </div>
         </div>
       </div>
     </div>
     
     <!-- Enhanced Message Input -->
-    <div class="border-t border-gray-200 bg-white p-4">
+    <div class="border-t border-slate-200 bg-white p-4">
       <!-- File Preview Area -->
-      <div id="file-preview-area" class="hidden mb-4 p-3 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+      <div id="file-preview-area" class="hidden mb-4 p-3 bg-slate-50 rounded-lg border-2 border-dashed border-slate-300">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-3">
             <div id="preview-icon" class="text-2xl"></div>
             <div>
-              <p id="preview-name" class="text-sm font-medium text-gray-900"></p>
-              <p id="preview-size" class="text-xs text-gray-500"></p>
+              <p id="preview-name" class="text-sm font-medium text-slate-900"></p>
+              <p id="preview-size" class="text-xs text-slate-500"></p>
             </div>
           </div>
           <button type="button" onclick="clearFilePreview()" class="text-red-500 hover:text-red-700">
@@ -150,7 +150,7 @@
           <!-- Attachment Button -->
           <div class="flex flex-col space-y-2">
             <button type="button" onclick="toggleAttachmentMenu()" 
-                    class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors relative">
+                    class="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors relative">
               <i class="fas fa-plus text-lg"></i>
             </button>
             
@@ -158,17 +158,17 @@
             <div id="attachment-menu" class="hidden absolute bottom-16 left-0 bg-white rounded-lg shadow-xl border p-2 z-20">
               <div class="flex flex-col space-y-1 w-48">
                 <button type="button" onclick="triggerFileInput('image')" 
-                        class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
+                        class="flex items-center space-x-3 p-3 hover:bg-slate-50 rounded-lg transition-colors text-left">
                   <i class="fas fa-image text-green-500"></i>
                   <span class="text-sm font-medium">Photo</span>
                 </button>
                 <button type="button" onclick="triggerFileInput('document')" 
-                        class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
+                        class="flex items-center space-x-3 p-3 hover:bg-slate-50 rounded-lg transition-colors text-left">
                   <i class="fas fa-file-alt text-blue-500"></i>
                   <span class="text-sm font-medium">Document</span>
                 </button>
                 <button type="button" onclick="startVoiceRecording()" 
-                        class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg transition-colors text-left">
+                        class="flex items-center space-x-3 p-3 hover:bg-slate-50 rounded-lg transition-colors text-left">
                   <i class="fas fa-microphone text-red-500"></i>
                   <span class="text-sm font-medium">Voice Note</span>
                 </button>
@@ -178,7 +178,7 @@
           
           <!-- Voice Recording Button -->
           <button type="button" id="voice-btn" onclick="toggleVoiceRecording()" 
-                  class="p-2 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors hidden">
+                  class="p-2 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors hidden">
             <i class="fas fa-microphone text-lg"></i>
           </button>
           
@@ -187,13 +187,13 @@
             <textarea name="content" 
                      rows="1" 
                      placeholder="Type your message..." 
-                     class="w-full border border-gray-300 rounded-2xl px-4 py-3 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all"
+                     class="w-full border border-slate-300 rounded-xl px-4 py-3 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all"
                      id="message-input"
                      autocomplete="off"></textarea>
             
             <!-- Emoji Button -->
             <button type="button" onclick="toggleEmojiPicker()" 
-                    class="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 p-1 rounded transition-colors">
+                    class="absolute right-12 top-1/2 transform -translate-y-1/2 text-slate-500 hover:text-slate-700 p-1 rounded transition-colors">
               <i class="fas fa-smile text-lg"></i>
             </button>
             
@@ -201,11 +201,11 @@
             <div id="emoji-picker" class="absolute bottom-full right-0 mb-2 bg-white border rounded-xl shadow-2xl hidden z-30 w-80">
               <div class="p-4">
                 <div class="flex space-x-2 mb-4 border-b">
-                  <button type="button" onclick="showEmojiCategory('recent')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">Recent</button>
-                  <button type="button" onclick="showEmojiCategory('people')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">😊</button>
-                  <button type="button" onclick="showEmojiCategory('nature')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">🌿</button>
-                  <button type="button" onclick="showEmojiCategory('food')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">🍔</button>
-                  <button type="button" onclick="showEmojiCategory('objects')" class="emoji-tab px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">⚽</button>
+                  <button type="button" onclick="showEmojiCategory('recent')" class="emoji-tab px-3 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">Recent</button>
+                  <button type="button" onclick="showEmojiCategory('people')" class="emoji-tab px-3 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">😊</button>
+                  <button type="button" onclick="showEmojiCategory('nature')" class="emoji-tab px-3 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">🌿</button>
+                  <button type="button" onclick="showEmojiCategory('food')" class="emoji-tab px-3 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">🍔</button>
+                  <button type="button" onclick="showEmojiCategory('objects')" class="emoji-tab px-3 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 border-b-2 border-transparent hover:border-blue-500 transition-colors">⚽</button>
                 </div>
                 
                 <div class="emoji-category" id="recent-emojis">
@@ -216,148 +216,148 @@
                 
                 <div class="emoji-category hidden" id="people-emojis">
                   <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto text-xl">
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😀')">😀</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😃')">😃</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😄')">😄</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😁')">😁</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😆')">😆</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😅')">😅</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😂')">😂</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤣')">🤣</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😊')">😊</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😇')">😇</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🙂')">🙂</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🙃')">🙃</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😉')">😉</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😌')">😌</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😍')">😍</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥰')">🥰</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😘')">😘</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😗')">😗</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('☺️')">☺️</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😚')">😚</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😙')">😙</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥲')">🥲</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😋')">😋</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😛')">😛</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😜')">😜</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤪')">🤪</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😝')">😝</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤑')">🤑</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤗')">🤗</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤭')">🤭</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤫')">🤫</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤔')">🤔</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😀')">😀</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😃')">😃</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😄')">😄</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😁')">😁</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😆')">😆</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😅')">😅</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😂')">😂</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤣')">🤣</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😊')">😊</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😇')">😇</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🙂')">🙂</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🙃')">🙃</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😉')">😉</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😌')">😌</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😍')">😍</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥰')">🥰</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😘')">😘</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😗')">😗</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('☺️')">☺️</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😚')">😚</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😙')">😙</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥲')">🥲</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😋')">😋</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😛')">😛</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😜')">😜</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤪')">🤪</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('😝')">😝</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤑')">🤑</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤗')">🤗</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤭')">🤭</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤫')">🤫</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🤔')">🤔</span>
                   </div>
                 </div>
                 
                 <div class="emoji-category hidden" id="nature-emojis">
                   <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto text-xl">
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌱')">🌱</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌿')">🌿</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍀')">🍀</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌾')">🌾</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💐')">💐</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌷')">🌷</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌹')">🌹</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥀')">🥀</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌺')">🌺</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌸')">🌸</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌼')">🌼</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌻')">🌻</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌞')">🌞</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌝')">🌝</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌛')">🌛</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌜')">🌜</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌚')">🌚</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌕')">🌕</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌖')">🌖</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌗')">🌗</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌘')">🌘</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌑')">🌑</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌒')">🌒</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌓')">🌓</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌔')">🌔</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⭐')">⭐</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌟')">🌟</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💫')">💫</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('✨')">✨</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🔥')">🔥</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💥')">💥</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌱')">🌱</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌿')">🌿</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍀')">🍀</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌾')">🌾</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💐')">💐</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌷')">🌷</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌹')">🌹</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥀')">🥀</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌺')">🌺</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌸')">🌸</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌼')">🌼</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌻')">🌻</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌞')">🌞</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌝')">🌝</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌛')">🌛</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌜')">🌜</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌚')">🌚</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌕')">🌕</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌖')">🌖</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌗')">🌗</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌘')">🌘</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌑')">🌑</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌒')">🌒</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌓')">🌓</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌔')">🌔</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⭐')">⭐</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌟')">🌟</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💫')">💫</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('✨')">✨</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🔥')">🔥</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('💥')">💥</span>
                   </div>
                 </div>
                 
                 <div class="emoji-category hidden" id="food-emojis">
                   <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto text-xl">
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍔')">🍔</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍕')">🍕</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌭')">🌭</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌮')">🌮</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌯')">🌯</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍿')">🍿</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧂')">🧂</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥓')">🥓</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥚')">🥚</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍳')">🍳</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧈')">🧈</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥞')">🥞</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧇')">🧇</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥖')">🥖</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍞')">🍞</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥨')">🥨</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥯')">🥯</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍪')">🍪</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎂')">🎂</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍰')">🍰</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧁')">🧁</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥧')">🥧</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍫')">🍫</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍬')">🍬</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍭')">🍭</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍮')">🍮</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍯')">🍯</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍼')">🍼</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥛')">🥛</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('☕')">☕</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍵')">🍵</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧃')">🧃</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍔')">🍔</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍕')">🍕</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌭')">🌭</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌮')">🌮</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🌯')">🌯</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍿')">🍿</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧂')">🧂</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥓')">🥓</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥚')">🥚</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍳')">🍳</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧈')">🧈</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥞')">🥞</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧇')">🧇</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥖')">🥖</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍞')">🍞</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥨')">🥨</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥯')">🥯</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍪')">🍪</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎂')">🎂</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍰')">🍰</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧁')">🧁</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥧')">🥧</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍫')">🍫</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍬')">🍬</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍭')">🍭</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍮')">🍮</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍯')">🍯</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍼')">🍼</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥛')">🥛</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('☕')">☕</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🍵')">🍵</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🧃')">🧃</span>
                   </div>
                 </div>
                 
                 <div class="emoji-category hidden" id="objects-emojis">
                   <div class="grid grid-cols-8 gap-2 max-h-48 overflow-y-auto text-xl">
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⚽')">⚽</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏀')">🏀</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏈')">🏈</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⚾')">⚾</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥎')">🥎</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎾')">🎾</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏐')">🏐</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏉')">🏉</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥏')">🥏</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎱')">🎱</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🪀')">🪀</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏓')">🏓</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏸')">🏸</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥍')">🥍</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏒')">🏒</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥌')">🥌</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛷')">🛷</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⛸️')">⛸️</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛼')">🛼</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛹')">🛹</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛴')">🛴</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🚲')">🚲</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏎️')">🏎️</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏍️')">🏍️</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛺')">🛺</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛻')">🛻</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏕️')">🏕️</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⛺')">⛺</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎪')">🎪</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎨')">🎨</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎭')">🎭</span>
-                    <span class="cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎪')">🎪</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⚽')">⚽</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏀')">🏀</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏈')">🏈</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⚾')">⚾</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥎')">🥎</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎾')">🎾</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏐')">🏐</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏉')">🏉</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥏')">🥏</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎱')">🎱</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🪀')">🪀</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏓')">🏓</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏸')">🏸</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥍')">🥍</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏒')">🏒</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🥌')">🥌</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛷')">🛷</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⛸️')">⛸️</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛼')">🛼</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛹')">🛹</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛴')">🛴</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🚲')">🚲</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏎️')">🏎️</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏍️')">🏍️</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛺')">🛺</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🛻')">🛻</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🏕️')">🏕️</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('⛺')">⛺</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎪')">🎪</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎨')">🎨</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎭')">🎭</span>
+                    <span class="cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors" onclick="insertEmoji('🎪')">🎪</span>
                   </div>
                 </div>
               </div>
@@ -389,7 +389,7 @@
             <button type="button" onclick="stopVoiceRecording()" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
               <i class="fas fa-stop mr-1"></i> Stop
             </button>
-            <button type="button" onclick="cancelVoiceRecording()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+            <button type="button" onclick="cancelVoiceRecording()" class="px-4 py-2 bg-slate-600 text-white rounded-lg hover:bg-slate-700 transition-colors">
               <i class="fas fa-times mr-1"></i> Cancel
             </button>
           </div>
@@ -564,7 +564,7 @@ function showEmojiCategory(category) {
   // Remove active state from all tabs
   document.querySelectorAll('.emoji-tab').forEach(tab => {
     tab.classList.remove('border-blue-500', 'text-blue-600');
-    tab.classList.add('border-transparent', 'text-gray-500');
+    tab.classList.add('border-transparent', 'text-slate-500');
   });
   
   // Show selected category
@@ -576,7 +576,7 @@ function showEmojiCategory(category) {
   // Update active tab
   const activeTab = document.querySelector(`[onclick="showEmojiCategory('${category}')"]`);
   if (activeTab) {
-    activeTab.classList.remove('border-transparent', 'text-gray-500');
+    activeTab.classList.remove('border-transparent', 'text-slate-500');
     activeTab.classList.add('border-blue-500', 'text-blue-600');
   }
 }
@@ -587,7 +587,7 @@ function populateRecentEmojis() {
   
   recentEmojis.forEach(emoji => {
     const span = document.createElement('span');
-    span.className = 'cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-colors text-xl';
+    span.className = 'cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors text-xl';
     span.textContent = emoji;
     span.onclick = () => insertEmoji(emoji);
     recentContainer.appendChild(span);
@@ -681,7 +681,7 @@ function showFilePreview(file, type) {
       previewIcon.innerHTML = '<i class="fas fa-microphone text-red-500"></i>';
       break;
     default:
-      previewIcon.innerHTML = '<i class="fas fa-file text-gray-500"></i>';
+      previewIcon.innerHTML = '<i class="fas fa-file text-slate-500"></i>';
   }
 }
 
@@ -927,7 +927,7 @@ function showCancelEditButton() {
     cancelBtn.type = 'button';
     cancelBtn.id = 'cancel-edit-btn';
     cancelBtn.onclick = cancelEdit;
-    cancelBtn.className = 'px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors';
+    cancelBtn.className = 'px-4 py-2 bg-slate-500 text-white rounded-lg hover:bg-slate-600 transition-colors';
     cancelBtn.innerHTML = '<i class="fas fa-times mr-1"></i>Cancel';
     
     form.querySelector('.flex.items-end.space-x-3').appendChild(cancelBtn);
@@ -1066,8 +1066,8 @@ function showMessageMenu(event, messageId, isCurrentUser) {
   // Add menu items
   menuItems.forEach(item => {
     const menuItem = document.createElement('button');
-    menuItem.className = 'w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-3';
-    menuItem.innerHTML = `<i class="${item.icon} text-gray-600"></i><span>${item.text}</span>`;
+    menuItem.className = 'w-full text-left px-4 py-2 hover:bg-slate-100 flex items-center space-x-3';
+    menuItem.innerHTML = `<i class="${item.icon} text-slate-600"></i><span>${item.text}</span>`;
     menuItem.onclick = () => {
       item.action();
       menu.remove();

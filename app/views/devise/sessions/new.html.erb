@@ -1,17 +1,17 @@
 <div class="min-h-screen flex">
   <%# ===== LEFT: Image Panel (hidden on mobile) ===== %>
-  <div class="hidden lg:flex lg:w-1/2 relative bg-gray-900 items-center justify-center overflow-hidden">
+  <div class="hidden lg:flex lg:w-1/2 relative bg-slate-900 items-center justify-center overflow-hidden">
     <img src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80"
          alt="People working together"
          class="absolute inset-0 w-full h-full object-cover opacity-30">
-    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/40 to-gray-900/80"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/40 to-slate-900/80"></div>
     <div class="relative z-10 max-w-md px-12 text-center">
-      <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-8">
+      <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center mx-auto mb-8">
         <svg class="w-8 h-8 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
       </div>
       <h2 class="text-3xl font-bold text-white mb-4">Welcome back to<br>Radius</h2>
-      <p class="text-gray-300 text-base leading-relaxed">Connect with trusted local service providers or manage your business — all in one place.</p>
-      <div class="mt-10 flex items-center justify-center gap-8 text-sm text-gray-400">
+      <p class="text-slate-300 text-base leading-relaxed">Connect with trusted local service providers or manage your business — all in one place.</p>
+      <div class="mt-10 flex items-center justify-center gap-8 text-sm text-slate-400">
         <div class="text-center">
           <div class="text-2xl font-bold text-white"><%= User.provider.count %>+</div>
           <div>Providers</div>
@@ -31,7 +31,7 @@
   </div>
 
   <%# ===== RIGHT: Sign In Form ===== %>
-  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-gray-50">
+  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-slate-50">
     <div class="w-full max-w-md">
       <%# Logo %>
       <div class="text-center mb-10">
@@ -39,15 +39,15 @@
           <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-sm">
             <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
           </div>
-          <span class="text-xl font-bold text-gray-900">Rad<span class="text-orange-500">ius</span></span>
+          <span class="text-xl font-bold text-slate-900">Rad<span class="text-orange-500">ius</span></span>
         </a>
       </div>
 
       <%# Card %>
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 sm:p-10">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 sm:p-10">
         <div class="mb-8">
-          <h1 class="text-2xl font-bold text-gray-900">Sign in to your account</h1>
-          <p class="mt-2 text-sm text-gray-500">
+          <h1 class="text-2xl font-bold text-slate-900">Sign in to your account</h1>
+          <p class="mt-2 text-sm text-slate-500">
             Don't have an account?
             <a href="<%= new_registration_path(resource_name) %>" class="font-semibold text-orange-500 hover:text-orange-600 transition-colors">Sign up free</a>
           </p>
@@ -65,38 +65,38 @@
           <div class="space-y-5">
             <%# Email %>
             <div>
-              <label for="user_email" class="block text-sm font-medium text-gray-700 mb-1.5">Email address</label>
+              <label for="user_email" class="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-envelope text-gray-400 text-sm"></i>
+                  <i class="fas fa-envelope text-slate-400 text-sm"></i>
                 </div>
                 <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true,
                     placeholder: "you@example.com",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
               </div>
             </div>
 
             <%# Password %>
             <div>
               <div class="flex items-center justify-between mb-1.5">
-                <label for="user_password" class="block text-sm font-medium text-gray-700">Password</label>
+                <label for="user_password" class="block text-sm font-medium text-slate-700">Password</label>
                 <a href="<%= new_password_path(resource_name) %>" class="text-xs font-semibold text-orange-500 hover:text-orange-600 transition-colors">Forgot password?</a>
               </div>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-lock text-gray-400 text-sm"></i>
+                  <i class="fas fa-lock text-slate-400 text-sm"></i>
                 </div>
                 <%= f.password_field :password, autocomplete: "current-password", required: true,
                     placeholder: "Enter your password",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
               </div>
             </div>
 
             <%# Remember me %>
             <div class="flex items-center justify-between">
               <label class="flex items-center gap-2.5 cursor-pointer group">
-                <%= f.check_box :remember_me, class: "w-4 h-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500 focus:ring-offset-0 cursor-pointer" %>
-                <span class="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">Remember me</span>
+                <%= f.check_box :remember_me, class: "w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500 focus:ring-offset-0 cursor-pointer" %>
+                <span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">Remember me</span>
               </label>
             </div>
 
@@ -111,23 +111,23 @@
 
         <%# Divider %>
         <div class="relative my-8">
-          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200"></div></div>
-          <div class="relative flex justify-center"><span class="bg-white px-4 text-xs text-gray-400 uppercase tracking-wider">or continue with</span></div>
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
+          <div class="relative flex justify-center"><span class="bg-white px-4 text-xs text-slate-400 uppercase tracking-wider">or continue with</span></div>
         </div>
 
         <%# Google Sign In %>
-        <%= button_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: "w-full inline-flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700" do %>
+        <%= button_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: "w-full inline-flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700" do %>
           <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
           Continue with Google
         <% end %>
       </div>
 
       <%# Footer %>
-      <p class="mt-8 text-center text-xs text-gray-400">
+      <p class="mt-8 text-center text-xs text-slate-400">
         By signing in, you agree to our
-        <a href="#" class="text-gray-500 hover:text-gray-700 underline">Terms of Service</a>
+        <a href="#" class="text-slate-500 hover:text-slate-700 underline">Terms of Service</a>
         and
-        <a href="#" class="text-gray-500 hover:text-gray-700 underline">Privacy Policy</a>.
+        <a href="#" class="text-slate-500 hover:text-slate-700 underline">Privacy Policy</a>.
       </p>
     </div>
   </div>
