@@ -68,4 +68,14 @@ class UserMailer < ApplicationMailer
     @app_name = 'Radius'
     mail(to: @provider.email, subject: "New Booking - #{@service.title}")
   end
+
+  def new_review_notification(review)
+    @review = review
+    @booking = review.booking
+    @provider = @booking.service.provider
+    @customer = @booking.customer
+    @service = @booking.service
+    @app_name = 'Radius'
+    mail(to: @provider.email, subject: "New #{@review.rating}-Star Review - #{@service.title}")
+  end
 end

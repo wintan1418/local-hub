@@ -4,11 +4,21 @@ class ServicesController < ApplicationController
     @query = params[:query]
     @category_id = params[:category_id]
     @sort = params[:sort] || "newest"
+    @location = params[:location]
 
     @services = Service.includes(:category, provider: { bookings: :review })
 
     @services = @services.where("title ILIKE ? OR description ILIKE ?", "%#{@query}%", "%#{@query}%") if @query.present?
     @services = @services.where(category_id: @category_id) if @category_id.present?
+
+    # Location-based filtering
+    if @location.present?
+      coords = Geocoder.coordinates(@location)
+      if coords
+        nearby_provider_ids = User.provider.near(coords, 30).pluck(:id)
+        @services = @services.where(provider_id: nearby_provider_ids)
+      end
+    end
 
     @services = case @sort
     when "price_low"

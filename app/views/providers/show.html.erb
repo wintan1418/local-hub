@@ -1,0 +1,211 @@
+<div class="min-h-screen bg-slate-50">
+  <%# ===== HEADER ===== %>
+  <div class="bg-white border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+        <%# Avatar %>
+        <div class="relative flex-shrink-0">
+          <% if @provider.profile_picture.attached? %>
+            <%= image_tag @provider.profile_picture, class: "w-24 h-24 rounded-2xl object-cover ring-4 ring-slate-100 shadow-lg" %>
+          <% else %>
+            <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center text-3xl font-black text-slate-300 ring-4 ring-slate-100 shadow-lg">
+              <%= @provider.display_name.first.upcase %>
+            </div>
+          <% end %>
+          <% if @provider.verified? %>
+            <div class="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center ring-4 ring-white shadow-sm">
+              <i class="fas fa-check text-white text-xs"></i>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Info %>
+        <div class="flex-1">
+          <div class="flex items-center gap-3 flex-wrap">
+            <h1 class="text-2xl sm:text-3xl font-black text-slate-900"><%= @provider.business_name || @provider.full_name %></h1>
+            <% if @badge && @badge[:name] != "New" %>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-<%= @badge[:color] %>-50 text-<%= @badge[:color] %>-700">
+                <i class="<%= @badge[:icon] %> mr-1"></i><%= @badge[:name] %>
+              </span>
+            <% end %>
+          </div>
+
+          <div class="flex items-center flex-wrap gap-4 mt-2 text-sm text-slate-500">
+            <% if @provider.average_rating > 0 %>
+              <div class="flex items-center gap-1">
+                <i class="fas fa-star text-amber-400 text-xs"></i>
+                <span class="font-semibold text-slate-900"><%= @provider.average_rating %></span>
+                <span>(<%= @provider.total_reviews %> reviews)</span>
+              </div>
+            <% end %>
+            <div class="flex items-center gap-1">
+              <i class="fas fa-briefcase text-xs text-slate-400"></i>
+              <span><%= @provider.total_completed_bookings %> jobs completed</span>
+            </div>
+            <% if @provider.years_experience.to_i > 0 %>
+              <div class="flex items-center gap-1">
+                <i class="fas fa-clock text-xs text-slate-400"></i>
+                <span><%= @provider.years_experience %> years experience</span>
+              </div>
+            <% end %>
+            <% if @provider.city.present? %>
+              <div class="flex items-center gap-1">
+                <i class="fas fa-map-marker-alt text-xs text-slate-400"></i>
+                <span><%= [@provider.city, @provider.state].compact.join(", ") %></span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <%# CTA %>
+        <div class="flex gap-3 flex-shrink-0">
+          <% if user_signed_in? && current_user.customer? %>
+            <%= form_with url: conversations_path, method: :post, local: true do |form| %>
+              <%= form.hidden_field :user_id, value: @provider.id %>
+              <button type="submit" class="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all cursor-pointer">
+                <i class="fas fa-comments mr-2 text-xs"></i>Message
+              </button>
+            <% end %>
+          <% elsif !user_signed_in? %>
+            <%= link_to new_user_session_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all" do %>
+              <i class="fas fa-sign-in-alt mr-2 text-xs"></i>Sign in to Contact
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid lg:grid-cols-3 gap-8">
+      <%# ===== LEFT: Main content ===== %>
+      <div class="lg:col-span-2 space-y-8">
+        <%# About %>
+        <% if @provider.bio.present? %>
+          <div class="bg-white rounded-xl border border-slate-100 p-6">
+            <h2 class="text-lg font-bold text-slate-900 mb-3">About</h2>
+            <p class="text-sm text-slate-600 leading-relaxed"><%= @provider.bio %></p>
+          </div>
+        <% end %>
+
+        <%# Services %>
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 mb-4">Services (<%= @services.size %>)</h2>
+          <% if @services.any? %>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <% @services.each do |service| %>
+                <%= link_to service_path(service), class: "group block bg-white rounded-xl border border-slate-100 p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" do %>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-medium text-slate-500 bg-slate-50 px-2 py-0.5 rounded-full"><%= service.category.name %></span>
+                  </div>
+                  <h3 class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors text-sm"><%= service.title %></h3>
+                  <p class="text-xs text-slate-500 mt-1 line-clamp-2"><%= service.description %></p>
+                  <div class="mt-3 flex items-center justify-between">
+                    <span class="text-base font-black text-slate-900">$<%= number_with_precision(service.base_price, precision: 0) %><% if service.hourly? %><span class="text-xs text-slate-400 font-normal">/hr</span><% end %></span>
+                    <span class="text-xs text-orange-500 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">View <i class="fas fa-arrow-right text-[10px] ml-1"></i></span>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="bg-white rounded-xl border border-slate-100 p-8 text-center">
+              <p class="text-slate-400 text-sm">No services listed yet.</p>
+            </div>
+          <% end %>
+        </div>
+
+        <%# Reviews %>
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 mb-4">Reviews (<%= @reviews.size %>)</h2>
+          <% if @reviews.any? %>
+            <div class="space-y-4">
+              <% @reviews.each do |review| %>
+                <div class="bg-white rounded-xl border border-slate-100 p-5">
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-center gap-3">
+                      <div class="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">
+                        <%= review.booking.customer.display_name.first.upcase %>
+                      </div>
+                      <div>
+                        <p class="text-sm font-semibold text-slate-900"><%= review.booking.customer.display_name %></p>
+                        <p class="text-xs text-slate-400"><%= review.booking.service.title %> &middot; <%= time_ago_in_words(review.created_at) %> ago</p>
+                      </div>
+                    </div>
+                    <div class="flex gap-0.5">
+                      <% 5.times do |i| %><i class="fas fa-star text-xs <%= i < review.rating ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
+                    </div>
+                  </div>
+                  <p class="mt-3 text-sm text-slate-600 leading-relaxed"><%= review.comment %></p>
+                </div>
+              <% end %>
+            </div>
+          <% else %>
+            <div class="bg-white rounded-xl border border-slate-100 p-8 text-center">
+              <p class="text-slate-400 text-sm">No reviews yet.</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <%# ===== RIGHT: Sidebar ===== %>
+      <div class="space-y-6">
+        <%# Quick stats %>
+        <div class="bg-white rounded-xl border border-slate-100 p-6">
+          <h3 class="text-sm font-bold text-slate-900 mb-4">Stats</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-slate-500">Rating</span>
+              <div class="flex items-center gap-1">
+                <i class="fas fa-star text-amber-400 text-xs"></i>
+                <span class="text-sm font-bold text-slate-900"><%= @provider.average_rating %></span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-slate-500">Jobs completed</span>
+              <span class="text-sm font-bold text-slate-900"><%= @provider.total_completed_bookings %></span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-slate-500">Reviews</span>
+              <span class="text-sm font-bold text-slate-900"><%= @provider.total_reviews %></span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-slate-500">Member since</span>
+              <span class="text-sm font-bold text-slate-900"><%= @provider.created_at.strftime("%b %Y") %></span>
+            </div>
+            <% if @provider.verified? %>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-slate-500">Status</span>
+                <span class="inline-flex items-center text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full"><i class="fas fa-check-circle mr-1"></i>Verified</span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <%# Location %>
+        <% if @provider.city.present? %>
+          <div class="bg-white rounded-xl border border-slate-100 p-6">
+            <h3 class="text-sm font-bold text-slate-900 mb-3">Location</h3>
+            <div class="flex items-start gap-3">
+              <i class="fas fa-map-marker-alt text-orange-400 mt-0.5"></i>
+              <div>
+                <p class="text-sm text-slate-700"><%= @provider.address %></p>
+                <p class="text-sm text-slate-700"><%= [@provider.city, @provider.state, @provider.zip_code].compact.join(", ") %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <%# Contact CTA %>
+        <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-6 text-center">
+          <h3 class="text-sm font-bold text-white mb-2">Need this pro?</h3>
+          <p class="text-xs text-slate-400 mb-4">Browse their services and book directly.</p>
+          <% if @services.any? %>
+            <%= link_to service_path(@services.first), class: "inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-all" do %>
+              View Services <i class="fas fa-arrow-right ml-2 text-xs"></i>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

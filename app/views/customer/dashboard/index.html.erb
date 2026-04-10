@@ -121,9 +121,13 @@
                       </span>
                       <p class="text-sm font-medium mt-1 text-slate-900">$<%= booking.total_price %></p>
                       <% if booking.status == 'pending' %>
-                        <button class="mt-2 text-xs text-red-600 hover:text-red-700">
+                        <%= link_to booking_path(booking), method: :delete, data: { confirm: "Cancel this booking?" }, class: "mt-2 text-xs text-red-600 hover:text-red-700" do %>
                           <i class="fas fa-times mr-1"></i>Cancel
-                        </button>
+                        <% end %>
+                      <% elsif booking.status == 'completed' && !booking.review %>
+                        <%= link_to new_booking_review_path(booking), class: "mt-2 inline-flex items-center text-xs font-semibold text-orange-600 hover:text-orange-700" do %>
+                          <i class="fas fa-star mr-1"></i>Leave Review
+                        <% end %>
                       <% end %>
                     </div>
                   </div>
@@ -244,7 +248,11 @@
                   <div class="text-right">
                     <p class="text-xs font-medium text-slate-900">$<%= booking.total_price %></p>
                     <% if booking.status == 'completed' && !booking.review %>
-                      <button class="text-xs text-orange-600 hover:text-orange-700">Review</button>
+                      <%= link_to new_booking_review_path(booking), class: "text-xs font-semibold text-orange-600 hover:text-orange-700" do %>
+                        <i class="fas fa-star mr-0.5"></i>Review
+                      <% end %>
+                    <% elsif booking.review %>
+                      <span class="text-xs text-emerald-600"><i class="fas fa-check mr-0.5"></i>Reviewed</span>
                     <% end %>
                   </div>
                 </div>

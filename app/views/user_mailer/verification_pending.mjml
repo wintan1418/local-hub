@@ -1,0 +1,33 @@
+<mjml>
+  <mj-head>
+    <mj-title>Documents Received - Radius</mj-title>
+    <mj-preview>We've received your verification documents.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <mj-section background-color="#0f172a" padding="30px 0">
+      <mj-column>
+        <mj-text align="center" color="#ffffff" font-size="22px" font-weight="800">Radius</mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#0f172a">Documents Received</mj-text>
+        <mj-text>Hi <%= @user.display_name %>,</mj-text>
+        <mj-text>We've received your verification documents and they're now under review. Our team will verify your credentials within 1-2 business days.</mj-text>
+        <mj-text>You'll receive an email once the review is complete. In the meantime, you can continue setting up your profile and services.</mj-text>
+        <mj-button background-color="#0f172a" href="<%= provider_dashboard_url %>">Go to Dashboard</mj-button>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="20px 0">
+      <mj-column>
+        <mj-text align="center" font-size="12px" color="#94a3b8">&copy; <%= Date.current.year %> Radius. All rights reserved.</mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

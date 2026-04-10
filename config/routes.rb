@@ -39,6 +39,13 @@ Rails.application.routes.draw do
   namespace :provider do
     get "dashboard", to: "dashboard#index", as: :dashboard
     resources :services, only: [ :new, :create, :edit, :update, :destroy ]
+    resources :bookings, only: [] do
+      member do
+        patch :confirm
+        patch :complete
+        patch :cancel
+      end
+    end
 
     resource :profile, only: [ :show, :edit, :update ] do
       member do
@@ -89,7 +96,12 @@ Rails.application.routes.draw do
   resources :services, only: [ :index, :show ] do
     resources :bookings, only: [ :create ]
   end
-  resources :bookings, only: [ :destroy ]
+  resources :bookings, only: [ :destroy ] do
+    resource :review, only: [ :new, :create ]
+  end
+
+  # Public provider profiles
+  resources :providers, only: [ :show ]
 
   # Leaderboard
   resources :leaderboard, only: [ :index, :show ]

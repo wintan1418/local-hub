@@ -16,6 +16,15 @@
             class: "w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-shadow text-sm" %>
       </div>
 
+      <div class="relative flex-1 sm:max-w-[200px]">
+        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+          <i class="fas fa-map-marker-alt text-slate-400 text-sm"></i>
+        </div>
+        <%= f.text_field :location, value: @location,
+            placeholder: "City or ZIP",
+            class: "w-full pl-11 pr-4 py-3 rounded-lg border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-shadow text-sm" %>
+      </div>
+
       <%= f.select :category_id,
           options_for_select([['All Categories', '']] + @categories.map { |c| [c.name, c.id] }, @category_id),
           {}, class: "px-4 py-3 rounded-lg border border-slate-200 text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-sm bg-white" %>
@@ -26,13 +35,22 @@
     <% end %>
 
     <%# Active filter chips %>
-    <% if @query.present? || @category_id.present? %>
+    <% if @query.present? || @category_id.present? || @location.present? %>
       <div class="flex flex-wrap items-center gap-2 mt-4 max-w-3xl mx-auto">
         <span class="text-sm text-slate-500">Filters:</span>
         <% if @query.present? %>
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-orange-50 text-orange-700">
             "<%= @query %>"
-            <%= link_to services_path(category_id: @category_id, sort: @sort), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
+            <%= link_to services_path(category_id: @category_id, sort: @sort, location: @location), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
+              <i class="fas fa-times text-xs"></i>
+            <% end %>
+          </span>
+        <% end %>
+        <% if @location.present? %>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-sky-50 text-sky-700">
+            <i class="fas fa-map-marker-alt text-xs"></i>
+            <%= @location %>
+            <%= link_to services_path(query: @query, category_id: @category_id, location: @location, sort: @sort), class: "ml-1 text-sky-400 hover:text-sky-600" do %>
               <i class="fas fa-times text-xs"></i>
             <% end %>
           </span>
@@ -43,7 +61,7 @@
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-orange-50 text-orange-700">
               <i class="fas fa-tag text-xs"></i>
               <%= active_cat.name %>
-              <%= link_to services_path(query: @query, sort: @sort), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
+              <%= link_to services_path(query: @query, sort: @sort, location: @location), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
                 <i class="fas fa-times text-xs"></i>
               <% end %>
             </span>
@@ -73,7 +91,7 @@
             ["Top Rated", "top_rated", "fas fa-star"]
           ] %>
           <% sort_options.each do |label, value, icon| %>
-            <%= link_to services_path(query: @query, category_id: @category_id, sort: value),
+            <%= link_to services_path(query: @query, category_id: @category_id, location: @location, sort: value),
                 class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors #{@sort == value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}" do %>
               <i class="<%= icon %> text-[10px]"></i><%= label %>
             <% end %>
@@ -90,7 +108,7 @@
         <div class="mt-12 flex justify-center">
           <nav class="flex items-center gap-1">
             <% if @services.prev_page %>
-              <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: @services.prev_page),
+              <%= link_to services_path(query: @query, category_id: @category_id, location: @location, sort: @sort, page: @services.prev_page),
                   class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors" do %>
                 <i class="fas fa-chevron-left text-xs"></i>
               <% end %>
@@ -100,7 +118,7 @@
               <% if page_num == @services.current_page %>
                 <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-orange-500 text-white text-sm font-medium"><%= page_num %></span>
               <% elsif page_num == 1 || page_num == @services.total_pages || (page_num - @services.current_page).abs <= 2 %>
-                <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: page_num),
+                <%= link_to services_path(query: @query, category_id: @category_id, location: @location, sort: @sort, page: page_num),
                     class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 transition-colors text-sm font-medium" do %>
                   <%= page_num %>
                 <% end %>
@@ -110,7 +128,7 @@
             <% end %>
 
             <% if @services.next_page %>
-              <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: @services.next_page),
+              <%= link_to services_path(query: @query, category_id: @category_id, location: @location, sort: @sort, page: @services.next_page),
                   class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 transition-colors" do %>
                 <i class="fas fa-chevron-right text-xs"></i>
               <% end %>

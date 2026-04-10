@@ -1,0 +1,110 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <%# Header %>
+    <div class="mb-8">
+      <%= link_to customer_dashboard_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 transition-colors mb-4" do %>
+        <i class="fas fa-arrow-left text-xs"></i> Back to dashboard
+      <% end %>
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900">Leave a Review</h1>
+      <p class="mt-2 text-slate-500">Share your experience to help other customers.</p>
+    </div>
+
+    <%# Service info card %>
+    <div class="bg-white rounded-xl border border-slate-100 p-5 mb-8 flex items-center gap-4">
+      <div class="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-concierge-bell text-slate-400"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <h3 class="font-bold text-slate-900 truncate"><%= @booking.service.title %></h3>
+        <p class="text-sm text-slate-500">by <%= @booking.service.provider.display_name %></p>
+        <p class="text-xs text-slate-400 mt-0.5">
+          Completed <%= time_ago_in_words(@booking.updated_at) %> ago &middot; $<%= number_with_precision(@booking.total_price, precision: 0) %>
+        </p>
+      </div>
+    </div>
+
+    <%# Review form %>
+    <div class="bg-white rounded-xl border border-slate-100 p-6 sm:p-8">
+      <%= form_with(model: @review, url: booking_review_path(@booking), method: :post) do |f| %>
+
+        <% if @review.errors.any? %>
+          <div class="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
+            <p class="text-sm font-medium text-red-800"><%= pluralize(@review.errors.count, "error") %> prevented your review:</p>
+            <ul class="mt-2 list-disc list-inside text-sm text-red-700">
+              <% @review.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%# Star rating %>
+        <div class="mb-6">
+          <label class="block text-sm font-bold text-slate-900 mb-3">How would you rate this service?</label>
+          <div class="flex gap-2" id="star-rating">
+            <% (1..5).each do |star| %>
+              <label class="cursor-pointer">
+                <input type="radio" name="review[rating]" value="<%= star %>" class="hidden peer" <%= 'checked' if @review.rating == star %>>
+                <i class="fas fa-star text-3xl text-slate-200 peer-checked:text-amber-400 hover:text-amber-300 transition-colors star-btn" data-star="<%= star %>"></i>
+              </label>
+            <% end %>
+          </div>
+          <p class="text-xs text-slate-400 mt-2" id="star-label">Select a rating</p>
+        </div>
+
+        <%# Comment %>
+        <div class="mb-8">
+          <label class="block text-sm font-bold text-slate-900 mb-2">Tell us about your experience</label>
+          <%= f.text_area :comment, rows: 5,
+              placeholder: "What went well? Was the provider professional and on time? Would you hire them again?",
+              class: "w-full border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all resize-none" %>
+          <p class="text-xs text-slate-400 mt-1.5">Minimum 10 characters. Be honest and helpful.</p>
+        </div>
+
+        <%# Submit %>
+        <div class="flex items-center justify-between">
+          <%= link_to "Cancel", customer_dashboard_path, class: "text-sm font-semibold text-slate-500 hover:text-slate-700 transition-colors" %>
+          <%= f.submit "Submit Review", class: "btn-shine bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold text-sm transition-all cursor-pointer hover:shadow-lg hover:shadow-orange-500/20" %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+// Interactive star rating
+document.addEventListener('DOMContentLoaded', function() {
+  var labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+  var stars = document.querySelectorAll('.star-btn');
+  var labelEl = document.getElementById('star-label');
+
+  function highlightStars(upTo) {
+    stars.forEach(function(s, i) {
+      s.classList.toggle('text-amber-400', i < upTo);
+      s.classList.toggle('text-slate-200', i >= upTo);
+    });
+  }
+
+  stars.forEach(function(star) {
+    var val = parseInt(star.dataset.star);
+
+    star.addEventListener('mouseenter', function() {
+      highlightStars(val);
+      if (labelEl) labelEl.textContent = labels[val];
+    });
+
+    star.parentElement.addEventListener('click', function() {
+      highlightStars(val);
+      if (labelEl) labelEl.textContent = labels[val];
+    });
+  });
+
+  document.getElementById('star-rating').addEventListener('mouseleave', function() {
+    var checked = document.querySelector('input[name="review[rating]"]:checked');
+    var val = checked ? parseInt(checked.value) : 0;
+    highlightStars(val);
+    if (labelEl) labelEl.textContent = val ? labels[val] : 'Select a rating';
+  });
+});
+</script>

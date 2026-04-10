@@ -125,6 +125,21 @@
                         <%= booking.status.titleize %>
                       </span>
                       <p class="text-sm font-medium mt-1 text-slate-900">$<%= booking.total_price %></p>
+                      <%# Action buttons %>
+                      <div class="mt-2 flex gap-2 justify-end">
+                        <% if booking.pending? %>
+                          <%= link_to confirm_provider_booking_path(booking), method: :patch, class: "inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors" do %>
+                            <i class="fas fa-check mr-1"></i>Accept
+                          <% end %>
+                          <%= link_to cancel_provider_booking_path(booking), method: :patch, data: { confirm: "Reject this booking?" }, class: "inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-colors" do %>
+                            <i class="fas fa-times mr-1"></i>Reject
+                          <% end %>
+                        <% elsif booking.confirmed? %>
+                          <%= link_to complete_provider_booking_path(booking), method: :patch, data: { confirm: "Mark this booking as completed?" }, class: "inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors" do %>
+                            <i class="fas fa-check-double mr-1"></i>Complete
+                          <% end %>
+                        <% end %>
+                      </div>
                     </div>
                   </div>
                 <% end %>

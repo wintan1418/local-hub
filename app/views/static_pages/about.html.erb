@@ -174,7 +174,7 @@
         { value: @total_reviews, label: "Reviews" }
       ].each do |stat| %>
         <div>
-          <div class="text-3xl sm:text-4xl font-black text-white counter" data-target="<%= stat[:value] %>">0</div>
+          <div class="text-3xl sm:text-4xl font-black text-white"><%= number_with_delimiter(stat[:value]) %>+</div>
           <div class="text-xs text-slate-500 mt-2 font-medium uppercase tracking-wider"><%= stat[:label] %></div>
         </div>
       <% end %>
