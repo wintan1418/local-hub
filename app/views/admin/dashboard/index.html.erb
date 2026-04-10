@@ -8,12 +8,12 @@
           <p class="mt-1 text-sm text-slate-600">Platform overview and management</p>
         </div>
         <div class="flex space-x-3">
-          <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-500 transition-colors flex items-center">
+          <%= link_to admin_categories_path, class: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center" do %>
             <i class="fas fa-plus mr-2"></i>Add Category
-          </button>
-          <button class="bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors flex items-center">
-            <i class="fas fa-download mr-2"></i>Export Reports
-          </button>
+          <% end %>
+          <%= link_to admin_users_path, class: "bg-white border border-slate-200 text-slate-700 px-4 py-2 rounded-lg hover:bg-slate-50 transition-colors flex items-center" do %>
+            <i class="fas fa-users mr-2"></i>All Users
+          <% end %>
         </div>
       </div>
     </div>
@@ -267,18 +267,18 @@
               <% end %>
             <% end %>
             
-            <button class="block w-full bg-orange-500 text-white text-center py-2 px-4 rounded-lg hover:bg-orange-500 transition-colors">
+            <%= link_to admin_users_path, class: "block w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-2 px-4 rounded-lg transition-colors" do %>
               <i class="fas fa-users mr-2"></i>Manage Users
-            </button>
-            <button class="block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">
+            <% end %>
+            <%= link_to admin_services_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-cog mr-2"></i>Manage Services
-            </button>
-            <button class="block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">
+            <% end %>
+            <%= link_to admin_categories_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-tags mr-2"></i>Manage Categories
-            </button>
-            <button class="block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">
+            <% end %>
+            <%= link_to admin_users_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-chart-bar mr-2"></i>Analytics
-            </button>
+            <% end %>
           </div>
         </div>
 
