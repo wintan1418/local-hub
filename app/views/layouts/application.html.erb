@@ -52,6 +52,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 
     <%= yield(:head) if content_for?(:head) %>
+
+    <script>
+      function toggleMobileMenu(){var m=document.getElementById('mobile-menu'),o=document.getElementById('menu-icon-open'),c=document.getElementById('menu-icon-close');if(!m)return;if(m.classList.contains('hidden')){m.classList.remove('hidden');if(o)o.classList.add('hidden');if(c)c.classList.remove('hidden');document.body.style.overflow='hidden';}else{closeMobileMenu();}}
+      function closeMobileMenu(){var m=document.getElementById('mobile-menu'),o=document.getElementById('menu-icon-open'),c=document.getElementById('menu-icon-close');if(m)m.classList.add('hidden');if(o)o.classList.remove('hidden');if(c)c.classList.add('hidden');document.body.style.overflow='';}
+    </script>
   </head>
 
   <body class="min-h-screen font-sans antialiased text-slate-800 bg-white" style="font-family: 'Inter', system-ui, sans-serif;">
@@ -436,32 +441,6 @@
     </footer>
 
     <script>
-      // Mobile menu toggle
-      function toggleMobileMenu() {
-        var menu = document.getElementById('mobile-menu');
-        var iconOpen = document.getElementById('menu-icon-open');
-        var iconClose = document.getElementById('menu-icon-close');
-        if (!menu) return;
-        var isHidden = menu.classList.contains('hidden');
-        if (isHidden) {
-          menu.classList.remove('hidden');
-          if (iconOpen) iconOpen.classList.add('hidden');
-          if (iconClose) iconClose.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
-        } else {
-          closeMobileMenu();
-        }
-      }
-      function closeMobileMenu() {
-        var menu = document.getElementById('mobile-menu');
-        var iconOpen = document.getElementById('menu-icon-open');
-        var iconClose = document.getElementById('menu-icon-close');
-        if (menu) menu.classList.add('hidden');
-        if (iconOpen) iconOpen.classList.remove('hidden');
-        if (iconClose) iconClose.classList.add('hidden');
-        document.body.style.overflow = '';
-      }
-
       // Dropdown toggle
       function toggleDropdown() {
         const dd = document.getElementById('user-dropdown');
