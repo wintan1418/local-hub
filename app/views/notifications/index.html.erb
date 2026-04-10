@@ -1,5 +1,6 @@
-<div class="max-w-4xl mx-auto p-6">
-  <div class="bg-white shadow-lg rounded-lg">
+<div class="min-h-screen bg-gray-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-white rounded-xl border border-gray-100">
     <!-- Header -->
     <div class="px-6 py-4 border-b border-gray-200">
       <div class="flex justify-between items-center">
@@ -9,7 +10,7 @@
         </h2>
         <% if @notifications.unread.any? %>
           <%= link_to mark_all_as_read_notifications_path, method: :patch, 
-                      class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200" do %>
+                      class: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200" do %>
             <i class="fas fa-check-double mr-1"></i>
             Mark All as Read
           <% end %>
@@ -92,4 +93,5 @@
       <% end %>
     </div>
   </div>
+</div>
 </div>

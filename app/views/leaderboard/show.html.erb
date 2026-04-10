@@ -13,9 +13,9 @@
         <%# Avatar %>
         <div class="flex-shrink-0">
           <% if @provider.profile_picture.attached? %>
-            <%= image_tag @provider.profile_picture, class: "h-20 w-20 rounded-2xl object-cover" %>
+            <%= image_tag @provider.profile_picture, class: "h-20 w-20 rounded-xl object-cover" %>
           <% else %>
-            <div class="h-20 w-20 rounded-2xl bg-orange-100 flex items-center justify-center text-2xl font-bold text-orange-600">
+            <div class="h-20 w-20 rounded-xl bg-orange-100 flex items-center justify-center text-2xl font-bold text-orange-600">
               <%= @provider.display_name.first.upcase %>
             </div>
           <% end %>
@@ -80,7 +80,7 @@
       <%# Main Content %>
       <div class="lg:col-span-2 space-y-8">
         <%# Stats %>
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+        <div class="bg-white rounded-xl border border-gray-100 p-6">
           <h2 class="text-lg font-semibold text-gray-900 mb-6">Performance</h2>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div class="text-center">
@@ -111,7 +111,7 @@
         </div>
 
         <%# Services %>
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+        <div class="bg-white rounded-xl border border-gray-100 p-6">
           <h2 class="text-lg font-semibold text-gray-900 mb-6">Services Offered</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <% @services.each do |service| %>
@@ -138,7 +138,7 @@
         </div>
 
         <%# Reviews %>
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+        <div class="bg-white rounded-xl border border-gray-100 p-6">
           <h2 class="text-lg font-semibold text-gray-900 mb-6">Recent Reviews</h2>
           <% if @recent_reviews.any? %>
             <div class="space-y-6">
@@ -175,7 +175,7 @@
       <div class="space-y-6">
         <%# Portfolio %>
         <% if @provider.portfolio_images.any? %>
-          <div class="bg-white rounded-2xl border border-gray-100 p-6">
+          <div class="bg-white rounded-xl border border-gray-100 p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Portfolio</h3>
             <div class="grid grid-cols-2 gap-3">
               <% @provider.portfolio_images.limit(6).each do |image| %>
@@ -191,7 +191,7 @@
         <% end %>
 
         <%# Contact %>
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+        <div class="bg-white rounded-xl border border-gray-100 p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Contact</h3>
           <div class="space-y-3">
             <div class="flex items-center gap-3">
@@ -220,7 +220,7 @@
         </div>
 
         <%# Quick Stats %>
-        <div class="bg-white rounded-2xl border border-gray-100 p-6">
+        <div class="bg-white rounded-xl border border-gray-100 p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
           <div class="space-y-3">
             <div class="flex justify-between items-center">

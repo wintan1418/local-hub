@@ -1,11 +1,12 @@
-<div class="max-w-6xl mx-auto p-6">
+<div class="min-h-screen bg-gray-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
   <div class="mb-6 flex justify-between items-center">
     <div>
       <h1 class="text-3xl font-bold text-gray-900">Messages</h1>
       <p class="text-gray-600">Manage your conversations with <%= current_user.customer? ? 'service providers' : 'customers' %></p>
     </div>
     <% if current_user.customer? %>
-      <button onclick="openProviderSearch()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center">
+      <button onclick="openProviderSearch()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition duration-200 flex items-center">
         <i class="fas fa-plus mr-2"></i>Start New Chat
       </button>
     <% end %>
@@ -113,6 +114,7 @@
   </div>
 </div>
 <% end %>
+</div>
 
 <script>
 function openProviderSearch() {

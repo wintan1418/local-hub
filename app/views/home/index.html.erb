@@ -1,310 +1,307 @@
 <%
-  # Hero slideshow images — high-quality, diverse shots
-  hero_images = [
-    "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1920&q=80",
-    "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=1920&q=80",
-    "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&q=80",
-    "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1920&q=80"
-  ]
-
-  category_images = {
-    "home-cleaning"     => "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80",
-    "plumbing"          => "https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&q=80",
-    "electrical"        => "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=600&q=80",
-    "landscaping"       => "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
-    "moving"            => "https://images.unsplash.com/photo-1600518464441-9154a4dea21b?w=600&q=80",
-    "handyman"          => "https://images.unsplash.com/photo-1504148455328-c376907d081c?w=600&q=80",
-    "painting"          => "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&q=80",
-    "pet-care"          => "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=80",
-    "tutoring"          => "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80",
-    "personal-training" => "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=600&q=80"
+  category_icons = {
+    "home-cleaning" => "fa-broom", "plumbing" => "fa-wrench", "electrical" => "fa-bolt",
+    "landscaping" => "fa-leaf", "moving" => "fa-truck", "handyman" => "fa-hammer",
+    "painting" => "fa-paint-roller", "pet-care" => "fa-paw", "tutoring" => "fa-graduation-cap",
+    "personal-training" => "fa-dumbbell"
   }
-
-  service_images = {
-    "home-cleaning"     => "https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=800&q=80",
-    "plumbing"          => "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=800&q=80",
-    "electrical"        => "https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?w=800&q=80",
-    "landscaping"       => "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80",
-    "moving"            => "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80",
-    "handyman"          => "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800&q=80",
-    "painting"          => "https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=800&q=80",
-    "pet-care"          => "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80",
-    "tutoring"          => "https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800&q=80",
-    "personal-training" => "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80"
+  category_colors = {
+    "home-cleaning" => "sky", "plumbing" => "blue", "electrical" => "amber",
+    "landscaping" => "emerald", "moving" => "violet", "handyman" => "orange",
+    "painting" => "rose", "pet-care" => "teal", "tutoring" => "indigo",
+    "personal-training" => "red"
   }
 %>
 
 <%# ================================================================
-    HERO — Full-bleed image slider with bold overlay
+    HERO — Falling professionals particle rain
     ================================================================ %>
-<section class="relative min-h-[92vh] flex items-center overflow-hidden" id="hero">
-  <%# Background image slideshow %>
+<section class="relative min-h-[100vh] flex items-center overflow-hidden bg-slate-950" id="hero">
+  <%# Ambient gradient glow %>
   <div class="absolute inset-0">
-    <% hero_images.each_with_index do |img, i| %>
-      <div class="hero-slide absolute inset-0 transition-opacity duration-[1.5s] ease-in-out <%= i == 0 ? 'opacity-100' : 'opacity-0' %>" data-slide>
-        <img src="<%= img %>" alt="" class="w-full h-full object-cover scale-[1.05]" loading="<%= i == 0 ? 'eager' : 'lazy' %>">
-      </div>
-    <% end %>
-    <%# Overlay: dark bottom-heavy gradient with warm orange tint %>
-    <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-orange-900/20"></div>
+    <div class="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-orange-500/[0.07] rounded-full blur-[120px] orb-float"></div>
+    <div class="absolute bottom-[-10%] right-[15%] w-[600px] h-[600px] bg-violet-500/[0.05] rounded-full blur-[140px] orb-float-reverse"></div>
+    <div class="absolute top-[30%] right-[40%] w-[300px] h-[300px] bg-sky-500/[0.04] rounded-full blur-[100px] orb-float-slow"></div>
   </div>
 
-  <%# Content %>
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 w-full">
-    <div class="max-w-2xl">
-      <%# Animated pill %>
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 hero-fade-in" style="animation-delay: 0.2s">
-        <span class="relative flex h-2.5 w-2.5">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-orange-500"></span>
-        </span>
-        <span class="text-white/90 text-sm font-medium"><%= number_with_delimiter(@total_providers) %>+ verified professionals near you</span>
-      </div>
+  <%# Dot grid %>
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 48px 48px;"></div>
 
-      <%# Headline %>
-      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight hero-fade-in" style="animation-delay: 0.4s">
-        Find the right pro,<br>
-        <span class="relative">
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-400">right around you.</span>
-          <span class="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-transparent rounded-full opacity-60"></span>
-        </span>
-      </h1>
+  <%# ===== PARTICLE CANVAS — JS renders falling pro bubbles here ===== %>
+  <div class="absolute inset-0 overflow-hidden pointer-events-none" id="particle-canvas"></div>
 
-      <%# Subtext %>
-      <p class="mt-8 text-lg lg:text-xl text-white/70 max-w-lg leading-relaxed hero-fade-in" style="animation-delay: 0.6s">
-        Search, compare, and book trusted local professionals — plumbers, electricians, cleaners, and more. All verified, all reviewed.
-      </p>
+  <%# ===== CENTER CONTENT ===== %>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 lg:py-20">
+    <div class="max-w-3xl mx-auto">
 
-      <%# Search bar — frosted glass %>
-      <div class="mt-10 hero-fade-in" style="animation-delay: 0.8s">
-        <%= form_tag services_path, method: :get, class: "relative" do %>
-          <div class="flex flex-col sm:flex-row bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-2 shadow-2xl shadow-black/20 focus-within:border-orange-400/40 focus-within:bg-white/[0.15] transition-all duration-300">
-            <div class="relative flex-1">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fas fa-search text-white/40"></i>
+      <div class="relative text-center">
+        <%# Badge %>
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] mb-8 hero-reveal" style="--delay: 0s">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span class="text-white/70 text-sm font-medium"><%= number_with_delimiter(@total_providers) %> pros available now</span>
+        </div>
+
+        <%# Headline %>
+        <h1 class="hero-reveal" style="--delay: 0.1s">
+          <span class="block text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight">
+            Find your pro.
+          </span>
+          <span class="block text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight mt-2 hero-gradient-text">
+            Book in minutes.
+          </span>
+        </h1>
+
+        <p class="mt-8 text-lg sm:text-xl text-white/50 max-w-xl mx-auto leading-relaxed hero-reveal" style="--delay: 0.2s">
+          Verified local professionals for every project. Search, compare, and book — instantly.
+        </p>
+
+        <%# Search bar %>
+        <div class="mt-10 max-w-2xl mx-auto hero-reveal" style="--delay: 0.3s">
+          <%= form_tag services_path, method: :get do %>
+            <div class="search-glow flex flex-col sm:flex-row bg-white rounded-2xl shadow-2xl shadow-black/20 p-2 focus-within:shadow-[0_0_80px_-10px_rgba(249,115,22,0.2)] transition-all duration-500">
+              <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                  <i class="fas fa-search text-slate-300 text-lg"></i>
+                </div>
+                <%= text_field_tag :query, nil,
+                    placeholder: "What do you need help with?",
+                    class: "w-full pl-[3.25rem] pr-4 py-4 sm:py-5 bg-transparent text-slate-900 placeholder-slate-400 text-lg focus:outline-none rounded-xl" %>
               </div>
-              <%= text_field_tag :query, nil,
-                  placeholder: "What service do you need?",
-                  class: "w-full pl-11 pr-4 py-4 bg-transparent text-white placeholder-white/40 text-base focus:outline-none" %>
+              <button type="submit" class="btn-shine group bg-orange-500 hover:bg-orange-600 text-white px-10 py-4 sm:py-5 rounded-xl font-bold text-base transition-all duration-300 cursor-pointer mt-2 sm:mt-0 whitespace-nowrap hover:shadow-lg hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98]">
+                Search Pros
+                <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
+              </button>
             </div>
-            <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-xl font-semibold text-base transition-all hover:shadow-lg hover:shadow-orange-500/25 whitespace-nowrap cursor-pointer mt-2 sm:mt-0">
-              <i class="fas fa-search mr-2 sm:hidden"></i>Search
-            </button>
-          </div>
-        <% end %>
-      </div>
+          <% end %>
+        </div>
 
-      <%# Popular tags %>
-      <div class="mt-6 flex flex-wrap gap-2 hero-fade-in" style="animation-delay: 1s">
-        <span class="text-white/40 text-sm py-1.5">Popular:</span>
-        <% @categories.limit(5).each do |category| %>
-          <%= link_to category.name, services_path(category_id: category.id),
-              class: "px-3.5 py-1.5 rounded-full text-sm font-medium bg-white/[0.08] border border-white/[0.1] text-white/70 hover:bg-white/[0.15] hover:text-white transition-all" %>
-        <% end %>
+        <%# Category pills %>
+        <div class="mt-8 flex flex-wrap justify-center gap-2 hero-reveal" style="--delay: 0.4s">
+          <% @categories.limit(5).each do |cat| %>
+            <% color = category_colors[cat.slug] || "gray" %>
+            <%= link_to services_path(category_id: cat.id),
+                class: "group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-white/[0.06] border border-white/[0.08] text-white/60 hover:bg-white/[0.12] hover:text-white hover:border-white/[0.2] transition-all duration-200" do %>
+              <i class="fas <%= category_icons[cat.slug] || 'fa-cog' %> text-xs text-<%= color %>-400 opacity-70"></i>
+              <%= cat.name %>
+            <% end %>
+          <% end %>
+        </div>
+
+        <%# Social proof %>
+        <div class="mt-12 hero-reveal" style="--delay: 0.5s">
+          <div class="inline-flex flex-wrap items-center justify-center gap-6 sm:gap-8 px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/[0.06]">
+            <div class="flex items-center gap-2.5">
+              <div class="flex -space-x-2">
+                <img src="https://i.pravatar.cc/32?u=h1" class="w-7 h-7 rounded-full ring-2 ring-slate-950" alt="">
+                <img src="https://i.pravatar.cc/32?u=h2" class="w-7 h-7 rounded-full ring-2 ring-slate-950" alt="">
+                <img src="https://i.pravatar.cc/32?u=h3" class="w-7 h-7 rounded-full ring-2 ring-slate-950" alt="">
+              </div>
+              <span class="text-white/60 text-sm font-medium"><%= number_with_delimiter(@total_providers) %>+ pros</span>
+            </div>
+            <div class="hidden sm:flex items-center gap-1.5">
+              <div class="flex gap-0.5"><% 5.times do %><i class="fas fa-star text-amber-400 text-[10px]"></i><% end %></div>
+              <span class="text-white/60 text-sm font-medium">4.9 avg</span>
+            </div>
+            <div class="hidden md:flex items-center gap-1.5">
+              <i class="fas fa-shield-alt text-emerald-400 text-[10px]"></i>
+              <span class="text-white/60 text-sm font-medium">Verified</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <%# Stats bar at bottom %>
-  <div class="absolute bottom-0 inset-x-0 z-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-px bg-white/[0.08] backdrop-blur-md rounded-t-2xl overflow-hidden border-t border-x border-white/[0.12]">
-        <% [
-          { value: @total_providers, label: "Providers", icon: "fa-hard-hat" },
-          { value: @total_services, label: "Services", icon: "fa-concierge-bell" },
-          { value: @total_bookings, label: "Bookings", icon: "fa-calendar-check" },
-          { value: @total_customers, label: "Customers", icon: "fa-users" }
-        ].each do |stat| %>
-          <div class="px-6 py-5 text-center bg-black/20">
-            <div class="text-2xl sm:text-3xl font-bold text-white"><%= number_with_delimiter(stat[:value]) %>+</div>
-            <div class="text-xs text-white/50 mt-1 font-medium uppercase tracking-wider"><%= stat[:label] %></div>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-
-  <%# Slide indicators %>
-  <div class="absolute bottom-24 sm:bottom-28 left-1/2 -translate-x-1/2 z-10 flex gap-2">
-    <% hero_images.size.times do |i| %>
-      <button class="h-1.5 rounded-full transition-all duration-500 cursor-pointer <%= i == 0 ? 'bg-orange-500 w-8' : 'bg-white/30 w-4 hover:bg-white/50' %>"
-              data-dot data-index="<%= i %>"></button>
-    <% end %>
-  </div>
+  <%# Bottom fade to white %>
+  <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent z-20"></div>
 </section>
 
 <%# ================================================================
-    CATEGORIES — Clean light section
+    MARQUEE TRUST BAR
     ================================================================ %>
-<section class="py-24 bg-white" id="services">
+<div class="py-5 bg-slate-900 overflow-hidden">
+  <div class="marquee-wrapper">
+    <div class="marquee-track">
+      <% 2.times do %>
+        <% ["Verified Professionals", "Background Checked", "Secure Payments", "Real Reviews", "Instant Booking", "#{number_with_delimiter(@total_bookings)}+ Bookings Completed", "4.9★ Average Rating", "#{number_with_delimiter(@total_providers)}+ Trusted Pros", "Free to Get Started", "24/7 Support"].each do |item| %>
+          <span class="inline-flex items-center text-sm text-slate-300 font-medium whitespace-nowrap px-8">
+            <span class="w-1.5 h-1.5 rounded-full bg-orange-400 mr-3 flex-shrink-0"></span>
+            <%= item %>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<%# ================================================================
+    CATEGORIES — Bento-style icon cards
+    ================================================================ %>
+<section class="py-20 bg-white" id="services">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-600 border border-orange-100 uppercase tracking-wider mb-4">Categories</span>
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Browse by Category</h2>
-      <p class="mt-4 text-lg text-gray-500">Whatever you need done, we have the right pro.</p>
+    <div class="flex items-end justify-between mb-12" data-aos="fade-up">
+      <div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">What do you need?</h2>
+        <p class="mt-2 text-slate-500 text-lg">Choose a category to find the right pro.</p>
+      </div>
+      <div class="hidden sm:block">
+        <%= link_to services_path, class: "group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors" do %>
+          Browse all <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+        <% end %>
+      </div>
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4" data-aos="fade-up" data-aos-delay="100">
-      <% @categories.each do |category| %>
+      <% @categories.each_with_index do |category, i| %>
+        <% color = category_colors[category.slug] || "gray" %>
         <%= link_to services_path(category_id: category.id),
-            class: "group relative rounded-2xl overflow-hidden aspect-[4/3] shadow-sm hover:shadow-xl transition-shadow duration-300" do %>
-          <img src="<%= category_images[category.slug] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&q=80' %>"
-               alt="<%= category.name %>"
-               class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
-               loading="lazy">
-          <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/30 to-transparent group-hover:from-gray-900/90 transition-all duration-300"></div>
-          <div class="absolute inset-0 flex flex-col justify-end p-4">
-            <h3 class="text-white font-bold text-sm sm:text-base drop-shadow-lg"><%= category.name %></h3>
-            <span class="text-white/60 text-xs mt-0.5"><%= category.services.count %> services</span>
+            class: "cat-card tilt-card group relative flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl border border-slate-100 bg-white hover:border-#{color}-200 hover:bg-#{color}-50/30 transition-all duration-300 overflow-hidden",
+            style: "--glow-color: var(--tw-#{color}-100, rgba(249,115,22,0.06))",
+            data: { aos: "fade-up", "aos-delay": i * 40 } do %>
+          <%# Glow on hover %>
+          <div class="absolute inset-0 bg-gradient-to-br from-<%= color %>-100/0 to-<%= color %>-100/0 group-hover:from-<%= color %>-100/30 group-hover:to-transparent transition-all duration-500 rounded-2xl"></div>
+          <div class="relative">
+            <div class="w-14 h-14 rounded-2xl bg-<%= color %>-50 border border-<%= color %>-100 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-md group-hover:shadow-<%= color %>-500/10 transition-all duration-300">
+              <i class="fas <%= category_icons[category.slug] || 'fa-cog' %> text-xl text-<%= color %>-500"></i>
+            </div>
+            <span class="text-sm font-bold text-slate-800 group-hover:text-<%= color %>-700 transition-colors"><%= category.name %></span>
+            <span class="block text-xs text-slate-400 mt-1"><%= category.services.count %> pros</span>
           </div>
         <% end %>
       <% end %>
     </div>
-
-    <div class="text-center mt-12">
-      <%= link_to services_path, class: "inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 transition-colors group text-sm" do %>
-        View all services
-        <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
-      <% end %>
-    </div>
   </div>
 </section>
 
 <%# ================================================================
-    HOW IT WORKS — Subtle gradient background
-    ================================================================ %>
-<section class="py-24 bg-gradient-to-b from-gray-50 to-white" id="how-it-works">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-600 border border-orange-100 uppercase tracking-wider mb-4">How It Works</span>
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Three Steps. That's It.</h2>
-      <p class="mt-4 text-lg text-gray-500">Getting help has never been easier.</p>
-    </div>
-
-    <% steps = [
-      { num: 1, title: "Search & Compare", desc: "Browse verified professionals in your area. Compare ratings, prices, and reviews.", icon: "fa-search", color: "orange" },
-      { num: 2, title: "Book Instantly", desc: "Pick a time that works. Chat with providers and get instant confirmation.", icon: "fa-calendar-check", color: "blue" },
-      { num: 3, title: "Get It Done", desc: "A trusted pro handles the work. Pay securely and leave a review.", icon: "fa-check-double", color: "green" }
-    ] %>
-
-    <%# Desktop — horizontal cards %>
-    <div class="hidden md:grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-      <% steps.each_with_index do |step, i| %>
-        <%
-          step_colors = {
-            "orange" => { bg: "bg-orange-50", ring: "ring-orange-100", text: "text-orange-600", icon_bg: "bg-orange-100" },
-            "blue"   => { bg: "bg-blue-50", ring: "ring-blue-100", text: "text-blue-600", icon_bg: "bg-blue-100" },
-            "green"  => { bg: "bg-green-50", ring: "ring-green-100", text: "text-green-600", icon_bg: "bg-green-100" }
-          }
-          sc = step_colors[step[:color]]
-        %>
-        <div class="relative text-center" data-aos="fade-up" data-aos-delay="<%= i * 150 %>">
-          <%# Connector line %>
-          <% if i < steps.length - 1 %>
-            <div class="hidden lg:block absolute top-10 left-[60%] w-[80%] border-t-2 border-dashed border-gray-200"></div>
-          <% end %>
-
-          <div class="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl <%= sc[:bg] %> ring-4 <%= sc[:ring] %> mb-6 z-10">
-            <i class="fas <%= step[:icon] %> text-2xl <%= sc[:text] %>"></i>
-          </div>
-          <div class="absolute top-0 right-1/2 translate-x-1/2 -translate-y-2 w-7 h-7 rounded-full bg-gray-900 text-white text-xs font-bold flex items-center justify-center z-20 ring-4 ring-white">
-            <%= step[:num] %>
-          </div>
-          <h3 class="text-lg font-bold text-gray-900 mb-2"><%= step[:title] %></h3>
-          <p class="text-gray-500 text-sm leading-relaxed max-w-xs mx-auto"><%= step[:desc] %></p>
-        </div>
-      <% end %>
-    </div>
-
-    <%# Mobile — vertical list %>
-    <div class="md:hidden space-y-6">
-      <% steps.each_with_index do |step, i| %>
-        <div class="flex gap-4" data-aos="fade-up" data-aos-delay="<%= i * 100 %>">
-          <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-orange-500 text-white flex items-center justify-center text-lg font-bold shadow-lg shadow-orange-500/20">
-            <%= step[:num] %>
-          </div>
-          <div>
-            <h3 class="text-base font-bold text-gray-900 mb-1"><%= step[:title] %></h3>
-            <p class="text-gray-500 text-sm leading-relaxed"><%= step[:desc] %></p>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    FEATURED SERVICES — Cards with hover lift
+    FEATURED SERVICES
     ================================================================ %>
 <% if @featured_services.any? %>
-<section class="py-24 bg-white">
+<section class="py-20 bg-gradient-to-b from-slate-50/80 to-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-14" data-aos="fade-up">
+    <div class="flex items-end justify-between mb-12" data-aos="fade-up">
       <div>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-600 border border-orange-100 uppercase tracking-wider mb-4">New Listings</span>
-        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Recently Added</h2>
-        <p class="mt-3 text-gray-500">Fresh services from our newest providers.</p>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Popular right now</h2>
+        <p class="mt-2 text-slate-500 text-lg">Services customers are booking this week.</p>
       </div>
       <div class="hidden sm:block">
-        <%= link_to services_path, class: "inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 transition-colors group text-sm" do %>
+        <%= link_to services_path, class: "group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors" do %>
           See all <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
         <% end %>
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
-      <% @featured_services.each_with_index do |service, i| %>
-        <%= link_to service_path(service), class: "group block rounded-2xl bg-white border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300", data: { aos: "fade-up", "aos-delay": i * 100 } do %>
-          <div class="aspect-[16/10] relative overflow-hidden bg-gray-100">
-            <% if service.images.attached? %>
-              <%= image_tag service.images.first, class: "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500", loading: "lazy" %>
-            <% else %>
-              <img src="<%= service_images[service.category&.slug] || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80' %>"
-                   alt="<%= service.title %>"
-                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                   loading="lazy">
-            <% end %>
-            <div class="absolute top-3 right-3 bg-white rounded-xl px-3 py-1.5 shadow-lg">
-              <span class="text-base font-bold text-gray-900">$<%= number_with_precision(service.base_price, precision: 0) %></span>
-              <span class="text-xs text-gray-400"><%= service.hourly? ? "/hr" : "" %></span>
-            </div>
-          </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+      <%= render partial: 'services/service_card', collection: @featured_services, as: :service %>
+    </div>
+  </div>
+</section>
+<% end %>
 
-          <div class="p-5">
-            <div class="flex items-center gap-2 mb-2.5">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-100">
-                <%= service.category&.name || "Uncategorized" %>
-              </span>
-              <% if service.provider&.verified? %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700 border border-green-100">
-                  <i class="fas fa-check-circle mr-1"></i>Verified
+<%# ================================================================
+    TRUST — Bold dark section
+    ================================================================ %>
+<section class="py-24 bg-slate-900 relative overflow-hidden">
+  <%# Ambient glow %>
+  <div class="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-[120px]"></div>
+  <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-violet-500/10 rounded-full blur-[100px]"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Built for trust</h2>
+      <p class="mt-3 text-slate-400 text-lg">Everything you need to hire with confidence.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" data-aos="fade-up" data-aos-delay="100">
+      <% [
+        { icon: "fa-shield-alt", title: "Verified Pros", desc: "Background-checked, identity-verified, and reviewed by real customers.", color: "emerald" },
+        { icon: "fa-credit-card", title: "Secure Payments", desc: "Stripe-powered. Your money is protected until the job is complete.", color: "sky" },
+        { icon: "fa-star", title: "Real Reviews", desc: "Only customers who completed a booking can leave a review. Zero fakes.", color: "amber" },
+        { icon: "fa-bolt", title: "Instant Booking", desc: "No back-and-forth. Find a pro, pick a time, get confirmed in minutes.", color: "violet" }
+      ].each_with_index do |item, i| %>
+        <div class="group p-6 rounded-2xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.08] hover:border-white/[0.12] transition-all duration-300" data-aos="fade-up" data-aos-delay="<%= 100 + i * 80 %>">
+          <div class="w-12 h-12 rounded-xl bg-<%= item[:color] %>-500/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+            <i class="fas <%= item[:icon] %> text-<%= item[:color] %>-400 text-lg"></i>
+          </div>
+          <h3 class="text-base font-bold text-white mb-2"><%= item[:title] %></h3>
+          <p class="text-sm text-slate-400 leading-relaxed"><%= item[:desc] %></p>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Stats row %>
+    <div class="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 pt-12 border-t border-white/[0.06]" data-aos="fade-up" data-aos-delay="200">
+      <% [
+        { value: @total_providers, label: "Providers" },
+        { value: @total_services, label: "Services" },
+        { value: @total_bookings, label: "Bookings" },
+        { value: @total_customers, label: "Customers" }
+      ].each do |stat| %>
+        <div class="text-center">
+          <div class="text-3xl sm:text-4xl font-black text-white counter" data-target="<%= stat[:value] %>">0</div>
+          <div class="text-xs text-slate-500 mt-1 font-medium uppercase tracking-wider"><%= stat[:label] %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
+    TOP PROVIDERS
+    ================================================================ %>
+<% if @top_providers.present? && @top_providers.any? %>
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-end justify-between mb-12" data-aos="fade-up">
+      <div>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Top rated this month</h2>
+        <p class="mt-2 text-slate-500 text-lg">Pros with the best track records.</p>
+      </div>
+      <div class="hidden sm:block">
+        <%= link_to leaderboard_index_path, class: "group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors" do %>
+          View all <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <% @top_providers.each_with_index do |provider, index| %>
+        <%= link_to leaderboard_path(provider), class: "group block bg-white rounded-xl border border-slate-100 p-5 hover:shadow-xl hover:shadow-slate-900/[0.05] hover:-translate-y-1 transition-all duration-300", data: { aos: "fade-up", "aos-delay": index * 60 } do %>
+          <div class="flex items-center gap-4">
+            <div class="relative flex-shrink-0">
+              <% if provider.profile_picture.attached? %>
+                <%= image_tag provider.profile_picture, class: "w-14 h-14 rounded-xl object-cover ring-2 ring-slate-100" %>
+              <% else %>
+                <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center text-lg font-bold text-slate-400">
+                  <%= provider.display_name.first.upcase %>
+                </div>
+              <% end %>
+              <% if index == 0 %>
+                <div class="absolute -top-1.5 -right-1.5 w-6 h-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                  <i class="fas fa-trophy text-white text-[8px]"></i>
+                </div>
+              <% end %>
+            </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors text-sm truncate"><%= provider.business_name || provider.full_name %></h3>
+              <div class="flex items-center gap-1 mt-1">
+                <% 5.times do |i| %><i class="fas fa-star text-[10px] <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
+                <span class="text-xs font-semibold text-slate-700 ml-1"><%= provider.average_rating %></span>
+                <span class="text-slate-300 mx-1">&middot;</span>
+                <span class="text-xs text-slate-400"><%= provider.total_completed_bookings %> jobs</span>
+              </div>
+              <% badge = provider.provider_badge %>
+              <% if badge && badge[:name] != "New" %>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-<%= badge[:color] %>-50 text-<%= badge[:color] %>-700 mt-2">
+                  <i class="<%= badge[:icon] %> mr-1"></i><%= badge[:name] %>
                 </span>
               <% end %>
             </div>
-
-            <h3 class="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors line-clamp-1"><%= service.title %></h3>
-            <p class="text-sm text-gray-500 mt-1.5 line-clamp-2 leading-relaxed"><%= service.description %></p>
-
-            <div class="mt-4 flex items-center justify-between pt-4 border-t border-gray-100">
-              <div class="flex items-center gap-2.5">
-                <div class="w-7 h-7 rounded-full bg-orange-100 flex items-center justify-center text-xs font-bold text-orange-600">
-                  <%= service.provider&.display_name&.first&.upcase || "?" %>
-                </div>
-                <span class="text-sm text-gray-600 font-medium"><%= service.provider&.display_name %></span>
-              </div>
-              <span class="text-xs text-orange-500 font-semibold opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
-                View <i class="fas fa-arrow-right text-[10px]"></i>
-              </span>
-            </div>
           </div>
         <% end %>
-      <% end %>
-    </div>
-
-    <div class="text-center mt-10 sm:hidden">
-      <%= link_to services_path, class: "inline-flex items-center gap-2 text-orange-600 font-semibold" do %>
-        View all services <i class="fas fa-arrow-right text-xs"></i>
       <% end %>
     </div>
   </div>
@@ -312,237 +309,32 @@
 <% end %>
 
 <%# ================================================================
-    TOP PROVIDERS — Soft gray with warm accent
+    TESTIMONIALS
     ================================================================ %>
-<% if @top_providers.present? && @top_providers.any? %>
-<section class="py-24 bg-gray-50">
+<section class="py-20 bg-slate-50/50">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-14" data-aos="fade-up">
-      <div>
-        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-600 border border-amber-100 uppercase tracking-wider mb-4">
-          <i class="fas fa-trophy mr-1.5"></i>Top Rated
-        </span>
-        <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Meet Our Best Providers</h2>
-        <p class="mt-3 text-gray-500">Highly rated professionals trusted by the community.</p>
-      </div>
-      <div class="hidden sm:block">
-        <%= link_to leaderboard_index_path, class: "inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 transition-colors group text-sm" do %>
-          View leaderboard <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
-        <% end %>
-      </div>
+    <div class="text-center mb-12" data-aos="fade-up">
+      <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Loved by thousands</h2>
+      <p class="mt-2 text-slate-500 text-lg">Don't take our word for it.</p>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <% @top_providers.each_with_index do |provider, index| %>
-        <%= link_to leaderboard_path(provider), class: "group block bg-white rounded-2xl border #{index == 0 ? 'border-orange-200 ring-1 ring-orange-100' : 'border-gray-100'} p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center", data: { aos: "fade-up", "aos-delay": index * 100 } do %>
-          <div class="flex justify-center mb-4">
-            <% if index == 0 %>
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 text-white flex items-center justify-center shadow-lg shadow-amber-500/25">
-                <i class="fas fa-trophy text-sm"></i>
-              </div>
-            <% else %>
-              <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center text-xs font-bold">
-                #<%= index + 1 %>
-              </div>
-            <% end %>
-          </div>
-
-          <div class="flex justify-center mb-4">
-            <% if provider.profile_picture.attached? %>
-              <%= image_tag provider.profile_picture, class: "w-16 h-16 rounded-2xl object-cover ring-2 ring-gray-100" %>
-            <% else %>
-              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center text-xl font-bold text-orange-600 ring-2 ring-orange-100">
-                <%= provider.display_name.first.upcase %>
-              </div>
-            <% end %>
-          </div>
-
-          <h3 class="font-semibold text-gray-900 group-hover:text-orange-600 transition-colors mb-2 line-clamp-1">
-            <%= provider.business_name || provider.full_name %>
-          </h3>
-
-          <% badge = provider.provider_badge %>
-          <% if badge %>
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-<%= badge[:color] %>-50 text-<%= badge[:color] %>-700 border border-<%= badge[:color] %>-100 mb-3">
-              <i class="<%= badge[:icon] %> mr-1"></i><%= badge[:name] %>
-            </span>
-          <% end %>
-
-          <div class="flex items-center justify-center gap-0.5 mb-1">
-            <% 5.times do |i| %>
-              <i class="fas fa-star text-xs <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-gray-200' %>"></i>
-            <% end %>
-            <span class="text-sm font-semibold text-gray-900 ml-1.5"><%= provider.average_rating %></span>
-          </div>
-          <div class="text-xs text-gray-400 mt-1"><%= provider.total_completed_bookings %> jobs completed</div>
-        <% end %>
-      <% end %>
-    </div>
-
-    <div class="text-center mt-10 sm:hidden">
-      <%= link_to leaderboard_index_path, class: "inline-flex items-center gap-2 text-orange-600 font-semibold" do %>
-        View all providers <i class="fas fa-arrow-right text-xs"></i>
-      <% end %>
-    </div>
-  </div>
-</section>
-<% end %>
-
-<%# ================================================================
-    PROVIDERS NEAR YOU — Warm background with radar motif
-    ================================================================ %>
-<section class="py-24 bg-gradient-to-b from-orange-50/50 to-white relative overflow-hidden" id="nearby-section">
-  <%# Decorative rings %>
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-    <div class="w-[400px] h-[400px] rounded-full border border-orange-200/30"></div>
-  </div>
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-    <div class="w-[600px] h-[600px] rounded-full border border-orange-200/20"></div>
-  </div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-14" data-aos="fade-up">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-600 border border-orange-100 uppercase tracking-wider mb-4">
-        <svg class="w-3 h-3 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-        Near You
-      </span>
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Service Providers Near You</h2>
-      <p class="mt-4 text-lg text-gray-500">
-        Professionals within <span class="font-semibold text-gray-700" id="nearby-radius">25</span> miles of your location.
-      </p>
-    </div>
-
-    <%# Prompt state %>
-    <div id="nearby-prompt" data-aos="fade-up" data-aos-delay="100">
-      <div class="text-center py-12 max-w-sm mx-auto">
-        <div class="relative mx-auto mb-6 w-20 h-20">
-          <div class="absolute inset-0 rounded-full bg-orange-100 animate-ping opacity-20"></div>
-          <div class="relative w-20 h-20 rounded-full bg-orange-100 flex items-center justify-center">
-            <i class="fas fa-location-crosshairs text-orange-500 text-2xl"></i>
-          </div>
-        </div>
-        <p class="text-gray-700 text-sm font-medium mb-1">Discover providers near you</p>
-        <p class="text-gray-400 text-xs mb-8">Allow location access to see who's nearby</p>
-        <button onclick="nearbyDetect()"
-                class="inline-flex items-center px-7 py-3.5 rounded-xl text-sm font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/25 hover:shadow-orange-500/35 cursor-pointer hover:-translate-y-0.5">
-          <i class="fas fa-location-arrow mr-2"></i>Detect My Location
-        </button>
-      </div>
-    </div>
-
-    <%# Loading state %>
-    <div id="nearby-loading" class="hidden">
-      <div class="flex flex-col items-center justify-center py-16">
-        <div class="relative w-16 h-16 mb-6">
-          <div class="absolute inset-0 rounded-full border-4 border-orange-100"></div>
-          <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-orange-500 animate-spin"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <svg class="w-5 h-5 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.5"/></svg>
-          </div>
-        </div>
-        <p class="text-gray-600 text-sm font-medium">Finding providers near you...</p>
-        <p class="text-gray-400 text-xs mt-1">Please allow location access when prompted</p>
-      </div>
-    </div>
-
-    <%# Error state %>
-    <div id="nearby-error" class="hidden">
-      <div class="text-center py-12 max-w-md mx-auto">
-        <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <i class="fas fa-location-crosshairs text-gray-400 text-xl"></i>
-        </div>
-        <p class="text-gray-600 text-sm mb-4" id="nearby-error-msg"></p>
-        <button onclick="nearbyDetect()"
-                class="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-medium text-orange-600 bg-orange-50 hover:bg-orange-100 transition-colors cursor-pointer">
-          <i class="fas fa-redo mr-2 text-xs"></i>Try Again
-        </button>
-      </div>
-    </div>
-
-    <%# Results state %>
-    <div id="nearby-results" class="hidden">
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" id="nearby-grid"></div>
-      <div class="text-center mt-10">
-        <%= link_to leaderboard_index_path, class: "inline-flex items-center gap-2 text-orange-600 font-semibold hover:text-orange-700 transition-colors group text-sm" do %>
-          View all providers <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    WHY CHOOSE US — Clean icon cards
-    ================================================================ %>
-<section class="py-24 bg-white">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-600 border border-orange-100 uppercase tracking-wider mb-4">Why Radius</span>
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Built for Trust</h2>
-      <p class="mt-4 text-lg text-gray-500">Everything you need to find and hire with confidence.</p>
-    </div>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid md:grid-cols-3 gap-5" data-aos="fade-up" data-aos-delay="100">
       <% [
-        { icon: "fa-shield-alt", color: "blue", title: "Verified Pros", desc: "Every provider is background-checked and identity-verified before they go live." },
-        { icon: "fa-lock", color: "green", title: "Secure Payments", desc: "Stripe-powered payments keep your money safe. Pay only when the job is done." },
-        { icon: "fa-star", color: "amber", title: "Honest Reviews", desc: "Only verified customers can leave ratings. What you see is what you get." },
-        { icon: "fa-comments", color: "purple", title: "Direct Chat", desc: "Message providers before booking. Ask questions and align on expectations." }
-      ].each_with_index do |item, i|
-        color_map = {
-          "blue"   => { bg: "bg-blue-50", text: "text-blue-600", border: "border-blue-100", shadow: "group-hover:shadow-blue-100/50" },
-          "green"  => { bg: "bg-green-50", text: "text-green-600", border: "border-green-100", shadow: "group-hover:shadow-green-100/50" },
-          "amber"  => { bg: "bg-amber-50", text: "text-amber-600", border: "border-amber-100", shadow: "group-hover:shadow-amber-100/50" },
-          "purple" => { bg: "bg-purple-50", text: "text-purple-600", border: "border-purple-100", shadow: "group-hover:shadow-purple-100/50" }
-        }
-        c = color_map[item[:color]]
-      %>
-        <div class="group bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 <%= c[:shadow] %>" data-aos="fade-up" data-aos-delay="<%= i * 80 %>">
-          <div class="w-12 h-12 rounded-xl <%= c[:bg] %> <%= c[:text] %> border <%= c[:border] %> flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-            <i class="fas <%= item[:icon] %> text-lg"></i>
+        { name: "Sarah J.", role: "Homeowner", review: "Found an amazing plumber within minutes. Fixed my emergency leak the same day. Seamless booking and felt safe the entire time.", rating: 5, avatar: "https://i.pravatar.cc/64?u=sarah1" },
+        { name: "Mike C.", role: "Business Owner", review: "We use Radius for all our office maintenance needs. Reliable providers, transparent pricing, great communication.", rating: 5, avatar: "https://i.pravatar.cc/64?u=mike2" },
+        { name: "Emily R.", role: "Property Manager", review: "Managing multiple properties is so much easier. All my trusted contractors in one place with scheduling and payment.", rating: 4, avatar: "https://i.pravatar.cc/64?u=emily3" }
+      ].each do |t| %>
+        <div class="tilt-card group bg-white rounded-2xl border border-slate-100 p-7 transition-all duration-300">
+          <div class="flex gap-0.5 mb-4">
+            <% t[:rating].times do %><i class="fas fa-star text-amber-400 text-sm"></i><% end %>
+            <% (5 - t[:rating]).times do %><i class="fas fa-star text-slate-200 text-sm"></i><% end %>
           </div>
-          <h3 class="text-base font-bold text-gray-900 mb-2"><%= item[:title] %></h3>
-          <p class="text-sm text-gray-500 leading-relaxed"><%= item[:desc] %></p>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    TESTIMONIALS — Warm background
-    ================================================================ %>
-<section class="py-24 bg-gray-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
-      <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-orange-50 text-orange-600 border border-orange-100 uppercase tracking-wider mb-4">Testimonials</span>
-      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">What Our Customers Say</h2>
-      <p class="mt-4 text-lg text-gray-500">Real stories from real people.</p>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-8">
-      <% [
-        { name: "Sarah Johnson", role: "Homeowner", review: "Found an amazing plumber within minutes. Fixed my emergency leak the same day. The booking process was seamless and I felt safe the entire time.", rating: 5 },
-        { name: "Mike Chen", role: "Business Owner", review: "We use Radius for all our office maintenance. Reliable providers, fair prices, and great communication every single time.", rating: 5 },
-        { name: "Emily Rodriguez", role: "Property Manager", review: "Managing multiple properties is so much easier now. All my trusted contractors in one place with easy scheduling and payment.", rating: 5 }
-      ].each_with_index do |testimonial, i| %>
-        <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm hover:shadow-lg transition-shadow duration-300 relative" data-aos="fade-up" data-aos-delay="<%= i * 100 %>">
-          <div class="absolute top-4 right-6 text-7xl font-serif text-orange-100 leading-none select-none">"</div>
-          <div class="relative">
-            <div class="flex gap-0.5 mb-4">
-              <% testimonial[:rating].times do %>
-                <i class="fas fa-star text-amber-400 text-sm"></i>
-              <% end %>
-            </div>
-            <blockquote class="text-gray-600 leading-relaxed mb-6 text-sm"><%= testimonial[:review] %></blockquote>
-            <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
-              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 text-white flex items-center justify-center font-semibold text-sm shadow-sm">
-                <%= testimonial[:name].split.map(&:first).join %>
-              </div>
-              <div>
-                <div class="text-sm font-semibold text-gray-900"><%= testimonial[:name] %></div>
-                <div class="text-xs text-gray-400"><%= testimonial[:role] %></div>
-              </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-6">"<%= t[:review] %>"</p>
+          <div class="flex items-center gap-3">
+            <img src="<%= t[:avatar] %>" alt="" class="w-10 h-10 rounded-full ring-2 ring-slate-100">
+            <div>
+              <div class="text-sm font-bold text-slate-900"><%= t[:name] %></div>
+              <div class="text-xs text-slate-400"><%= t[:role] %></div>
             </div>
           </div>
         </div>
@@ -552,264 +344,405 @@
 </section>
 
 <%# ================================================================
-    CTA FOR PROVIDERS — Dark section (contrast)
+    NEARBY PROVIDERS
     ================================================================ %>
-<section class="py-24 bg-gray-900 relative overflow-hidden">
-  <%# Decorative glow %>
-  <div class="absolute top-0 right-0 w-[500px] h-[500px] rounded-full bg-orange-500/[0.06] blur-[120px] pointer-events-none"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden" data-aos="fade-up">
-      <%# Image side %>
-      <div class="relative hidden lg:block min-h-[500px]">
-        <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&q=80"
-             alt="Service professional at work"
-             class="absolute inset-0 w-full h-full object-cover"
-             loading="lazy">
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-gray-950/80"></div>
-      </div>
-
-      <%# Content side %>
-      <div class="bg-gray-950 py-16 px-8 sm:px-12 lg:px-16 flex flex-col justify-center">
-        <p class="text-orange-400 font-semibold text-sm tracking-wide uppercase mb-4">For Service Providers</p>
-        <h2 class="text-3xl sm:text-4xl font-bold text-white leading-tight">Grow your business with Radius</h2>
-        <p class="mt-4 text-lg text-gray-400 leading-relaxed">Join our network of trusted professionals and reach new customers every day.</p>
-
-        <ul class="mt-8 space-y-4">
-          <% [
-            "Get found by customers searching in your area",
-            "Manage bookings and schedule from one dashboard",
-            "Build credibility with verified badges and real reviews",
-            "Start free — upgrade only when you're ready"
-          ].each do |benefit| %>
-            <li class="flex items-center gap-3">
-              <div class="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-check text-[10px]"></i>
-              </div>
-              <span class="text-gray-300 text-sm"><%= benefit %></span>
-            </li>
-          <% end %>
-        </ul>
-
-        <div class="mt-10 flex flex-col sm:flex-row gap-4">
-          <% if user_signed_in? %>
-            <% if current_user.provider? %>
-              <%= link_to provider_dashboard_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/20 hover:-translate-y-0.5" do %>
-                Go to Dashboard <i class="fas fa-arrow-right ml-2"></i>
-              <% end %>
-            <% else %>
-              <%= link_to services_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/20 hover:-translate-y-0.5" do %>
-                Browse Services <i class="fas fa-arrow-right ml-2"></i>
-              <% end %>
-            <% end %>
-          <% else %>
-            <%= link_to new_user_registration_path(role: 'provider'), class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/20 hover:-translate-y-0.5" do %>
-              Become a Provider <i class="fas fa-arrow-right ml-2"></i>
-            <% end %>
-            <%= link_to about_path, class: "inline-flex items-center justify-center text-gray-300 hover:text-white px-6 py-4 rounded-xl font-semibold border border-gray-600 hover:border-gray-500 transition-all" do %>
-              Learn More
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
+<section class="py-20 bg-white" id="nearby-section">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10"><h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Providers near you</h2><p class="mt-2 text-slate-500 text-lg">Within <span class="font-semibold text-slate-700" id="nearby-radius">25</span> miles.</p></div>
+    <div id="nearby-prompt"><div class="text-center py-6"><button onclick="nearbyDetect()" class="group inline-flex items-center px-8 py-4 rounded-xl text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 transition-all cursor-pointer hover:shadow-lg hover:shadow-slate-900/20 hover:scale-[1.02] active:scale-[0.98]"><i class="fas fa-location-arrow mr-2.5 text-xs group-hover:rotate-45 transition-transform duration-300"></i>Detect My Location</button><p class="text-slate-400 text-xs mt-3">We'll find verified pros near you</p></div></div>
+    <div id="nearby-loading" class="hidden"><div class="flex flex-col items-center py-10"><div class="w-10 h-10 border-2 border-slate-200 border-t-slate-900 rounded-full animate-spin mb-3"></div><p class="text-slate-500 text-sm">Finding providers...</p></div></div>
+    <div id="nearby-error" class="hidden"><div class="text-center py-6"><p class="text-slate-600 text-sm mb-3" id="nearby-error-msg"></p><button onclick="nearbyDetect()" class="text-sm font-semibold text-orange-600 hover:text-orange-700 cursor-pointer">Try again <i class="fas fa-redo text-xs ml-1"></i></button></div></div>
+    <div id="nearby-results" class="hidden"><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="nearby-grid"></div><div class="text-center mt-8"><%= link_to leaderboard_index_path, class: "group text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors" do %>View all <i class="fas fa-arrow-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i><% end %></div></div>
   </div>
 </section>
 
 <%# ================================================================
-    FINAL CTA — Bold and simple
+    PROVIDER CTA
     ================================================================ %>
-<section class="py-28 bg-gradient-to-b from-white to-orange-50 relative overflow-hidden">
-  <%# Decorative ring %>
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-orange-200/40 pointer-events-none"></div>
+<section class="py-24 relative overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-rose-600"></div>
+  <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px;"></div>
 
   <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white mb-8 shadow-xl shadow-orange-500/25" data-aos="zoom-in">
-      <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-    </div>
-    <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 tracking-tight" data-aos="fade-up" data-aos-delay="100">Ready to get started?</h2>
-    <p class="mt-4 text-lg text-gray-500 max-w-xl mx-auto" data-aos="fade-up" data-aos-delay="200">Join thousands of customers and providers who trust Radius.</p>
-
-    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="300">
-      <% if user_signed_in? %>
-        <%= link_to services_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/25 hover:-translate-y-0.5" do %>
-          Browse Services <i class="fas fa-arrow-right ml-2"></i>
+    <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight" data-aos="fade-up">Are you a service pro?</h2>
+    <p class="mt-2 text-white/40 text-sm font-medium tracking-widest uppercase" data-aos="fade-up" data-aos-delay="50">Join the network</p>
+    <p class="mt-4 text-white/80 text-lg" data-aos="fade-up" data-aos-delay="100">Join <%= number_with_delimiter(@total_providers) %>+ professionals growing their business on Radius. Free to start, no commitment.</p>
+    <div class="mt-10 flex flex-wrap justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
+      <% if user_signed_in? && current_user.provider? %>
+        <%= link_to provider_dashboard_path, class: "group bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02] active:scale-[0.98] transition-all" do %>
+          Go to Dashboard <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
         <% end %>
-      <% else %>
-        <%= link_to new_user_registration_path(role: 'customer'), class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-semibold transition-all shadow-lg shadow-orange-500/25 hover:-translate-y-0.5" do %>
-          Sign Up Free <i class="fas fa-arrow-right ml-2"></i>
+      <% elsif !user_signed_in? %>
+        <%= link_to new_user_registration_path(role: 'provider'), class: "group bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-black/10 hover:scale-[1.02] active:scale-[0.98] transition-all" do %>
+          Get Started Free <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
         <% end %>
-        <%= link_to new_user_session_path, class: "inline-flex items-center justify-center text-gray-700 hover:text-gray-900 px-8 py-4 rounded-xl font-semibold border border-gray-300 hover:border-gray-400 bg-white transition-all hover:-translate-y-0.5" do %>
-          Sign In
+        <%= link_to about_path, class: "text-white/90 hover:text-white px-8 py-4 rounded-xl font-bold text-sm border-2 border-white/30 hover:border-white/60 transition-all" do %>
+          Learn More
         <% end %>
       <% end %>
     </div>
   </div>
 </section>
+
+<%# ================================================================
+    FINAL CTA
+    ================================================================ %>
+<% unless user_signed_in? %>
+<section class="py-24 bg-white">
+  <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+    <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Ready to get started?</h2>
+    <p class="mt-3 text-slate-500 text-lg">It's free. No credit card required.</p>
+    <div class="mt-8">
+      <%= link_to new_user_registration_path(role: 'customer'), class: "group inline-flex items-center bg-slate-900 hover:bg-slate-800 text-white px-10 py-4 rounded-xl font-bold text-sm transition-all hover:shadow-xl hover:shadow-slate-900/20 hover:scale-[1.02] active:scale-[0.98]" do %>
+        Create Free Account <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
 
 <%# ================================================================
     STYLES + ANIMATIONS
     ================================================================ %>
 <style>
-  @keyframes heroFadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .hero-fade-in {
-    opacity: 0;
-    animation: heroFadeIn 0.8s ease-out forwards;
-  }
+/* Gradient text */
+.hero-gradient-text {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 30%, #e879f9 70%, #a78bfa 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientText 6s ease-in-out infinite;
+}
+@keyframes gradientText {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Falling particle bubbles */
+.pro-bubble {
+  position: absolute;
+  will-change: transform, opacity;
+  pointer-events: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: bubbleFall linear infinite, bubbleDrift ease-in-out infinite, bubbleTwinkle ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255,255,255,0.03), inset 0 0 20px rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(2px);
+}
+.pro-bubble img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  opacity: 0.7;
+}
+/* Trade icon overlay on bubble */
+.pro-bubble .bubble-icon {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 45%;
+}
+/* Star ring around some bubbles */
+.pro-bubble .bubble-ring {
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid rgba(251,191,36,0.2);
+  animation: ringPulse 4s ease-in-out infinite;
+}
+@keyframes bubbleFall {
+  0% { transform: translateY(-120px); }
+  100% { transform: translateY(calc(100vh + 120px)); }
+}
+@keyframes bubbleDrift {
+  0%, 100% { margin-left: 0; }
+  25% { margin-left: 15px; }
+  50% { margin-left: -10px; }
+  75% { margin-left: 20px; }
+}
+@keyframes bubbleTwinkle {
+  0%, 100% { opacity: var(--base-opacity, 0.4); }
+  50% { opacity: calc(var(--base-opacity, 0.4) * 1.6); }
+}
+@keyframes ringPulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.15); opacity: 0.6; }
+}
+
+/* Floating orbs */
+.orb-float {
+  animation: orbFloat 8s ease-in-out infinite;
+}
+.orb-float-reverse {
+  animation: orbFloat 10s ease-in-out infinite reverse;
+}
+.orb-float-slow {
+  animation: orbFloat 14s ease-in-out infinite;
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+/* Staggered entrance animation */
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  animation: heroReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes heroReveal {
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Scroll reveal for sections */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scroll-reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 3D tilt cards */
+.tilt-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.tilt-card:hover {
+  transform: translateY(-4px) rotateX(2deg) rotateY(-2deg);
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.02);
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+/* Marquee trust bar */
+.marquee-wrapper { overflow: hidden; }
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 40s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* Shine effect on buttons */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+}
+.btn-shine:hover::after {
+  left: 120%;
+}
+
+/* Glow pulse on search focus */
+.search-glow:focus-within {
+  box-shadow: 0 0 0 4px rgba(249,115,22,0.15), 0 0 80px -10px rgba(249,115,22,0.2);
+}
+
+
+/* Category card inner glow */
+.cat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(circle at 50% 0%, var(--glow-color, rgba(249,115,22,0.08)), transparent 70%);
+}
+.cat-card:hover::before { opacity: 1; }
 </style>
 
 <%# ================================================================
-    HERO SLIDER (vanilla JS)
+    SCRIPTS
     ================================================================ %>
 <script>
+/* Particle rain — falling professional bubbles */
 (function() {
-  var slides = document.querySelectorAll('[data-slide]');
-  var dots = document.querySelectorAll('[data-dot]');
-  if (!slides.length) return;
+  var canvas = document.getElementById('particle-canvas');
+  if (!canvas) return;
 
-  var current = 0;
-  var interval;
+  var pros = [
+    { img: 'https://i.pravatar.cc/96?u=p1', icon: 'fa-wrench', color: '#60a5fa' },
+    { img: 'https://i.pravatar.cc/96?u=p2', icon: 'fa-broom', color: '#38bdf8' },
+    { img: 'https://i.pravatar.cc/96?u=p3', icon: 'fa-bolt', color: '#fbbf24' },
+    { img: 'https://i.pravatar.cc/96?u=p4', icon: 'fa-paint-roller', color: '#fb7185' },
+    { img: 'https://i.pravatar.cc/96?u=p5', icon: 'fa-leaf', color: '#34d399' },
+    { img: 'https://i.pravatar.cc/96?u=p6', icon: 'fa-dumbbell', color: '#f87171' },
+    { img: 'https://i.pravatar.cc/96?u=p7', icon: 'fa-hammer', color: '#fb923c' },
+    { img: 'https://i.pravatar.cc/96?u=p8', icon: 'fa-graduation-cap', color: '#818cf8' },
+    { img: 'https://i.pravatar.cc/96?u=p9', icon: 'fa-truck', color: '#a78bfa' },
+    { img: 'https://i.pravatar.cc/96?u=p10', icon: 'fa-paw', color: '#2dd4bf' },
+    { img: 'https://i.pravatar.cc/96?u=p11', icon: 'fa-wrench', color: '#60a5fa' },
+    { img: 'https://i.pravatar.cc/96?u=p12', icon: 'fa-broom', color: '#38bdf8' },
+    { img: 'https://i.pravatar.cc/96?u=p13', icon: 'fa-bolt', color: '#fbbf24' },
+    { img: 'https://i.pravatar.cc/96?u=p14', icon: 'fa-paint-roller', color: '#fb7185' },
+    { img: 'https://i.pravatar.cc/96?u=p15', icon: 'fa-hammer', color: '#fb923c' },
+    { img: 'https://i.pravatar.cc/96?u=p16', icon: 'fa-leaf', color: '#34d399' },
+    { img: 'https://i.pravatar.cc/96?u=p17', icon: 'fa-dumbbell', color: '#f87171' },
+    { img: 'https://i.pravatar.cc/96?u=p18', icon: 'fa-graduation-cap', color: '#818cf8' },
+    { img: 'https://i.pravatar.cc/96?u=p19', icon: 'fa-truck', color: '#a78bfa' },
+    { img: 'https://i.pravatar.cc/96?u=p20', icon: 'fa-paw', color: '#2dd4bf' },
+  ];
 
-  function goTo(index) {
-    slides[current].classList.remove('opacity-100');
-    slides[current].classList.add('opacity-0');
-    if (dots[current]) {
-      dots[current].classList.remove('bg-orange-500', 'w-8');
-      dots[current].classList.add('bg-white/30', 'w-4');
+  var BUBBLE_COUNT = 30;
+
+  function createBubble(initial) {
+    var pro = pros[Math.floor(Math.random() * pros.length)];
+    var size = 36 + Math.floor(Math.random() * 36); // 36-72px
+    var left = Math.random() * 100;
+    var fallDuration = 12 + Math.random() * 20; // 12-32s
+    var driftDuration = 6 + Math.random() * 8;
+    var twinkleDuration = 3 + Math.random() * 5;
+    var delay = initial ? -(Math.random() * fallDuration) : 0; // Stagger on first load
+    var baseOpacity = 0.15 + Math.random() * 0.35;
+    var hasRing = Math.random() > 0.6;
+    var hasIcon = Math.random() > 0.3;
+
+    var bubble = document.createElement('div');
+    bubble.className = 'pro-bubble';
+    bubble.style.cssText = 'width:'+size+'px;height:'+size+'px;left:'+left+'%;'
+      + 'animation-duration:'+fallDuration+'s,'+driftDuration+'s,'+twinkleDuration+'s;'
+      + 'animation-delay:'+delay+'s,'+(-Math.random()*driftDuration)+'s,'+(-Math.random()*twinkleDuration)+'s;'
+      + '--base-opacity:'+baseOpacity+';';
+
+    var img = document.createElement('img');
+    img.src = pro.img;
+    img.loading = 'lazy';
+    img.alt = '';
+    bubble.appendChild(img);
+
+    if (hasIcon) {
+      var icon = document.createElement('div');
+      icon.className = 'bubble-icon';
+      icon.innerHTML = '<i class="fas '+pro.icon+'" style="color:'+pro.color+'"></i>';
+      bubble.appendChild(icon);
     }
-    current = index % slides.length;
-    slides[current].classList.remove('opacity-0');
-    slides[current].classList.add('opacity-100');
-    if (dots[current]) {
-      dots[current].classList.remove('bg-white/30', 'w-4');
-      dots[current].classList.add('bg-orange-500', 'w-8');
+
+    if (hasRing) {
+      var ring = document.createElement('div');
+      ring.className = 'bubble-ring';
+      ring.style.animationDelay = (-Math.random() * 4) + 's';
+      bubble.appendChild(ring);
     }
-  }
 
-  function startAutoplay() {
-    interval = setInterval(function() { goTo(current + 1); }, 5000);
-  }
+    canvas.appendChild(bubble);
 
-  dots.forEach(function(dot) {
-    dot.addEventListener('click', function() {
-      clearInterval(interval);
-      goTo(parseInt(this.dataset.index));
-      startAutoplay();
-    });
-  });
-
-  startAutoplay();
-})();
-</script>
-
-<%# ================================================================
-    NEARBY PROVIDERS (vanilla JS)
-    ================================================================ %>
-<script>
-var NEARBY_RADIUS = 25;
-
-function nearbyShow(id) {
-  ['nearby-prompt','nearby-loading','nearby-error','nearby-results'].forEach(function(s) {
-    var el = document.getElementById(s);
-    if (el) el.classList.add('hidden');
-  });
-  var target = document.getElementById(id);
-  if (target) target.classList.remove('hidden');
-}
-
-function nearbyDetect() {
-  if (!navigator.geolocation) {
-    nearbyShowError('Geolocation is not supported by your browser.');
-    return;
-  }
-  nearbyShow('nearby-loading');
-  navigator.geolocation.getCurrentPosition(
-    function(pos) { nearbyFetch(pos.coords.latitude, pos.coords.longitude); },
-    function(err) {
-      var msgs = {
-        1: 'Location access was denied. Enable location in your browser settings and try again.',
-        2: 'Could not determine your location. Please try again.',
-        3: 'Location request timed out. Please try again.'
-      };
-      nearbyShowError(msgs[err.code] || 'Could not get your location.');
-    },
-    { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 }
-  );
-}
-
-function nearbyShowError(msg) {
-  nearbyShow('nearby-error');
-  var el = document.getElementById('nearby-error-msg');
-  if (el) el.textContent = msg;
-}
-
-function nearbyFetch(lat, lng) {
-  fetch('/api/nearby_providers?lat=' + lat + '&lng=' + lng + '&radius=' + NEARBY_RADIUS)
-    .then(function(r) { return r.json(); })
-    .then(function(providers) {
-      if (!providers || providers.error || providers.length === 0) {
-        nearbyShowError('No providers found within ' + NEARBY_RADIUS + ' miles. Try again later.');
-        return;
+    // Remove and re-create when animation ends (continuous rain)
+    bubble.addEventListener('animationiteration', function handler(e) {
+      if (e.animationName === 'bubbleFall') {
+        bubble.removeEventListener('animationiteration', handler);
+        bubble.remove();
+        createBubble(false);
       }
-      nearbyRender(providers);
-    })
-    .catch(function() {
-      nearbyShowError('Could not load nearby providers. Please try again.');
     });
-}
+  }
 
-function nearbyEscape(str) {
-  if (!str) return '';
-  var div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-function nearbyRender(providers) {
-  nearbyShow('nearby-results');
-  var grid = document.getElementById('nearby-grid');
-  if (!grid) return;
-
-  var badgeColors = {
-    purple: { bg: '#faf5ff', text: '#7e22ce', border: '#f3e8ff' },
-    blue:   { bg: '#eff6ff', text: '#1d4ed8', border: '#dbeafe' },
-    green:  { bg: '#f0fdf4', text: '#15803d', border: '#dcfce7' },
-    yellow: { bg: '#fefce8', text: '#a16207', border: '#fef9c3' },
-    gray:   { bg: '#f9fafb', text: '#6b7280', border: '#f3f4f6' }
-  };
-
-  grid.innerHTML = providers.map(function(p) {
-    var initial = (p.display_name || '?')[0].toUpperCase();
-    var avatar = p.profile_picture_url
-      ? '<img src="' + p.profile_picture_url + '" alt="' + nearbyEscape(p.display_name) + '" class="w-14 h-14 rounded-2xl object-cover ring-2 ring-gray-100">'
-      : '<div class="w-14 h-14 rounded-2xl bg-orange-100 flex items-center justify-center text-lg font-bold text-orange-600">' + initial + '</div>';
-
-    var stars = '';
-    for (var i = 0; i < 5; i++) {
-      stars += '<i class="fas fa-star text-xs ' + (i < Math.round(p.average_rating) ? 'text-amber-400' : 'text-gray-200') + '"></i>';
+  // Respect reduced motion preference
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    for (var i = 0; i < BUBBLE_COUNT; i++) {
+      createBubble(true);
     }
+  }
+})();
 
-    var bc = p.badge ? (badgeColors[p.badge.color] || badgeColors.gray) : null;
-    var badge = p.badge
-      ? '<div class="mt-2"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium" style="background:' + bc.bg + ';color:' + bc.text + ';border:1px solid ' + bc.border + '"><i class="' + nearbyEscape(p.badge.icon) + ' mr-1"></i>' + nearbyEscape(p.badge.name) + '</span></div>'
-      : '';
+/* Scroll reveal */
+document.addEventListener('DOMContentLoaded', function() {
+  var reveals = document.querySelectorAll('.scroll-reveal');
+  var revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(function(el) { revealObserver.observe(el); });
+});
 
-    var name = nearbyEscape(p.business_name || p.display_name);
-    return '<a href="' + p.url + '" class="group block bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300">'
-      + '<div class="flex items-start gap-4">'
-      + '<div class="flex-shrink-0">' + avatar + '</div>'
-      + '<div class="flex-1 min-w-0">'
-      + '<h4 class="font-semibold text-gray-900 group-hover:text-orange-600 transition-colors truncate text-sm">' + name + '</h4>'
-      + '<div class="flex items-center gap-1 mt-1">' + stars + '<span class="text-xs text-gray-400 ml-1">' + p.average_rating + '</span></div>'
-      + '<div class="flex items-center gap-3 mt-2 text-xs text-gray-500">'
-      + '<span><i class="fas fa-location-dot text-orange-400 mr-1"></i>' + p.distance + ' mi</span>'
-      + '<span><i class="fas fa-check-circle text-green-400 mr-1"></i>' + p.total_completed_bookings + ' jobs</span>'
-      + '</div>'
-      + badge
-      + '</div></div></a>';
+/* Animated counters */
+document.addEventListener('DOMContentLoaded', function() {
+  var counters = document.querySelectorAll('.counter');
+  var observed = false;
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && !observed) {
+        observed = true;
+        counters.forEach(function(el) {
+          var target = parseInt(el.dataset.target);
+          var duration = 2000;
+          var start = performance.now();
+          function step(now) {
+            var progress = Math.min((now - start) / duration, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(eased * target).toLocaleString() + '+';
+            if (progress < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+  counters.forEach(function(el) { observer.observe(el); });
+});
+
+/* Nearby providers */
+var NEARBY_RADIUS = 25;
+function nearbyShow(id) { ['nearby-prompt','nearby-loading','nearby-error','nearby-results'].forEach(function(s){var e=document.getElementById(s);if(e)e.classList.add('hidden');}); var t=document.getElementById(id);if(t)t.classList.remove('hidden'); }
+function nearbyDetect() { if(!navigator.geolocation){nearbyShowError('Geolocation not supported.');return;} nearbyShow('nearby-loading'); navigator.geolocation.getCurrentPosition(function(p){nearbyFetch(p.coords.latitude,p.coords.longitude);},function(e){var m={1:'Location access denied.',2:'Could not determine location.',3:'Request timed out.'};nearbyShowError(m[e.code]||'Could not get location.');},{enableHighAccuracy:false,timeout:10000,maximumAge:300000}); }
+function nearbyShowError(msg) { nearbyShow('nearby-error'); var e=document.getElementById('nearby-error-msg'); if(e) e.textContent=msg; }
+function nearbyFetch(lat,lng) { fetch('/api/nearby_providers?lat='+lat+'&lng='+lng+'&radius='+NEARBY_RADIUS).then(function(r){return r.json();}).then(function(p){if(!p||p.error||p.length===0){nearbyShowError('No providers found nearby.');return;}nearbyRender(p);}).catch(function(){nearbyShowError('Could not load providers.');}); }
+function nearbyEsc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function nearbyRender(providers) {
+  nearbyShow('nearby-results'); var g=document.getElementById('nearby-grid'); if(!g) return;
+  var bc={purple:{bg:'#faf5ff',text:'#7e22ce',border:'#f3e8ff'},blue:{bg:'#eff6ff',text:'#1d4ed8',border:'#dbeafe'},green:{bg:'#f0fdf4',text:'#15803d',border:'#dcfce7'},yellow:{bg:'#fefce8',text:'#a16207',border:'#fef9c3'},gray:{bg:'#f9fafb',text:'#6b7280',border:'#f3f4f6'}};
+  g.innerHTML=providers.map(function(p){
+    var i=(p.display_name||'?')[0].toUpperCase();
+    var av=p.profile_picture_url?'<img src="'+p.profile_picture_url+'" class="w-12 h-12 rounded-xl object-cover ring-2 ring-slate-100">':'<div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-400">'+i+'</div>';
+    var st='';for(var j=0;j<5;j++)st+='<i class="fas fa-star text-[10px] '+(j<Math.round(p.average_rating)?'text-amber-400':'text-slate-200')+'"></i>';
+    var b=p.badge&&p.badge.name!=='New'?bc[p.badge.color]||bc.gray:null;
+    var badge=b?'<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium mt-1.5" style="background:'+b.bg+';color:'+b.text+';border:1px solid '+b.border+'"><i class="'+nearbyEsc(p.badge.icon)+' mr-1"></i>'+nearbyEsc(p.badge.name)+'</span>':'';
+    return '<a href="'+p.url+'" class="group block bg-white rounded-xl border border-slate-100 p-4 hover:shadow-xl hover:shadow-slate-900/[0.05] hover:-translate-y-1 transition-all duration-300"><div class="flex items-center gap-3">'+av+'<div class="flex-1 min-w-0"><h4 class="font-bold text-slate-900 group-hover:text-orange-600 text-sm truncate">'+nearbyEsc(p.business_name||p.display_name)+'</h4><div class="flex items-center gap-1 mt-0.5">'+st+'<span class="text-xs text-slate-400 ml-1">'+p.distance+' mi</span></div>'+badge+'</div></div></a>';
   }).join('');
 }
 </script>

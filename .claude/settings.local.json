@@ -40,7 +40,27 @@
       "Bash(mailcatcher:*)",
       "Bash(whoami && psql -U wintan -d postgres -c \"SELECT 1\" 2>&1 || true)",
       "Bash(bundle list 2>&1 | grep -i \"sprockets\\\\|propshaft\")",
-      "Bash(git commit -m \"$\\(cat <<'EOF'\nReplace loud orange CTA gradients with soft bg-orange-50 and add section breathing room\nEOF\n\\)\" && git push)"
+      "Bash(git commit -m \"$\\(cat <<'EOF'\nReplace loud orange CTA gradients with soft bg-orange-50 and add section breathing room\nEOF\n\\)\" && git push)",
+      "Bash(pkill -f \"puma\" 2>/dev/null; sleep 2; bin/rails server -d 2>&1 || echo \"Starting server...\")",
+      "Bash(git commit -m \"$\\(cat <<'EOF'\nRevamp onboarding welcome page and add Google OAuth sign-in\n\n- Redesign welcome page with split layout, icon fields, progress indicator\n- Add Google OAuth2 via omniauth-google-oauth2 gem\n- Create OmniAuth callbacks controller and migration for provider/uid\n- Add Google sign-in buttons to sign-in and sign-up pages\n- Update Devise config and routes for OmniAuth\nEOF\n\\)\" && git push)",
+      "Bash(curl -s \"http://localhost:3000/api/nearby_providers?lat=41.88&lng=-87.63&radius=25\" | python3 -m json.tool | head -40)",
+      "Bash(curl -s \"http://localhost:3000/api/nearby_providers?lat=41.88&lng=-87.63&radius=25\" | python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(f'{len\\(d\\)} providers found'\\)\" 2>/dev/null || echo \"API check failed\")",
+      "Bash(curl -s \"http://localhost:3000/api/nearby_providers?lat=41.88&lng=-87.63&radius=50\" | python3 -m json.tool 2>/dev/null | head -30)",
+      "Bash(RAILS_ENV=production bundle exec:*)",
+      "WebFetch(domain:y9elp.hatchboxapp.com)",
+      "Bash(bundle exec:*)",
+      "Bash(kill 23519)",
+      "WebFetch(domain:localhost)",
+      "WebFetch(domain:www.thumbtack.com)",
+      "WebFetch(domain:www.taskrabbit.com)",
+      "WebFetch(domain:www.bark.com)",
+      "WebFetch(domain:linear.app)",
+      "WebFetch(domain:stripe.com)",
+      "WebFetch(domain:www.housecall.pro)",
+      "WebFetch(domain:www.angi.com)",
+      "WebFetch(domain:dribbble.com)",
+      "WebFetch(domain:webflow.com)",
+      "WebFetch(domain:www.awwwards.com)"
     ],
     "deny": []
   }

@@ -13,14 +13,14 @@
         </div>
         <%= f.text_field :query, value: @query,
             placeholder: "What service do you need?",
-            class: "w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
+            class: "w-full pl-11 pr-4 py-3 rounded-lg border border-gray-200 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-shadow text-sm" %>
       </div>
 
       <%= f.select :category_id,
           options_for_select([['All Categories', '']] + @categories.map { |c| [c.name, c.id] }, @category_id),
-          {}, class: "px-4 py-3 rounded-xl border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent text-sm bg-white" %>
+          {}, class: "px-4 py-3 rounded-lg border border-gray-200 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-sm bg-white" %>
 
-      <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-colors shadow-sm whitespace-nowrap">
+      <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold text-sm transition-colors shadow-sm whitespace-nowrap">
         <i class="fas fa-search mr-2"></i>Search
       </button>
     <% end %>
@@ -32,7 +32,7 @@
         <% if @query.present? %>
           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-orange-50 text-orange-700">
             "<%= @query %>"
-            <%= link_to services_path(category_id: @category_id), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
+            <%= link_to services_path(category_id: @category_id, sort: @sort), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
               <i class="fas fa-times text-xs"></i>
             <% end %>
           </span>
@@ -43,7 +43,7 @@
             <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-orange-50 text-orange-700">
               <i class="fas fa-tag text-xs"></i>
               <%= active_cat.name %>
-              <%= link_to services_path(query: @query), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
+              <%= link_to services_path(query: @query, sort: @sort), class: "ml-1 text-orange-400 hover:text-orange-600" do %>
                 <i class="fas fa-times text-xs"></i>
               <% end %>
             </span>
@@ -59,22 +59,74 @@
 <section class="py-12 bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <% if @services.any? %>
-      <p class="text-sm text-gray-500 mb-8">
-        Showing <%= @services.size %> service<%= @services.size == 1 ? '' : 's' %>
-        <% if @query.present? || @category_id.present? %> matching your search<% end %>
-      </p>
+      <%# Sort bar + count %>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+        <p class="text-sm text-gray-500">
+          Showing <%= @services.total_count %> service<%= @services.total_count == 1 ? '' : 's' %>
+          <% if @query.present? || @category_id.present? %> matching your search<% end %>
+        </p>
+        <div class="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+          <% sort_options = [
+            ["Newest", "newest", "fas fa-clock"],
+            ["Price: Low", "price_low", "fas fa-arrow-down"],
+            ["Price: High", "price_high", "fas fa-arrow-up"],
+            ["Top Rated", "top_rated", "fas fa-star"]
+          ] %>
+          <% sort_options.each do |label, value, icon| %>
+            <%= link_to services_path(query: @query, category_id: @category_id, sort: value),
+                class: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-colors #{@sort == value ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}" do %>
+              <i class="<%= icon %> text-[10px]"></i><%= label %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <%= render partial: 'service_card', collection: @services, as: :service %>
       </div>
+
+      <%# Pagination %>
+      <% if @services.total_pages > 1 %>
+        <div class="mt-12 flex justify-center">
+          <nav class="flex items-center gap-1">
+            <% if @services.prev_page %>
+              <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: @services.prev_page),
+                  class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors" do %>
+                <i class="fas fa-chevron-left text-xs"></i>
+              <% end %>
+            <% end %>
+
+            <% (1..@services.total_pages).each do |page_num| %>
+              <% if page_num == @services.current_page %>
+                <span class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-orange-500 text-white text-sm font-medium"><%= page_num %></span>
+              <% elsif page_num == 1 || page_num == @services.total_pages || (page_num - @services.current_page).abs <= 2 %>
+                <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: page_num),
+                    class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium" do %>
+                  <%= page_num %>
+                <% end %>
+              <% elsif page_num == 2 || page_num == @services.total_pages - 1 %>
+                <span class="inline-flex items-center justify-center w-10 h-10 text-gray-400 text-sm">&hellip;</span>
+              <% end %>
+            <% end %>
+
+            <% if @services.next_page %>
+              <%= link_to services_path(query: @query, category_id: @category_id, sort: @sort, page: @services.next_page),
+                  class: "inline-flex items-center justify-center w-10 h-10 rounded-lg border border-gray-200 text-gray-500 hover:bg-gray-50 transition-colors" do %>
+                <i class="fas fa-chevron-right text-xs"></i>
+              <% end %>
+            <% end %>
+          </nav>
+        </div>
+      <% end %>
+
     <% else %>
       <div class="text-center py-20">
-        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-2xl flex items-center justify-center">
+        <div class="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-xl flex items-center justify-center">
           <i class="fas fa-search text-gray-400 text-2xl"></i>
         </div>
         <h3 class="text-lg font-semibold text-gray-900 mb-2">No services found</h3>
         <p class="text-gray-500 mb-6">Try adjusting your search terms or removing filters.</p>
-        <%= link_to "Browse all services", services_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold text-sm transition-colors shadow-sm" %>
+        <%= link_to "Browse all services", services_path, class: "inline-flex items-center justify-center bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold text-sm transition-colors shadow-sm" %>
       </div>
     <% end %>
   </div>
