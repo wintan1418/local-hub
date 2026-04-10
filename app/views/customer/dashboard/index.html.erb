@@ -217,17 +217,63 @@
         <div class="bg-white rounded-xl border border-slate-100 p-6">
           <h2 class="text-lg font-semibold mb-4 text-slate-900">Quick Actions</h2>
           <div class="space-y-3">
-            <%= link_to services_path, class: "block w-full bg-orange-500 text-white text-center py-2 px-4 rounded-lg hover:bg-orange-500 transition-colors" do %>
+            <%= link_to services_path, class: "block w-full bg-orange-500 hover:bg-orange-600 text-white text-center py-2 px-4 rounded-lg transition-colors" do %>
               <i class="fas fa-search mr-2"></i>Browse Services
             <% end %>
-            <button class="block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">
-              <i class="fas fa-history mr-2"></i>Booking History
-            </button>
-            <button class="block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">
-              <i class="fas fa-star mr-2"></i>My Reviews
-            </button>
+            <%= link_to conversations_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-comments mr-2"></i>Messages
+            <% end %>
+            <%= link_to notifications_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-bell mr-2"></i>Notifications
+            <% end %>
+            <%= link_to settings_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-cog mr-2"></i>Settings
+            <% end %>
           </div>
         </div>
+
+        <%# Pending quotes %>
+        <% if @quotes.present? && @quotes.any? %>
+          <div class="bg-white rounded-xl border border-slate-100 p-6">
+            <h2 class="text-lg font-semibold mb-4 text-slate-900">Quotes Received</h2>
+            <div class="space-y-3">
+              <% @quotes.each do |quote| %>
+                <%= link_to quote_path(quote), class: "block p-3 border border-slate-100 rounded-lg hover:bg-slate-50 transition-colors" do %>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <div class="text-sm font-semibold text-slate-900"><%= quote.title %></div>
+                      <div class="text-xs text-slate-400"><%= quote.provider.display_name %></div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-sm font-bold text-slate-900">$<%= number_with_precision(quote.total_price, precision: 0) %></div>
+                      <% status_colors = { "sent" => "sky", "approved" => "emerald" } %>
+                      <span class="text-[10px] font-bold text-<%= status_colors[quote.status] || 'slate' %>-600"><%= quote.status.titleize %></span>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <%# Needs review %>
+        <% if @needs_review.present? && @needs_review.any? %>
+          <div class="bg-amber-50 rounded-xl border border-amber-200 p-6">
+            <h2 class="text-sm font-bold text-amber-900 mb-3"><i class="fas fa-star mr-1.5"></i>Leave a Review</h2>
+            <p class="text-xs text-amber-700 mb-4">Help the community by reviewing your completed bookings.</p>
+            <div class="space-y-2">
+              <% @needs_review.each do |booking| %>
+                <%= link_to new_booking_review_path(booking), class: "flex items-center justify-between p-3 bg-white rounded-lg border border-amber-100 hover:border-amber-300 transition-colors" do %>
+                  <div>
+                    <div class="text-sm font-semibold text-slate-900"><%= booking.service.title %></div>
+                    <div class="text-xs text-slate-400"><%= time_ago_in_words(booking.updated_at) %> ago</div>
+                  </div>
+                  <span class="text-xs font-bold text-orange-600">Review <i class="fas fa-arrow-right ml-1"></i></span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
 
         <!-- Past Bookings Summary -->
         <div class="bg-white rounded-xl border border-slate-100 p-6">
@@ -247,21 +293,23 @@
                   </div>
                   <div class="text-right">
                     <p class="text-xs font-medium text-slate-900">$<%= booking.total_price %></p>
-                    <% if booking.status == 'completed' && !booking.review %>
-                      <%= link_to new_booking_review_path(booking), class: "text-xs font-semibold text-orange-600 hover:text-orange-700" do %>
-                        <i class="fas fa-star mr-0.5"></i>Review
+                    <div class="flex items-center gap-2 mt-1 justify-end">
+                      <% if booking.status == 'completed' && !booking.review %>
+                        <%= link_to new_booking_review_path(booking), class: "text-xs font-semibold text-orange-600 hover:text-orange-700" do %>
+                          <i class="fas fa-star mr-0.5"></i>Review
+                        <% end %>
+                      <% elsif booking.review %>
+                        <span class="text-xs text-emerald-600"><i class="fas fa-check mr-0.5"></i>Reviewed</span>
                       <% end %>
-                    <% elsif booking.review %>
-                      <span class="text-xs text-emerald-600"><i class="fas fa-check mr-0.5"></i>Reviewed</span>
-                    <% end %>
+                      <% if booking.status == 'completed' && booking.invoice.present? %>
+                        <%= link_to booking_invoice_path(booking), class: "text-xs font-semibold text-sky-600 hover:text-sky-700" do %>
+                          <i class="fas fa-file-invoice mr-0.5"></i>Invoice
+                        <% end %>
+                      <% end %>
+                    </div>
                   </div>
                 </div>
               <% end %>
-            </div>
-            <div class="mt-4 text-center">
-              <button class="text-orange-600 hover:text-orange-700 font-medium text-sm">
-                View All History <i class="fas fa-arrow-right ml-1"></i>
-              </button>
             </div>
           <% else %>
             <div class="text-center py-6">
