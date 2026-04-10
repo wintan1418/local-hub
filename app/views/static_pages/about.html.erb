@@ -192,14 +192,18 @@
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10" data-aos="fade-up" data-aos-delay="100">
       <% [
-        { icon: "fa-search", color: "orange", title: "Smart Search", desc: "Find services by category, location, price, and rating." },
-        { icon: "fa-calendar-check", color: "sky", title: "Instant Booking", desc: "Book appointments directly with real-time availability." },
-        { icon: "fa-comments", color: "violet", title: "In-App Chat", desc: "Message providers with file sharing and rich media." },
-        { icon: "fa-credit-card", color: "emerald", title: "Secure Payments", desc: "Stripe-powered checkout with subscription plans." },
-        { icon: "fa-bell", color: "amber", title: "Notifications", desc: "Stay updated on bookings, messages, and reviews." },
-        { icon: "fa-star", color: "rose", title: "Reviews & Ratings", desc: "Verified reviews from real customers who booked." },
-        { icon: "fa-id-badge", color: "blue", title: "Verification", desc: "Document verification, licenses, and identity checks." },
-        { icon: "fa-bullhorn", color: "teal", title: "CRM & Campaigns", desc: "SMS and email marketing tools for providers." }
+        { icon: "fa-search", color: "orange", title: "Smart Search", desc: "Find by category, location, price, and rating." },
+        { icon: "fa-file-invoice-dollar", color: "sky", title: "Quoting", desc: "Professional quotes with line items and one-click approval." },
+        { icon: "fa-credit-card", color: "emerald", title: "Payments", desc: "Stripe-powered checkout. Customers pay when they book." },
+        { icon: "fa-file-invoice", color: "violet", title: "Invoicing", desc: "Auto-generated invoices after job completion." },
+        { icon: "fa-calendar-alt", color: "amber", title: "Calendar", desc: "Visual month calendar for managing your schedule." },
+        { icon: "fa-chart-line", color: "rose", title: "Analytics", desc: "Revenue charts, booking trends, performance data." },
+        { icon: "fa-comments", color: "teal", title: "Messaging", desc: "In-app chat with files, pins, and replies." },
+        { icon: "fa-bell", color: "blue", title: "Reminders", desc: "Automated booking reminders and review follow-ups." },
+        { icon: "fa-star", color: "orange", title: "Reviews", desc: "Verified reviews from real customers who booked." },
+        { icon: "fa-shield-alt", color: "emerald", title: "Verification", desc: "Document verification, identity checks, verified badges." },
+        { icon: "fa-bullhorn", color: "violet", title: "CRM", desc: "SMS and email marketing campaigns for providers." },
+        { icon: "fa-trophy", color: "amber", title: "Leaderboard", desc: "Top-rated providers ranked by performance." }
       ].each do |feature| %>
         <div class="text-center group">
           <div class="w-12 h-12 rounded-xl bg-<%= feature[:color] %>-50 text-<%= feature[:color] %>-500 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-200">
