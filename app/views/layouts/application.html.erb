@@ -19,6 +19,17 @@
 
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            maxWidth: {
+              '7xl': '1200px',
+            }
+          }
+        }
+      }
+    </script>
     <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css", rel: "stylesheet" %>
 
     <!-- Font Awesome -->
