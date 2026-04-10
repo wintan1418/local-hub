@@ -178,12 +178,18 @@
             <%= link_to provider_subscriptions_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-credit-card mr-2"></i>Subscription
             <% end %>
+            <%= link_to provider_quotes_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-file-invoice-dollar mr-2"></i>Quotes
+            <% end %>
             <%= link_to provider_crm_campaigns_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-bullhorn mr-2"></i>SMS Campaigns
             <% end %>
-            <button class="block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors">
-              <i class="fas fa-calendar-alt mr-2"></i>Manage Availability
-            </button>
+            <%= link_to provider_calendar_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-calendar-alt mr-2"></i>Calendar
+            <% end %>
+            <%= link_to provider_analytics_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-chart-line mr-2"></i>Analytics
+            <% end %>
             <%= link_to conversations_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-comments mr-2"></i>Messages
             <% end %>

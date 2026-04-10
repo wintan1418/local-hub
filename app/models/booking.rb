@@ -2,6 +2,7 @@ class Booking < ApplicationRecord
   belongs_to :customer, class_name: "User"
   belongs_to :service
   has_one :review, dependent: :destroy
+  has_one :invoice, dependent: :destroy
 
   enum :status, { pending: 0, confirmed: 1, completed: 2, cancelled: 3 }
   validates :scheduled_at, :total_price, presence: true
@@ -23,6 +24,17 @@ class Booking < ApplicationRecord
     Notification.create_for_booking(self, :created)
   end
 
+  def generate_invoice
+    return if invoice.present?
+    Invoice.create!(
+      booking: self,
+      amount: total_price,
+      status: paid? ? :paid : :issued,
+      issued_at: Time.current,
+      paid_at: paid? ? Time.current : nil
+    )
+  end
+
   def send_booking_update_notifications
     # Send update email to customer
     UserMailer.booking_update(self).deliver_later
@@ -33,6 +45,7 @@ class Booking < ApplicationRecord
       Notification.create_for_booking(self, :updated, "Your booking has been confirmed!")
     when 'completed'
       Notification.create_for_booking(self, :updated, "Your booking has been completed. Please leave a review!")
+      generate_invoice
     when 'cancelled'
       Notification.create_for_booking(self, :cancelled)
     end

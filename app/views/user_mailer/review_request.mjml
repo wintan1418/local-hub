@@ -1,0 +1,27 @@
+<mjml>
+  <mj-head>
+    <mj-title>How was your experience? - Radius</mj-title>
+    <mj-preview>Leave a review for your recent booking.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <mj-section background-color="#0f172a" padding="30px 0">
+      <mj-column><mj-text align="center" color="#ffffff" font-size="22px" font-weight="800">Radius</mj-text></mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#0f172a">How was your experience?</mj-text>
+        <mj-text>Hi <%= @user.display_name %>,</mj-text>
+        <mj-text>Your recent booking for <strong><%= @service.title %></strong> has been completed. We'd love to hear how it went!</mj-text>
+        <mj-text>Your review helps other customers make informed decisions and helps great providers get recognized.</mj-text>
+        <mj-button background-color="#f97316" href="<%= new_booking_review_url(@booking) %>">Leave a Review</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="20px 0">
+      <mj-column><mj-text align="center" font-size="12px" color="#94a3b8">&copy; <%= Date.current.year %> Radius</mj-text></mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

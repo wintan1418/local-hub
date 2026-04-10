@@ -1,0 +1,29 @@
+<mjml>
+  <mj-head>
+    <mj-title>New Quote - Radius</mj-title>
+    <mj-preview>You've received a quote from a provider.</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <mj-section background-color="#0f172a" padding="30px 0">
+      <mj-column><mj-text align="center" color="#ffffff" font-size="22px" font-weight="800">Radius</mj-text></mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#0f172a">You've Received a Quote</mj-text>
+        <mj-text>Hi <%= @user.display_name %>,</mj-text>
+        <mj-text><strong><%= @provider.display_name %></strong> has sent you a quote for <strong><%= @service.title %></strong>.</mj-text>
+        <mj-text font-size="14px" color="#64748b"><strong>Quote:</strong> <%= @quote.title %></mj-text>
+        <mj-text font-size="14px" color="#64748b"><strong>Amount:</strong> $<%= number_with_precision(@quote.total_price, precision: 2) %></mj-text>
+        <mj-text>Review the details and approve or decline the quote.</mj-text>
+        <mj-button background-color="#f97316" href="<%= quote_url(@quote) %>">View Quote</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="20px 0">
+      <mj-column><mj-text align="center" font-size="12px" color="#94a3b8">&copy; <%= Date.current.year %> Radius</mj-text></mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

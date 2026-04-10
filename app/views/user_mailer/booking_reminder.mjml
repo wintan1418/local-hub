@@ -1,0 +1,28 @@
+<mjml>
+  <mj-head>
+    <mj-title>Booking Reminder - Radius</mj-title>
+    <mj-preview>Your appointment is tomorrow!</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, -apple-system, sans-serif" />
+      <mj-text font-size="16px" color="#374151" line-height="1.6" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <mj-section background-color="#0f172a" padding="30px 0">
+      <mj-column><mj-text align="center" color="#ffffff" font-size="22px" font-weight="800">Radius</mj-text></mj-column>
+    </mj-section>
+    <mj-section background-color="#ffffff" padding="40px 30px">
+      <mj-column>
+        <mj-text font-size="22px" font-weight="700" color="#0f172a">Reminder: Your Appointment is Tomorrow</mj-text>
+        <mj-text>Hi <%= @user.display_name %>,</mj-text>
+        <mj-text>Just a friendly reminder that your booking for <strong><%= @service.title %></strong> with <strong><%= @provider.display_name %></strong> is scheduled for tomorrow.</mj-text>
+        <mj-text font-size="14px" color="#64748b"><strong>Date:</strong> <%= @booking.scheduled_at.strftime("%B %d, %Y at %I:%M %p") %></mj-text>
+        <mj-text font-size="14px" color="#64748b"><strong>Total:</strong> $<%= @booking.total_price %></mj-text>
+        <mj-button background-color="#0f172a" href="<%= customer_dashboard_url %>">View Booking</mj-button>
+      </mj-column>
+    </mj-section>
+    <mj-section padding="20px 0">
+      <mj-column><mj-text align="center" font-size="12px" color="#94a3b8">&copy; <%= Date.current.year %> Radius</mj-text></mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

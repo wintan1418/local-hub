@@ -1,0 +1,42 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-2xl font-black text-slate-900">Quotes</h1>
+        <p class="text-sm text-slate-500 mt-1"><%= @quotes.size %> total quotes</p>
+      </div>
+      <%= link_to new_provider_quote_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
+        <i class="fas fa-plus mr-2 text-xs"></i>New Quote
+      <% end %>
+    </div>
+
+    <% if @quotes.any? %>
+      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+        <div class="divide-y divide-slate-50">
+          <% @quotes.each do |quote| %>
+            <%= link_to provider_quote_path(quote), class: "flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors" do %>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-bold text-slate-900"><%= quote.title %></div>
+                <div class="text-xs text-slate-400 mt-0.5"><%= quote.customer.display_name %> &middot; <%= quote.service.title %> &middot; <%= time_ago_in_words(quote.created_at) %> ago</div>
+              </div>
+              <div class="flex items-center gap-3 flex-shrink-0">
+                <span class="text-sm font-black text-slate-900">$<%= number_with_precision(quote.total_price, precision: 2) %></span>
+                <% status_colors = { "draft" => "slate", "sent" => "sky", "approved" => "emerald", "rejected" => "red", "expired" => "amber", "converted" => "violet" } %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[quote.status] %>-50 text-<%= status_colors[quote.status] %>-700"><%= quote.status.titleize %></span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="bg-white rounded-xl border border-slate-100 p-12 text-center">
+        <i class="fas fa-file-invoice text-3xl text-slate-300 mb-3"></i>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">No quotes yet</h3>
+        <p class="text-sm text-slate-500 mb-6">Create a quote to send to your customers.</p>
+        <%= link_to new_provider_quote_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white" do %>
+          <i class="fas fa-plus mr-2 text-xs"></i>Create First Quote
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

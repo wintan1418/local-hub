@@ -70,6 +70,49 @@ class StripeService
     }
   end
 
+  def self.create_booking_checkout(booking)
+    user = booking.customer
+    service = booking.service
+
+    # Ensure customer has a Stripe customer ID
+    stripe_customer = user.stripe_customer_id.present? ?
+                      Stripe::Customer.retrieve(user.stripe_customer_id) :
+                      create_customer(user)
+
+    return nil unless stripe_customer
+
+    session = Stripe::Checkout::Session.create({
+      customer: stripe_customer.id,
+      payment_method_types: ["card"],
+      line_items: [{
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: service.title,
+            description: "Service by #{service.provider.display_name}"
+          },
+          unit_amount: (booking.total_price * 100).to_i
+        },
+        quantity: 1
+      }],
+      mode: "payment",
+      success_url: "#{Rails.application.routes.url_helpers.booking_payment_success_url(booking)}?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: Rails.application.routes.url_helpers.service_url(service),
+      metadata: {
+        booking_id: booking.id,
+        user_id: user.id,
+        service_id: service.id
+      }
+    })
+
+    booking.update(stripe_checkout_session_id: session.id)
+
+    { checkout_url: session.url, session_id: session.id }
+  rescue Stripe::StripeError => e
+    Rails.logger.error "Stripe Booking Checkout Error: #{e.message}"
+    nil
+  end
+
   def self.create_subscription(user, plan, payment_method_id = nil)
     # This method is kept for backward compatibility
     # but now redirects to checkout session creation

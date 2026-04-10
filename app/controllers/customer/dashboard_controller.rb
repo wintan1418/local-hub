@@ -29,6 +29,12 @@ module Customer
                                       .order(Arel.sql("COUNT(*) DESC"))
                                       .limit(3)
                                       .count
+
+      # Quotes received
+      @quotes = Quote.where(customer: current_user).where(status: [:sent, :approved]).order(created_at: :desc).limit(5)
+
+      # Completed bookings needing review
+      @needs_review = current_user.bookings.where(status: :completed).left_joins(:review).where(reviews: { id: nil }).includes(:service).limit(3)
     end
 
     private

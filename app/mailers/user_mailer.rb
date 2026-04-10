@@ -69,6 +69,32 @@ class UserMailer < ApplicationMailer
     mail(to: @provider.email, subject: "New Booking - #{@service.title}")
   end
 
+  def booking_reminder(booking)
+    @booking = booking
+    @user = booking.customer
+    @service = booking.service
+    @provider = @service.provider
+    @app_name = 'Radius'
+    mail(to: @user.email, subject: "Reminder: #{@service.title} tomorrow")
+  end
+
+  def review_request(booking)
+    @booking = booking
+    @user = booking.customer
+    @service = booking.service
+    @app_name = 'Radius'
+    mail(to: @user.email, subject: "How was your experience with #{@service.provider.display_name}?")
+  end
+
+  def quote_sent(quote)
+    @quote = quote
+    @user = quote.customer
+    @provider = quote.provider
+    @service = quote.service
+    @app_name = 'Radius'
+    mail(to: @user.email, subject: "New Quote from #{@provider.display_name} - #{@quote.title}")
+  end
+
   def new_review_notification(review)
     @review = review
     @booking = review.booking

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_03_01_194559) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_10_210432) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_01_194559) do
     t.decimal "total_price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stripe_payment_intent_id"
+    t.string "stripe_checkout_session_id"
+    t.boolean "paid"
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["service_id"], name: "index_bookings_on_service_id"
   end
@@ -137,6 +140,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_01_194559) do
     t.index ["user_id"], name: "index_crm_campaigns_on_user_id"
   end
 
+  create_table "invoices", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.string "invoice_number"
+    t.decimal "amount", precision: 10, scale: 2
+    t.integer "status", default: 0
+    t.datetime "issued_at"
+    t.datetime "paid_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_invoices_on_booking_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.bigint "sender_id", null: false
     t.bigint "recipient_id", null: false
@@ -208,6 +223,33 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_01_194559) do
     t.datetime "updated_at", null: false
     t.index ["active"], name: "index_plans_on_active"
     t.index ["stripe_price_id"], name: "index_plans_on_stripe_price_id", unique: true
+  end
+
+  create_table "quote_line_items", force: :cascade do |t|
+    t.bigint "quote_id", null: false
+    t.string "description"
+    t.integer "quantity"
+    t.decimal "unit_price"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["quote_id"], name: "index_quote_line_items_on_quote_id"
+  end
+
+  create_table "quotes", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.bigint "customer_id", null: false
+    t.bigint "provider_id", null: false
+    t.string "title"
+    t.text "description"
+    t.decimal "total_price", precision: 10, scale: 2
+    t.integer "status", default: 0
+    t.datetime "valid_until"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_quotes_on_customer_id"
+    t.index ["provider_id"], name: "index_quotes_on_provider_id"
+    t.index ["service_id"], name: "index_quotes_on_service_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -335,12 +377,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_03_01_194559) do
   add_foreign_key "conversations", "users", column: "customer_id"
   add_foreign_key "conversations", "users", column: "provider_id"
   add_foreign_key "crm_campaigns", "users"
+  add_foreign_key "invoices", "bookings"
   add_foreign_key "messages", "bookings"
   add_foreign_key "messages", "users", column: "recipient_id"
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "notification_preferences", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "phone_verifications", "users"
+  add_foreign_key "quote_line_items", "quotes"
+  add_foreign_key "quotes", "services"
+  add_foreign_key "quotes", "users", column: "customer_id"
+  add_foreign_key "quotes", "users", column: "provider_id"
   add_foreign_key "reviews", "bookings"
   add_foreign_key "service_areas", "services"
   add_foreign_key "services", "categories"

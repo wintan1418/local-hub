@@ -38,6 +38,8 @@ Rails.application.routes.draw do
   get "customer/dashboard", to: "customer/dashboard#index", as: :customer_dashboard
   namespace :provider do
     get "dashboard", to: "dashboard#index", as: :dashboard
+    get "calendar", to: "calendar#index", as: :calendar
+    get "analytics", to: "analytics#index", as: :analytics
     resources :services, only: [ :new, :create, :edit, :update, :destroy ]
     resources :bookings, only: [] do
       member do
@@ -70,6 +72,12 @@ Rails.application.routes.draw do
       collection do
         post :send_code
         post :verify
+      end
+    end
+
+    resources :quotes do
+      member do
+        patch :send_quote
       end
     end
 
@@ -107,10 +115,22 @@ Rails.application.routes.draw do
   end
   resources :bookings, only: [ :destroy ] do
     resource :review, only: [ :new, :create ]
+    resource :invoice, only: [ :show ]
+    member do
+      get :payment_success
+    end
   end
 
   # Public provider profiles
   resources :providers, only: [ :show ]
+
+  # Customer quotes
+  resources :quotes, only: [:show] do
+    member do
+      patch :approve
+      patch :reject
+    end
+  end
 
   # Leaderboard
   resources :leaderboard, only: [ :index, :show ]
