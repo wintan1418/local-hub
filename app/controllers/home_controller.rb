@@ -13,5 +13,6 @@ class HomeController < ApplicationController
                          .select { |p| p.total_completed_bookings >= 1 }
                          .sort_by { |p| [-p.average_rating, -p.total_completed_bookings] }
                          .first(4)
+    @plans = Plan.where(active: true).order(:position)
   end
 end

@@ -63,7 +63,8 @@
       "WebFetch(domain:www.awwwards.com)",
       "Bash(git push:*)",
       "Bash(grep -r \"before_action\\\\|def \" /home/wintan/local-hub/app/controllers/customer -type f --include=\"*.rb\")",
-      "WebFetch(domain:www.getjobber.com)"
+      "WebFetch(domain:www.getjobber.com)",
+      "Bash(grep -v '^--$')"
     ],
     "deny": []
   }

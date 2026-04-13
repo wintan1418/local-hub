@@ -465,6 +465,223 @@
 </section>
 
 <%# ================================================================
+    BUILT FOR BOTH SIDES — Customer + Provider flow
+    ================================================================ %>
+<section class="py-24 bg-white relative overflow-hidden">
+  <div class="absolute top-0 left-0 w-96 h-96 bg-sky-100/30 rounded-full blur-[120px] -translate-x-1/3 -translate-y-1/3"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-orange-100/30 rounded-full blur-[120px] translate-x-1/3 translate-y-1/3"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-xs font-bold uppercase tracking-wider mb-4">
+        <i class="fas fa-arrows-left-right text-[10px]"></i>
+        Two Sides, One Platform
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Built for everyone</h2>
+      <p class="mt-3 text-slate-500 text-lg max-w-2xl mx-auto">Whether you need help or you provide it, Radius works for you.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+      <%# Customer side %>
+      <div class="relative group" data-aos="fade-right">
+        <div class="absolute inset-0 bg-gradient-to-br from-sky-50 to-blue-50 rounded-2xl"></div>
+        <div class="relative p-8 sm:p-10 rounded-2xl border border-sky-100 h-full">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/30">
+              <i class="fas fa-user text-white text-lg"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-sky-600 uppercase tracking-wider">For Customers</div>
+              <div class="text-xl font-black text-slate-900">Need help with something?</div>
+            </div>
+          </div>
+
+          <div class="space-y-3 mb-8">
+            <% [
+              { icon: "fa-search", text: "Search verified pros by category, location, and price" },
+              { icon: "fa-comments", text: "Chat directly with providers before you book" },
+              { icon: "fa-credit-card", text: "Pay securely with Stripe — protected until job is done" },
+              { icon: "fa-bell", text: "Get reminders, invoices, and review your provider" }
+            ].each do |item| %>
+              <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 w-6 h-6 rounded-md bg-white flex items-center justify-center mt-0.5">
+                  <i class="fas <%= item[:icon] %> text-sky-500 text-[10px]"></i>
+                </div>
+                <span class="text-sm text-slate-700"><%= item[:text] %></span>
+              </div>
+            <% end %>
+          </div>
+
+          <%= link_to user_signed_in? ? services_path : new_user_registration_path(role: 'customer'),
+              class: "btn-shine inline-flex items-center px-6 py-3 rounded-xl text-sm font-bold bg-sky-500 hover:bg-sky-600 text-white transition-all hover:shadow-lg hover:shadow-sky-500/30" do %>
+            <%= user_signed_in? ? 'Browse Services' : 'Sign Up Free' %>
+            <i class="fas fa-arrow-right ml-2 text-xs"></i>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Provider side %>
+      <div class="relative group" data-aos="fade-left">
+        <div class="absolute inset-0 bg-gradient-to-br from-orange-50 to-rose-50 rounded-2xl"></div>
+        <div class="relative p-8 sm:p-10 rounded-2xl border border-orange-100 h-full">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-12 h-12 rounded-xl bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/30">
+              <i class="fas fa-briefcase text-white text-lg"></i>
+            </div>
+            <div>
+              <div class="text-xs font-bold text-orange-600 uppercase tracking-wider">For Pros</div>
+              <div class="text-xl font-black text-slate-900">Run your business?</div>
+            </div>
+          </div>
+
+          <div class="space-y-3 mb-8">
+            <% [
+              { icon: "fa-magnifying-glass-location", text: "Get discovered by customers in your area" },
+              { icon: "fa-file-invoice-dollar", text: "Send quotes, accept bookings, generate invoices" },
+              { icon: "fa-calendar-alt", text: "Visual calendar, analytics, and CRM tools built in" },
+              { icon: "fa-chart-line", text: "Track revenue, build your reputation, grow your biz" }
+            ].each do |item| %>
+              <div class="flex items-start gap-3">
+                <div class="flex-shrink-0 w-6 h-6 rounded-md bg-white flex items-center justify-center mt-0.5">
+                  <i class="fas <%= item[:icon] %> text-orange-500 text-[10px]"></i>
+                </div>
+                <span class="text-sm text-slate-700"><%= item[:text] %></span>
+              </div>
+            <% end %>
+          </div>
+
+          <%= link_to user_signed_in? && current_user.provider? ? provider_dashboard_path : new_user_registration_path(role: 'provider'),
+              class: "btn-shine inline-flex items-center px-6 py-3 rounded-xl text-sm font-bold bg-orange-500 hover:bg-orange-600 text-white transition-all hover:shadow-lg hover:shadow-orange-500/30" do %>
+            <%= user_signed_in? && current_user.provider? ? 'Go to Dashboard' : 'Become a Provider' %>
+            <i class="fas fa-arrow-right ml-2 text-xs"></i>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
+    PRICING — Provider plans
+    ================================================================ %>
+<section class="py-24 bg-slate-50/50 relative overflow-hidden">
+  <div class="absolute top-0 right-1/4 w-72 h-72 bg-orange-100/40 rounded-full blur-[100px]"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider mb-4">
+        <i class="fas fa-tag text-[10px]"></i>
+        Provider Pricing
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Simple plans, no surprises</h2>
+      <p class="mt-3 text-slate-500 text-lg max-w-xl mx-auto">Free for customers. Providers choose a plan that fits.</p>
+    </div>
+
+    <% if @plans.present? && @plans.any? %>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+        <% @plans.each_with_index do |plan, i| %>
+          <% is_popular = plan.name == "Professional" %>
+          <div class="relative <%= is_popular ? 'lg:-mt-4 lg:mb-4' : '' %>">
+            <% if is_popular %>
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-orange-500 text-white shadow-lg shadow-orange-500/30 uppercase tracking-wider">Most Popular</span>
+              </div>
+            <% end %>
+            <div class="h-full bg-white rounded-2xl border <%= is_popular ? 'border-orange-300 shadow-xl shadow-orange-500/10' : 'border-slate-100 shadow-sm' %> p-7 hover:shadow-lg transition-all">
+              <div class="mb-5">
+                <h3 class="text-lg font-black text-slate-900"><%= plan.name %></h3>
+                <p class="text-xs text-slate-400 mt-1">
+                  <%= case plan.name
+                      when "Free" then "Get started, no commitment"
+                      when "Professional" then "For growing service pros"
+                      when "Business" then "For established businesses"
+                      end %>
+                </p>
+              </div>
+
+              <div class="mb-6 pb-6 border-b border-slate-100">
+                <div class="flex items-baseline">
+                  <span class="text-4xl font-black text-slate-900">$<%= plan.price.to_i %></span>
+                  <span class="text-sm text-slate-400 ml-1.5">/month</span>
+                </div>
+              </div>
+
+              <ul class="space-y-3 mb-8">
+                <% (plan.features || []).each do |feature| %>
+                  <li class="flex items-start gap-2.5">
+                    <div class="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-50 flex items-center justify-center mt-0.5">
+                      <i class="fas fa-check text-emerald-500 text-[8px]"></i>
+                    </div>
+                    <span class="text-sm text-slate-600"><%= feature %></span>
+                  </li>
+                <% end %>
+              </ul>
+
+              <%= link_to new_user_registration_path(role: 'provider'),
+                  class: "block w-full text-center px-5 py-3 rounded-xl text-sm font-bold transition-all #{is_popular ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-900'}" do %>
+                <%= plan.price.to_i == 0 ? 'Start Free' : 'Get Started' %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <p class="text-center text-sm text-slate-400 mt-10">
+      <i class="fas fa-shield-alt text-emerald-500 mr-1"></i>
+      14-day free trial on paid plans &middot; Cancel anytime &middot; No credit card required
+    </p>
+  </div>
+</section>
+
+<%# ================================================================
+    FAQ — Quick answers
+    ================================================================ %>
+<section class="py-24 bg-white">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-violet-600 text-xs font-bold uppercase tracking-wider mb-4">
+        <i class="fas fa-circle-question text-[10px]"></i>
+        Questions
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Got questions?</h2>
+      <p class="mt-3 text-slate-500 text-lg">Quick answers to common questions.</p>
+    </div>
+
+    <div class="space-y-3" data-aos="fade-up" data-aos-delay="100">
+      <% [
+        { q: "How does Radius work?", a: "Customers search for verified local pros, compare ratings and prices, and book instantly. Pros manage everything from one dashboard — bookings, quotes, invoices, calendar, and analytics." },
+        { q: "Is Radius free for customers?", a: "Completely free. You only pay for the services you book. No subscription, no hidden fees." },
+        { q: "How are providers verified?", a: "Every provider submits business licenses, insurance certificates, and government ID. Our admin team reviews each application before granting verified status." },
+        { q: "How do payments work?", a: "Customers pay securely through Stripe at booking. Funds are released after the job is completed. Card details never touch our servers." },
+        { q: "Can providers send quotes?", a: "Yes. Providers can create detailed quotes with line items, send them to customers, and convert approved quotes to bookings with one click." },
+        { q: "What if I'm not satisfied with the service?", a: "Talk to your provider first — most issues resolve directly. You can also contact our support team. We stand behind every booking." }
+      ].each do |faq| %>
+        <details class="group bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
+          <summary class="flex items-center justify-between cursor-pointer px-6 py-5 text-left">
+            <span class="text-sm font-bold text-slate-900 pr-4"><%= faq[:q] %></span>
+            <span class="flex-shrink-0 w-7 h-7 rounded-lg bg-white group-open:bg-orange-50 flex items-center justify-center transition-colors border border-slate-200 group-open:border-orange-200">
+              <i class="fas fa-chevron-down text-slate-400 group-open:text-orange-500 text-[10px] transition-transform group-open:rotate-180"></i>
+            </span>
+          </summary>
+          <div class="px-6 pb-5">
+            <p class="text-sm text-slate-500 leading-relaxed"><%= faq[:a] %></p>
+          </div>
+        </details>
+      <% end %>
+    </div>
+
+    <div class="text-center mt-10">
+      <p class="text-sm text-slate-500">Still have questions?
+        <%= link_to "Contact us", contact_path, class: "font-semibold text-orange-600 hover:text-orange-700" %>
+        or
+        <%= link_to "see how it works", how_it_works_path, class: "font-semibold text-orange-600 hover:text-orange-700" %>
+      </p>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
     PROVIDER CTA — Split layout with image
     ================================================================ %>
 <section class="py-24 bg-slate-900 relative overflow-hidden">
