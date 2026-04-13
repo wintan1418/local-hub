@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  booking: one
+  description: MyString
+  amount: 9.99
+  category: MyString
+
+two:
+  booking: two
+  description: MyString
+  amount: 9.99
+  category: MyString

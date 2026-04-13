@@ -99,6 +99,67 @@
             <% end %>
           </div>
         <% end %>
+
+        <%# Expense tracking (provider only) %>
+        <% if current_user.provider? && current_user == @booking.service.provider %>
+          <div class="bg-white rounded-xl border border-slate-100 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Expenses & Profit</h2>
+              <div class="text-right">
+                <div class="text-xs text-slate-400">Profit</div>
+                <div class="text-lg font-black <%= @booking.profit >= 0 ? 'text-emerald-600' : 'text-red-500' %>">
+                  $<%= number_with_precision(@booking.profit, precision: 2) %>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 mb-4 text-center">
+              <div class="p-3 rounded-lg bg-sky-50">
+                <div class="text-[10px] font-bold text-sky-600 uppercase">Revenue</div>
+                <div class="text-sm font-black text-slate-900">$<%= number_with_precision(@booking.total_price, precision: 2) %></div>
+              </div>
+              <div class="p-3 rounded-lg bg-red-50">
+                <div class="text-[10px] font-bold text-red-600 uppercase">Expenses</div>
+                <div class="text-sm font-black text-slate-900">$<%= number_with_precision(@booking.total_expenses, precision: 2) %></div>
+              </div>
+              <div class="p-3 rounded-lg bg-emerald-50">
+                <div class="text-[10px] font-bold text-emerald-600 uppercase">Profit</div>
+                <div class="text-sm font-black text-slate-900">$<%= number_with_precision(@booking.profit, precision: 2) %></div>
+              </div>
+            </div>
+
+            <% if @booking.expenses.any? %>
+              <div class="space-y-2 mb-4">
+                <% @booking.expenses.each do |expense| %>
+                  <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50">
+                    <div>
+                      <div class="text-sm font-semibold text-slate-900"><%= expense.description %></div>
+                      <% if expense.category.present? %>
+                        <div class="text-[10px] text-slate-400 uppercase"><%= expense.category %></div>
+                      <% end %>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <span class="text-sm font-bold text-red-600">-$<%= number_with_precision(expense.amount, precision: 2) %></span>
+                      <%= button_to booking_expense_path(@booking, expense), method: :delete, data: { turbo_confirm: "Remove this expense?" }, class: "text-xs text-slate-400 hover:text-red-500 cursor-pointer" do %>
+                        <i class="fas fa-times"></i>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%# Add expense form %>
+            <%= form_with url: booking_expenses_path(@booking), local: true, class: "pt-4 border-t border-slate-100" do |f| %>
+              <div class="flex gap-2">
+                <%= f.text_field :description, placeholder: "Expense description", class: "flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", name: "expense[description]" %>
+                <%= f.number_field :amount, placeholder: "0.00", step: 0.01, class: "w-24 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", name: "expense[amount]" %>
+                <%= f.select :category, options_for_select(Expense::CATEGORIES.map { |c| [c.titleize, c] }), {}, class: "w-28 px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white", name: "expense[category]" %>
+                <button type="submit" class="px-4 py-2 rounded-lg text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors">Add</button>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
       </div>
 
       <%# ===== Sidebar ===== %>
@@ -189,6 +250,19 @@
               <% end %>
             <% end %>
           </div>
+
+          <%# Reschedule (pending/confirmed only) %>
+          <% if (@booking.pending? || @booking.confirmed?) %>
+            <details class="mt-3 pt-3 border-t border-slate-100">
+              <summary class="cursor-pointer text-xs font-semibold text-slate-500 hover:text-slate-700">
+                <i class="fas fa-clock mr-1"></i>Reschedule
+              </summary>
+              <%= form_with url: reschedule_booking_path(@booking), method: :patch, local: true, class: "mt-3" do |f| %>
+                <%= f.datetime_field :scheduled_at, value: @booking.scheduled_at.strftime("%Y-%m-%dT%H:%M"), class: "w-full px-3 py-2 rounded-lg border border-slate-200 text-sm mb-2" %>
+                <button type="submit" class="w-full px-4 py-2 rounded-lg text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors">Update Time</button>
+              <% end %>
+            </details>
+          <% end %>
         </div>
 
         <%# Timeline %>

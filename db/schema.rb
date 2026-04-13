@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_10_210432) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -63,6 +63,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_10_210432) do
     t.string "stripe_payment_intent_id"
     t.string "stripe_checkout_session_id"
     t.boolean "paid"
+    t.integer "recurrence"
+    t.integer "parent_booking_id"
+    t.decimal "deposit_amount"
+    t.boolean "deposit_paid"
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["service_id"], name: "index_bookings_on_service_id"
   end
@@ -138,6 +142,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_10_210432) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_crm_campaigns_on_user_id"
+  end
+
+  create_table "expenses", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.string "description"
+    t.decimal "amount", precision: 10, scale: 2
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_expenses_on_booking_id"
   end
 
   create_table "invoices", force: :cascade do |t|
@@ -377,6 +391,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_10_210432) do
   add_foreign_key "conversations", "users", column: "customer_id"
   add_foreign_key "conversations", "users", column: "provider_id"
   add_foreign_key "crm_campaigns", "users"
+  add_foreign_key "expenses", "bookings"
   add_foreign_key "invoices", "bookings"
   add_foreign_key "messages", "bookings"
   add_foreign_key "messages", "users", column: "recipient_id"

@@ -86,6 +86,16 @@ class UserMailer < ApplicationMailer
     mail(to: @user.email, subject: "How was your experience with #{@service.provider.display_name}?")
   end
 
+  def invoice_reminder(invoice, days)
+    @invoice = invoice
+    @booking = invoice.booking
+    @user = @booking.customer
+    @service = @booking.service
+    @days = days
+    @app_name = 'Radius'
+    mail(to: @user.email, subject: "Payment Reminder: Invoice #{@invoice.invoice_number}")
+  end
+
   def quote_sent(quote)
     @quote = quote
     @user = quote.customer

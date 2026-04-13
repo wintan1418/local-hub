@@ -70,16 +70,28 @@ class StripeService
     }
   end
 
-  def self.create_booking_checkout(booking)
+  def self.create_booking_checkout(booking, charge_deposit_only: false)
     user = booking.customer
     service = booking.service
 
-    # Ensure customer has a Stripe customer ID
     stripe_customer = user.stripe_customer_id.present? ?
                       Stripe::Customer.retrieve(user.stripe_customer_id) :
                       create_customer(user)
 
     return nil unless stripe_customer
+
+    # Determine amount to charge
+    amount_to_charge = if charge_deposit_only && booking.deposit_amount.present? && booking.deposit_amount > 0
+      booking.deposit_amount
+    else
+      booking.total_price
+    end
+
+    product_name = if charge_deposit_only && booking.deposit_amount.present?
+      "#{service.title} (Deposit)"
+    else
+      service.title
+    end
 
     session = Stripe::Checkout::Session.create({
       customer: stripe_customer.id,
@@ -88,10 +100,10 @@ class StripeService
         price_data: {
           currency: "usd",
           product_data: {
-            name: service.title,
+            name: product_name,
             description: "Service by #{service.provider.display_name}"
           },
-          unit_amount: (booking.total_price * 100).to_i
+          unit_amount: (amount_to_charge * 100).to_i
         },
         quantity: 1
       }],
@@ -101,7 +113,8 @@ class StripeService
       metadata: {
         booking_id: booking.id,
         user_id: user.id,
-        service_id: service.id
+        service_id: service.id,
+        payment_type: charge_deposit_only ? "deposit" : "full"
       }
     })
 

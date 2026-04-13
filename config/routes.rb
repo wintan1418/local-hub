@@ -117,8 +117,10 @@ Rails.application.routes.draw do
   resources :bookings, only: [ :index, :show, :destroy ] do
     resource :review, only: [ :new, :create ]
     resource :invoice, only: [ :show ]
+    resources :expenses, only: [ :create, :destroy ]
     member do
       get :payment_success
+      patch :reschedule
     end
   end
 

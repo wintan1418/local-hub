@@ -42,10 +42,10 @@
             </div>
             <div class="space-y-0.5">
               <% day_bookings.first(3).each do |booking| %>
-                <% status_colors = { "pending" => "bg-amber-100 text-amber-700 border-amber-200", "confirmed" => "bg-emerald-100 text-emerald-700 border-emerald-200", "completed" => "bg-sky-100 text-sky-700 border-sky-200" } %>
-                <div class="text-[10px] font-medium px-1.5 py-0.5 rounded border truncate <%= status_colors[booking.status] || 'bg-slate-100 text-slate-600 border-slate-200' %>">
+                <% status_colors = { "pending" => "bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-200", "confirmed" => "bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200", "completed" => "bg-sky-100 text-sky-700 border-sky-200 hover:bg-sky-200" } %>
+                <%= link_to booking_path(booking), class: "block text-[10px] font-medium px-1.5 py-0.5 rounded border truncate transition-colors #{status_colors[booking.status] || 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'}" do %>
                   <%= booking.scheduled_at.strftime("%-I%p") %> <%= booking.service.title.truncate(15) %>
-                </div>
+                <% end %>
               <% end %>
               <% if day_bookings.size > 3 %>
                 <div class="text-[10px] text-slate-400 px-1.5">+<%= day_bookings.size - 3 %> more</div>
