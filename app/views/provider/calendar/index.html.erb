@@ -2,8 +2,13 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h1 class="text-2xl font-black text-slate-900">Calendar</h1>
-        <p class="text-sm text-slate-500 mt-1">Your booking schedule at a glance.</p>
+        <div class="flex items-center gap-2 mb-1">
+          <h1 class="text-2xl font-black text-slate-900">Calendar</h1>
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-50 text-violet-600 border border-violet-100">
+            <i class="fas fa-hand-point-up text-[8px]"></i>Drag to reschedule
+          </span>
+        </div>
+        <p class="text-sm text-slate-500">Drag bookings between days to reschedule instantly.</p>
       </div>
       <div class="flex items-center gap-2">
         <%= link_to provider_calendar_path(month: @month.prev_month.strftime("%Y-%m-%d")), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors" do %>
@@ -17,6 +22,9 @@
       </div>
     </div>
 
+    <%# Toast for drag feedback %>
+    <div id="drag-toast" class="fixed top-24 left-1/2 -translate-x-1/2 z-50 hidden bg-slate-900 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-2xl"></div>
+
     <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
       <%# Day headers %>
       <div class="grid grid-cols-7 border-b border-slate-100">
@@ -26,13 +34,17 @@
       </div>
 
       <%# Calendar grid %>
-      <div class="grid grid-cols-7">
+      <div class="grid grid-cols-7" id="calendar-grid">
         <% (@start_date..@end_date).each do |date| %>
           <% is_today = date == Date.current %>
           <% is_current_month = date.month == @month.month %>
           <% day_bookings = @bookings_by_date[date] || [] %>
-          <div class="min-h-[100px] sm:min-h-[120px] border-b border-r border-slate-50 p-1.5 sm:p-2 <%= is_current_month ? '' : 'bg-slate-50/50' %>">
-            <div class="flex items-center justify-between mb-1">
+          <div
+            class="calendar-day min-h-[120px] sm:min-h-[140px] border-b border-r border-slate-50 p-1.5 sm:p-2 transition-colors <%= is_current_month ? '' : 'bg-slate-50/50' %>"
+            data-date="<%= date.iso8601 %>"
+            data-drop-target
+          >
+            <div class="flex items-center justify-between mb-1.5">
               <span class="text-xs font-bold <%= is_today ? 'w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center' : is_current_month ? 'text-slate-700' : 'text-slate-300' %>">
                 <%= date.day %>
               </span>
@@ -40,15 +52,24 @@
                 <span class="text-[10px] font-bold text-slate-400"><%= day_bookings.size %></span>
               <% end %>
             </div>
-            <div class="space-y-0.5">
-              <% day_bookings.first(3).each do |booking| %>
-                <% status_colors = { "pending" => "bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-200", "confirmed" => "bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200", "completed" => "bg-sky-100 text-sky-700 border-sky-200 hover:bg-sky-200" } %>
-                <%= link_to booking_path(booking), class: "block text-[10px] font-medium px-1.5 py-0.5 rounded border truncate transition-colors #{status_colors[booking.status] || 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'}" do %>
-                  <%= booking.scheduled_at.strftime("%-I%p") %> <%= booking.service.title.truncate(15) %>
-                <% end %>
-              <% end %>
-              <% if day_bookings.size > 3 %>
-                <div class="text-[10px] text-slate-400 px-1.5">+<%= day_bookings.size - 3 %> more</div>
+            <div class="space-y-1" data-bookings-container>
+              <% day_bookings.each do |booking| %>
+                <% status_colors = {
+                  "pending" => "bg-amber-100 text-amber-700 border-amber-200 hover:bg-amber-200",
+                  "confirmed" => "bg-emerald-100 text-emerald-700 border-emerald-200 hover:bg-emerald-200",
+                  "completed" => "bg-sky-100 text-sky-700 border-sky-200 hover:bg-sky-200"
+                } %>
+                <div
+                  class="booking-card text-[10px] font-medium px-1.5 py-1 rounded border truncate transition-all cursor-move <%= status_colors[booking.status] || 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200' %>"
+                  draggable="<%= booking.status.in?(['pending', 'confirmed']) ? 'true' : 'false' %>"
+                  data-booking-id="<%= booking.id %>"
+                  data-booking-status="<%= booking.status %>"
+                  data-booking-url="<%= booking_path(booking) %>"
+                  data-scheduled-time="<%= booking.scheduled_at.strftime("%H:%M") %>"
+                  title="<%= booking.scheduled_at.strftime("%-I:%M %p") %> · <%= booking.service.title %> · <%= booking.customer.display_name %>"
+                >
+                  <i class="fas fa-grip-vertical text-[8px] opacity-40 mr-0.5"></i><%= booking.scheduled_at.strftime("%-I%p") %> <%= booking.service.title.truncate(14) %>
+                </div>
               <% end %>
             </div>
           </div>
@@ -57,10 +78,105 @@
     </div>
 
     <%# Legend %>
-    <div class="mt-4 flex flex-wrap gap-4 text-xs text-slate-500">
-      <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-100 border border-amber-200"></span> Pending</div>
-      <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-100 border border-emerald-200"></span> Confirmed</div>
-      <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-sky-100 border border-sky-200"></span> Completed</div>
+    <div class="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-100 border border-amber-200"></span>Pending</div>
+      <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-100 border border-emerald-200"></span>Confirmed</div>
+      <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-sky-100 border border-sky-200"></span>Completed</div>
+      <span class="ml-auto text-slate-400"><i class="fas fa-info-circle mr-1"></i>Only pending/confirmed bookings are draggable</span>
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const toast = document.getElementById('drag-toast');
+  const days = document.querySelectorAll('[data-drop-target]');
+  const cards = document.querySelectorAll('.booking-card[draggable="true"]');
+
+  let draggedCard = null;
+
+  function showToast(msg, isError) {
+    toast.textContent = msg;
+    toast.classList.remove('hidden', 'bg-red-500', 'bg-slate-900', 'bg-emerald-500');
+    toast.classList.add(isError ? 'bg-red-500' : 'bg-emerald-500');
+    clearTimeout(toast._timeout);
+    toast._timeout = setTimeout(() => toast.classList.add('hidden'), 3000);
+  }
+
+  // Add a click handler separately so dragging doesn't navigate
+  document.querySelectorAll('.booking-card').forEach(card => {
+    let isDragging = false;
+    card.addEventListener('dragstart', () => { isDragging = true; });
+    card.addEventListener('click', (e) => {
+      if (!isDragging) {
+        const url = card.dataset.bookingUrl;
+        if (url) window.location.href = url;
+      }
+      setTimeout(() => { isDragging = false; }, 100);
+    });
+  });
+
+  cards.forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      draggedCard = card;
+      card.style.opacity = '0.4';
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', card.dataset.bookingId);
+    });
+
+    card.addEventListener('dragend', () => {
+      card.style.opacity = '1';
+      draggedCard = null;
+      days.forEach(d => d.classList.remove('ring-2', 'ring-orange-500', 'bg-orange-50/40'));
+    });
+  });
+
+  days.forEach(day => {
+    day.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      day.classList.add('ring-2', 'ring-orange-500', 'bg-orange-50/40');
+    });
+
+    day.addEventListener('dragleave', () => {
+      day.classList.remove('ring-2', 'ring-orange-500', 'bg-orange-50/40');
+    });
+
+    day.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      day.classList.remove('ring-2', 'ring-orange-500', 'bg-orange-50/40');
+      if (!draggedCard) return;
+
+      const bookingId = draggedCard.dataset.bookingId;
+      const newDate = day.dataset.date;
+      const time = draggedCard.dataset.scheduledTime || '09:00';
+      const newDateTime = `${newDate}T${time}`;
+
+      // Optimistic UI: move card immediately
+      const container = day.querySelector('[data-bookings-container]');
+      container.appendChild(draggedCard);
+
+      try {
+        const token = document.querySelector('meta[name="csrf-token"]').content;
+        const resp = await fetch(`/bookings/${bookingId}/reschedule`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-Token': token,
+            'Accept': 'text/html'
+          },
+          body: `scheduled_at=${encodeURIComponent(newDateTime)}`
+        });
+
+        if (resp.ok || resp.status === 302) {
+          showToast('✓ Booking rescheduled', false);
+        } else {
+          showToast('Could not reschedule. Refresh to retry.', true);
+        }
+      } catch (err) {
+        showToast('Network error. Refresh to retry.', true);
+      }
+    });
+  });
+});
+</script>

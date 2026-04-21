@@ -302,6 +302,225 @@
 </section>
 
 <%# ================================================================
+    FEATURE SHOWCASE — Visual mockups of key features
+    ================================================================ %>
+<section class="py-24 bg-slate-950 relative overflow-hidden">
+  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px;"></div>
+  <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-500/[0.08] rounded-full blur-[120px] -translate-y-1/2"></div>
+  <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-500/[0.06] rounded-full blur-[100px] translate-y-1/2"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/70 text-xs font-bold uppercase tracking-wider mb-4">
+        <i class="fas fa-sparkles text-orange-400 text-[10px]"></i>What's New
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">More than a marketplace</h2>
+      <p class="mt-4 text-slate-400 text-lg max-w-2xl mx-auto">We just shipped 40+ features that no other platform has. Here's what sets Radius apart.</p>
+    </div>
+
+    <%# Feature mockup grid — 4 col layout with different sizes %>
+    <div class="grid lg:grid-cols-6 gap-5" data-aos="fade-up" data-aos-delay="100">
+
+      <%# 1. Website Builder — LARGE LEFT %>
+      <div class="lg:col-span-4 bg-gradient-to-br from-white/[0.04] to-white/[0.02] border border-white/[0.08] rounded-2xl p-8 relative overflow-hidden group hover:border-white/[0.15] transition-all">
+        <div class="absolute top-0 right-0 w-96 h-96 bg-violet-500/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-bold uppercase tracking-wider mb-4">
+            <i class="fas fa-globe text-[10px]"></i>Website Builder
+          </div>
+          <h3 class="text-2xl font-black text-white mb-2">Your own branded site</h3>
+          <p class="text-sm text-slate-400 mb-6 max-w-sm">Every provider gets a custom mini-site at <code class="text-xs font-mono text-orange-400">/pros/your-name</code>. Pick a theme, your colors, your branding.</p>
+
+          <%# Mock browser window %>
+          <div class="bg-slate-900 rounded-xl border border-white/[0.06] overflow-hidden shadow-2xl">
+            <div class="flex items-center gap-1.5 px-3 py-2 bg-slate-950 border-b border-white/[0.06]">
+              <div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-amber-500/60"></div>
+              <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/60"></div>
+              <div class="ml-2 flex-1 text-[10px] text-slate-500 font-mono truncate">radius.app/pros/johns-plumbing</div>
+            </div>
+            <div class="bg-gradient-to-br from-slate-800 via-slate-900 to-black p-6 min-h-[180px] relative">
+              <div class="absolute inset-0" style="background-image: radial-gradient(circle at 70% 30%, rgba(249,115,22,0.3), transparent 50%);"></div>
+              <div class="relative">
+                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/10 text-[9px] font-bold text-white mb-3">
+                  <div class="w-1 h-1 rounded-full bg-emerald-400"></div>Verified
+                </div>
+                <div class="text-xl font-black text-white leading-tight">John's Plumbing Co.</div>
+                <div class="text-xs text-slate-400 mt-1">Trusted plumbers since 2003</div>
+                <div class="mt-4 flex gap-2">
+                  <div class="px-3 py-1.5 rounded-lg bg-orange-500 text-white text-[10px] font-bold">Book Now</div>
+                  <div class="px-3 py-1.5 rounded-lg bg-white/10 text-white text-[10px] font-bold">Contact</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# 2. Stripe Payouts — RIGHT TALL %>
+      <div class="lg:col-span-2 bg-gradient-to-br from-emerald-500/[0.08] to-white/[0.02] border border-emerald-500/[0.15] rounded-2xl p-7 group hover:border-emerald-500/[0.3] transition-all">
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-4">
+          <i class="fas fa-dollar-sign text-[10px]"></i>Payouts
+        </div>
+        <h3 class="text-xl font-black text-white mb-2">Direct to your bank</h3>
+
+        <%# Mock payout card %>
+        <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl p-5 text-white mt-6 shadow-xl">
+          <div class="text-[10px] font-bold uppercase tracking-widest opacity-80">This Month</div>
+          <div class="text-3xl font-black mt-1">$4,287<span class="text-lg opacity-60">.50</span></div>
+          <div class="flex items-center gap-1 mt-2 text-[10px] opacity-90">
+            <i class="fas fa-arrow-up"></i>+$642 vs last month
+          </div>
+          <div class="mt-4 pt-3 border-t border-white/20 text-[10px] opacity-80">
+            Next payout: <span class="font-bold">Tomorrow, 9am</span>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mt-5">Stripe Connect handles it. 90/10 split, next-day deposits.</p>
+      </div>
+
+      <%# 3. Gift Cards %>
+      <div class="lg:col-span-2 bg-gradient-to-br from-violet-500/[0.08] to-white/[0.02] border border-violet-500/[0.15] rounded-2xl p-7 group hover:border-violet-500/[0.3] transition-all">
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-bold uppercase tracking-wider mb-4">
+          <i class="fas fa-gift text-[10px]"></i>Gift Cards
+        </div>
+        <h3 class="text-xl font-black text-white mb-2">Give services</h3>
+
+        <%# Mock gift card %>
+        <div class="relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-pink-600 rounded-xl p-5 text-white mt-6 shadow-xl rotate-[-2deg]">
+          <div class="absolute top-1 right-1 opacity-20"><i class="fas fa-gift text-5xl"></i></div>
+          <div class="relative">
+            <div class="text-[9px] font-bold uppercase tracking-widest opacity-80">Radius</div>
+            <div class="text-2xl font-black mt-1">$100.00</div>
+            <div class="text-[10px] font-mono mt-3 opacity-90">A8F4-2B9D-7C3E</div>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 mt-5">$25 to $500. Redeem for any service.</p>
+      </div>
+
+      <%# 4. Reverse Marketplace — LARGE %>
+      <div class="lg:col-span-4 bg-gradient-to-br from-orange-500/[0.08] to-white/[0.02] border border-orange-500/[0.15] rounded-2xl p-8 relative overflow-hidden group hover:border-orange-500/[0.3] transition-all">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div class="relative">
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[10px] font-bold uppercase tracking-wider mb-4">
+            <i class="fas fa-bullhorn text-[10px]"></i>Reverse Marketplace
+          </div>
+          <h3 class="text-2xl font-black text-white mb-2">Pros come to you</h3>
+          <p class="text-sm text-slate-400 mb-6 max-w-sm">Post what you need. Verified pros submit quotes. Pick the best one.</p>
+
+          <%# Mock job request with quotes %>
+          <div class="space-y-2">
+            <div class="bg-white/[0.04] border border-white/[0.08] rounded-xl p-4">
+              <div class="flex items-start justify-between">
+                <div>
+                  <div class="text-xs font-bold text-white">Kitchen sink leaking</div>
+                  <div class="text-[10px] text-slate-500 mt-0.5">Posted 2h ago · Budget $100-250</div>
+                </div>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-400">Open</span>
+              </div>
+            </div>
+            <% [
+              { name: "James R.", rating: "4.9", price: "$120", msg: "Can be there today, 20+ years exp." },
+              { name: "Maria L.", rating: "5.0", price: "$145", msg: "Available tomorrow morning." },
+              { name: "David K.", rating: "4.8", price: "$95", msg: "Cheapest fix — I'll bring parts." }
+            ].each do |q| %>
+              <div class="bg-white/[0.02] border border-white/[0.06] rounded-xl p-3 flex items-center gap-3 ml-6">
+                <div class="w-7 h-7 rounded-lg bg-slate-700 flex items-center justify-center text-[10px] font-bold text-white"><%= q[:name][0] %></div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-white"><%= q[:name] %></span>
+                    <span class="text-[9px] text-amber-400"><i class="fas fa-star"></i> <%= q[:rating] %></span>
+                  </div>
+                  <div class="text-[10px] text-slate-500 truncate"><%= q[:msg] %></div>
+                </div>
+                <div class="text-sm font-black text-white"><%= q[:price] %></div>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# 5. Calendar w/ DnD %>
+      <div class="lg:col-span-3 bg-gradient-to-br from-sky-500/[0.08] to-white/[0.02] border border-sky-500/[0.15] rounded-2xl p-7 group hover:border-sky-500/[0.3] transition-all">
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-bold uppercase tracking-wider mb-4">
+          <i class="fas fa-calendar text-[10px]"></i>Visual Calendar
+        </div>
+        <h3 class="text-xl font-black text-white mb-1">Drag. Drop. Reschedule.</h3>
+        <p class="text-xs text-slate-500 mb-5">Move bookings between days with your mouse. No forms.</p>
+
+        <%# Mock mini calendar %>
+        <div class="bg-slate-900 rounded-xl border border-white/[0.06] p-4">
+          <div class="grid grid-cols-7 gap-1 mb-2">
+            <% %w[S M T W T F S].each do |d| %>
+              <div class="text-center text-[9px] font-bold text-slate-500"><%= d %></div>
+            <% end %>
+          </div>
+          <div class="grid grid-cols-7 gap-1">
+            <% (1..21).each do |day| %>
+              <div class="aspect-square rounded text-[9px] text-slate-500 flex flex-col items-start p-1 <%= day == 15 ? 'bg-orange-500/20 border border-orange-500/40' : 'bg-white/[0.03]' %>">
+                <%= day %>
+                <% if day == 12 %>
+                  <div class="mt-0.5 w-full h-1 rounded bg-emerald-400"></div>
+                <% elsif day == 15 %>
+                  <div class="mt-0.5 w-full h-1 rounded bg-amber-400 animate-pulse"></div>
+                  <div class="mt-0.5 w-full h-1 rounded bg-sky-400"></div>
+                <% elsif day == 17 %>
+                  <div class="mt-0.5 w-full h-1 rounded bg-emerald-400"></div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# 6. Loyalty Tiers %>
+      <div class="lg:col-span-3 bg-gradient-to-br from-amber-500/[0.08] to-white/[0.02] border border-amber-500/[0.15] rounded-2xl p-7 group hover:border-amber-500/[0.3] transition-all">
+        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold uppercase tracking-wider mb-4">
+          <i class="fas fa-crown text-[10px]"></i>Loyalty Tiers
+        </div>
+        <h3 class="text-xl font-black text-white mb-1">The more you book, the more you save</h3>
+        <p class="text-xs text-slate-500 mb-5">Automatic tier upgrades. Better providers, perks, and rewards.</p>
+
+        <%# Mock tier progression %>
+        <div class="space-y-2">
+          <% [
+            { name: "Bronze", color: "orange", min: "0+", icon: "fa-star", current: false },
+            { name: "Silver", color: "slate", min: "5+", icon: "fa-award", current: false },
+            { name: "Gold", color: "amber", min: "20+", icon: "fa-medal", current: true },
+            { name: "Platinum", color: "violet", min: "50+", icon: "fa-crown", current: false }
+          ].each do |tier| %>
+            <div class="flex items-center gap-3 p-2.5 rounded-lg <%= tier[:current] ? 'bg-amber-500/20 border border-amber-500/40' : 'bg-white/[0.03]' %>">
+              <div class="w-7 h-7 rounded-full bg-<%= tier[:color] %>-500/20 flex items-center justify-center">
+                <i class="fas <%= tier[:icon] %> text-<%= tier[:color] %>-400 text-[10px]"></i>
+              </div>
+              <div class="flex-1">
+                <div class="text-xs font-bold text-white"><%= tier[:name] %><% if tier[:current] %> <span class="text-[9px] text-amber-400 ml-1">← You</span><% end %></div>
+              </div>
+              <span class="text-[10px] text-slate-500"><%= tier[:min] %> bookings</span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%# Feature count tagline %>
+    <div class="mt-14 text-center" data-aos="fade-up" data-aos-delay="200">
+      <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Plus all these essentials</p>
+      <div class="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto">
+        <% [
+          "Stripe Payments", "Automated Invoicing", "Real-time Chat", "Provider Verification",
+          "Reviews & Ratings", "Booking Reminders", "Recurring Bookings", "Deposits", "Tipping",
+          "Expense Tracking", "Team Management", "CSV Exports", "Dispute Resolution",
+          "Referral Program", "Favorites", "Map View", "Vacation Mode", "Job Requests",
+          "PWA Install", "Push Notifications", "Analytics Dashboard", "CRM Campaigns"
+        ].each do |f| %>
+          <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-white/[0.04] border border-white/[0.08] text-slate-300"><%= f %></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
     TOP PROVIDERS — Ranked cards with visual flair
     ================================================================ %>
 <% if @top_providers.present? && @top_providers.any? %>
