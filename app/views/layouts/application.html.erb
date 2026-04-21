@@ -124,13 +124,67 @@
                 <% end %>
               <% end %>
 
-              <%# Notifications %>
-              <%= link_to notifications_path, class: "relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors", title: "Notifications" do %>
-                <i class="fas fa-bell text-lg"></i>
-                <span data-notification-count class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center <%= current_user.unread_notifications_count > 0 ? '' : 'hidden' %>">
-                  <%= current_user.unread_notifications_count > 9 ? '9+' : current_user.unread_notifications_count %>
-                </span>
-              <% end %>
+              <%# Notifications Dropdown %>
+              <div class="relative">
+                <button type="button" onclick="toggleNotifDropdown(event)" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors" title="Notifications">
+                  <i class="fas fa-bell text-lg"></i>
+                  <span data-notification-count class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center <%= current_user.unread_notifications_count > 0 ? '' : 'hidden' %>">
+                    <%= current_user.unread_notifications_count > 9 ? '9+' : current_user.unread_notifications_count %>
+                  </span>
+                </button>
+
+                <div id="notif-dropdown" class="hidden absolute right-0 mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white rounded-xl shadow-2xl border border-slate-100 z-50 overflow-hidden">
+                  <%# Header %>
+                  <div class="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+                    <div>
+                      <div class="text-sm font-bold text-slate-900">Notifications</div>
+                      <% unread = current_user.unread_notifications_count %>
+                      <div class="text-xs text-slate-400"><%= unread > 0 ? "#{unread} unread" : "All caught up" %></div>
+                    </div>
+                    <% if current_user.unread_notifications_count > 0 %>
+                      <%= button_to mark_all_as_read_notifications_path, method: :patch, class: "text-xs font-semibold text-orange-600 hover:text-orange-700 cursor-pointer" do %>
+                        Mark all read
+                      <% end %>
+                    <% end %>
+                  </div>
+
+                  <%# List %>
+                  <% recent_notifs = current_user.notifications.order(created_at: :desc).limit(8) %>
+                  <% if recent_notifs.any? %>
+                    <div class="max-h-96 overflow-y-auto divide-y divide-slate-50">
+                      <% recent_notifs.each do |n| %>
+                        <div class="flex items-start gap-3 px-4 py-3 hover:bg-slate-50 transition-colors <%= n.unread? ? 'bg-orange-50/30' : '' %>">
+                          <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0">
+                            <i class="<%= n.icon_class %> text-xs"></i>
+                          </div>
+                          <div class="flex-1 min-w-0">
+                            <div class="text-xs font-bold text-slate-900"><%= n.title %></div>
+                            <div class="text-xs text-slate-500 line-clamp-2 mt-0.5"><%= n.message %></div>
+                            <div class="text-[10px] text-slate-400 mt-1"><%= time_ago_in_words(n.created_at) %> ago</div>
+                          </div>
+                          <% if n.unread? %>
+                            <span class="w-2 h-2 rounded-full bg-orange-500 flex-shrink-0 mt-1.5"></span>
+                          <% end %>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <div class="py-10 text-center">
+                      <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-bell-slash text-slate-300"></i>
+                      </div>
+                      <p class="text-xs text-slate-400">No notifications yet</p>
+                    </div>
+                  <% end %>
+
+                  <%# Footer %>
+                  <div class="border-t border-slate-100 px-4 py-2.5 bg-slate-50/50">
+                    <%= link_to notifications_path, class: "block text-center text-xs font-semibold text-orange-600 hover:text-orange-700" do %>
+                      View all notifications →
+                    <% end %>
+                  </div>
+                </div>
+              </div>
 
               <%# Divider %>
               <div class="hidden sm:block w-px h-6 bg-slate-200"></div>
@@ -460,14 +514,28 @@
       // Dropdown toggle
       function toggleDropdown() {
         const dd = document.getElementById('user-dropdown');
+        const nd = document.getElementById('notif-dropdown');
+        if (nd) nd.classList.add('hidden');
         if (dd) dd.classList.toggle('hidden');
       }
 
-      // Close dropdown on outside click
+      function toggleNotifDropdown(e) {
+        if (e) { e.preventDefault(); e.stopPropagation(); }
+        const nd = document.getElementById('notif-dropdown');
+        const dd = document.getElementById('user-dropdown');
+        if (dd) dd.classList.add('hidden');
+        if (nd) nd.classList.toggle('hidden');
+      }
+
+      // Close dropdowns on outside click
       document.addEventListener('click', function(e) {
         const dd = document.getElementById('user-dropdown');
+        const nd = document.getElementById('notif-dropdown');
         if (dd && !dd.contains(e.target) && !e.target.closest('button[onclick="toggleDropdown()"]')) {
           dd.classList.add('hidden');
+        }
+        if (nd && !nd.contains(e.target) && !e.target.closest('button[onclick^="toggleNotifDropdown"]')) {
+          nd.classList.add('hidden');
         }
       });
 

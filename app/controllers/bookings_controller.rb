@@ -69,19 +69,26 @@ class BookingsController < ApplicationController
   def reschedule
     @booking = Booking.find(params[:id])
     unless @booking.customer == current_user || @booking.service.provider == current_user
-      redirect_to root_path, alert: "Access denied." and return
+      respond_to do |format|
+        format.html { redirect_to root_path, alert: "Access denied." }
+        format.json { render json: { error: "Access denied" }, status: :forbidden }
+      end
+      return
     end
 
     new_time = params[:scheduled_at]
-    if new_time.present?
-      if @booking.update(scheduled_at: new_time)
-        Notification.create_for_booking(@booking, :updated, "Booking rescheduled to #{@booking.scheduled_at.strftime('%b %d at %-I:%M %p')}")
-        redirect_to booking_path(@booking), notice: "Booking rescheduled."
-      else
-        redirect_to booking_path(@booking), alert: @booking.errors.full_messages.to_sentence
+    if new_time.present? && @booking.update(scheduled_at: new_time)
+      Notification.create_for_booking(@booking, :updated, "Booking rescheduled to #{@booking.scheduled_at.strftime('%b %d at %-I:%M %p')}")
+      respond_to do |format|
+        format.html { redirect_to booking_path(@booking), notice: "Booking rescheduled." }
+        format.json { render json: { ok: true, scheduled_at: @booking.scheduled_at } }
       end
     else
-      redirect_to booking_path(@booking), alert: "New date/time required."
+      message = @booking.errors.full_messages.to_sentence.presence || "New date/time required."
+      respond_to do |format|
+        format.html { redirect_to booking_path(@booking), alert: message }
+        format.json { render json: { error: message }, status: :unprocessable_entity }
+      end
     end
   end
 

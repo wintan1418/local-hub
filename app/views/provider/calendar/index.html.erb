@@ -158,20 +158,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
       try {
         const token = document.querySelector('meta[name="csrf-token"]').content;
-        const resp = await fetch(`/bookings/${bookingId}/reschedule`, {
+        const resp = await fetch(`/bookings/${bookingId}/reschedule.json`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
             'X-CSRF-Token': token,
-            'Accept': 'text/html'
+            'Accept': 'application/json'
           },
           body: `scheduled_at=${encodeURIComponent(newDateTime)}`
         });
 
-        if (resp.ok || resp.status === 302) {
+        const data = await resp.json().catch(() => null);
+
+        if (resp.ok && data?.ok) {
           showToast('✓ Booking rescheduled', false);
         } else {
-          showToast('Could not reschedule. Refresh to retry.', true);
+          showToast((data && data.error) || 'Could not reschedule', true);
         }
       } catch (err) {
         showToast('Network error. Refresh to retry.', true);
