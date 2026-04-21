@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  provider: one
+  question: MyString
+  answer: MyText
+  sort_order: 1
+
+two:
+  provider: two
+  question: MyString
+  answer: MyText
+  sort_order: 1

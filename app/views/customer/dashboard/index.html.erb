@@ -4,7 +4,13 @@
     <div class="mb-8">
       <div class="flex items-center justify-between">
         <div>
-          <h1 class="text-3xl font-bold text-slate-900">Customer Dashboard</h1>
+          <div class="flex items-center gap-3 flex-wrap">
+            <h1 class="text-3xl font-bold text-slate-900">Customer Dashboard</h1>
+            <% tier = current_user.loyalty_tier %>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-<%= tier[:color] %>-50 text-<%= tier[:color] %>-700 border border-<%= tier[:color] %>-200">
+              <i class="fas <%= tier[:icon] %> text-[10px]"></i><%= tier[:name] %> Tier
+            </span>
+          </div>
           <p class="mt-1 text-sm text-slate-600">Welcome back, <%= current_user.email.split('@').first.titleize %>!</p>
         </div>
         <div class="flex space-x-3">
@@ -222,6 +228,9 @@
             <% end %>
             <%= link_to refer_path, class: "block w-full bg-gradient-to-r from-orange-500 to-rose-500 text-white text-center py-2 px-4 rounded-lg hover:from-orange-600 hover:to-rose-600 transition-colors" do %>
               <i class="fas fa-gift mr-2"></i>Refer & Earn $<%= Referral::CREDIT_AMOUNT.to_i %>
+            <% end %>
+            <%= link_to gift_cards_path, class: "block w-full bg-violet-50 text-violet-800 text-center py-2 px-4 rounded-lg hover:bg-violet-100 transition-colors font-semibold" do %>
+              <i class="fas fa-gift mr-2"></i>Gift Cards
             <% end %>
             <%= link_to settings_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-cog mr-2"></i>Settings

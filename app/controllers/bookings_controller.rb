@@ -85,6 +85,17 @@ class BookingsController < ApplicationController
     end
   end
 
+  def add_tip
+    @booking = current_user.bookings.find(params[:id])
+    amount = params[:tip_amount].to_f
+    if amount >= 0 && @booking.completed?
+      @booking.update(tip_amount: amount)
+      redirect_to booking_path(@booking), notice: "Thanks for the $#{amount} tip!"
+    else
+      redirect_to booking_path(@booking), alert: "Could not add tip."
+    end
+  end
+
   def destroy
     @booking = current_user.bookings.find(params[:id])
     @booking.cancelled!

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -72,6 +72,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
     t.integer "service_package_id"
     t.bigint "referral_id"
     t.text "notes_from_customer"
+    t.decimal "tip_amount", precision: 10, scale: 2, default: "0.0"
+    t.string "gift_card_code"
+    t.decimal "gift_card_amount_used", precision: 10, scale: 2, default: "0.0"
+    t.integer "assigned_team_member_id"
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["referral_id"], name: "index_bookings_on_referral_id"
     t.index ["service_id"], name: "index_bookings_on_service_id"
@@ -182,6 +186,21 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
     t.index ["customer_id", "provider_id"], name: "index_favorites_on_customer_id_and_provider_id", unique: true
     t.index ["customer_id"], name: "index_favorites_on_customer_id"
     t.index ["provider_id"], name: "index_favorites_on_provider_id"
+  end
+
+  create_table "gift_cards", force: :cascade do |t|
+    t.string "code"
+    t.decimal "amount", precision: 10, scale: 2
+    t.decimal "balance", precision: 10, scale: 2
+    t.integer "purchaser_id"
+    t.integer "redeemed_by_id"
+    t.integer "status", default: 0
+    t.text "message"
+    t.string "recipient_email"
+    t.string "recipient_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_gift_cards_on_code", unique: true
   end
 
   create_table "invoices", force: :cascade do |t|
@@ -299,6 +318,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
     t.index ["stripe_price_id"], name: "index_plans_on_stripe_price_id", unique: true
   end
 
+  create_table "provider_faqs", force: :cascade do |t|
+    t.bigint "provider_id", null: false
+    t.string "question"
+    t.text "answer"
+    t.integer "sort_order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider_id"], name: "index_provider_faqs_on_provider_id"
+  end
+
   create_table "quote_line_items", force: :cascade do |t|
     t.bigint "quote_id", null: false
     t.string "description"
@@ -413,6 +442,18 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
     t.index ["user_id"], name: "index_subscriptions_on_user_id"
   end
 
+  create_table "team_members", force: :cascade do |t|
+    t.bigint "provider_id", null: false
+    t.integer "member_id"
+    t.string "role"
+    t.integer "status", default: 0
+    t.string "invite_email"
+    t.string "invite_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider_id"], name: "index_team_members_on_provider_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -453,6 +494,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
     t.datetime "vacation_until"
     t.string "referral_code"
     t.decimal "referral_credit", precision: 10, scale: 2, default: "0.0"
+    t.string "slug"
+    t.integer "site_theme", default: 0
+    t.string "site_brand_color", default: "#f97316"
+    t.string "site_tagline"
+    t.text "site_about"
+    t.boolean "site_published", default: false
     t.index ["admin_role"], name: "index_users_on_admin_role"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -460,6 +507,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
     t.index ["referral_code"], name: "index_users_on_referral_code", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["slug"], name: "index_users_on_slug", unique: true
     t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id", unique: true
   end
 
@@ -491,6 +539,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
   add_foreign_key "notification_preferences", "users"
   add_foreign_key "notifications", "users"
   add_foreign_key "phone_verifications", "users"
+  add_foreign_key "provider_faqs", "users", column: "provider_id"
   add_foreign_key "quote_line_items", "quotes"
   add_foreign_key "quotes", "services"
   add_foreign_key "quotes", "users", column: "customer_id"
@@ -503,4 +552,5 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
   add_foreign_key "sms_logs", "users"
   add_foreign_key "subscriptions", "plans"
   add_foreign_key "subscriptions", "users"
+  add_foreign_key "team_members", "users", column: "provider_id"
 end

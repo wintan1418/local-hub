@@ -78,6 +78,49 @@ class User < ApplicationRecord
     Conversation.where("customer_id = ? OR provider_id = ?", id, id)
   end
 
+  # Website builder
+  enum :site_theme, { modern: 0, classic: 1, bold: 2 }, prefix: :theme
+  has_many :provider_faqs, foreign_key: :provider_id, dependent: :destroy
+  has_one_attached :site_cover_photo
+
+  before_save :ensure_slug, if: -> { provider? && slug.blank? }
+
+  def to_param
+    slug.presence || id.to_s
+  end
+
+  def site_url
+    "/pros/#{slug}"
+  end
+
+  # Team management
+  has_many :team_members, foreign_key: :provider_id, dependent: :destroy
+  has_many :team_memberships, class_name: "TeamMember", foreign_key: :member_id
+
+  # Gift cards
+  has_many :gift_cards_purchased, class_name: "GiftCard", foreign_key: :purchaser_id
+
+  # Loyalty tier
+  def loyalty_tier
+    count = customer? ? bookings.completed.count : 0
+    return { name: "Platinum", color: "violet", icon: "fa-crown", min: 50 } if count >= 50
+    return { name: "Gold", color: "amber", icon: "fa-medal", min: 20 } if count >= 20
+    return { name: "Silver", color: "slate", icon: "fa-award", min: 5 } if count >= 5
+    { name: "Bronze", color: "orange", icon: "fa-star", min: 0 }
+  end
+
+  def ensure_slug
+    return if slug.present?
+    base = (business_name || display_name || "pro").parameterize.presence || "pro"
+    candidate = base
+    n = 1
+    while User.where.not(id: id).exists?(slug: candidate)
+      n += 1
+      candidate = "#{base}-#{n}"
+    end
+    self.slug = candidate
+  end
+
   before_create :generate_referral_code
 
   def on_vacation?

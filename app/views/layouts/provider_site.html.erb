@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title><%= @provider.business_name || @provider.display_name %></title>
+  <meta name="description" content="<%= @provider.site_tagline || "Services by #{@provider.display_name} on Radius" %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="<%= @brand_color %>">
+  <%= csrf_meta_tags %>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .brand-bg { background-color: <%= @brand_color %>; }
+    .brand-text { color: <%= @brand_color %>; }
+    .brand-border { border-color: <%= @brand_color %>; }
+  </style>
+</head>
+<body class="antialiased">
+  <%= yield %>
+
+  <%# Powered by Radius footer %>
+  <div class="py-6 bg-slate-50 text-center border-t border-slate-100">
+    <a href="/" class="text-xs text-slate-400 hover:text-slate-600 transition-colors">
+      Powered by <span class="font-bold text-slate-600">Radius</span>
+    </a>
+  </div>
+</body>
+</html>

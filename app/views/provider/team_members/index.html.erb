@@ -1,0 +1,47 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-2xl font-black text-slate-900">Team Members</h1>
+        <p class="text-sm text-slate-500 mt-1">Invite people to help run your business.</p>
+      </div>
+      <%= link_to new_provider_team_member_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
+        <i class="fas fa-plus mr-2 text-xs"></i>Invite Member
+      <% end %>
+    </div>
+
+    <% if @team_members.any? %>
+      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+        <div class="divide-y divide-slate-50">
+          <% @team_members.each do |tm| %>
+            <div class="flex items-center justify-between px-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-400">
+                  <%= (tm.member&.display_name || tm.invite_email)[0].upcase %>
+                </div>
+                <div>
+                  <div class="text-sm font-bold text-slate-900"><%= tm.member&.display_name || tm.invite_email %></div>
+                  <div class="text-xs text-slate-400"><%= tm.role&.titleize %> · <%= tm.status.titleize %></div>
+                </div>
+              </div>
+              <%= button_to provider_team_member_path(tm), method: :delete, data: { turbo_confirm: "Remove this team member?" }, class: "text-slate-400 hover:text-red-500 cursor-pointer" do %>
+                <i class="fas fa-times"></i>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="bg-white rounded-xl border border-dashed border-slate-200 p-12 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-users text-slate-300 text-xl"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-900 mb-1">No team members yet</h3>
+        <p class="text-sm text-slate-500 mb-6">Invite staff to assign bookings and help manage your business.</p>
+        <%= link_to new_provider_team_member_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white" do %>
+          Invite First Member
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

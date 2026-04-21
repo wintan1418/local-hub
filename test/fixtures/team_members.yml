@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  provider: one
+  member_id: 1
+  role: MyString
+  status: 1
+  invite_email: MyString
+  invite_token: MyString
+
+two:
+  provider: two
+  member_id: 1
+  role: MyString
+  status: 1
+  invite_email: MyString
+  invite_token: MyString

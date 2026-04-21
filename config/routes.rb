@@ -89,6 +89,20 @@ Rails.application.routes.draw do
     post "payouts/connect", to: "payouts#connect", as: :connect_payouts
     get "payouts/refresh", to: "payouts#refresh", as: :refresh_payouts
 
+    # Website builder
+    resource :site, only: [:edit, :update], controller: "sites" do
+      post :publish
+      post :unpublish
+      resources :faqs, controller: "provider_faqs", only: [:create, :update, :destroy]
+    end
+
+    # Team
+    resources :team_members, only: [:index, :new, :create, :destroy]
+
+    # Exports
+    get "exports/bookings", to: "exports#bookings", as: :export_bookings
+    get "exports/revenue", to: "exports#revenue", as: :export_revenue
+
     resources :crm_campaigns do
       member do
         post :send_campaign
@@ -136,6 +150,7 @@ Rails.application.routes.draw do
     member do
       get :payment_success
       patch :reschedule
+      patch :add_tip
     end
   end
 
@@ -144,6 +159,16 @@ Rails.application.routes.draw do
     member do
       post :favorite
       delete :unfavorite
+    end
+  end
+
+  # Public provider mini-site (branded)
+  get "pros/:slug", to: "provider_sites#show", as: :public_provider_site
+
+  # Gift cards (public purchase + redemption)
+  resources :gift_cards, only: [:index, :new, :create, :show] do
+    collection do
+      post :redeem
     end
   end
 

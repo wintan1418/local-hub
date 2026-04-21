@@ -8,6 +8,14 @@ class Booking < ApplicationRecord
   belongs_to :service_package, optional: true
   has_many_attached :photos
 
+  def total_with_tip
+    (total_price || 0) + (tip_amount || 0)
+  end
+
+  def final_amount_due
+    total_with_tip - (gift_card_amount_used || 0)
+  end
+
   def total_expenses
     expenses.sum(:amount)
   end

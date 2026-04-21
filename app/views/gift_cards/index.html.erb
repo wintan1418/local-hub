@@ -1,0 +1,46 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <%# Hero %>
+    <div class="relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-pink-600 rounded-2xl p-8 sm:p-12 mb-8 text-white">
+      <div class="absolute top-0 right-0 opacity-10"><i class="fas fa-gift text-[200px]"></i></div>
+      <div class="relative">
+        <h1 class="text-3xl sm:text-4xl font-black mb-2">Gift Cards</h1>
+        <p class="opacity-90 mb-6 max-w-md">Give the gift of great local service. Perfect for birthdays, holidays, or thanking someone special.</p>
+        <%= link_to new_gift_card_path, class: "inline-flex items-center px-6 py-3 bg-white text-slate-900 hover:bg-slate-100 rounded-xl font-bold text-sm transition-all" do %>
+          <i class="fas fa-plus mr-2 text-xs"></i>Buy a Gift Card
+        <% end %>
+      </div>
+    </div>
+
+    <%# Amount options preview %>
+    <div class="grid grid-cols-5 gap-3 mb-10">
+      <% @available_amounts.each do |amt| %>
+        <%= link_to new_gift_card_path(amount: amt), class: "block p-5 rounded-xl bg-white border border-slate-100 hover:border-violet-300 hover:shadow-md transition-all text-center" do %>
+          <div class="text-2xl font-black text-slate-900">$<%= amt %></div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <%# My gift cards %>
+    <% if @my_cards.any? %>
+      <h2 class="text-lg font-bold text-slate-900 mb-4">Your Gift Cards</h2>
+      <div class="space-y-3">
+        <% @my_cards.each do |card| %>
+          <%= link_to gift_card_path(card), class: "block bg-white rounded-xl border border-slate-100 p-5 hover:shadow-md transition-all" do %>
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-wider"><%= card.code %></div>
+                <div class="text-xs text-slate-500 mt-1">To: <%= card.recipient_name.presence || card.recipient_email.presence || 'Unassigned' %></div>
+              </div>
+              <div class="text-right">
+                <div class="text-xl font-black text-slate-900">$<%= number_with_precision(card.balance, precision: 2) %></div>
+                <% status_colors = { "active" => "emerald", "redeemed" => "slate", "expired" => "red", "cancelled" => "red" } %>
+                <span class="text-[10px] font-bold text-<%= status_colors[card.status] %>-600"><%= card.status.titleize %></span>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

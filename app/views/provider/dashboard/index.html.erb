@@ -193,6 +193,15 @@
             <%= link_to provider_payouts_path, class: "block w-full bg-emerald-50 text-emerald-800 text-center py-2 px-4 rounded-lg hover:bg-emerald-100 transition-colors font-semibold" do %>
               <i class="fas fa-dollar-sign mr-2"></i>Payouts
             <% end %>
+            <%= link_to edit_provider_site_path, class: "block w-full bg-violet-50 text-violet-800 text-center py-2 px-4 rounded-lg hover:bg-violet-100 transition-colors font-semibold" do %>
+              <i class="fas fa-globe mr-2"></i>My Website
+            <% end %>
+            <%= link_to provider_team_members_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-users mr-2"></i>Team
+            <% end %>
+            <%= link_to export_bookings_provider_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-file-export mr-2"></i>Export CSV
+            <% end %>
             <%= link_to job_requests_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-briefcase mr-2"></i>Job Requests
             <% end %>
