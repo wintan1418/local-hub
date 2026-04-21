@@ -53,8 +53,8 @@
         { name: "Services", icon: "fa-concierge-bell", path: admin_services_path, color: "violet" },
         { name: "Categories", icon: "fa-tags", path: admin_categories_path, color: "amber" },
         { name: "Verifications", icon: "fa-shield-alt", path: admin_verifications_path, color: "emerald" },
-        { name: "Providers", icon: "fa-user-tie", path: admin_users_path(role: 'provider'), color: "orange" },
-        { name: "Bookings", icon: "fa-calendar", path: admin_dashboard_path, color: "rose" }
+        { name: "Disputes", icon: "fa-gavel", path: admin_disputes_path, color: "red" },
+        { name: "Providers", icon: "fa-user-tie", path: admin_users_path(role: 'provider'), color: "orange" }
       ].each do |action| %>
         <%= link_to action[:path], class: "group flex flex-col items-center p-4 rounded-xl bg-white border border-slate-100 hover:border-#{action[:color]}-200 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200" do %>
           <div class="w-10 h-10 rounded-xl bg-<%= action[:color] %>-50 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">

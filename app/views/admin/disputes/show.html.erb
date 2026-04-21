@@ -1,0 +1,101 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <%= link_to admin_disputes_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
+      <i class="fas fa-arrow-left text-xs"></i>Back to disputes
+    <% end %>
+
+    <%# Dispute card %>
+    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden mb-6">
+      <div class="p-6 border-b border-slate-100">
+        <div class="flex items-start justify-between mb-3">
+          <div>
+            <h1 class="text-xl font-black text-slate-900">Dispute ##{<%= @dispute.id %>}</h1>
+            <p class="text-xs text-slate-400 mt-1">Raised by <%= @dispute.raised_by.display_name %> &middot; <%= time_ago_in_words(@dispute.created_at) %> ago</p>
+          </div>
+          <% status_colors = { "open" => "amber", "under_review" => "sky", "resolved" => "emerald", "dismissed" => "slate", "refunded" => "violet" } %>
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-<%= status_colors[@dispute.status] %>-50 text-<%= status_colors[@dispute.status] %>-700"><%= @dispute.status.titleize %></span>
+        </div>
+      </div>
+
+      <div class="p-6">
+        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Reason</div>
+        <div class="text-sm font-semibold text-slate-900 mb-4"><%= @dispute.reason %></div>
+
+        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Description</div>
+        <p class="text-sm text-slate-600 leading-relaxed"><%= @dispute.description %></p>
+      </div>
+
+      <div class="p-6 bg-slate-50 border-t border-slate-100">
+        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Booking</div>
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-sm font-bold text-slate-900"><%= @dispute.booking.service.title %></div>
+            <div class="text-xs text-slate-500"><%= @dispute.booking.customer.display_name %> → <%= @dispute.booking.service.provider.display_name %> · $<%= @dispute.booking.total_price %></div>
+          </div>
+          <%= link_to "View Booking →", booking_path(@dispute.booking), class: "text-xs font-semibold text-orange-600 hover:text-orange-700" %>
+        </div>
+      </div>
+    </div>
+
+    <%# Resolution action %>
+    <% unless @dispute.resolved? || @dispute.dismissed? || @dispute.refunded? %>
+      <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+        <h2 class="text-base font-bold text-slate-900 mb-4">Take Action</h2>
+
+        <%# Resolve %>
+        <details class="mb-3 group">
+          <summary class="cursor-pointer flex items-center justify-between p-4 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 transition-colors">
+            <span class="text-sm font-bold text-emerald-900"><i class="fas fa-check mr-2"></i>Resolve (no refund)</span>
+            <i class="fas fa-chevron-down text-emerald-500 text-xs group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <%= form_with url: resolve_admin_dispute_path(@dispute), method: :patch, local: true, class: "p-4 border border-t-0 border-emerald-200 rounded-b-xl -mt-1 bg-emerald-50/50" do |f| %>
+            <%= f.text_area :resolution, rows: 3, placeholder: "Resolution notes (visible to customer and provider)...", class: "w-full px-4 py-3 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 resize-none" %>
+            <button type="submit" class="mt-3 bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-lg text-sm font-bold cursor-pointer">Mark Resolved</button>
+          <% end %>
+        </details>
+
+        <%# Refund %>
+        <details class="mb-3 group">
+          <summary class="cursor-pointer flex items-center justify-between p-4 rounded-xl border border-violet-200 bg-violet-50 hover:bg-violet-100 transition-colors">
+            <span class="text-sm font-bold text-violet-900"><i class="fas fa-undo mr-2"></i>Refund Customer</span>
+            <i class="fas fa-chevron-down text-violet-500 text-xs group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <%= form_with url: refund_admin_dispute_path(@dispute), method: :patch, local: true, class: "p-4 border border-t-0 border-violet-200 rounded-b-xl -mt-1 bg-violet-50/50" do |f| %>
+            <div class="mb-3">
+              <label class="block text-xs font-bold text-violet-900 mb-1.5">Refund Amount ($)</label>
+              <%= f.number_field :refund_amount, step: 0.01, value: @dispute.booking.total_price, class: "w-full px-4 py-2 rounded-lg border border-violet-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20" %>
+              <p class="text-xs text-violet-600 mt-1">Max: $<%= @dispute.booking.total_price %> (full booking amount)</p>
+            </div>
+            <%= f.text_area :resolution, rows: 3, placeholder: "Why are you refunding?", class: "w-full px-4 py-3 rounded-lg border border-violet-200 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500/20 resize-none" %>
+            <button type="submit" class="mt-3 bg-violet-500 hover:bg-violet-600 text-white px-5 py-2 rounded-lg text-sm font-bold cursor-pointer">Process Refund</button>
+          <% end %>
+        </details>
+
+        <%# Dismiss %>
+        <details class="group">
+          <summary class="cursor-pointer flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition-colors">
+            <span class="text-sm font-bold text-slate-700"><i class="fas fa-times mr-2"></i>Dismiss (no action)</span>
+            <i class="fas fa-chevron-down text-slate-500 text-xs group-open:rotate-180 transition-transform"></i>
+          </summary>
+          <%= form_with url: dismiss_admin_dispute_path(@dispute), method: :patch, local: true, class: "p-4 border border-t-0 border-slate-200 rounded-b-xl -mt-1 bg-slate-50/50" do |f| %>
+            <%= f.text_area :resolution, rows: 3, placeholder: "Why dismiss?", class: "w-full px-4 py-3 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500/20 resize-none" %>
+            <button type="submit" class="mt-3 bg-slate-700 hover:bg-slate-800 text-white px-5 py-2 rounded-lg text-sm font-bold cursor-pointer">Dismiss</button>
+          <% end %>
+        </details>
+      </div>
+    <% else %>
+      <div class="bg-<%= status_colors[@dispute.status] %>-50 rounded-2xl border border-<%= status_colors[@dispute.status] %>-200 p-6">
+        <div class="flex items-start gap-3">
+          <i class="fas fa-gavel text-<%= status_colors[@dispute.status] %>-600 mt-1"></i>
+          <div>
+            <div class="text-xs font-bold text-<%= status_colors[@dispute.status] %>-900 uppercase tracking-wider mb-1">Resolution</div>
+            <p class="text-sm text-<%= status_colors[@dispute.status] %>-800"><%= @dispute.resolution %></p>
+            <% if @dispute.refund_amount.present? && @dispute.refund_amount > 0 %>
+              <p class="text-sm font-bold text-<%= status_colors[@dispute.status] %>-900 mt-2">Refunded: $<%= number_with_precision(@dispute.refund_amount, precision: 2) %></p>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

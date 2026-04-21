@@ -93,6 +93,23 @@ class StripeService
       service.title
     end
 
+    amount_cents = (amount_to_charge * 100).to_i
+    platform_fee_cents = (amount_cents * PLATFORM_COMMISSION_RATE).to_i
+    provider = service.provider
+
+    payment_intent_data = {
+      metadata: {
+        booking_id: booking.id,
+        payment_type: charge_deposit_only ? "deposit" : "full"
+      }
+    }
+
+    # If provider has Stripe Connect set up, use payment split
+    if provider.stripe_connect_id.present? && provider.stripe_connect_charges_enabled?
+      payment_intent_data[:application_fee_amount] = platform_fee_cents
+      payment_intent_data[:transfer_data] = { destination: provider.stripe_connect_id }
+    end
+
     session = Stripe::Checkout::Session.create({
       customer: stripe_customer.id,
       payment_method_types: ["card"],
@@ -101,15 +118,16 @@ class StripeService
           currency: "usd",
           product_data: {
             name: product_name,
-            description: "Service by #{service.provider.display_name}"
+            description: "Service by #{provider.display_name}"
           },
-          unit_amount: (amount_to_charge * 100).to_i
+          unit_amount: amount_cents
         },
         quantity: 1
       }],
       mode: "payment",
       success_url: "#{Rails.application.routes.url_helpers.booking_payment_success_url(booking)}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: Rails.application.routes.url_helpers.service_url(service),
+      payment_intent_data: payment_intent_data,
       metadata: {
         booking_id: booking.id,
         user_id: user.id,
@@ -118,12 +136,70 @@ class StripeService
       }
     })
 
+    booking.update(
+      platform_fee_cents: platform_fee_cents,
+      provider_payout_cents: amount_cents - platform_fee_cents
+    )
+
     booking.update(stripe_checkout_session_id: session.id)
 
     { checkout_url: session.url, session_id: session.id }
   rescue Stripe::StripeError => e
     Rails.logger.error "Stripe Booking Checkout Error: #{e.message}"
     nil
+  end
+
+  # Platform commission: 10% of booking
+  PLATFORM_COMMISSION_RATE = 0.10
+
+  def self.create_connect_account(user)
+    return user.stripe_connect_id if user.stripe_connect_id.present?
+    account = Stripe::Account.create({
+      type: "express",
+      country: "US",
+      email: user.email,
+      capabilities: {
+        card_payments: { requested: true },
+        transfers: { requested: true }
+      },
+      business_type: "individual",
+      metadata: { user_id: user.id }
+    })
+    user.update(stripe_connect_id: account.id)
+    account.id
+  rescue Stripe::StripeError => e
+    Rails.logger.error "Stripe Connect create error: #{e.message}"
+    nil
+  end
+
+  def self.connect_onboarding_link(user, return_url:, refresh_url:)
+    account_id = create_connect_account(user)
+    return nil unless account_id
+
+    link = Stripe::AccountLink.create({
+      account: account_id,
+      refresh_url: refresh_url,
+      return_url: return_url,
+      type: "account_onboarding"
+    })
+    link.url
+  rescue Stripe::StripeError => e
+    Rails.logger.error "Stripe Connect onboarding link error: #{e.message}"
+    nil
+  end
+
+  def self.refresh_connect_status(user)
+    return false unless user.stripe_connect_id
+    account = Stripe::Account.retrieve(user.stripe_connect_id)
+    user.update(
+      stripe_connect_onboarded: account.details_submitted,
+      stripe_connect_charges_enabled: account.charges_enabled,
+      stripe_connect_payouts_enabled: account.payouts_enabled
+    )
+    true
+  rescue Stripe::StripeError => e
+    Rails.logger.error "Stripe Connect status refresh error: #{e.message}"
+    false
   end
 
   def self.create_subscription(user, plan, payment_method_id = nil)

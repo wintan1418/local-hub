@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  booking: one
+  raised_by_id: 1
+  reason: MyString
+  description: MyText
+  status: 1
+  resolution: MyText
+  resolved_at: 2026-04-21 20:05:49
+  refund_amount: 9.99
+
+two:
+  booking: two
+  raised_by_id: 1
+  reason: MyString
+  description: MyText
+  status: 1
+  resolution: MyText
+  resolved_at: 2026-04-21 20:05:49
+  refund_amount: 9.99

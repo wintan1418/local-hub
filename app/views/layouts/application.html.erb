@@ -127,11 +127,9 @@
               <%# Notifications %>
               <%= link_to notifications_path, class: "relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors", title: "Notifications" do %>
                 <i class="fas fa-bell text-lg"></i>
-                <% if current_user.unread_notifications_count > 0 %>
-                  <span class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
-                    <%= current_user.unread_notifications_count > 9 ? '9+' : current_user.unread_notifications_count %>
-                  </span>
-                <% end %>
+                <span data-notification-count class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center <%= current_user.unread_notifications_count > 0 ? '' : 'hidden' %>">
+                  <%= current_user.unread_notifications_count > 9 ? '9+' : current_user.unread_notifications_count %>
+                </span>
               <% end %>
 
               <%# Divider %>
@@ -515,6 +513,8 @@
     <style>
       @keyframes progress { 0% { width: 0; } 100% { width: 100%; } }
       .animate-progress { animation: progress 5s linear forwards; }
+      @keyframes slide-in-right { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+      .animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
     </style>
   </body>
 </html>

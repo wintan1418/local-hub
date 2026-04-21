@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_21_174037) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_21_191147) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -148,6 +148,20 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_174037) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_crm_campaigns_on_user_id"
+  end
+
+  create_table "disputes", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.integer "raised_by_id"
+    t.string "reason"
+    t.text "description"
+    t.integer "status"
+    t.text "resolution"
+    t.datetime "resolved_at"
+    t.decimal "refund_amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_disputes_on_booking_id"
   end
 
   create_table "expenses", force: :cascade do |t|
@@ -462,6 +476,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_174037) do
   add_foreign_key "conversations", "users", column: "customer_id"
   add_foreign_key "conversations", "users", column: "provider_id"
   add_foreign_key "crm_campaigns", "users"
+  add_foreign_key "disputes", "bookings"
   add_foreign_key "expenses", "bookings"
   add_foreign_key "favorites", "users", column: "customer_id"
   add_foreign_key "favorites", "users", column: "provider_id"

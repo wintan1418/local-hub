@@ -6,6 +6,22 @@ class Notification < ApplicationRecord
   validates :message, presence: true
   validates :notification_type, presence: true
 
+  after_create_commit :broadcast_to_user
+
+  def broadcast_to_user
+    NotificationsChannel.broadcast_to(user, {
+      id: id,
+      title: title,
+      message: message,
+      type: notification_type,
+      icon: icon_class,
+      unread_count: user.notifications.unread.count,
+      created_at: created_at.strftime("%b %d, %-I:%M %p")
+    })
+  rescue => e
+    Rails.logger.error "Notification broadcast failed: #{e.message}"
+  end
+
   enum :notification_type, {
     booking_created: "booking_created",
     booking_updated: "booking_updated",

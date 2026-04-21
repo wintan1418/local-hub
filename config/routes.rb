@@ -84,6 +84,11 @@ Rails.application.routes.draw do
       end
     end
 
+    # Stripe Connect (payouts)
+    get "payouts", to: "payouts#index", as: :payouts
+    post "payouts/connect", to: "payouts#connect", as: :connect_payouts
+    get "payouts/refresh", to: "payouts#refresh", as: :refresh_payouts
+
     resources :crm_campaigns do
       member do
         post :send_campaign
@@ -111,6 +116,13 @@ Rails.application.routes.draw do
     end
     resources :services, only: [:index, :destroy]
     resources :categories, only: [:index, :create, :destroy]
+    resources :disputes, only: [:index, :show] do
+      member do
+        patch :resolve
+        patch :refund
+        patch :dismiss
+      end
+    end
   end
 
   resources :services, only: [ :index, :show ] do
@@ -119,6 +131,7 @@ Rails.application.routes.draw do
   resources :bookings, only: [ :index, :show, :destroy ] do
     resource :review, only: [ :new, :create ]
     resource :invoice, only: [ :show ]
+    resource :dispute, only: [ :new, :create, :show ]
     resources :expenses, only: [ :create, :destroy ]
     member do
       get :payment_success

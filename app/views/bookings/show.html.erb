@@ -266,6 +266,19 @@
               <% end %>
             <% end %>
 
+            <%# Dispute %>
+            <% if (@booking.completed? || @booking.confirmed?) && (@booking.customer == current_user || @booking.service.provider == current_user) %>
+              <% if @booking.dispute.present? %>
+                <%= link_to booking_dispute_path(@booking), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 transition-all" do %>
+                  <i class="fas fa-exclamation-triangle mr-2 text-xs"></i>View Dispute
+                <% end %>
+              <% else %>
+                <%= link_to new_booking_dispute_path(@booking), class: "w-full inline-flex items-center justify-center px-4 py-2.5 text-xs font-semibold text-slate-400 hover:text-red-600 transition-colors" do %>
+                  <i class="fas fa-flag mr-1.5 text-[10px]"></i>Report an issue
+                <% end %>
+              <% end %>
+            <% end %>
+
             <%# Rebook %>
             <% if current_user.customer? && (@booking.completed? || @booking.cancelled?) %>
               <%= link_to service_path(@booking.service), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-all" do %>

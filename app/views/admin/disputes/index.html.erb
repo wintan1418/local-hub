@@ -1,0 +1,65 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-2xl font-black text-slate-900">Dispute Queue</h1>
+        <p class="text-sm text-slate-500 mt-1"><%= @disputes.size %> disputes</p>
+      </div>
+      <%= link_to admin_dashboard_path, class: "text-sm text-slate-500 hover:text-slate-700" do %>
+        <i class="fas fa-arrow-left mr-1 text-xs"></i>Dashboard
+      <% end %>
+    </div>
+
+    <div class="flex items-center gap-2 mb-6">
+      <% [
+        ["All", nil],
+        ["Open", "open"],
+        ["Under Review", "under_review"],
+        ["Resolved", "resolved"],
+        ["Refunded", "refunded"],
+        ["Dismissed", "dismissed"]
+      ].each do |label, status| %>
+        <%= link_to admin_disputes_path(status: status), class: "px-4 py-2 rounded-lg text-xs font-semibold transition-colors #{params[:status] == status ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}" do %>
+          <%= label %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if @disputes.any? %>
+      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
+        <div class="divide-y divide-slate-50">
+          <% @disputes.each do |dispute| %>
+            <%= link_to admin_dispute_path(dispute), class: "flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors" do %>
+              <div class="flex items-center gap-4 min-w-0">
+                <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-exclamation-triangle text-red-500 text-xs"></i>
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-bold text-slate-900 truncate"><%= dispute.reason %></div>
+                  <div class="text-xs text-slate-400">
+                    <%= dispute.raised_by.display_name %> &middot; Booking ##{<%= dispute.booking_id %>} &middot; <%= time_ago_in_words(dispute.created_at) %> ago
+                  </div>
+                </div>
+              </div>
+              <% status_colors = { "open" => "amber", "under_review" => "sky", "resolved" => "emerald", "dismissed" => "slate", "refunded" => "violet" } %>
+              <div class="flex items-center gap-3 flex-shrink-0">
+                <% if dispute.refund_amount.present? %>
+                  <span class="text-sm font-bold text-violet-600">-$<%= number_with_precision(dispute.refund_amount, precision: 0) %></span>
+                <% end %>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[dispute.status] %>-50 text-<%= status_colors[dispute.status] %>-700"><%= dispute.status.titleize %></span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="bg-white rounded-xl border border-slate-100 p-12 text-center">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-3">
+          <i class="fas fa-check text-emerald-500"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-900">All clear</h3>
+        <p class="text-sm text-slate-500">No disputes to review.</p>
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -73,6 +73,11 @@ class User < ApplicationRecord
   # Job requests (customer)
   has_many :job_requests, foreign_key: :customer_id, dependent: :destroy
 
+  # Conversations (user is either customer or provider)
+  def conversations
+    Conversation.where("customer_id = ? OR provider_id = ?", id, id)
+  end
+
   before_create :generate_referral_code
 
   def on_vacation?
