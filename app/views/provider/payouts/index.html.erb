@@ -59,7 +59,7 @@
               <div class="text-xs text-slate-500">Finish your Stripe Connect setup to start receiving payouts.</div>
             </div>
           </div>
-          <%= button_to connect_payouts_provider_path, method: :post, class: "bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold cursor-pointer whitespace-nowrap" do %>
+          <%= button_to provider_connect_payouts_path, method: :post, class: "bg-orange-500 hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold cursor-pointer whitespace-nowrap" do %>
             Continue Setup <i class="fas fa-arrow-right ml-1 text-xs"></i>
           <% end %>
         </div>
@@ -75,7 +75,7 @@
             <li><i class="fas fa-check mr-2"></i>Next-day payouts after job completion</li>
             <li><i class="fas fa-check mr-2"></i>Secure — we never touch your funds</li>
           </ul>
-          <%= button_to connect_payouts_provider_path, method: :post, class: "bg-white text-slate-900 hover:bg-slate-100 px-6 py-3 rounded-xl text-sm font-bold cursor-pointer inline-flex items-center gap-2" do %>
+          <%= button_to provider_connect_payouts_path, method: :post, class: "bg-white text-slate-900 hover:bg-slate-100 px-6 py-3 rounded-xl text-sm font-bold cursor-pointer inline-flex items-center gap-2" do %>
             Connect with Stripe <i class="fas fa-arrow-right text-xs"></i>
           <% end %>
         </div>

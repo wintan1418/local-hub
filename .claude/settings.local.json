@@ -64,7 +64,9 @@
       "Bash(git push:*)",
       "Bash(grep -r \"before_action\\\\|def \" /home/wintan/local-hub/app/controllers/customer -type f --include=\"*.rb\")",
       "WebFetch(domain:www.getjobber.com)",
-      "Bash(grep -v '^--$')"
+      "Bash(grep -v '^--$')",
+      "Bash(convert -background none /tmp/icon.svg -resize 192x192 /home/wintan/local-hub/public/icon-192.png)",
+      "Bash(convert -background none /tmp/icon.svg -resize 512x512 /home/wintan/local-hub/public/icon-512.png)"
     ],
     "deny": []
   }

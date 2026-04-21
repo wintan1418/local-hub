@@ -14,7 +14,7 @@ class Provider::PayoutsController < ApplicationController
   end
 
   def connect
-    return_url = refresh_payouts_provider_url
+    return_url = provider_refresh_payouts_url
     refresh_url = provider_payouts_url
     url = StripeService.connect_onboarding_link(current_user, return_url: return_url, refresh_url: refresh_url)
     if url
