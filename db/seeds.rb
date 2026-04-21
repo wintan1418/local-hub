@@ -6,35 +6,52 @@ require 'faker'
 
 puts "🌱 Starting seed process..."
 
-# Clean existing data
-puts "🧹 Cleaning existing data..."
-JobRequestQuote.destroy_all if defined?(JobRequestQuote)
-JobRequest.destroy_all if defined?(JobRequest)
-Referral.destroy_all if defined?(Referral)
-Favorite.destroy_all if defined?(Favorite)
-ServicePackage.destroy_all if defined?(ServicePackage)
-Expense.destroy_all if defined?(Expense)
-Invoice.destroy_all if defined?(Invoice)
-QuoteLineItem.destroy_all if defined?(QuoteLineItem)
-Quote.destroy_all if defined?(Quote)
-Review.destroy_all
-Booking.destroy_all
-ServiceArea.destroy_all
-Availability.destroy_all
-Service.destroy_all
-Subscription.destroy_all
-Plan.destroy_all
-Category.destroy_all
-User.destroy_all
+# IMPORTANT: This seed file is DESTRUCTIVE by default.
+# In production with real users, set SEED_WIPE=false to skip the clean step.
+# Or set SEED_SKIP_IF_USERS=true to skip seeding if users already exist.
 
-# Reset primary key sequences
-ActiveRecord::Base.connection.reset_pk_sequence!('users')
-ActiveRecord::Base.connection.reset_pk_sequence!('categories')
-ActiveRecord::Base.connection.reset_pk_sequence!('services')
-ActiveRecord::Base.connection.reset_pk_sequence!('bookings')
-ActiveRecord::Base.connection.reset_pk_sequence!('reviews')
-ActiveRecord::Base.connection.reset_pk_sequence!('plans')
-ActiveRecord::Base.connection.reset_pk_sequence!('subscriptions')
+if ENV['SEED_SKIP_IF_USERS'] == 'true' && User.any?
+  puts "⚠️  Users already exist — skipping seed (SEED_SKIP_IF_USERS=true)"
+  exit 0
+end
+
+if Rails.env.production? && ENV['SEED_CONFIRM'] != 'yes'
+  puts "⚠️  Running in production. To wipe and reseed, re-run with SEED_CONFIRM=yes"
+  puts "   Example: SEED_CONFIRM=yes bundle exec rails db:seed"
+  exit 0
+end
+
+if ENV['SEED_WIPE'] != 'false'
+  # Clean existing data
+  puts "🧹 Cleaning existing data..."
+  JobRequestQuote.destroy_all if defined?(JobRequestQuote)
+  JobRequest.destroy_all if defined?(JobRequest)
+  Referral.destroy_all if defined?(Referral)
+  Favorite.destroy_all if defined?(Favorite)
+  ServicePackage.destroy_all if defined?(ServicePackage)
+  Expense.destroy_all if defined?(Expense)
+  Invoice.destroy_all if defined?(Invoice)
+  QuoteLineItem.destroy_all if defined?(QuoteLineItem)
+  Quote.destroy_all if defined?(Quote)
+  Review.destroy_all
+  Booking.destroy_all
+  ServiceArea.destroy_all
+  Availability.destroy_all
+  Service.destroy_all
+  Subscription.destroy_all
+  Plan.destroy_all
+  Category.destroy_all
+  User.destroy_all
+
+  # Reset primary key sequences
+  ActiveRecord::Base.connection.reset_pk_sequence!('users')
+  ActiveRecord::Base.connection.reset_pk_sequence!('categories')
+  ActiveRecord::Base.connection.reset_pk_sequence!('services')
+  ActiveRecord::Base.connection.reset_pk_sequence!('bookings')
+  ActiveRecord::Base.connection.reset_pk_sequence!('reviews')
+  ActiveRecord::Base.connection.reset_pk_sequence!('plans')
+  ActiveRecord::Base.connection.reset_pk_sequence!('subscriptions')
+end
 
 # Create Plans
 puts "💳 Creating subscription plans..."
