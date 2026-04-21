@@ -42,6 +42,18 @@
               <i class="fas fa-briefcase text-xs text-slate-400"></i>
               <span><%= @provider.total_completed_bookings %> jobs completed</span>
             </div>
+            <% if @provider.response_time_text %>
+              <div class="flex items-center gap-1">
+                <i class="fas fa-bolt text-xs text-amber-400"></i>
+                <span><%= @provider.response_time_text %></span>
+              </div>
+            <% end %>
+            <% if @provider.on_vacation? %>
+              <div class="flex items-center gap-1 text-amber-600">
+                <i class="fas fa-umbrella-beach text-xs"></i>
+                <span class="font-semibold">Away until <%= @provider.vacation_until.strftime("%b %d") %></span>
+              </div>
+            <% end %>
             <% if @provider.years_experience.to_i > 0 %>
               <div class="flex items-center gap-1">
                 <i class="fas fa-clock text-xs text-slate-400"></i>
@@ -58,8 +70,17 @@
         </div>
 
         <%# CTA %>
-        <div class="flex gap-3 flex-shrink-0">
+        <div class="flex gap-2 flex-shrink-0">
           <% if user_signed_in? && current_user.customer? %>
+            <% if @is_favorited %>
+              <%= button_to unfavorite_provider_path(@provider), method: :delete, class: "inline-flex items-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100 transition-all cursor-pointer" do %>
+                <i class="fas fa-heart mr-2 text-xs"></i>Saved
+              <% end %>
+            <% else %>
+              <%= button_to favorite_provider_path(@provider), method: :post, class: "inline-flex items-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all cursor-pointer" do %>
+                <i class="far fa-heart mr-2 text-xs"></i>Save
+              <% end %>
+            <% end %>
             <%= form_with url: conversations_path, method: :post, local: true do |form| %>
               <%= form.hidden_field :user_id, value: @provider.id %>
               <button type="submit" class="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all cursor-pointer">

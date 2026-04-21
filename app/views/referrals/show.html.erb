@@ -1,0 +1,67 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <h1 class="text-2xl font-black text-slate-900 mb-2">Refer & Earn</h1>
+    <p class="text-sm text-slate-500 mb-8">Invite friends to Radius and earn $<%= Referral::CREDIT_AMOUNT.to_i %> credit for each signup.</p>
+
+    <%# Credit balance %>
+    <div class="bg-gradient-to-br from-orange-500 to-rose-500 rounded-xl p-8 mb-6 text-white">
+      <div class="text-xs font-bold uppercase tracking-wider opacity-80 mb-2">Your Credit Balance</div>
+      <div class="text-4xl font-black">$<%= number_with_precision(@credit, precision: 2) %></div>
+      <p class="text-sm opacity-80 mt-2">Automatically applied to your next booking.</p>
+    </div>
+
+    <%# Referral code %>
+    <div class="bg-white rounded-xl border border-slate-100 p-6 mb-6">
+      <h2 class="text-sm font-bold text-slate-900 mb-3">Your Referral Code</h2>
+      <div class="flex items-center gap-2 mb-4">
+        <code class="flex-1 px-4 py-3 rounded-lg bg-slate-100 font-mono text-sm font-bold text-slate-900"><%= @referral_code %></code>
+        <button onclick="navigator.clipboard.writeText('<%= @referral_code %>'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy', 2000);" class="px-4 py-3 rounded-lg bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition-colors">Copy</button>
+      </div>
+
+      <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Share Link</h3>
+      <div class="flex items-center gap-2">
+        <input type="text" readonly value="<%= @referral_url %>" class="flex-1 px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-600" onclick="this.select()">
+        <button onclick="navigator.clipboard.writeText('<%= @referral_url %>'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy', 2000);" class="px-4 py-3 rounded-lg bg-slate-900 text-white text-sm font-semibold hover:bg-slate-800 transition-colors">Copy</button>
+      </div>
+    </div>
+
+    <%# How it works %>
+    <div class="bg-white rounded-xl border border-slate-100 p-6 mb-6">
+      <h2 class="text-sm font-bold text-slate-900 mb-4">How it works</h2>
+      <div class="space-y-3">
+        <% [
+          { step: 1, title: "Share your code", desc: "Send your referral link to friends." },
+          { step: 2, title: "They sign up", desc: "New users create an account using your link." },
+          { step: 3, title: "You both earn", desc: "When they make their first booking, you get $#{Referral::CREDIT_AMOUNT.to_i} credit." }
+        ].each do |item| %>
+          <div class="flex items-start gap-3">
+            <div class="w-7 h-7 rounded-full bg-orange-500 text-white flex items-center justify-center text-xs font-bold flex-shrink-0"><%= item[:step] %></div>
+            <div>
+              <div class="text-sm font-bold text-slate-900"><%= item[:title] %></div>
+              <div class="text-xs text-slate-500"><%= item[:desc] %></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Referrals list %>
+    <% if @referrals_sent.any? %>
+      <div class="bg-white rounded-xl border border-slate-100 p-6">
+        <h2 class="text-sm font-bold text-slate-900 mb-4">Your Referrals</h2>
+        <div class="space-y-2">
+          <% @referrals_sent.each do |ref| %>
+            <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50">
+              <div>
+                <div class="text-sm font-semibold text-slate-900"><%= ref.referee&.display_name || 'Pending signup' %></div>
+                <div class="text-xs text-slate-400"><%= time_ago_in_words(ref.created_at) %> ago</div>
+              </div>
+              <% status_colors = { "pending" => "amber", "completed" => "emerald", "rewarded" => "violet" } %>
+              <span class="text-xs font-bold text-<%= status_colors[ref.status] %>-600"><%= ref.status.titleize %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

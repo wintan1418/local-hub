@@ -1,0 +1,43 @@
+<div class="min-h-screen bg-slate-50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+      <h1 class="text-2xl font-black text-slate-900">My Pros</h1>
+      <p class="text-sm text-slate-500 mt-1">Your favorite service providers.</p>
+    </div>
+
+    <% if @providers.any? %>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <% @providers.each do |provider| %>
+          <%= link_to provider_path(provider), class: "group block bg-white rounded-xl border border-slate-100 p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" do %>
+            <div class="flex items-center gap-3 mb-3">
+              <% if provider.profile_picture.attached? %>
+                <%= image_tag provider.profile_picture, class: "w-12 h-12 rounded-xl object-cover" %>
+              <% else %>
+                <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-base font-bold text-slate-400">
+                  <%= provider.display_name.first.upcase %>
+                </div>
+              <% end %>
+              <div class="min-w-0">
+                <div class="text-sm font-bold text-slate-900 truncate group-hover:text-orange-600 transition-colors"><%= provider.business_name || provider.display_name %></div>
+                <div class="flex items-center gap-1 mt-0.5">
+                  <% 5.times do |i| %><i class="fas fa-star text-[9px] <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
+                  <span class="text-xs text-slate-400 ml-1"><%= provider.average_rating %></span>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500"><%= provider.services.count %> service<%= provider.services.count == 1 ? '' : 's' %> · <%= provider.total_completed_bookings %> jobs</p>
+          <% end %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="bg-white rounded-xl border border-slate-100 p-12 text-center">
+        <i class="far fa-heart text-3xl text-slate-300 mb-3"></i>
+        <h3 class="text-lg font-bold text-slate-900 mb-2">No favorites yet</h3>
+        <p class="text-sm text-slate-500 mb-6">Save providers you love for quick rebooking.</p>
+        <%= link_to services_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600" do %>
+          <i class="fas fa-search mr-2 text-xs"></i>Find Providers
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

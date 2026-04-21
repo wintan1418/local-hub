@@ -5,6 +5,7 @@ class Service < ApplicationRecord
   has_many :availabilities, dependent: :destroy
   has_many :bookings, dependent: :destroy
   has_many :reviews, through: :bookings
+  has_many :packages, class_name: "ServicePackage", dependent: :destroy
 
   has_many_attached :images
 

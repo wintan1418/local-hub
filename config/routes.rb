@@ -41,7 +41,9 @@ Rails.application.routes.draw do
     get "dashboard", to: "dashboard#index", as: :dashboard
     get "calendar", to: "calendar#index", as: :calendar
     get "analytics", to: "analytics#index", as: :analytics
-    resources :services, only: [ :new, :create, :edit, :update, :destroy ]
+    resources :services, only: [ :new, :create, :edit, :update, :destroy ] do
+      resources :packages, controller: "service_packages", only: [:create, :destroy]
+    end
     resources :bookings, only: [] do
       member do
         patch :confirm
@@ -125,7 +127,27 @@ Rails.application.routes.draw do
   end
 
   # Public provider profiles
-  resources :providers, only: [ :show ]
+  resources :providers, only: [ :show ] do
+    member do
+      post :favorite
+      delete :unfavorite
+    end
+  end
+
+  # Favorites
+  get "my-pros", to: "favorites#index", as: :favorites
+
+  # Job requests (reverse marketplace)
+  resources :job_requests do
+    resources :quotes, controller: "job_request_quotes", only: [:create] do
+      member do
+        patch :accept
+      end
+    end
+  end
+
+  # Referrals
+  get "refer", to: "referrals#show", as: :refer
 
   # Customer quotes
   resources :quotes, only: [:show] do

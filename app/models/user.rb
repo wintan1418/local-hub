@@ -62,6 +62,51 @@ class User < ApplicationRecord
   has_many :crm_campaigns, dependent: :destroy
   has_many :campaign_recipients, dependent: :destroy
 
+  # Favorites (customer)
+  has_many :favorites, foreign_key: :customer_id, dependent: :destroy
+  has_many :favorited_providers, through: :favorites, source: :provider
+
+  # Referrals
+  has_many :referrals_sent, class_name: "Referral", foreign_key: :referrer_id, dependent: :destroy
+  has_many :referrals_received, class_name: "Referral", foreign_key: :referee_id
+
+  # Job requests (customer)
+  has_many :job_requests, foreign_key: :customer_id, dependent: :destroy
+
+  before_create :generate_referral_code
+
+  def on_vacation?
+    vacation_until.present? && vacation_until > Time.current
+  end
+
+  def average_response_time_hours
+    responded = Booking.joins(:service).where(services: { provider_id: id }).where.not(first_response_at: nil)
+    return nil if responded.empty?
+    avg_seconds = responded.map { |b| b.first_response_at - b.created_at }.sum / responded.count
+    (avg_seconds / 3600.0).round(1)
+  end
+
+  def response_time_text
+    hrs = average_response_time_hours
+    return nil unless hrs
+    return "Usually responds within an hour" if hrs < 1
+    return "Usually responds in #{hrs.to_i} hours" if hrs < 24
+    "Usually responds in #{(hrs / 24).to_i} days"
+  end
+
+  def favorited_by?(user)
+    return false unless user
+    favorites.exists?(customer_id: user.id) || user.favorites.exists?(provider_id: id)
+  end
+
+  private
+
+  def generate_referral_code
+    self.referral_code ||= "#{(first_name || 'user').parameterize}-#{SecureRandom.hex(3).upcase}"
+  end
+
+  public
+
 
   # Validations
   validates :email, presence: true, uniqueness: { case_sensitive: false }, 

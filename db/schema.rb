@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_21_174037) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,7 +67,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
     t.integer "parent_booking_id"
     t.decimal "deposit_amount"
     t.boolean "deposit_paid"
+    t.boolean "urgent", default: false
+    t.datetime "first_response_at"
+    t.integer "service_package_id"
+    t.bigint "referral_id"
+    t.text "notes_from_customer"
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
+    t.index ["referral_id"], name: "index_bookings_on_referral_id"
     t.index ["service_id"], name: "index_bookings_on_service_id"
   end
 
@@ -154,6 +160,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
     t.index ["booking_id"], name: "index_expenses_on_booking_id"
   end
 
+  create_table "favorites", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.bigint "provider_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id", "provider_id"], name: "index_favorites_on_customer_id_and_provider_id", unique: true
+    t.index ["customer_id"], name: "index_favorites_on_customer_id"
+    t.index ["provider_id"], name: "index_favorites_on_provider_id"
+  end
+
   create_table "invoices", force: :cascade do |t|
     t.bigint "booking_id", null: false
     t.string "invoice_number"
@@ -164,6 +180,36 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["booking_id"], name: "index_invoices_on_booking_id"
+  end
+
+  create_table "job_request_quotes", force: :cascade do |t|
+    t.bigint "job_request_id", null: false
+    t.bigint "provider_id", null: false
+    t.decimal "price", precision: 10, scale: 2
+    t.text "message"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["job_request_id"], name: "index_job_request_quotes_on_job_request_id"
+    t.index ["provider_id"], name: "index_job_request_quotes_on_provider_id"
+  end
+
+  create_table "job_requests", force: :cascade do |t|
+    t.bigint "customer_id", null: false
+    t.bigint "category_id", null: false
+    t.string "title"
+    t.text "description"
+    t.decimal "budget_min", precision: 10, scale: 2
+    t.decimal "budget_max", precision: 10, scale: 2
+    t.datetime "needed_by"
+    t.string "city"
+    t.string "state"
+    t.string "zip"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_job_requests_on_category_id"
+    t.index ["customer_id"], name: "index_job_requests_on_customer_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -266,6 +312,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
     t.index ["service_id"], name: "index_quotes_on_service_id"
   end
 
+  create_table "referrals", force: :cascade do |t|
+    t.string "code"
+    t.integer "referrer_id"
+    t.integer "referee_id"
+    t.integer "status"
+    t.decimal "credit_amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "reviews", force: :cascade do |t|
     t.bigint "booking_id", null: false
     t.integer "rating"
@@ -284,6 +340,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["service_id"], name: "index_service_areas_on_service_id"
+  end
+
+  create_table "service_packages", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.string "name"
+    t.text "description"
+    t.decimal "price"
+    t.integer "sort_order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_service_packages_on_service_id"
   end
 
   create_table "services", force: :cascade do |t|
@@ -369,11 +436,15 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
     t.string "uid"
     t.float "latitude"
     t.float "longitude"
+    t.datetime "vacation_until"
+    t.string "referral_code"
+    t.decimal "referral_credit", precision: 10, scale: 2, default: "0.0"
     t.index ["admin_role"], name: "index_users_on_admin_role"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["latitude", "longitude"], name: "index_users_on_latitude_and_longitude"
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
+    t.index ["referral_code"], name: "index_users_on_referral_code", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["stripe_customer_id"], name: "index_users_on_stripe_customer_id", unique: true
   end
@@ -392,7 +463,13 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
   add_foreign_key "conversations", "users", column: "provider_id"
   add_foreign_key "crm_campaigns", "users"
   add_foreign_key "expenses", "bookings"
+  add_foreign_key "favorites", "users", column: "customer_id"
+  add_foreign_key "favorites", "users", column: "provider_id"
   add_foreign_key "invoices", "bookings"
+  add_foreign_key "job_request_quotes", "job_requests"
+  add_foreign_key "job_request_quotes", "users", column: "provider_id"
+  add_foreign_key "job_requests", "categories"
+  add_foreign_key "job_requests", "users", column: "customer_id"
   add_foreign_key "messages", "bookings"
   add_foreign_key "messages", "users", column: "recipient_id"
   add_foreign_key "messages", "users", column: "sender_id"
@@ -405,6 +482,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_13_141104) do
   add_foreign_key "quotes", "users", column: "provider_id"
   add_foreign_key "reviews", "bookings"
   add_foreign_key "service_areas", "services"
+  add_foreign_key "service_packages", "services"
   add_foreign_key "services", "categories"
   add_foreign_key "services", "users", column: "provider_id"
   add_foreign_key "sms_logs", "users"

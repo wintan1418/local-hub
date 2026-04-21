@@ -94,7 +94,7 @@ class BookingsController < ApplicationController
   private
 
   def booking_params
-    params.require(:booking).permit(:scheduled_at, :total_price, :recurrence)
+    params.require(:booking).permit(:scheduled_at, :total_price, :recurrence, :urgent, :service_package_id, :notes_from_customer, photos: [])
   end
 
   def ensure_customer!

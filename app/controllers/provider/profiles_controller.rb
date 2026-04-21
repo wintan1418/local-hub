@@ -112,7 +112,7 @@ class Provider::ProfilesController < ApplicationController
       :first_name, :last_name, :phone, :bio,
       :business_name, :business_license, :insurance_number,
       :years_experience, :address, :city, :state, :zip_code,
-      :profile_picture
+      :profile_picture, :vacation_until
     )
   end
 end

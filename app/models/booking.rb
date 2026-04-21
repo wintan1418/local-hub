@@ -4,6 +4,8 @@ class Booking < ApplicationRecord
   has_one :review, dependent: :destroy
   has_one :invoice, dependent: :destroy
   has_many :expenses, dependent: :destroy
+  belongs_to :service_package, optional: true
+  has_many_attached :photos
 
   def total_expenses
     expenses.sum(:amount)

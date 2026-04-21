@@ -7,6 +7,8 @@ class ServicesController < ApplicationController
     @location = params[:location]
 
     @services = Service.includes(:category, provider: { bookings: :review })
+      .joins(:provider)
+      .where("users.vacation_until IS NULL OR users.vacation_until < ?", Time.current)
 
     @services = @services.where("title ILIKE ? OR description ILIKE ?", "%#{@query}%", "%#{@query}%") if @query.present?
     @services = @services.where(category_id: @category_id) if @category_id.present?

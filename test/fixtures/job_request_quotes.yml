@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  job_request: one
+  provider: one
+  price: 9.99
+  message: MyText
+  status: 1
+
+two:
+  job_request: two
+  provider: two
+  price: 9.99
+  message: MyText
+  status: 1

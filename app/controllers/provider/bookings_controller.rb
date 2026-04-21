@@ -5,6 +5,7 @@ class Provider::BookingsController < ApplicationController
 
   def confirm
     if @booking.pending?
+      @booking.update(first_response_at: Time.current) if @booking.first_response_at.nil?
       @booking.confirmed!
       redirect_to provider_dashboard_path, notice: "Booking confirmed!"
     else

@@ -99,9 +99,91 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <%# View toggle %>
+      <div class="flex items-center justify-end mb-4">
+        <div class="inline-flex bg-slate-100 rounded-lg p-1">
+          <button onclick="toggleView('list')" id="list-btn" class="px-4 py-1.5 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition-all">
+            <i class="fas fa-list mr-1"></i>List
+          </button>
+          <button onclick="toggleView('map')" id="map-btn" class="px-4 py-1.5 rounded-md text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all">
+            <i class="fas fa-map-location-dot mr-1"></i>Map
+          </button>
+        </div>
+      </div>
+
+      <%# List view %>
+      <div id="list-view" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <%= render partial: 'service_card', collection: @services, as: :service %>
       </div>
+
+      <%# Map view %>
+      <div id="map-view" class="hidden">
+        <div id="services-map" class="w-full h-[600px] rounded-xl border border-slate-200"></div>
+      </div>
+
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+      <script>
+        var servicesMap = null;
+        var servicesData = <%= @services.map { |s|
+          next nil unless s.provider.latitude && s.provider.longitude
+          {
+            id: s.id,
+            title: s.title,
+            price: s.base_price.to_i,
+            provider: s.provider.display_name,
+            lat: s.provider.latitude,
+            lng: s.provider.longitude,
+            url: Rails.application.routes.url_helpers.service_path(s),
+            rating: s.provider.average_rating
+          }
+        }.compact.to_json.html_safe %>;
+
+        function toggleView(view) {
+          var list = document.getElementById('list-view');
+          var map = document.getElementById('map-view');
+          var listBtn = document.getElementById('list-btn');
+          var mapBtn = document.getElementById('map-btn');
+          if (view === 'map') {
+            list.classList.add('hidden');
+            map.classList.remove('hidden');
+            listBtn.className = 'px-4 py-1.5 rounded-md text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all';
+            mapBtn.className = 'px-4 py-1.5 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition-all';
+            if (!servicesMap) initMap();
+          } else {
+            list.classList.remove('hidden');
+            map.classList.add('hidden');
+            listBtn.className = 'px-4 py-1.5 rounded-md text-xs font-semibold bg-white text-slate-900 shadow-sm transition-all';
+            mapBtn.className = 'px-4 py-1.5 rounded-md text-xs font-semibold text-slate-500 hover:text-slate-700 transition-all';
+          }
+        }
+
+        function initMap() {
+          var center = servicesData.length > 0 ? [servicesData[0].lat, servicesData[0].lng] : [39.8283, -98.5795];
+          servicesMap = L.map('services-map').setView(center, servicesData.length > 0 ? 10 : 4);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+          }).addTo(servicesMap);
+
+          servicesData.forEach(function(s) {
+            var marker = L.marker([s.lat, s.lng]).addTo(servicesMap);
+            marker.bindPopup(
+              '<div style="min-width:180px">' +
+              '<div style="font-weight:700;color:#0f172a;font-size:13px">' + s.title + '</div>' +
+              '<div style="font-size:11px;color:#64748b;margin-top:2px">' + s.provider + ' · ' + s.rating + '★</div>' +
+              '<div style="font-size:14px;font-weight:800;color:#0f172a;margin-top:4px">$' + s.price + '</div>' +
+              '<a href="' + s.url + '" style="display:inline-block;margin-top:6px;padding:4px 10px;background:#f97316;color:white;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none">View</a>' +
+              '</div>'
+            );
+          });
+
+          if (servicesData.length > 1) {
+            var group = L.featureGroup(servicesData.map(function(s){return L.marker([s.lat, s.lng])}));
+            servicesMap.fitBounds(group.getBounds().pad(0.2));
+          }
+        }
+      </script>
 
       <%# Pagination %>
       <% if @services.total_pages > 1 %>

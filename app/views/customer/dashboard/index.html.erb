@@ -214,6 +214,15 @@
             <%= link_to notifications_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-bell mr-2"></i>Notifications
             <% end %>
+            <%= link_to favorites_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-heart mr-2"></i>My Pros
+            <% end %>
+            <%= link_to job_requests_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
+              <i class="fas fa-briefcase mr-2"></i>Job Requests
+            <% end %>
+            <%= link_to refer_path, class: "block w-full bg-gradient-to-r from-orange-500 to-rose-500 text-white text-center py-2 px-4 rounded-lg hover:from-orange-600 hover:to-rose-600 transition-colors" do %>
+              <i class="fas fa-gift mr-2"></i>Refer & Earn $<%= Referral::CREDIT_AMOUNT.to_i %>
+            <% end %>
             <%= link_to settings_path, class: "block w-full bg-slate-100 text-slate-800 text-center py-2 px-4 rounded-lg hover:bg-slate-200 transition-colors" do %>
               <i class="fas fa-cog mr-2"></i>Settings
             <% end %>

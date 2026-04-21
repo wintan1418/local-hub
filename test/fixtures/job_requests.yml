@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  customer: one
+  category: one
+  title: MyString
+  description: MyText
+  budget_min: 9.99
+  budget_max: 9.99
+  needed_by: 2026-04-21 18:40:27
+  city: MyString
+  state: MyString
+  zip: MyString
+  status: 1
+
+two:
+  customer: two
+  category: two
+  title: MyString
+  description: MyText
+  budget_min: 9.99
+  budget_max: 9.99
+  needed_by: 2026-04-21 18:40:27
+  city: MyString
+  state: MyString
+  zip: MyString
+  status: 1
