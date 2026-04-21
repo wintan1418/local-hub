@@ -15,7 +15,24 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <meta name="theme-color" content="#ea580c">
+    <meta name="theme-color" content="#f97316">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Radius">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+          navigator.serviceWorker.register('/service-worker.js').catch(function(err) {
+            console.warn('SW registration failed:', err);
+          });
+        });
+      }
+    </script>
 
     <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
