@@ -8,6 +8,15 @@ puts "🌱 Starting seed process..."
 
 # Clean existing data
 puts "🧹 Cleaning existing data..."
+JobRequestQuote.destroy_all if defined?(JobRequestQuote)
+JobRequest.destroy_all if defined?(JobRequest)
+Referral.destroy_all if defined?(Referral)
+Favorite.destroy_all if defined?(Favorite)
+ServicePackage.destroy_all if defined?(ServicePackage)
+Expense.destroy_all if defined?(Expense)
+Invoice.destroy_all if defined?(Invoice)
+QuoteLineItem.destroy_all if defined?(QuoteLineItem)
+Quote.destroy_all if defined?(Quote)
 Review.destroy_all
 Booking.destroy_all
 ServiceArea.destroy_all
@@ -336,13 +345,15 @@ Service.all.each do |service|
                [ 'pending', 'confirmed' ].sample
     end
 
-    booking = Booking.create!(
+    booking = Booking.new(
       customer: customer,
       service: service,
       scheduled_at: scheduled_date,
       status: status,
       total_price: service.base_price * rand(1..4)
     )
+    booking.skip_availability_check = true
+    booking.save!
 
     # Create review for completed bookings
     if booking.status == 'completed' && [ true, true, false ].sample
@@ -376,6 +387,196 @@ Service.all.each do |service|
   end
 end
 
+# ============================================================
+# NEW FEATURE SEEDS
+# ============================================================
+
+# Service packages — add tiers to 40% of services
+puts "📦 Creating service packages..."
+package_sets = [
+  [
+    { name: "Basic", description: "Essential service, quick & efficient", price_multiplier: 0.8, sort_order: 1 },
+    { name: "Standard", description: "Most popular — great balance of value and quality", price_multiplier: 1.0, sort_order: 2 },
+    { name: "Premium", description: "Full-service with white-glove treatment", price_multiplier: 1.5, sort_order: 3 }
+  ],
+  [
+    { name: "Single Visit", description: "One-time service", price_multiplier: 1.0, sort_order: 1 },
+    { name: "Monthly Plan", description: "4 visits/month at a discount", price_multiplier: 3.2, sort_order: 2 }
+  ]
+]
+
+Service.all.sample((Service.count * 0.4).to_i).each do |service|
+  set = package_sets.sample
+  set.each do |pkg|
+    ServicePackage.create!(
+      service: service,
+      name: pkg[:name],
+      description: pkg[:description],
+      price: (service.base_price * pkg[:price_multiplier]).round(2),
+      sort_order: pkg[:sort_order]
+    )
+  end
+end
+puts "  ✅ Created #{ServicePackage.count} packages across #{ServicePackage.unscoped.distinct.pluck(:service_id).count} services"
+
+# Favorites — customers save favorite providers
+puts "❤️  Creating favorites..."
+customers.sample(30).each do |customer|
+  providers.sample(rand(2..6)).each do |provider|
+    Favorite.find_or_create_by(customer: customer, provider: provider)
+  end
+end
+puts "  ✅ Created #{Favorite.count} favorites"
+
+# Vacation mode — 5 providers on vacation
+puts "🏖️  Setting vacation mode on some providers..."
+providers.sample(5).each do |provider|
+  provider.update(vacation_until: rand(7..30).days.from_now)
+end
+puts "  ✅ #{User.provider.where("vacation_until > ?", Time.current).count} providers on vacation"
+
+# Response times — backfill for existing bookings
+puts "⚡ Backfilling response times..."
+Booking.where(status: [:confirmed, :completed]).find_each do |booking|
+  # Simulate response time: 30 min to 48 hours
+  booking.update_column(:first_response_at, booking.created_at + rand(30.minutes..48.hours))
+end
+puts "  ✅ Backfilled #{Booking.where.not(first_response_at: nil).count} response times"
+
+# Urgent bookings — mark 15% as urgent
+puts "⚡ Marking urgent bookings..."
+Booking.pending.limit((Booking.pending.count * 0.2).to_i).update_all(urgent: true)
+puts "  ✅ #{Booking.where(urgent: true).count} urgent bookings"
+
+# Job requests — customers posting open jobs
+puts "💼 Creating job requests..."
+job_titles = {
+  "Home Cleaning" => [
+    { title: "Deep clean needed before Airbnb guest", desc: "3-bedroom house needs a thorough cleaning before guests arrive Friday. Kitchen and bathrooms are priority." },
+    { title: "Weekly cleaning for 2-bedroom apartment", desc: "Looking for a reliable cleaner for weekly service, preferably Tuesdays." }
+  ],
+  "Plumbing" => [
+    { title: "Kitchen faucet leaking badly", desc: "The faucet under the kitchen sink has been leaking for 2 days. Getting worse. Need someone ASAP." },
+    { title: "Install new water heater", desc: "Old water heater finally died. Need replacement installed, gas line." }
+  ],
+  "Electrical" => [
+    { title: "Install ceiling fan in master bedroom", desc: "Purchased a ceiling fan from Home Depot, need it installed. No existing fixture." }
+  ],
+  "Landscaping" => [
+    { title: "Spring yard cleanup", desc: "Need leaves cleared, bushes trimmed, and flower beds mulched." }
+  ],
+  "Handyman" => [
+    { title: "TV mounting + furniture assembly", desc: "Just moved in. Need 65\" TV mounted and IKEA desk/bookshelf assembled." },
+    { title: "Fix squeaky door and loose cabinet hinges", desc: "Several minor fixes around the house. Probably a 1-2 hour job." }
+  ]
+}
+
+job_titles.each do |cat_name, jobs|
+  category = created_categories.find { |c| c.name == cat_name }
+  next unless category
+
+  jobs.each do |job_data|
+    customer = customers.sample
+    location = cities.sample
+    JobRequest.create!(
+      customer: customer,
+      category: category,
+      title: job_data[:title],
+      description: job_data[:desc],
+      budget_min: rand(50..150),
+      budget_max: rand(200..500),
+      needed_by: rand(1..14).days.from_now,
+      city: location[:city],
+      state: location[:state],
+      zip: location[:zip],
+      status: [:open, :open, :open, :awarded].sample
+    )
+  end
+end
+puts "  ✅ Created #{JobRequest.count} job requests"
+
+# Job request quotes — providers submit quotes
+puts "💬 Creating job quotes..."
+JobRequest.open.each do |jr|
+  relevant_providers = User.provider.joins(:services).where(services: { category_id: jr.category_id }).distinct.limit(rand(2..5))
+  relevant_providers.each do |provider|
+    price = rand(jr.budget_min.to_f..jr.budget_max.to_f).round
+    JobRequestQuote.create!(
+      job_request: jr,
+      provider: provider,
+      price: price,
+      message: [
+        "I can handle this — #{rand(5..15)} years of experience in this area. Available #{rand(1..3)} days from now.",
+        "Happy to help! I typically charge $#{price} for jobs like this. Can bring all materials if needed.",
+        "Seen this exact issue many times. Should be quick. Available tomorrow or this weekend.",
+        "Quality work, fair pricing, and fully insured. Let me know if you'd like to proceed.",
+        "I've done several similar jobs with great reviews. I can come by for a free estimate first if you prefer."
+      ].sample,
+      status: :pending
+    )
+  end
+end
+puts "  ✅ Created #{JobRequestQuote.count} quotes on job requests"
+
+# Referrals — some customers have referred others
+puts "🎁 Creating referrals..."
+referring_customers = customers.sample(10)
+referring_customers.each do |referrer|
+  referrer.update(referral_code: "#{referrer.first_name.parameterize}-#{SecureRandom.hex(3).upcase}") if referrer.referral_code.blank?
+  rand(1..4).times do
+    referee = customers.sample
+    next if referee == referrer
+    next if Referral.exists?(referrer: referrer, referee: referee)
+    Referral.create!(
+      referrer: referrer,
+      referee: referee,
+      status: [:pending, :completed, :rewarded].sample,
+      credit_amount: Referral::CREDIT_AMOUNT
+    )
+  end
+  # Credit balance for referrer
+  rewarded_count = referrer.referrals_sent.where(status: :rewarded).count
+  referrer.update(referral_credit: rewarded_count * Referral::CREDIT_AMOUNT)
+end
+puts "  ✅ Created #{Referral.count} referrals"
+
+# Ensure all users have referral codes
+User.where(referral_code: nil).find_each do |u|
+  u.update(referral_code: "#{(u.first_name || 'user').parameterize}-#{SecureRandom.hex(3).upcase}")
+end
+
+# Expenses on some completed bookings
+puts "💸 Adding expenses to completed bookings..."
+Booking.completed.sample(50).each do |booking|
+  rand(1..3).times do
+    Expense.create!(
+      booking: booking,
+      description: [
+        "Parts from Home Depot", "Fuel for travel", "Cleaning supplies", "Paint and brushes",
+        "Rental equipment", "Contractor assistance", "Materials", "Disposal fee"
+      ].sample,
+      amount: rand(5.0..80.0).round(2),
+      category: Expense::CATEGORIES.sample
+    )
+  end
+end
+puts "  ✅ Created #{Expense.count} expenses"
+
+# Invoices for completed bookings (auto-generated)
+puts "🧾 Generating invoices for completed bookings..."
+Booking.completed.left_joins(:invoice).where(invoices: { id: nil }).find_each do |b|
+  Invoice.create!(
+    booking: b,
+    amount: b.total_price,
+    status: :issued,
+    issued_at: b.updated_at
+  )
+end
+# Mark some as paid
+paid_count = Invoice.count / 2
+Invoice.issued.limit(paid_count).each { |i| i.update(status: :paid, paid_at: rand(1..60).days.ago) }
+puts "  ✅ #{Invoice.count} invoices (#{Invoice.paid.count} paid)"
+
 # Calculate and display some stats
 puts "\n📊 Seed Statistics:"
 puts "  • Users: #{User.count} (#{User.where(user_role: 'admin').count} admins, #{User.where(user_role: 'provider').count} providers, #{User.where(user_role: 'customer').count} customers)"
@@ -383,9 +584,16 @@ puts "  • Plans: #{Plan.count}"
 puts "  • Subscriptions: #{Subscription.count}"
 puts "  • Categories: #{Category.count}"
 puts "  • Services: #{Service.count}"
-puts "  • Bookings: #{Booking.count}"
+puts "  • Service Packages: #{ServicePackage.count}"
+puts "  • Bookings: #{Booking.count} (#{Booking.where(urgent: true).count} urgent)"
 puts "  • Reviews: #{Review.count}"
+puts "  • Favorites: #{Favorite.count}"
+puts "  • Job Requests: #{JobRequest.count} (#{JobRequestQuote.count} quotes)"
+puts "  • Referrals: #{Referral.count}"
+puts "  • Invoices: #{Invoice.count} (#{Invoice.paid.count} paid)"
+puts "  • Expenses: #{Expense.count}"
 puts "  • Verified Providers: #{User.where(user_role: 'provider', verified: true).count}"
+puts "  • Providers on Vacation: #{User.provider.where("vacation_until > ?", Time.current).count}"
 
 puts "\n✅ Seeding completed successfully!"
 puts "\n📝 Sample login credentials:"

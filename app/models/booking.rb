@@ -34,7 +34,8 @@ class Booking < ApplicationRecord
     end
   end
   validates :scheduled_at, :total_price, presence: true
-  validate :within_provider_availability, on: :create
+  validate :within_provider_availability, on: :create, unless: :skip_availability_check
+  attr_accessor :skip_availability_check
 
   def within_provider_availability
     return unless scheduled_at.present? && service.present?
