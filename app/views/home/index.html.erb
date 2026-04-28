@@ -5,161 +5,137 @@
     "painting" => "fa-paint-roller", "pet-care" => "fa-paw", "tutoring" => "fa-graduation-cap",
     "personal-training" => "fa-dumbbell"
   }
-  category_colors = {
-    "home-cleaning" => "sky", "plumbing" => "blue", "electrical" => "amber",
-    "landscaping" => "emerald", "moving" => "violet", "handyman" => "orange",
-    "painting" => "rose", "pet-care" => "teal", "tutoring" => "indigo",
-    "personal-training" => "red"
-  }
 %>
 
 <%# ================================================================
-    HERO — Falling professionals particle rain
+    1. HERO — 60/40 grid, falling balls inside the image area
     ================================================================ %>
-<section class="relative min-h-[100vh] flex items-center overflow-hidden bg-slate-950" id="hero">
-  <%# Ambient gradient glow %>
-  <div class="absolute inset-0">
-    <div class="absolute top-[-20%] left-[20%] w-[500px] h-[500px] bg-orange-500/[0.07] rounded-full blur-[120px] orb-float"></div>
-    <div class="absolute bottom-[-10%] right-[15%] w-[600px] h-[600px] bg-violet-500/[0.05] rounded-full blur-[140px] orb-float-reverse"></div>
-    <div class="absolute top-[30%] right-[40%] w-[300px] h-[300px] bg-sky-500/[0.04] rounded-full blur-[100px] orb-float-slow"></div>
-  </div>
+<section class="bg-cream border-b border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+    <div class="grid lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-16 items-center">
+      <%# LEFT: text %>
+      <div>
+        <div class="eyebrow mb-5 hero-reveal" style="--delay: 0s">find local pros · trusted by <%= number_with_delimiter(@total_customers + @total_providers) %>+</div>
 
-  <%# Dot grid %>
-  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 48px 48px;"></div>
-
-  <%# ===== PARTICLE CANVAS — JS renders falling pro bubbles here ===== %>
-  <div class="absolute inset-0 overflow-hidden pointer-events-none" id="particle-canvas"></div>
-
-  <%# ===== CENTER CONTENT ===== %>
-  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 lg:py-20">
-    <div class="max-w-3xl mx-auto">
-
-      <div class="relative text-center">
-        <%# Eyebrow %>
-        <div class="hero-reveal mb-6 sm:mb-8 inline-flex items-center gap-2.5" style="--delay: 0s">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span class="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55"><%= number_with_delimiter(@total_providers) %> pros available now</span>
-        </div>
-
-        <%# Headline — Fraunces with italic-wonk emphasis %>
-        <h1 class="hero-reveal display text-white" style="--delay: 0.1s">
-          <span class="block text-[clamp(48px,9vw,104px)] leading-[0.95] tracking-[-0.035em]">
-            Local pros,
-          </span>
-          <span class="block text-[clamp(48px,9vw,104px)] leading-[0.95] tracking-[-0.035em] mt-1">
-            <em class="italic-wonk text-terracotta">actually</em> good.
-          </span>
+        <h1 class="display text-ink hero-reveal" style="--delay: 0.05s; font-size: clamp(48px, 8vw, 104px); line-height: 0.95; letter-spacing: -0.035em;">
+          Local pros,<br>
+          <em class="italic-wonk" style="color: #1f4d3a;">actually</em> good.
         </h1>
 
-        <p class="mt-6 sm:mt-8 text-base sm:text-lg text-white/55 max-w-xl mx-auto leading-[1.55] hero-reveal" style="--delay: 0.2s">
-          Verified plumbers, electricians, cleaners and more. Compare prices, read real reviews, book and pay in one place. Done in minutes.
+        <p class="mt-6 max-w-xl text-[17px] sm:text-[19px] leading-[1.5] text-ink-2 hero-reveal" style="--delay: 0.1s">
+          Verified plumbers, electricians, cleaners and more. Compare prices,
+          read real reviews, book and pay in one place.
         </p>
 
-        <%# Search bar — pill, two-field %>
-        <div class="mt-10 max-w-2xl mx-auto hero-reveal" style="--delay: 0.3s">
-          <%= form_tag services_path, method: :get do %>
-            <div class="flex items-center gap-2 bg-white rounded-pill shadow-card-lg p-1.5">
-              <div class="relative flex-1 min-w-0">
-                <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                  <i class="fas fa-search text-ink-4 text-sm"></i>
-                </div>
-                <%= text_field_tag :query, nil,
-                    placeholder: "What do you need help with?",
-                    class: "w-full pl-12 pr-4 py-3.5 bg-transparent text-ink placeholder-ink-4 text-base font-medium focus:outline-none rounded-pill" %>
+        <%# Pill search — what / where / submit %>
+        <div class="mt-8 max-w-xl hero-reveal" style="--delay: 0.15s">
+          <%= form_tag services_path, method: :get, class: "block" do %>
+            <div class="flex items-stretch gap-1 bg-cream-elevated border border-line-strong rounded-pill p-1.5 shadow-card">
+              <div class="flex-1 min-w-0 px-4 py-1 hover:bg-cream-sunken rounded-pill transition-colors flex flex-col justify-center">
+                <label class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 leading-none">What</label>
+                <%= text_field_tag :query, nil, placeholder: "Cleaning, plumbing, lawn…", class: "w-full bg-transparent text-sm font-medium text-ink placeholder-ink-4 focus:outline-none mt-1" %>
               </div>
-              <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-7 py-3.5 rounded-pill font-semibold text-sm transition-colors cursor-pointer whitespace-nowrap inline-flex items-center gap-2">
-                <span class="hidden sm:inline">Find pros</span>
+              <span class="w-px self-stretch bg-line"></span>
+              <div class="flex-1 min-w-0 px-4 py-1 hover:bg-cream-sunken rounded-pill transition-colors flex flex-col justify-center">
+                <label class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 leading-none">Where</label>
+                <%= text_field_tag :location, nil, placeholder: "Your zip or city", class: "w-full bg-transparent text-sm font-medium text-ink placeholder-ink-4 focus:outline-none mt-1" %>
+              </div>
+              <button type="submit" aria-label="Search" class="flex-shrink-0 w-12 h-12 rounded-full bg-ink hover:bg-ink-2 text-cream flex items-center justify-center transition-colors active:translate-y-px">
                 <i class="fas fa-arrow-right text-xs"></i>
               </button>
             </div>
           <% end %>
         </div>
 
-        <%# Category pills %>
-        <div class="mt-7 flex flex-wrap justify-center gap-2 hero-reveal" style="--delay: 0.4s">
-          <% @categories.limit(5).each do |cat| %>
-            <%= link_to services_path(category_id: cat.id),
-                class: "group inline-flex items-center gap-2 px-3.5 py-2 rounded-pill text-[13px] font-medium bg-white/[0.05] border border-white/[0.1] text-white/60 hover:bg-white/[0.1] hover:text-white hover:border-white/[0.18] transition-all duration-200" do %>
-              <i class="fas <%= category_icons[cat.slug] || 'fa-cog' %> text-[10px]"></i>
-              <%= cat.name %>
-            <% end %>
+        <%# Trust strip — 3 items separated by top border %>
+        <div class="mt-10 pt-6 border-t border-line grid grid-cols-3 gap-4 max-w-xl hero-reveal" style="--delay: 0.2s">
+          <% [
+            { icon: "fa-shield-alt", label: "Background-checked" },
+            { icon: "fa-bolt", label: "Same-day available" },
+            { icon: "fa-check", label: "Money-back guarantee" }
+          ].each do |item| %>
+            <div class="flex items-start gap-2.5">
+              <i class="fas <%= item[:icon] %> text-forest text-sm mt-0.5"></i>
+              <span class="text-[13px] text-ink-2 leading-[1.35]"><%= item[:label] %></span>
+            </div>
           <% end %>
         </div>
+      </div>
 
-        <%# Trust strip %>
-        <div class="mt-12 sm:mt-14 hero-reveal max-w-2xl mx-auto" style="--delay: 0.5s">
-          <div class="grid grid-cols-3 gap-px bg-white/[0.08] rounded-pill overflow-hidden">
-            <div class="px-4 py-3 bg-slate-950/40 backdrop-blur flex items-center justify-center gap-2 text-white/55 text-xs">
-              <i class="fas fa-shield-alt text-emerald-400/80 text-[10px]"></i>
-              <span class="font-mono uppercase tracking-[0.08em] text-[10px]">Verified</span>
+      <%# RIGHT: image area — falling balls cascade through %>
+      <div class="relative hero-reveal" style="--delay: 0.1s">
+        <div class="relative rounded-[20px] bg-cream-sunken border border-line overflow-hidden" style="aspect-ratio: 4/5; min-height: 460px;">
+          <%# Particle canvas — falling pro bubbles render here %>
+          <div class="absolute inset-0 overflow-hidden" id="particle-canvas"></div>
+
+          <%# Subtle inner gradient for depth %>
+          <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-cream-sunken/60 pointer-events-none"></div>
+
+          <%# Image label chip (mono) %>
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 bg-cream/90 border border-line px-2.5 py-1 rounded">
+            verified-pros · live
+          </div>
+        </div>
+
+        <%# Floating chip — top-left, breaks bounds %>
+        <div class="absolute top-8 sm:top-12" style="left: -20px;">
+          <div class="bg-cream-elevated border border-line rounded-pill pl-1.5 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
+            <div class="w-8 h-8 rounded-full bg-forest-soft text-forest flex items-center justify-center text-[11px] font-bold">M</div>
+            <div class="leading-tight">
+              <div class="text-[12px] font-semibold text-ink">Maya R.</div>
+              <div class="text-[10px] text-ink-3 flex items-center gap-1">
+                <i class="fas fa-star text-amber-500 text-[8px]"></i>
+                <span>4.96 · cleaning</span>
+              </div>
             </div>
-            <div class="px-4 py-3 bg-slate-950/40 backdrop-blur flex items-center justify-center gap-2 text-white/55 text-xs">
-              <i class="fas fa-bolt text-amber-400/80 text-[10px]"></i>
-              <span class="font-mono uppercase tracking-[0.08em] text-[10px]">Same-day</span>
-            </div>
-            <div class="px-4 py-3 bg-slate-950/40 backdrop-blur flex items-center justify-center gap-2 text-white/55 text-xs">
-              <i class="fas fa-check text-sky-400/80 text-[10px]"></i>
-              <span class="font-mono uppercase tracking-[0.08em] text-[10px]">Guaranteed</span>
+          </div>
+        </div>
+
+        <%# Floating chip — bottom-right, breaks bounds %>
+        <div class="absolute bottom-10 sm:bottom-12" style="right: -28px;">
+          <div class="bg-cream-elevated border border-line rounded-pill pl-3 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: #2d6e4e;"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2" style="background-color: #2d6e4e;"></span>
+            </span>
+            <div class="leading-tight">
+              <div class="text-[12px] font-semibold text-ink">Booked · Tue 2pm</div>
+              <div class="text-[10px] text-ink-3">3hr · $147</div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <%# Bottom fade to cream canvas %>
-  <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-cream via-cream/80 to-transparent z-20"></div>
 </section>
 
 <%# ================================================================
-    MARQUEE TRUST BAR
+    2. CATEGORIES — 4-col grid, swatch + display name + mono count
     ================================================================ %>
-<div class="py-5 bg-slate-900 overflow-hidden">
-  <div class="marquee-wrapper">
-    <div class="marquee-track">
-      <% 2.times do %>
-        <% ["Verified Professionals", "Background Checked", "Secure Payments", "Real Reviews", "Instant Booking", "#{number_with_delimiter(@total_bookings)}+ Bookings Completed", "4.9★ Average Rating", "#{number_with_delimiter(@total_providers)}+ Trusted Pros", "Free to Get Started", "24/7 Support"].each do |item| %>
-          <span class="inline-flex items-center text-sm text-slate-300 font-medium whitespace-nowrap px-8">
-            <span class="w-1.5 h-1.5 rounded-full bg-orange-400 mr-3 flex-shrink-0"></span>
-            <%= item %>
-          </span>
-        <% end %>
+<section class="bg-cream py-14 sm:py-20" id="services">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-end justify-between gap-4 mb-8 sm:mb-10">
+      <div>
+        <div class="eyebrow mb-3">browse · 01</div>
+        <h2 class="display text-[28px] sm:text-[32px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">What do you <em class="italic-wonk" style="color: #1f4d3a;">actually</em> need?</h2>
+      </div>
+      <%= link_to services_path, class: "hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-ink-2 hover:text-ink transition-colors" do %>
+        Browse all <i class="fas fa-arrow-right text-[10px]"></i>
       <% end %>
     </div>
-  </div>
-</div>
 
-<%# ================================================================
-    CATEGORIES — Bento-style icon cards
-    ================================================================ %>
-<section class="py-16 sm:py-24 bg-cream" id="services">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-10 sm:mb-12 gap-4" data-aos="fade-up">
-      <div>
-        <div class="eyebrow mb-3">Browse · 01</div>
-        <h2 class="display text-[28px] sm:text-[40px] text-ink">What do you <em class="italic-wonk text-terracotta">actually</em> need?</h2>
-      </div>
-      <div class="hidden sm:block">
-        <%= link_to services_path, class: "group inline-flex items-center gap-1.5 text-sm font-medium text-ink-2 hover:text-ink transition-colors" do %>
-          Browse all <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" data-aos="fade-up" data-aos-delay="100">
-      <% @categories.each_with_index do |category, i| %>
+    <% cat_swatches = [ "#1f4d3a", "#d96a3a", "#3d3a33", "#6f6a5e", "#1f4d3a", "#d96a3a", "#3d3a33", "#6f6a5e", "#1f4d3a", "#d96a3a" ] %>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      <% @categories.limit(8).each_with_index do |category, i| %>
         <%= link_to services_path(category_id: category.id),
-            class: "group flex flex-col p-5 sm:p-6 rounded-xl border border-line bg-cream-elevated hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200 min-h-[160px]",
-            data: { aos: "fade-up", "aos-delay": i * 30 } do %>
-          <div class="w-9 h-9 rounded-full bg-forest-soft flex items-center justify-center mb-auto">
-            <i class="fas <%= category_icons[category.slug] || 'fa-cog' %> text-forest text-sm"></i>
+            class: "group flex flex-col p-5 sm:p-6 rounded-xl border border-line bg-cream-elevated hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200",
+            style: "min-height: 160px;" do %>
+          <div class="w-9 h-9 rounded-full flex items-center justify-center mb-auto" style="background-color: <%= cat_swatches[i % cat_swatches.length] %>;">
+            <i class="fas <%= category_icons[category.slug] || 'fa-cog' %> text-cream text-[13px]"></i>
           </div>
           <div class="mt-6">
-            <div class="display text-[22px] leading-[1.1] text-ink"><%= category.name %></div>
-            <div class="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3 mt-1.5"><%= category.services.count %> pros</div>
+            <div class="display text-[22px] leading-[1.1] tracking-[-0.01em] text-ink"><%= category.name %></div>
+            <div class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mt-1.5"><%= category.services.count %> pros</div>
           </div>
         <% end %>
       <% end %>
@@ -168,828 +144,67 @@
 </section>
 
 <%# ================================================================
-    FEATURED SERVICES — with animated border + fire emoji
+    3. FEATURED PROVIDERS — sunken band, 4-col grid card
     ================================================================ %>
-<% if @featured_services.any? %>
-<section class="py-16 sm:py-24 bg-cream-sunken">
+<% if @top_providers.any? %>
+<section class="bg-cream-sunken py-14 sm:py-20 border-y border-line">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-10 sm:mb-12 gap-4" data-aos="fade-up">
+    <div class="flex items-end justify-between gap-4 mb-8 sm:mb-10">
       <div>
-        <div class="eyebrow mb-3">Featured · 02</div>
-        <h2 class="display text-[28px] sm:text-[40px] text-ink">Trusted this <em class="italic-wonk text-terracotta">week</em></h2>
+        <div class="eyebrow mb-3">featured · 02</div>
+        <h2 class="display text-[28px] sm:text-[32px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Pros doing it <em class="italic-wonk" style="color: #1f4d3a;">well</em>.</h2>
       </div>
-      <div class="hidden sm:block">
-        <%= link_to services_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-medium bg-ink text-cream hover:bg-ink-2 transition-colors" do %>
-          See all <i class="fas fa-arrow-right text-[10px]"></i>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      <%= render partial: 'services/service_card', collection: @featured_services, as: :service %>
-    </div>
-
-    <div class="text-center mt-8 sm:hidden">
-      <%= link_to services_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-medium bg-ink text-cream" do %>
-        See all services <i class="fas fa-arrow-right text-[10px]"></i>
-      <% end %>
-    </div>
-  </div>
-</section>
-<% end %>
-
-<%# ================================================================
-    TRUST — Bold dark section
-    ================================================================ %>
-<section class="py-24 bg-slate-900 relative overflow-hidden">
-  <%# Ambient glow %>
-  <div class="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-[120px]"></div>
-  <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-violet-500/10 rounded-full blur-[100px]"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-16" data-aos="fade-up">
-      <h2 class="text-3xl sm:text-4xl font-bold text-white tracking-tight">Built for trust</h2>
-      <p class="mt-3 text-slate-400 text-lg">Everything you need to hire with confidence.</p>
-    </div>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" data-aos="fade-up" data-aos-delay="100">
-      <% [
-        { icon: "fa-shield-alt", title: "Verified Pros", desc: "Background-checked, identity-verified, and reviewed by real customers.", color: "emerald" },
-        { icon: "fa-credit-card", title: "Secure Payments", desc: "Stripe-powered. Your money is protected until the job is complete.", color: "sky" },
-        { icon: "fa-star", title: "Real Reviews", desc: "Only customers who completed a booking can leave a review. Zero fakes.", color: "amber" },
-        { icon: "fa-bolt", title: "Instant Booking", desc: "No back-and-forth. Find a pro, pick a time, get confirmed in minutes.", color: "violet" }
-      ].each_with_index do |item, i| %>
-        <div class="group p-6 rounded-2xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.08] hover:border-white/[0.12] transition-all duration-300" data-aos="fade-up" data-aos-delay="<%= 100 + i * 80 %>">
-          <div class="w-12 h-12 rounded-xl bg-<%= item[:color] %>-500/10 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-            <i class="fas <%= item[:icon] %> text-<%= item[:color] %>-400 text-lg"></i>
-          </div>
-          <h3 class="text-base font-bold text-white mb-2"><%= item[:title] %></h3>
-          <p class="text-sm text-slate-400 leading-relaxed"><%= item[:desc] %></p>
-        </div>
+      <%= link_to services_path, class: "hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-medium bg-ink text-cream hover:bg-ink-2 transition-colors active:translate-y-px" do %>
+        See all <i class="fas fa-arrow-right text-[10px]"></i>
       <% end %>
     </div>
 
-    <%# Stats row %>
-    <div class="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-8 pt-12 border-t border-white/[0.06]" data-aos="fade-up" data-aos-delay="200">
-      <% [
-        { value: @total_providers, label: "Providers" },
-        { value: @total_services, label: "Services" },
-        { value: @total_bookings, label: "Bookings" },
-        { value: @total_customers, label: "Customers" }
-      ].each do |stat| %>
-        <div class="text-center">
-          <div class="text-3xl sm:text-4xl font-black text-white counter" data-target="<%= stat[:value] %>">0</div>
-          <div class="text-xs text-slate-500 mt-1 font-medium uppercase tracking-wider"><%= stat[:label] %></div>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    PLATFORM FEATURES — What Radius can do
-    ================================================================ %>
-<section class="py-24 bg-white relative overflow-hidden">
-  <div class="absolute top-1/2 right-0 w-96 h-96 bg-violet-100/20 rounded-full blur-[120px] translate-x-1/2 -translate-y-1/2"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center max-w-2xl mx-auto mb-14" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-violet-600 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-rocket text-[10px]"></i>
-        Full Platform
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Everything you need, built in</h2>
-      <p class="mt-3 text-slate-500 text-lg">Not just a directory — a complete toolkit for service businesses.</p>
-    </div>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5" data-aos="fade-up" data-aos-delay="100">
-      <% [
-        { icon: "fa-file-invoice-dollar", title: "Quoting", desc: "Create professional quotes with line items. Customers approve with one click.", color: "orange" },
-        { icon: "fa-credit-card", title: "Payments", desc: "Secure Stripe checkout. Customers pay when they book. You get paid.", color: "emerald" },
-        { icon: "fa-file-invoice", title: "Invoices", desc: "Auto-generated after job completion. Printable, downloadable, professional.", color: "sky" },
-        { icon: "fa-calendar-alt", title: "Calendar", desc: "Visual month calendar for providers. See your schedule at a glance.", color: "violet" },
-        { icon: "fa-chart-line", title: "Analytics", desc: "Revenue charts, booking trends, top services, review feed. Data-driven.", color: "amber" },
-        { icon: "fa-comments", title: "Messaging", desc: "In-app chat with file sharing, pins, replies. Stay connected.", color: "teal" },
-        { icon: "fa-bell", title: "Reminders", desc: "Automated booking reminders and review follow-ups. Never miss a beat.", color: "rose" },
-        { icon: "fa-shield-alt", title: "Verification", desc: "Document verification, identity checks, verified badges. Real trust.", color: "blue" }
-      ].each_with_index do |feature, i| %>
-        <div class="group p-5 rounded-xl bg-slate-50/50 border border-slate-100 hover:bg-white hover:border-<%= feature[:color] %>-200 hover:shadow-lg hover:shadow-<%= feature[:color] %>-500/[0.05] hover:-translate-y-0.5 transition-all duration-300" data-aos="fade-up" data-aos-delay="<%= 100 + i * 50 %>">
-          <div class="w-10 h-10 rounded-xl bg-<%= feature[:color] %>-50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-            <i class="fas <%= feature[:icon] %> text-<%= feature[:color] %>-500 text-sm"></i>
-          </div>
-          <h3 class="text-sm font-bold text-slate-900 mb-1"><%= feature[:title] %></h3>
-          <p class="text-xs text-slate-500 leading-relaxed"><%= feature[:desc] %></p>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    FEATURE SHOWCASE — Visual mockups of key features
-    ================================================================ %>
-<section class="py-24 bg-slate-950 relative overflow-hidden">
-  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px;"></div>
-  <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-500/[0.08] rounded-full blur-[120px] -translate-y-1/2"></div>
-  <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-violet-500/[0.06] rounded-full blur-[100px] translate-y-1/2"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-16" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/70 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-sparkles text-orange-400 text-[10px]"></i>What's New
-      </div>
-      <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">More than a marketplace</h2>
-      <p class="mt-4 text-slate-400 text-lg max-w-2xl mx-auto">We just shipped 40+ features that no other platform has. Here's what sets Radius apart.</p>
-    </div>
-
-    <%# Feature mockup grid — 4 col layout with different sizes %>
-    <div class="grid lg:grid-cols-6 gap-5" data-aos="fade-up" data-aos-delay="100">
-
-      <%# 1. Website Builder — LARGE LEFT %>
-      <div class="lg:col-span-4 bg-gradient-to-br from-white/[0.04] to-white/[0.02] border border-white/[0.08] rounded-2xl p-8 relative overflow-hidden group hover:border-white/[0.15] transition-all">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-violet-500/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <div class="relative">
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-bold uppercase tracking-wider mb-4">
-            <i class="fas fa-globe text-[10px]"></i>Website Builder
-          </div>
-          <h3 class="text-2xl font-black text-white mb-2">Your own branded site</h3>
-          <p class="text-sm text-slate-400 mb-6 max-w-sm">Every provider gets a custom mini-site at <code class="text-xs font-mono text-orange-400">/pros/your-name</code>. Pick a theme, your colors, your branding.</p>
-
-          <%# Mock browser window %>
-          <div class="bg-slate-900 rounded-xl border border-white/[0.06] overflow-hidden shadow-2xl">
-            <div class="flex items-center gap-1.5 px-3 py-2 bg-slate-950 border-b border-white/[0.06]">
-              <div class="w-2.5 h-2.5 rounded-full bg-red-500/60"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-amber-500/60"></div>
-              <div class="w-2.5 h-2.5 rounded-full bg-emerald-500/60"></div>
-              <div class="ml-2 flex-1 text-[10px] text-slate-500 font-mono truncate">radius.app/pros/johns-plumbing</div>
-            </div>
-            <div class="bg-gradient-to-br from-slate-800 via-slate-900 to-black p-6 min-h-[180px] relative">
-              <div class="absolute inset-0" style="background-image: radial-gradient(circle at 70% 30%, rgba(249,115,22,0.3), transparent 50%);"></div>
-              <div class="relative">
-                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/10 text-[9px] font-bold text-white mb-3">
-                  <div class="w-1 h-1 rounded-full bg-emerald-400"></div>Verified
-                </div>
-                <div class="text-xl font-black text-white leading-tight">John's Plumbing Co.</div>
-                <div class="text-xs text-slate-400 mt-1">Trusted plumbers since 2003</div>
-                <div class="mt-4 flex gap-2">
-                  <div class="px-3 py-1.5 rounded-lg bg-orange-500 text-white text-[10px] font-bold">Book Now</div>
-                  <div class="px-3 py-1.5 rounded-lg bg-white/10 text-white text-[10px] font-bold">Contact</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <%# 2. Stripe Payouts — RIGHT TALL %>
-      <div class="lg:col-span-2 bg-gradient-to-br from-emerald-500/[0.08] to-white/[0.02] border border-emerald-500/[0.15] rounded-2xl p-7 group hover:border-emerald-500/[0.3] transition-all">
-        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-4">
-          <i class="fas fa-dollar-sign text-[10px]"></i>Payouts
-        </div>
-        <h3 class="text-xl font-black text-white mb-2">Direct to your bank</h3>
-
-        <%# Mock payout card %>
-        <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl p-5 text-white mt-6 shadow-xl">
-          <div class="text-[10px] font-bold uppercase tracking-widest opacity-80">This Month</div>
-          <div class="text-3xl font-black mt-1">$4,287<span class="text-lg opacity-60">.50</span></div>
-          <div class="flex items-center gap-1 mt-2 text-[10px] opacity-90">
-            <i class="fas fa-arrow-up"></i>+$642 vs last month
-          </div>
-          <div class="mt-4 pt-3 border-t border-white/20 text-[10px] opacity-80">
-            Next payout: <span class="font-bold">Tomorrow, 9am</span>
-          </div>
-        </div>
-        <p class="text-xs text-slate-500 mt-5">Stripe Connect handles it. 90/10 split, next-day deposits.</p>
-      </div>
-
-      <%# 3. Gift Cards %>
-      <div class="lg:col-span-2 bg-gradient-to-br from-violet-500/[0.08] to-white/[0.02] border border-violet-500/[0.15] rounded-2xl p-7 group hover:border-violet-500/[0.3] transition-all">
-        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-[10px] font-bold uppercase tracking-wider mb-4">
-          <i class="fas fa-gift text-[10px]"></i>Gift Cards
-        </div>
-        <h3 class="text-xl font-black text-white mb-2">Give services</h3>
-
-        <%# Mock gift card %>
-        <div class="relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-pink-600 rounded-xl p-5 text-white mt-6 shadow-xl rotate-[-2deg]">
-          <div class="absolute top-1 right-1 opacity-20"><i class="fas fa-gift text-5xl"></i></div>
-          <div class="relative">
-            <div class="text-[9px] font-bold uppercase tracking-widest opacity-80">Radius</div>
-            <div class="text-2xl font-black mt-1">$100.00</div>
-            <div class="text-[10px] font-mono mt-3 opacity-90">A8F4-2B9D-7C3E</div>
-          </div>
-        </div>
-        <p class="text-xs text-slate-500 mt-5">$25 to $500. Redeem for any service.</p>
-      </div>
-
-      <%# 4. Reverse Marketplace — LARGE %>
-      <div class="lg:col-span-4 bg-gradient-to-br from-orange-500/[0.08] to-white/[0.02] border border-orange-500/[0.15] rounded-2xl p-8 relative overflow-hidden group hover:border-orange-500/[0.3] transition-all">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        <div class="relative">
-          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[10px] font-bold uppercase tracking-wider mb-4">
-            <i class="fas fa-bullhorn text-[10px]"></i>Reverse Marketplace
-          </div>
-          <h3 class="text-2xl font-black text-white mb-2">Pros come to you</h3>
-          <p class="text-sm text-slate-400 mb-6 max-w-sm">Post what you need. Verified pros submit quotes. Pick the best one.</p>
-
-          <%# Mock job request with quotes %>
-          <div class="space-y-2">
-            <div class="bg-white/[0.04] border border-white/[0.08] rounded-xl p-4">
-              <div class="flex items-start justify-between">
-                <div>
-                  <div class="text-xs font-bold text-white">Kitchen sink leaking</div>
-                  <div class="text-[10px] text-slate-500 mt-0.5">Posted 2h ago · Budget $100-250</div>
-                </div>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-400">Open</span>
-              </div>
-            </div>
-            <% [
-              { name: "James R.", rating: "4.9", price: "$120", msg: "Can be there today, 20+ years exp." },
-              { name: "Maria L.", rating: "5.0", price: "$145", msg: "Available tomorrow morning." },
-              { name: "David K.", rating: "4.8", price: "$95", msg: "Cheapest fix — I'll bring parts." }
-            ].each do |q| %>
-              <div class="bg-white/[0.02] border border-white/[0.06] rounded-xl p-3 flex items-center gap-3 ml-6">
-                <div class="w-7 h-7 rounded-lg bg-slate-700 flex items-center justify-center text-[10px] font-bold text-white"><%= q[:name][0] %></div>
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-white"><%= q[:name] %></span>
-                    <span class="text-[9px] text-amber-400"><i class="fas fa-star"></i> <%= q[:rating] %></span>
-                  </div>
-                  <div class="text-[10px] text-slate-500 truncate"><%= q[:msg] %></div>
-                </div>
-                <div class="text-sm font-black text-white"><%= q[:price] %></div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <% @top_providers.first(4).each do |provider| %>
+        <%= link_to provider_path(provider), class: "group block bg-cream-elevated rounded-xl border border-line overflow-hidden hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200" do %>
+          <%# Image area — striped placeholder or photo %>
+          <div class="relative aspect-[4/5]">
+            <% if provider.profile_picture.attached? %>
+              <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover" %>
+            <% else %>
+              <div class="absolute inset-0" style="background: repeating-linear-gradient(135deg, #d8d2c4 0px, #d8d2c4 1px, #efeae0 1px, #efeae0 9px);"></div>
+              <div class="absolute inset-0 flex items-center justify-center">
+                <span class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 bg-cream border border-line px-2 py-1 rounded"><%= provider.display_name.split(" ").first.downcase %>-1.jpg · main</span>
               </div>
             <% end %>
-          </div>
-        </div>
-      </div>
-
-      <%# 5. Calendar w/ DnD %>
-      <div class="lg:col-span-3 bg-gradient-to-br from-sky-500/[0.08] to-white/[0.02] border border-sky-500/[0.15] rounded-2xl p-7 group hover:border-sky-500/[0.3] transition-all">
-        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-[10px] font-bold uppercase tracking-wider mb-4">
-          <i class="fas fa-calendar text-[10px]"></i>Visual Calendar
-        </div>
-        <h3 class="text-xl font-black text-white mb-1">Drag. Drop. Reschedule.</h3>
-        <p class="text-xs text-slate-500 mb-5">Move bookings between days with your mouse. No forms.</p>
-
-        <%# Mock mini calendar %>
-        <div class="bg-slate-900 rounded-xl border border-white/[0.06] p-4">
-          <div class="grid grid-cols-7 gap-1 mb-2">
-            <% %w[S M T W T F S].each do |d| %>
-              <div class="text-center text-[9px] font-bold text-slate-500"><%= d %></div>
+            <%# Top-rated badge overlay %>
+            <% if provider.average_rating >= 4.8 %>
+              <div class="absolute top-3 left-3 bg-cream-elevated border border-line rounded-pill px-2.5 py-1 flex items-center gap-1.5 shadow-card">
+                <i class="fas fa-star text-amber-500 text-[9px]"></i>
+                <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink">top-rated</span>
+              </div>
             <% end %>
+            <%# Favorite icon overlay %>
+            <div class="absolute top-3 right-3 w-8 h-8 rounded-full bg-cream-elevated/90 backdrop-blur-sm border border-line flex items-center justify-center hover:bg-cream-elevated transition-colors">
+              <i class="far fa-heart text-ink-3 text-xs"></i>
+            </div>
           </div>
-          <div class="grid grid-cols-7 gap-1">
-            <% (1..21).each do |day| %>
-              <div class="aspect-square rounded text-[9px] text-slate-500 flex flex-col items-start p-1 <%= day == 15 ? 'bg-orange-500/20 border border-orange-500/40' : 'bg-white/[0.03]' %>">
-                <%= day %>
-                <% if day == 12 %>
-                  <div class="mt-0.5 w-full h-1 rounded bg-emerald-400"></div>
-                <% elsif day == 15 %>
-                  <div class="mt-0.5 w-full h-1 rounded bg-amber-400 animate-pulse"></div>
-                  <div class="mt-0.5 w-full h-1 rounded bg-sky-400"></div>
-                <% elsif day == 17 %>
-                  <div class="mt-0.5 w-full h-1 rounded bg-emerald-400"></div>
+
+          <div class="p-4">
+            <div class="display text-[17px] leading-[1.2] tracking-[-0.01em] text-ink truncate"><%= provider.business_name.presence || provider.display_name %></div>
+            <div class="text-[13px] text-ink-3 mt-1 truncate">
+              <% primary_service = provider.services.first %>
+              <%= primary_service&.title || (primary_service&.category&.name + " pro") || "Local pro" %>
+            </div>
+            <div class="mt-3 flex items-center justify-between">
+              <div class="flex items-center gap-1.5 text-[13px] text-ink-2">
+                <i class="fas fa-star text-amber-500 text-[10px]"></i>
+                <span class="font-medium"><%= provider.average_rating > 0 ? provider.average_rating : "New" %></span>
+                <% if provider.total_reviews > 0 %>
+                  <span class="text-ink-3">(<%= provider.total_reviews %>)</span>
                 <% end %>
               </div>
-            <% end %>
-          </div>
-        </div>
-      </div>
-
-      <%# 6. Loyalty Tiers %>
-      <div class="lg:col-span-3 bg-gradient-to-br from-amber-500/[0.08] to-white/[0.02] border border-amber-500/[0.15] rounded-2xl p-7 group hover:border-amber-500/[0.3] transition-all">
-        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-bold uppercase tracking-wider mb-4">
-          <i class="fas fa-crown text-[10px]"></i>Loyalty Tiers
-        </div>
-        <h3 class="text-xl font-black text-white mb-1">The more you book, the more you save</h3>
-        <p class="text-xs text-slate-500 mb-5">Automatic tier upgrades. Better providers, perks, and rewards.</p>
-
-        <%# Mock tier progression %>
-        <div class="space-y-2">
-          <% [
-            { name: "Bronze", color: "orange", min: "0+", icon: "fa-star", current: false },
-            { name: "Silver", color: "slate", min: "5+", icon: "fa-award", current: false },
-            { name: "Gold", color: "amber", min: "20+", icon: "fa-medal", current: true },
-            { name: "Platinum", color: "violet", min: "50+", icon: "fa-crown", current: false }
-          ].each do |tier| %>
-            <div class="flex items-center gap-3 p-2.5 rounded-lg <%= tier[:current] ? 'bg-amber-500/20 border border-amber-500/40' : 'bg-white/[0.03]' %>">
-              <div class="w-7 h-7 rounded-full bg-<%= tier[:color] %>-500/20 flex items-center justify-center">
-                <i class="fas <%= tier[:icon] %> text-<%= tier[:color] %>-400 text-[10px]"></i>
-              </div>
-              <div class="flex-1">
-                <div class="text-xs font-bold text-white"><%= tier[:name] %><% if tier[:current] %> <span class="text-[9px] text-amber-400 ml-1">← You</span><% end %></div>
-              </div>
-              <span class="text-[10px] text-slate-500"><%= tier[:min] %> bookings</span>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-
-    <%# Feature count tagline %>
-    <div class="mt-14 text-center" data-aos="fade-up" data-aos-delay="200">
-      <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3">Plus all these essentials</p>
-      <div class="flex flex-wrap justify-center gap-2 max-w-4xl mx-auto">
-        <% [
-          "Stripe Payments", "Automated Invoicing", "Real-time Chat", "Provider Verification",
-          "Reviews & Ratings", "Booking Reminders", "Recurring Bookings", "Deposits", "Tipping",
-          "Expense Tracking", "Team Management", "CSV Exports", "Dispute Resolution",
-          "Referral Program", "Favorites", "Map View", "Vacation Mode", "Job Requests",
-          "PWA Install", "Push Notifications", "Analytics Dashboard", "CRM Campaigns"
-        ].each do |f| %>
-          <span class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-white/[0.04] border border-white/[0.08] text-slate-300"><%= f %></span>
-        <% end %>
-      </div>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    TOP PROVIDERS — Ranked cards with visual flair
-    ================================================================ %>
-<% if @top_providers.present? && @top_providers.any? %>
-<%
-  rank_styles = [
-    { ring: "ring-amber-200", glow: "shadow-amber-500/10", badge_bg: "bg-gradient-to-br from-amber-400 to-orange-500", badge_shadow: "shadow-amber-500/30", label: "1st", emoji: "fa-crown" },
-    { ring: "ring-slate-200", glow: "shadow-slate-500/5", badge_bg: "bg-gradient-to-br from-slate-300 to-slate-400", badge_shadow: "shadow-slate-400/20", label: "2nd", emoji: "fa-medal" },
-    { ring: "ring-orange-200", glow: "shadow-orange-500/5", badge_bg: "bg-gradient-to-br from-orange-300 to-orange-500", badge_shadow: "shadow-orange-400/20", label: "3rd", emoji: "fa-medal" },
-    { ring: "ring-slate-100", glow: "", badge_bg: "bg-slate-200", badge_shadow: "", label: "4th", emoji: "fa-award" }
-  ]
-%>
-<section class="py-24 bg-white relative overflow-hidden">
-  <div class="absolute bottom-0 left-0 w-96 h-96 bg-amber-100/30 rounded-full blur-[120px] translate-y-1/2"></div>
-
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-14" data-aos="fade-up">
-      <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wider mb-4">
-          <i class="fas fa-trophy text-amber-500 text-[10px]"></i>
-          Leaderboard
-        </div>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Top rated this month</h2>
-        <p class="mt-2 text-slate-500">Highest rated pros based on verified reviews.</p>
-      </div>
-      <div class="hidden sm:block">
-        <%= link_to leaderboard_index_path, class: "group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900 transition-all" do %>
-          Full leaderboard <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <% @top_providers.each_with_index do |provider, index| %>
-        <% rs = rank_styles[index] || rank_styles[3] %>
-        <%= link_to leaderboard_path(provider), class: "tilt-card group block bg-white rounded-2xl border border-slate-100 p-6 transition-all duration-300 relative overflow-hidden", data: { aos: "fade-up", "aos-delay": index * 80 } do %>
-          <%# Rank badge %>
-          <div class="absolute top-4 right-4 w-8 h-8 rounded-full <%= rs[:badge_bg] %> flex items-center justify-center shadow-lg <%= rs[:badge_shadow] %>">
-            <i class="fas <%= rs[:emoji] %> text-white text-[10px]"></i>
-          </div>
-
-          <%# Avatar %>
-          <div class="flex justify-center mb-4">
-            <div class="relative">
-              <% if provider.profile_picture.attached? %>
-                <%= image_tag provider.profile_picture, class: "w-20 h-20 rounded-2xl object-cover ring-4 #{rs[:ring]} shadow-lg #{rs[:glow]}" %>
-              <% else %>
-                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center text-2xl font-black text-slate-300 ring-4 <%= rs[:ring] %> shadow-lg <%= rs[:glow] %>">
-                  <%= provider.display_name.first.upcase %>
-                </div>
-              <% end %>
-            </div>
-          </div>
-
-          <%# Info %>
-          <div class="text-center">
-            <h3 class="font-bold text-slate-900 group-hover:text-orange-600 transition-colors text-sm truncate"><%= provider.business_name || provider.full_name %></h3>
-
-            <div class="flex items-center justify-center gap-1 mt-2">
-              <% 5.times do |i| %><i class="fas fa-star text-xs <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
-              <span class="text-sm font-black text-slate-900 ml-1.5"><%= provider.average_rating %></span>
-            </div>
-
-            <div class="text-xs text-slate-400 mt-1.5"><%= provider.total_completed_bookings %> jobs completed</div>
-
-            <% badge = provider.provider_badge %>
-            <% if badge && badge[:name] != "New" %>
-              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold bg-<%= badge[:color] %>-50 text-<%= badge[:color] %>-700 mt-3">
-                <i class="<%= badge[:icon] %> mr-1"></i><%= badge[:name] %>
-              </span>
-            <% end %>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
-</section>
-<% end %>
-
-<%# ================================================================
-    TESTIMONIALS — Featured review + grid
-    ================================================================ %>
-<section class="py-24 bg-slate-50/50 relative overflow-hidden">
-  <div class="absolute top-0 left-1/2 w-96 h-96 bg-violet-100/30 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2"></div>
-
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-violet-600 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-heart text-[10px]"></i>
-        Customer love
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Loved by thousands</h2>
-      <p class="mt-2 text-slate-500">Real reviews from real customers. Zero fluff.</p>
-    </div>
-
-    <%# Featured review — large, highlighted %>
-    <div class="mb-8" data-aos="fade-up" data-aos-delay="50">
-      <div class="tilt-card bg-white rounded-2xl border border-slate-100 p-8 sm:p-10 relative overflow-hidden">
-        <div class="absolute top-6 right-8 text-8xl font-serif text-slate-100 leading-none select-none">&ldquo;</div>
-        <div class="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
-          <div>
-            <div class="flex gap-0.5 mb-4">
-              <% 5.times do %><i class="fas fa-star text-amber-400"></i><% end %>
-            </div>
-            <p class="text-slate-700 text-lg sm:text-xl leading-relaxed font-medium">"I was skeptical at first, but Radius completely changed how I find help for my home. The plumber I booked was at my door in 2 hours — on a Sunday. Verified, professional, and fairly priced. I've now booked 6 different pros through the platform."</p>
-          </div>
-          <div class="flex md:flex-col items-center gap-4 md:text-center">
-            <img src="https://i.pravatar.cc/96?u=featured1" alt="" class="w-16 h-16 rounded-2xl ring-4 ring-amber-100 shadow-lg">
-            <div>
-              <div class="font-bold text-slate-900">Sarah Johnson</div>
-              <div class="text-sm text-slate-400">Homeowner</div>
-              <div class="text-xs text-amber-600 font-semibold mt-1">6 bookings</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <%# Secondary reviews %>
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-aos="fade-up" data-aos-delay="100">
-      <% [
-        { name: "Mike C.", role: "Business Owner", review: "We use Radius for all our office maintenance. The providers are consistently reliable and the pricing is transparent. Saved us hours of calling around.", rating: 5, avatar: "https://i.pravatar.cc/64?u=mike2", bookings: "12 bookings" },
-        { name: "Emily R.", role: "Property Manager", review: "Managing 8 rental properties used to be a nightmare. Now all my contractors are in one place — scheduling, payments, everything.", rating: 5, avatar: "https://i.pravatar.cc/64?u=emily3", bookings: "23 bookings" },
-        { name: "David K.", role: "New Homeowner", review: "Just bought my first house and needed everything done. Radius made it easy to find a painter, electrician, and landscaper — all vetted.", rating: 4, avatar: "https://i.pravatar.cc/64?u=david4", bookings: "4 bookings" }
-      ].each do |t| %>
-        <div class="tilt-card group bg-white rounded-2xl border border-slate-100 p-6 transition-all duration-300">
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex gap-0.5">
-              <% t[:rating].times do %><i class="fas fa-star text-amber-400 text-sm"></i><% end %>
-              <% (5 - t[:rating]).times do %><i class="fas fa-star text-slate-200 text-sm"></i><% end %>
-            </div>
-            <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Verified</span>
-          </div>
-          <p class="text-slate-600 text-sm leading-relaxed mb-5">"<%= t[:review] %>"</p>
-          <div class="flex items-center justify-between pt-4 border-t border-slate-50">
-            <div class="flex items-center gap-3">
-              <img src="<%= t[:avatar] %>" alt="" class="w-9 h-9 rounded-full ring-2 ring-slate-100">
-              <div>
-                <div class="text-sm font-bold text-slate-900"><%= t[:name] %></div>
-                <div class="text-xs text-slate-400"><%= t[:role] %></div>
-              </div>
-            </div>
-            <span class="text-[10px] text-slate-400 font-medium"><%= t[:bookings] %></span>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    NEARBY PROVIDERS
-    ================================================================ %>
-<section class="py-20 bg-white" id="nearby-section">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10"><h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">Providers near you</h2><p class="mt-2 text-slate-500 text-lg">Within <span class="font-semibold text-slate-700" id="nearby-radius">25</span> miles.</p></div>
-    <div id="nearby-prompt"><div class="text-center py-6"><button onclick="nearbyDetect()" class="group inline-flex items-center px-8 py-4 rounded-xl text-sm font-semibold text-white bg-slate-900 hover:bg-slate-800 transition-all cursor-pointer hover:shadow-lg hover:shadow-slate-900/20 hover:scale-[1.02] active:scale-[0.98]"><i class="fas fa-location-arrow mr-2.5 text-xs group-hover:rotate-45 transition-transform duration-300"></i>Detect My Location</button><p class="text-slate-400 text-xs mt-3">We'll find verified pros near you</p></div></div>
-    <div id="nearby-loading" class="hidden"><div class="flex flex-col items-center py-10"><div class="w-10 h-10 border-2 border-slate-200 border-t-slate-900 rounded-full animate-spin mb-3"></div><p class="text-slate-500 text-sm">Finding providers...</p></div></div>
-    <div id="nearby-error" class="hidden"><div class="text-center py-6"><p class="text-slate-600 text-sm mb-3" id="nearby-error-msg"></p><button onclick="nearbyDetect()" class="text-sm font-semibold text-orange-600 hover:text-orange-700 cursor-pointer">Try again <i class="fas fa-redo text-xs ml-1"></i></button></div></div>
-    <div id="nearby-results" class="hidden"><div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" id="nearby-grid"></div><div class="text-center mt-8"><%= link_to leaderboard_index_path, class: "group text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors" do %>View all <i class="fas fa-arrow-right text-xs ml-1 group-hover:translate-x-1 transition-transform"></i><% end %></div></div>
-  </div>
-</section>
-
-<%# ================================================================
-    BUILT FOR BOTH SIDES — Customer + Provider flow
-    ================================================================ %>
-<section class="py-24 bg-white relative overflow-hidden">
-  <div class="absolute top-0 left-0 w-96 h-96 bg-sky-100/30 rounded-full blur-[120px] -translate-x-1/3 -translate-y-1/3"></div>
-  <div class="absolute bottom-0 right-0 w-96 h-96 bg-orange-100/30 rounded-full blur-[120px] translate-x-1/3 translate-y-1/3"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-600 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-arrows-left-right text-[10px]"></i>
-        Two Sides, One Platform
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Built for everyone</h2>
-      <p class="mt-3 text-slate-500 text-lg max-w-2xl mx-auto">Whether you need help or you provide it, Radius works for you.</p>
-    </div>
-
-    <div class="grid lg:grid-cols-2 gap-6">
-      <%# Customer side %>
-      <div class="relative group" data-aos="fade-right">
-        <div class="absolute inset-0 bg-gradient-to-br from-sky-50 to-blue-50 rounded-2xl"></div>
-        <div class="relative p-8 sm:p-10 rounded-2xl border border-sky-100 h-full">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-12 h-12 rounded-xl bg-sky-500 flex items-center justify-center shadow-lg shadow-sky-500/30">
-              <i class="fas fa-user text-white text-lg"></i>
-            </div>
-            <div>
-              <div class="text-xs font-bold text-sky-600 uppercase tracking-wider">For Customers</div>
-              <div class="text-xl font-black text-slate-900">Need help with something?</div>
-            </div>
-          </div>
-
-          <div class="space-y-3 mb-8">
-            <% [
-              { icon: "fa-search", text: "Search verified pros by category, location, and price" },
-              { icon: "fa-comments", text: "Chat directly with providers before you book" },
-              { icon: "fa-credit-card", text: "Pay securely with Stripe — protected until job is done" },
-              { icon: "fa-bell", text: "Get reminders, invoices, and review your provider" }
-            ].each do |item| %>
-              <div class="flex items-start gap-3">
-                <div class="flex-shrink-0 w-6 h-6 rounded-md bg-white flex items-center justify-center mt-0.5">
-                  <i class="fas <%= item[:icon] %> text-sky-500 text-[10px]"></i>
-                </div>
-                <span class="text-sm text-slate-700"><%= item[:text] %></span>
-              </div>
-            <% end %>
-          </div>
-
-          <%= link_to user_signed_in? ? services_path : new_user_registration_path(role: 'customer'),
-              class: "btn-shine inline-flex items-center px-6 py-3 rounded-xl text-sm font-bold bg-sky-500 hover:bg-sky-600 text-white transition-all hover:shadow-lg hover:shadow-sky-500/30" do %>
-            <%= user_signed_in? ? 'Browse Services' : 'Sign Up Free' %>
-            <i class="fas fa-arrow-right ml-2 text-xs"></i>
-          <% end %>
-        </div>
-      </div>
-
-      <%# Provider side %>
-      <div class="relative group" data-aos="fade-left">
-        <div class="absolute inset-0 bg-gradient-to-br from-orange-50 to-rose-50 rounded-2xl"></div>
-        <div class="relative p-8 sm:p-10 rounded-2xl border border-orange-100 h-full">
-          <div class="flex items-center gap-3 mb-6">
-            <div class="w-12 h-12 rounded-xl bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/30">
-              <i class="fas fa-briefcase text-white text-lg"></i>
-            </div>
-            <div>
-              <div class="text-xs font-bold text-orange-600 uppercase tracking-wider">For Pros</div>
-              <div class="text-xl font-black text-slate-900">Run your business?</div>
-            </div>
-          </div>
-
-          <div class="space-y-3 mb-8">
-            <% [
-              { icon: "fa-magnifying-glass-location", text: "Get discovered by customers in your area" },
-              { icon: "fa-file-invoice-dollar", text: "Send quotes, accept bookings, generate invoices" },
-              { icon: "fa-calendar-alt", text: "Visual calendar, analytics, and CRM tools built in" },
-              { icon: "fa-chart-line", text: "Track revenue, build your reputation, grow your biz" }
-            ].each do |item| %>
-              <div class="flex items-start gap-3">
-                <div class="flex-shrink-0 w-6 h-6 rounded-md bg-white flex items-center justify-center mt-0.5">
-                  <i class="fas <%= item[:icon] %> text-orange-500 text-[10px]"></i>
-                </div>
-                <span class="text-sm text-slate-700"><%= item[:text] %></span>
-              </div>
-            <% end %>
-          </div>
-
-          <%= link_to user_signed_in? && current_user.provider? ? provider_dashboard_path : new_user_registration_path(role: 'provider'),
-              class: "btn-shine inline-flex items-center px-6 py-3 rounded-xl text-sm font-bold bg-orange-500 hover:bg-orange-600 text-white transition-all hover:shadow-lg hover:shadow-orange-500/30" do %>
-            <%= user_signed_in? && current_user.provider? ? 'Go to Dashboard' : 'Become a Provider' %>
-            <i class="fas fa-arrow-right ml-2 text-xs"></i>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    PRICING — Provider plans
-    ================================================================ %>
-<section class="py-24 bg-slate-50/50 relative overflow-hidden">
-  <div class="absolute top-0 right-1/4 w-72 h-72 bg-orange-100/40 rounded-full blur-[100px]"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-tag text-[10px]"></i>
-        Provider Pricing
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Simple plans, no surprises</h2>
-      <p class="mt-3 text-slate-500 text-lg max-w-xl mx-auto">Free for customers. Providers choose a plan that fits.</p>
-    </div>
-
-    <% if @plans.present? && @plans.any? %>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-        <% @plans.each_with_index do |plan, i| %>
-          <% is_popular = plan.name == "Professional" %>
-          <div class="relative <%= is_popular ? 'lg:-mt-4 lg:mb-4' : '' %>">
-            <% if is_popular %>
-              <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-orange-500 text-white shadow-lg shadow-orange-500/30 uppercase tracking-wider">Most Popular</span>
-              </div>
-            <% end %>
-            <div class="h-full bg-white rounded-2xl border <%= is_popular ? 'border-orange-300 shadow-xl shadow-orange-500/10' : 'border-slate-100 shadow-sm' %> p-7 hover:shadow-lg transition-all">
-              <div class="mb-5">
-                <h3 class="text-lg font-black text-slate-900"><%= plan.name %></h3>
-                <p class="text-xs text-slate-400 mt-1">
-                  <%= case plan.name
-                      when "Free" then "Get started, no commitment"
-                      when "Professional" then "For growing service pros"
-                      when "Business" then "For established businesses"
-                      end %>
-                </p>
-              </div>
-
-              <div class="mb-6 pb-6 border-b border-slate-100">
-                <div class="flex items-baseline">
-                  <span class="text-4xl font-black text-slate-900">$<%= plan.price.to_i %></span>
-                  <span class="text-sm text-slate-400 ml-1.5">/month</span>
-                </div>
-              </div>
-
-              <ul class="space-y-3 mb-8">
-                <% (plan.features || []).each do |feature| %>
-                  <li class="flex items-start gap-2.5">
-                    <div class="flex-shrink-0 w-4 h-4 rounded-full bg-emerald-50 flex items-center justify-center mt-0.5">
-                      <i class="fas fa-check text-emerald-500 text-[8px]"></i>
-                    </div>
-                    <span class="text-sm text-slate-600"><%= feature %></span>
-                  </li>
-                <% end %>
-              </ul>
-
-              <%= link_to new_user_registration_path(role: 'provider'),
-                  class: "block w-full text-center px-5 py-3 rounded-xl text-sm font-bold transition-all #{is_popular ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-md' : 'bg-slate-100 hover:bg-slate-200 text-slate-900'}" do %>
-                <%= plan.price.to_i == 0 ? 'Start Free' : 'Get Started' %>
+              <% if primary_service&.base_price.to_f > 0 %>
+                <div class="display text-[17px] text-ink">$<%= number_with_precision(primary_service.base_price, precision: 0) %><span class="font-sans text-[11px] text-ink-3 font-normal">/hr</span></div>
               <% end %>
             </div>
           </div>
         <% end %>
-      </div>
-    <% end %>
-
-    <p class="text-center text-sm text-slate-400 mt-10">
-      <i class="fas fa-shield-alt text-emerald-500 mr-1"></i>
-      14-day free trial on paid plans &middot; Cancel anytime &middot; No credit card required
-    </p>
-  </div>
-</section>
-
-<%# ================================================================
-    FAQ — Quick answers
-    ================================================================ %>
-<section class="py-24 bg-white">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-violet-50 border border-violet-100 text-violet-600 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-circle-question text-[10px]"></i>
-        Questions
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Got questions?</h2>
-      <p class="mt-3 text-slate-500 text-lg">Quick answers to common questions.</p>
-    </div>
-
-    <div class="space-y-3" data-aos="fade-up" data-aos-delay="100">
-      <% [
-        { q: "How does Radius work?", a: "Customers search for verified local pros, compare ratings and prices, and book instantly. Pros manage everything from one dashboard — bookings, quotes, invoices, calendar, and analytics." },
-        { q: "Is Radius free for customers?", a: "Completely free. You only pay for the services you book. No subscription, no hidden fees." },
-        { q: "How are providers verified?", a: "Every provider submits business licenses, insurance certificates, and government ID. Our admin team reviews each application before granting verified status." },
-        { q: "How do payments work?", a: "Customers pay securely through Stripe at booking. Funds are released after the job is completed. Card details never touch our servers." },
-        { q: "Can providers send quotes?", a: "Yes. Providers can create detailed quotes with line items, send them to customers, and convert approved quotes to bookings with one click." },
-        { q: "What if I'm not satisfied with the service?", a: "Talk to your provider first — most issues resolve directly. You can also contact our support team. We stand behind every booking." }
-      ].each do |faq| %>
-        <details class="group bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
-          <summary class="flex items-center justify-between cursor-pointer px-6 py-5 text-left">
-            <span class="text-sm font-bold text-slate-900 pr-4"><%= faq[:q] %></span>
-            <span class="flex-shrink-0 w-7 h-7 rounded-lg bg-white group-open:bg-orange-50 flex items-center justify-center transition-colors border border-slate-200 group-open:border-orange-200">
-              <i class="fas fa-chevron-down text-slate-400 group-open:text-orange-500 text-[10px] transition-transform group-open:rotate-180"></i>
-            </span>
-          </summary>
-          <div class="px-6 pb-5">
-            <p class="text-sm text-slate-500 leading-relaxed"><%= faq[:a] %></p>
-          </div>
-        </details>
-      <% end %>
-    </div>
-
-    <div class="text-center mt-10">
-      <p class="text-sm text-slate-500">Still have questions?
-        <%= link_to "Contact us", contact_path, class: "font-semibold text-orange-600 hover:text-orange-700" %>
-        or
-        <%= link_to "see how it works", how_it_works_path, class: "font-semibold text-orange-600 hover:text-orange-700" %>
-      </p>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    PROVIDER CTA — Split layout with image
-    ================================================================ %>
-<section class="py-24 bg-slate-900 relative overflow-hidden">
-  <div class="absolute inset-0">
-    <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/[0.08] rounded-full blur-[120px]"></div>
-    <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-500/[0.06] rounded-full blur-[100px]"></div>
-  </div>
-  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px;"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-      <%# Left: Image with floating stats %>
-      <div class="hidden lg:block relative" data-aos="fade-right">
-        <div class="rounded-2xl overflow-hidden shadow-2xl shadow-black/30">
-          <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80" alt="Service professional" class="w-full h-[480px] object-cover" loading="lazy">
-        </div>
-        <%# Floating stat card %>
-        <div class="absolute -bottom-6 -right-6 glass-card rounded-xl p-4 shadow-xl bg-white/90">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
-              <i class="fas fa-chart-line text-emerald-600 text-sm"></i>
-            </div>
-            <div>
-              <div class="text-lg font-black text-slate-900">+47%</div>
-              <div class="text-xs text-slate-500">avg. revenue growth</div>
-            </div>
-          </div>
-        </div>
-        <%# Floating stat card 2 %>
-        <div class="absolute -top-4 -left-4 glass-card rounded-xl p-4 shadow-xl bg-white/90">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center">
-              <i class="fas fa-users text-amber-600 text-sm"></i>
-            </div>
-            <div>
-              <div class="text-lg font-black text-slate-900"><%= number_with_delimiter(@total_customers) %>+</div>
-              <div class="text-xs text-slate-500">potential customers</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <%# Right: Content %>
-      <div data-aos="fade-left">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider mb-6">
-          <i class="fas fa-rocket text-[10px]"></i>
-          For Professionals
-        </div>
-        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">Grow your business<br>with Radius</h2>
-        <p class="mt-5 text-slate-400 text-lg leading-relaxed">Join <%= number_with_delimiter(@total_providers) %>+ pros who use Radius to find new customers, manage bookings, and build their reputation.</p>
-
-        <div class="mt-8 space-y-4">
-          <% [
-            { icon: "fa-magnifying-glass-location", text: "Get discovered by customers searching your area", color: "sky" },
-            { icon: "fa-file-invoice-dollar", text: "Send professional quotes and get paid via Stripe", color: "emerald" },
-            { icon: "fa-calendar-alt", text: "Calendar, analytics, and booking management built in", color: "amber" },
-            { icon: "fa-chart-line", text: "Revenue tracking, review monitoring, and growth tools", color: "violet" },
-            { icon: "fa-gift", text: "Start free — upgrade only when you're ready", color: "orange" }
-          ].each do |benefit| %>
-            <div class="flex items-center gap-4">
-              <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-<%= benefit[:color] %>-500/10 flex items-center justify-center">
-                <i class="fas <%= benefit[:icon] %> text-<%= benefit[:color] %>-400 text-sm"></i>
-              </div>
-              <span class="text-slate-300 text-sm font-medium"><%= benefit[:text] %></span>
-            </div>
-          <% end %>
-        </div>
-
-        <div class="mt-10 flex flex-wrap gap-4">
-          <% if user_signed_in? && current_user.provider? %>
-            <%= link_to provider_dashboard_path, class: "btn-shine group bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm transition-all hover:shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98]" do %>
-              Go to Dashboard <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-            <% end %>
-          <% elsif !user_signed_in? %>
-            <%= link_to new_user_registration_path(role: 'provider'), class: "btn-shine group bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm transition-all hover:shadow-lg hover:shadow-orange-500/20 hover:scale-[1.02] active:scale-[0.98]" do %>
-              Get Started Free <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-            <% end %>
-            <%= link_to about_path, class: "group text-white/70 hover:text-white px-8 py-4 rounded-xl font-bold text-sm border border-white/10 hover:border-white/30 transition-all" do %>
-              Learn More
-            <% end %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<%# ================================================================
-    FINAL CTA — Clean, confident
-    ================================================================ %>
-<% unless user_signed_in? %>
-<section class="py-24 bg-white relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-b from-white via-white to-orange-50/30"></div>
-  <div class="relative max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
-    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-rose-500 flex items-center justify-center mx-auto mb-8 shadow-xl shadow-orange-500/20">
-      <svg class="w-7 h-7 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-    </div>
-    <h2 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight">Ready to find your pro?</h2>
-    <p class="mt-4 text-slate-500 text-lg">It's free. No credit card required. Takes 30 seconds.</p>
-    <div class="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
-      <%= link_to new_user_registration_path(role: 'customer'), class: "btn-shine group inline-flex items-center justify-center bg-slate-900 hover:bg-slate-800 text-white px-10 py-4 rounded-xl font-bold text-sm transition-all hover:shadow-xl hover:shadow-slate-900/20 hover:scale-[1.02] active:scale-[0.98]" do %>
-        Create Free Account <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-      <% end %>
-      <%= link_to new_user_session_path, class: "group inline-flex items-center justify-center text-slate-600 hover:text-slate-900 px-10 py-4 rounded-xl font-bold text-sm border border-slate-200 hover:border-slate-300 bg-white transition-all" do %>
-        Sign In
       <% end %>
     </div>
   </div>
@@ -997,249 +212,215 @@
 <% end %>
 
 <%# ================================================================
-    STYLES + ANIMATIONS
+    4. HOW IT WORKS — 3-col, italic display numbers, top+bottom border
+    ================================================================ %>
+<section class="bg-cream py-14 sm:py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 sm:mb-10">
+      <div class="eyebrow mb-3">how it works · 03</div>
+      <h2 class="display text-[28px] sm:text-[32px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Three steps. <em class="italic-wonk" style="color: #1f4d3a;">Done</em>.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 border-t border-b border-line">
+      <% [
+        { num: "1", title: "Tell us what you need", body: "Describe the job in a sentence or pick from a category. Takes 30 seconds." },
+        { num: "2", title: "Pick your pro", body: "Compare verified pros, read real reviews, and chat before you commit." },
+        { num: "3", title: "Book and relax", body: "Pay securely through Radius. We hold the funds until the job is done right." }
+      ].each_with_index do |step, i| %>
+        <div class="py-8 sm:py-10 px-2 sm:px-6 <%= 'border-b md:border-b-0 md:border-r' if i < 2 %> <%= 'md:border-r-0' if i == 2 %> border-line">
+          <div class="display italic-wonk text-[56px] leading-none" style="color: #1f4d3a; font-style: italic;"><%= step[:num] %></div>
+          <h3 class="display text-[24px] mt-4 text-ink" style="line-height: 1.1;"><%= step[:title] %></h3>
+          <p class="mt-3 text-[14px] leading-[1.55] text-ink-2 max-w-sm"><%= step[:body] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
+    5. RECENTLY ACTIVE — repeats grid card layout
+    ================================================================ %>
+<% if @top_providers.length > 4 %>
+<section class="bg-cream pb-14 sm:pb-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 sm:mb-10">
+      <div class="eyebrow mb-3">recently active · 04</div>
+      <h2 class="display text-[28px] sm:text-[32px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Online <em class="italic-wonk" style="color: #1f4d3a;">now</em>.</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <% @top_providers[4..7].to_a.each do |provider| %>
+        <%= link_to provider_path(provider), class: "group block bg-cream-elevated rounded-xl border border-line overflow-hidden hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200" do %>
+          <div class="relative aspect-[4/5]">
+            <% if provider.profile_picture.attached? %>
+              <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover" %>
+            <% else %>
+              <div class="absolute inset-0" style="background: repeating-linear-gradient(135deg, #d8d2c4 0px, #d8d2c4 1px, #efeae0 1px, #efeae0 9px);"></div>
+            <% end %>
+          </div>
+          <div class="p-4">
+            <div class="display text-[17px] leading-[1.2] text-ink truncate"><%= provider.business_name.presence || provider.display_name %></div>
+            <div class="flex items-center gap-1.5 text-[13px] text-ink-2 mt-2">
+              <i class="fas fa-star text-amber-500 text-[10px]"></i>
+              <span class="font-medium"><%= provider.average_rating > 0 ? provider.average_rating : "New" %></span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<%# ================================================================
+    6. CTA BANNER — ink bg, italic emphasis word in terracotta
+    ================================================================ %>
+<section class="bg-cream py-14 sm:py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="rounded-[20px] p-10 sm:p-14 lg:p-16 grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-10 items-center" style="background-color: #1a1a17;">
+      <div>
+        <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/55 mb-4">For service pros</div>
+        <h2 class="display text-cream" style="font-size: clamp(36px, 5vw, 56px); line-height: 1; letter-spacing: -0.02em;">
+          Get hired by people who <em class="italic-wonk" style="color: #d96a3a;">actually</em> show up.
+        </h2>
+        <p class="mt-5 text-cream/70 text-[15px] sm:text-[17px] leading-[1.5] max-w-md">
+          List your services, set your rates, and get paid securely. We handle bookings, payments, and reviews — you handle the work.
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row lg:flex-col gap-3">
+        <%= link_to new_user_registration_path, class: "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-pill text-sm font-semibold bg-cream text-ink hover:bg-cream-sunken transition-colors active:translate-y-px" do %>
+          Become a Radius pro <i class="fas fa-arrow-right text-[10px]"></i>
+        <% end %>
+        <%= link_to how_it_works_path, class: "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-pill text-sm font-medium text-cream/80 hover:text-cream border border-cream/20 hover:border-cream/40 transition-colors" do %>
+          See how it works
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
+    HERO BUBBLES STYLES (scoped) + JS
     ================================================================ %>
 <style>
-/* Gradient text */
-.hero-gradient-text {
-  background: linear-gradient(135deg, #fb923c 0%, #f97316 30%, #e879f9 70%, #a78bfa 100%);
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradientText 6s ease-in-out infinite;
-}
-@keyframes gradientText {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
+  /* Falling pro-bubbles — light-mode tuned for the hero card */
+  #particle-canvas .pro-bubble {
+    position: absolute;
+    will-change: transform, opacity;
+    pointer-events: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    animation: bubbleFall linear infinite, bubbleDrift ease-in-out infinite, bubbleTwinkle ease-in-out infinite;
+    box-shadow: 0 2px 8px rgba(26, 26, 23, 0.06);
+    border: 1px solid #e3ddd0;
+    background: #ffffff;
+  }
+  #particle-canvas .pro-bubble img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    opacity: 0.85;
+  }
+  #particle-canvas .pro-bubble .bubble-icon {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 42%;
+    height: 42%;
+    border-radius: 50%;
+    background: #1a1a17;
+    border: 1.5px solid #f7f4ee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 45%;
+    color: #f7f4ee;
+  }
+  #particle-canvas .pro-bubble .bubble-ring {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1px solid rgba(31, 77, 58, 0.3);
+    animation: ringPulse 4s ease-in-out infinite;
+  }
+  @keyframes bubbleFall {
+    0% { transform: translateY(-120px); }
+    100% { transform: translateY(calc(100% + 120px)); }
+  }
+  @keyframes bubbleDrift {
+    0%, 100% { margin-left: 0; }
+    25% { margin-left: 12px; }
+    50% { margin-left: -8px; }
+    75% { margin-left: 16px; }
+  }
+  @keyframes bubbleTwinkle {
+    0%, 100% { opacity: var(--base-opacity, 0.65); }
+    50% { opacity: calc(var(--base-opacity, 0.65) * 1.15); }
+  }
+  @keyframes ringPulse {
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.18); opacity: 0.7; }
+  }
 
-/* Falling particle bubbles */
-.pro-bubble {
-  position: absolute;
-  will-change: transform, opacity;
-  pointer-events: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  animation: bubbleFall linear infinite, bubbleDrift ease-in-out infinite, bubbleTwinkle ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(255,255,255,0.03), inset 0 0 20px rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(2px);
-}
-.pro-bubble img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  opacity: 0.7;
-}
-/* Trade icon overlay on bubble */
-.pro-bubble .bubble-icon {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  width: 40%;
-  height: 40%;
-  border-radius: 50%;
-  background: rgba(15,23,42,0.9);
-  border: 1px solid rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 45%;
-}
-/* Star ring around some bubbles */
-.pro-bubble .bubble-ring {
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  border: 1px solid rgba(251,191,36,0.2);
-  animation: ringPulse 4s ease-in-out infinite;
-}
-@keyframes bubbleFall {
-  0% { transform: translateY(-120px); }
-  100% { transform: translateY(calc(100vh + 120px)); }
-}
-@keyframes bubbleDrift {
-  0%, 100% { margin-left: 0; }
-  25% { margin-left: 15px; }
-  50% { margin-left: -10px; }
-  75% { margin-left: 20px; }
-}
-@keyframes bubbleTwinkle {
-  0%, 100% { opacity: var(--base-opacity, 0.4); }
-  50% { opacity: calc(var(--base-opacity, 0.4) * 1.6); }
-}
-@keyframes ringPulse {
-  0%, 100% { transform: scale(1); opacity: 0.3; }
-  50% { transform: scale(1.15); opacity: 0.6; }
-}
-
-/* Floating orbs */
-.orb-float {
-  animation: orbFloat 8s ease-in-out infinite;
-}
-.orb-float-reverse {
-  animation: orbFloat 10s ease-in-out infinite reverse;
-}
-.orb-float-slow {
-  animation: orbFloat 14s ease-in-out infinite;
-}
-@keyframes orbFloat {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -20px) scale(1.05); }
-  66% { transform: translate(-20px, 15px) scale(0.95); }
-}
-
-/* Staggered entrance animation */
-.hero-reveal {
-  opacity: 0;
-  transform: translateY(24px) scale(0.98);
-  animation: heroReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: var(--delay, 0s);
-}
-@keyframes heroReveal {
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-/* Scroll reveal for sections */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.scroll-reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* 3D tilt cards */
-.tilt-card {
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.tilt-card:hover {
-  transform: translateY(-4px) rotateX(2deg) rotateY(-2deg);
-  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.02);
-}
-
-/* Glassmorphism card */
-.glass-card {
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.8);
-}
-
-/* Marquee trust bar */
-.marquee-wrapper { overflow: hidden; }
-.marquee-track {
-  display: flex;
-  width: max-content;
-  animation: marqueeScroll 40s linear infinite;
-}
-.marquee-track:hover { animation-play-state: paused; }
-@keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* Shine effect on buttons */
-.btn-shine {
-  position: relative;
-  overflow: hidden;
-}
-.btn-shine::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 50%;
-  height: 200%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.6s ease;
-}
-.btn-shine:hover::after {
-  left: 120%;
-}
-
-/* Glow pulse on search focus */
-.search-glow:focus-within {
-  box-shadow: 0 0 0 4px rgba(249,115,22,0.15), 0 0 80px -10px rgba(249,115,22,0.2);
-}
-
-
-/* Category card inner glow */
-.cat-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  background: radial-gradient(circle at 50% 0%, var(--glow-color, rgba(249,115,22,0.08)), transparent 70%);
-}
-.cat-card:hover::before { opacity: 1; }
+  /* Hero entrance */
+  .hero-reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: heroReveal 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes heroReveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
 </style>
 
-<%# ================================================================
-    SCRIPTS
-    ================================================================ %>
 <script>
-/* Particle rain — falling professional bubbles */
 (function() {
   var canvas = document.getElementById('particle-canvas');
   if (!canvas) return;
 
   var pros = [
-    { img: 'https://i.pravatar.cc/96?u=p1', icon: 'fa-wrench', color: '#60a5fa' },
-    { img: 'https://i.pravatar.cc/96?u=p2', icon: 'fa-broom', color: '#38bdf8' },
-    { img: 'https://i.pravatar.cc/96?u=p3', icon: 'fa-bolt', color: '#fbbf24' },
-    { img: 'https://i.pravatar.cc/96?u=p4', icon: 'fa-paint-roller', color: '#fb7185' },
-    { img: 'https://i.pravatar.cc/96?u=p5', icon: 'fa-leaf', color: '#34d399' },
-    { img: 'https://i.pravatar.cc/96?u=p6', icon: 'fa-dumbbell', color: '#f87171' },
-    { img: 'https://i.pravatar.cc/96?u=p7', icon: 'fa-hammer', color: '#fb923c' },
-    { img: 'https://i.pravatar.cc/96?u=p8', icon: 'fa-graduation-cap', color: '#818cf8' },
-    { img: 'https://i.pravatar.cc/96?u=p9', icon: 'fa-truck', color: '#a78bfa' },
-    { img: 'https://i.pravatar.cc/96?u=p10', icon: 'fa-paw', color: '#2dd4bf' },
-    { img: 'https://i.pravatar.cc/96?u=p11', icon: 'fa-wrench', color: '#60a5fa' },
-    { img: 'https://i.pravatar.cc/96?u=p12', icon: 'fa-broom', color: '#38bdf8' },
-    { img: 'https://i.pravatar.cc/96?u=p13', icon: 'fa-bolt', color: '#fbbf24' },
-    { img: 'https://i.pravatar.cc/96?u=p14', icon: 'fa-paint-roller', color: '#fb7185' },
-    { img: 'https://i.pravatar.cc/96?u=p15', icon: 'fa-hammer', color: '#fb923c' },
-    { img: 'https://i.pravatar.cc/96?u=p16', icon: 'fa-leaf', color: '#34d399' },
-    { img: 'https://i.pravatar.cc/96?u=p17', icon: 'fa-dumbbell', color: '#f87171' },
-    { img: 'https://i.pravatar.cc/96?u=p18', icon: 'fa-graduation-cap', color: '#818cf8' },
-    { img: 'https://i.pravatar.cc/96?u=p19', icon: 'fa-truck', color: '#a78bfa' },
-    { img: 'https://i.pravatar.cc/96?u=p20', icon: 'fa-paw', color: '#2dd4bf' },
+    { img: 'https://i.pravatar.cc/96?u=p1', icon: 'fa-wrench' },
+    { img: 'https://i.pravatar.cc/96?u=p2', icon: 'fa-broom' },
+    { img: 'https://i.pravatar.cc/96?u=p3', icon: 'fa-bolt' },
+    { img: 'https://i.pravatar.cc/96?u=p4', icon: 'fa-paint-roller' },
+    { img: 'https://i.pravatar.cc/96?u=p5', icon: 'fa-leaf' },
+    { img: 'https://i.pravatar.cc/96?u=p6', icon: 'fa-dumbbell' },
+    { img: 'https://i.pravatar.cc/96?u=p7', icon: 'fa-hammer' },
+    { img: 'https://i.pravatar.cc/96?u=p8', icon: 'fa-graduation-cap' },
+    { img: 'https://i.pravatar.cc/96?u=p9', icon: 'fa-truck' },
+    { img: 'https://i.pravatar.cc/96?u=p10', icon: 'fa-paw' },
+    { img: 'https://i.pravatar.cc/96?u=p11', icon: 'fa-wrench' },
+    { img: 'https://i.pravatar.cc/96?u=p12', icon: 'fa-broom' },
+    { img: 'https://i.pravatar.cc/96?u=p13', icon: 'fa-bolt' },
+    { img: 'https://i.pravatar.cc/96?u=p14', icon: 'fa-paint-roller' },
+    { img: 'https://i.pravatar.cc/96?u=p15', icon: 'fa-hammer' }
   ];
 
-  var BUBBLE_COUNT = 30;
+  var BUBBLE_COUNT = 16;
 
   function createBubble(initial) {
     var pro = pros[Math.floor(Math.random() * pros.length)];
-    var size = 36 + Math.floor(Math.random() * 36); // 36-72px
+    var size = 38 + Math.floor(Math.random() * 30);
     var left = Math.random() * 100;
-    var fallDuration = 12 + Math.random() * 20; // 12-32s
+    var fallDuration = 14 + Math.random() * 18;
     var driftDuration = 6 + Math.random() * 8;
     var twinkleDuration = 3 + Math.random() * 5;
-    var delay = initial ? -(Math.random() * fallDuration) : 0; // Stagger on first load
-    var baseOpacity = 0.15 + Math.random() * 0.35;
-    var hasRing = Math.random() > 0.6;
+    var delay = initial ? -(Math.random() * fallDuration) : 0;
+    var baseOpacity = 0.55 + Math.random() * 0.35;
+    var hasRing = Math.random() > 0.55;
     var hasIcon = Math.random() > 0.3;
 
     var bubble = document.createElement('div');
     bubble.className = 'pro-bubble';
-    bubble.style.cssText = 'width:'+size+'px;height:'+size+'px;left:'+left+'%;'
-      + 'animation-duration:'+fallDuration+'s,'+driftDuration+'s,'+twinkleDuration+'s;'
-      + 'animation-delay:'+delay+'s,'+(-Math.random()*driftDuration)+'s,'+(-Math.random()*twinkleDuration)+'s;'
-      + '--base-opacity:'+baseOpacity+';';
+    bubble.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + left + '%;'
+      + 'animation-duration:' + fallDuration + 's,' + driftDuration + 's,' + twinkleDuration + 's;'
+      + 'animation-delay:' + delay + 's,' + (-Math.random() * driftDuration) + 's,' + (-Math.random() * twinkleDuration) + 's;'
+      + '--base-opacity:' + baseOpacity + ';';
 
     var img = document.createElement('img');
     img.src = pro.img;
@@ -1250,10 +431,9 @@
     if (hasIcon) {
       var icon = document.createElement('div');
       icon.className = 'bubble-icon';
-      icon.innerHTML = '<i class="fas '+pro.icon+'" style="color:'+pro.color+'"></i>';
+      icon.innerHTML = '<i class="fas ' + pro.icon + '"></i>';
       bubble.appendChild(icon);
     }
-
     if (hasRing) {
       var ring = document.createElement('div');
       ring.className = 'bubble-ring';
@@ -1263,7 +443,6 @@
 
     canvas.appendChild(bubble);
 
-    // Remove and re-create when animation ends (continuous rain)
     bubble.addEventListener('animationiteration', function handler(e) {
       if (e.animationName === 'bubbleFall') {
         bubble.removeEventListener('animationiteration', handler);
@@ -1273,71 +452,10 @@
     });
   }
 
-  // Respect reduced motion preference
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     for (var i = 0; i < BUBBLE_COUNT; i++) {
       createBubble(true);
     }
   }
 })();
-
-/* Scroll reveal */
-document.addEventListener('DOMContentLoaded', function() {
-  var reveals = document.querySelectorAll('.scroll-reveal');
-  var revealObserver = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach(function(el) { revealObserver.observe(el); });
-});
-
-/* Animated counters */
-document.addEventListener('DOMContentLoaded', function() {
-  var counters = document.querySelectorAll('.counter');
-  var observed = false;
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting && !observed) {
-        observed = true;
-        counters.forEach(function(el) {
-          var target = parseInt(el.dataset.target);
-          var duration = 2000;
-          var start = performance.now();
-          function step(now) {
-            var progress = Math.min((now - start) / duration, 1);
-            var eased = 1 - Math.pow(1 - progress, 3);
-            el.textContent = Math.floor(eased * target).toLocaleString() + '+';
-            if (progress < 1) requestAnimationFrame(step);
-          }
-          requestAnimationFrame(step);
-        });
-      }
-    });
-  }, { threshold: 0.3 });
-  counters.forEach(function(el) { observer.observe(el); });
-});
-
-/* Nearby providers */
-var NEARBY_RADIUS = 25;
-function nearbyShow(id) { ['nearby-prompt','nearby-loading','nearby-error','nearby-results'].forEach(function(s){var e=document.getElementById(s);if(e)e.classList.add('hidden');}); var t=document.getElementById(id);if(t)t.classList.remove('hidden'); }
-function nearbyDetect() { if(!navigator.geolocation){nearbyShowError('Geolocation not supported.');return;} nearbyShow('nearby-loading'); navigator.geolocation.getCurrentPosition(function(p){nearbyFetch(p.coords.latitude,p.coords.longitude);},function(e){var m={1:'Location access denied.',2:'Could not determine location.',3:'Request timed out.'};nearbyShowError(m[e.code]||'Could not get location.');},{enableHighAccuracy:false,timeout:10000,maximumAge:300000}); }
-function nearbyShowError(msg) { nearbyShow('nearby-error'); var e=document.getElementById('nearby-error-msg'); if(e) e.textContent=msg; }
-function nearbyFetch(lat,lng) { fetch('/api/nearby_providers?lat='+lat+'&lng='+lng+'&radius='+NEARBY_RADIUS).then(function(r){return r.json();}).then(function(p){if(!p||p.error||p.length===0){nearbyShowError('No providers found nearby.');return;}nearbyRender(p);}).catch(function(){nearbyShowError('Could not load providers.');}); }
-function nearbyEsc(s){if(!s)return'';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
-function nearbyRender(providers) {
-  nearbyShow('nearby-results'); var g=document.getElementById('nearby-grid'); if(!g) return;
-  var bc={purple:{bg:'#faf5ff',text:'#7e22ce',border:'#f3e8ff'},blue:{bg:'#eff6ff',text:'#1d4ed8',border:'#dbeafe'},green:{bg:'#f0fdf4',text:'#15803d',border:'#dcfce7'},yellow:{bg:'#fefce8',text:'#a16207',border:'#fef9c3'},gray:{bg:'#f9fafb',text:'#6b7280',border:'#f3f4f6'}};
-  g.innerHTML=providers.map(function(p){
-    var i=(p.display_name||'?')[0].toUpperCase();
-    var av=p.profile_picture_url?'<img src="'+p.profile_picture_url+'" class="w-12 h-12 rounded-xl object-cover ring-2 ring-slate-100">':'<div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-400">'+i+'</div>';
-    var st='';for(var j=0;j<5;j++)st+='<i class="fas fa-star text-[10px] '+(j<Math.round(p.average_rating)?'text-amber-400':'text-slate-200')+'"></i>';
-    var b=p.badge&&p.badge.name!=='New'?bc[p.badge.color]||bc.gray:null;
-    var badge=b?'<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium mt-1.5" style="background:'+b.bg+';color:'+b.text+';border:1px solid '+b.border+'"><i class="'+nearbyEsc(p.badge.icon)+' mr-1"></i>'+nearbyEsc(p.badge.name)+'</span>':'';
-    return '<a href="'+p.url+'" class="group block bg-white rounded-xl border border-slate-100 p-4 hover:shadow-xl hover:shadow-slate-900/[0.05] hover:-translate-y-1 transition-all duration-300"><div class="flex items-center gap-3">'+av+'<div class="flex-1 min-w-0"><h4 class="font-bold text-slate-900 group-hover:text-orange-600 text-sm truncate">'+nearbyEsc(p.business_name||p.display_name)+'</h4><div class="flex items-center gap-1 mt-0.5">'+st+'<span class="text-xs text-slate-400 ml-1">'+p.distance+' mi</span></div>'+badge+'</div></div></a>';
-  }).join('');
-}
 </script>

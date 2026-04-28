@@ -101,7 +101,7 @@
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        background: #f97316;
+        background: #1f4d3a;
         position: relative;
         flex-shrink: 0;
       }
@@ -112,7 +112,18 @@
         border: 1.5px solid #f7f4ee;
         border-radius: 50%;
       }
-      .brand-mark--on-dark::after { border-color: #0f172a; }
+      .brand-mark--on-dark::after { border-color: #1a1a17; }
+      /* Footer version chip */
+      .version-chip {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6f6a5e;
+        padding: 4px 10px;
+        border: 1px solid #e3ddd0;
+        border-radius: 999px;
+      }
     </style>
     <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css", rel: "stylesheet" %>
 
@@ -498,75 +509,63 @@
     <%# ========== PAGE CONTENT ========== %>
     <%= yield %>
 
-    <%# ========== FOOTER ========== %>
-    <footer class="bg-slate-950 text-white relative overflow-hidden">
-      <%# Subtle top glow %>
-      <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent"></div>
-
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-10">
-        <div class="grid grid-cols-2 md:grid-cols-12 gap-8 lg:gap-12">
-          <%# Brand — wider column %>
-          <div class="col-span-2 md:col-span-4 lg:col-span-5">
-            <div class="flex items-center gap-2.5 mb-5">
-              <div class="w-9 h-9 bg-gradient-to-br from-orange-500 to-rose-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/20">
-                <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-              </div>
-              <span class="text-xl font-black tracking-tight">Radius</span>
-            </div>
-            <p class="text-slate-400 text-sm leading-relaxed max-w-xs">The easiest way to find, compare, and book trusted local service professionals.</p>
-            <div class="flex gap-2 mt-6">
-              <% [
-                { icon: "fa-facebook-f", hover: "hover:bg-blue-600" },
-                { icon: "fa-x-twitter", hover: "hover:bg-slate-700" },
-                { icon: "fa-instagram", hover: "hover:bg-pink-600" },
-                { icon: "fa-linkedin-in", hover: "hover:bg-blue-700" }
-              ].each do |social| %>
-                <a href="#" class="w-9 h-9 rounded-xl bg-white/[0.05] border border-white/[0.06] <%= social[:hover] %> flex items-center justify-center text-slate-500 hover:text-white transition-all duration-200">
-                  <i class="fab <%= social[:icon] %> text-sm"></i>
+    <%# ========== FOOTER — editorial, 4-col, brand col 2x wide ========== %>
+    <footer class="bg-cream border-t border-line">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
+          <%# Brand — 2x wide %>
+          <div class="col-span-2">
+            <%= link_to root_path, class: "inline-flex items-center gap-2.5 mb-4" do %>
+              <span class="brand-mark"></span>
+              <span class="font-display text-[22px] font-medium tracking-tight text-ink">radius</span>
+            <% end %>
+            <p class="text-ink-2 text-[14px] leading-[1.55] max-w-sm">Find vetted local service pros. Compare, book, and pay in one place.</p>
+            <div class="flex gap-2 mt-5">
+              <% [ "fa-instagram", "fa-x-twitter", "fa-linkedin-in", "fa-facebook-f" ].each do |icon| %>
+                <a href="#" class="w-9 h-9 rounded-pill bg-cream-elevated border border-line text-ink-3 hover:text-ink hover:border-line-strong flex items-center justify-center transition-colors">
+                  <i class="fab <%= icon %> text-xs"></i>
                 </a>
               <% end %>
             </div>
           </div>
 
           <%# Services %>
-          <div class="md:col-span-2 lg:col-span-2">
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Services</h4>
-            <ul class="space-y-3">
-              <li><%= link_to "Home Cleaning", services_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
-              <li><%= link_to "Plumbing", services_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
-              <li><%= link_to "Electrical", services_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
-              <li><%= link_to "All Services", services_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200 font-medium" %></li>
+          <div>
+            <h4 class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">Services</h4>
+            <ul class="space-y-2.5">
+              <li><%= link_to "Home Cleaning", services_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
+              <li><%= link_to "Plumbing", services_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
+              <li><%= link_to "Electrical", services_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
+              <li><%= link_to "Browse all", services_path, class: "text-ink hover:text-ink text-[14px] font-medium transition-colors" %></li>
             </ul>
           </div>
 
           <%# Company %>
-          <div class="md:col-span-2 lg:col-span-2">
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Company</h4>
-            <ul class="space-y-3">
-              <li><%= link_to "About Us", about_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
-              <li><%= link_to "How It Works", how_it_works_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
-              <li><%= link_to "Leaderboard", leaderboard_index_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
-              <li><%= link_to "Contact", contact_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
+          <div>
+            <h4 class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">Company</h4>
+            <ul class="space-y-2.5">
+              <li><%= link_to "About", about_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
+              <li><%= link_to "How it works", how_it_works_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
+              <li><%= link_to "Leaderboard", leaderboard_index_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
+              <li><%= link_to "Contact", contact_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
             </ul>
           </div>
 
-          <%# Get Started %>
-          <div class="md:col-span-2 lg:col-span-3">
-            <h4 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-5">Get Started</h4>
-            <ul class="space-y-3">
-              <li><%= link_to "Find a Pro", services_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
-              <li><%= link_to "Become a Provider", new_user_registration_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
-              <li><%= link_to "Sign In", new_user_session_path, class: "text-slate-400 hover:text-white text-sm transition-colors duration-200" %></li>
+          <%# For Pros %>
+          <div>
+            <h4 class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">For Pros</h4>
+            <ul class="space-y-2.5">
+              <li><%= link_to "Become a pro", new_user_registration_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
+              <li><%= link_to "Sign in", new_user_session_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
+              <li><%= link_to "Find a pro", services_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
             </ul>
           </div>
         </div>
 
-        <%# Bottom bar %>
-        <div class="mt-16 pt-8 border-t border-white/[0.06] flex flex-col sm:flex-row justify-between items-center gap-3">
-          <p class="text-slate-600 text-xs">&copy; <%= Date.current.year %> Radius. All rights reserved.</p>
-          <div class="flex items-center gap-6">
-            <span class="text-slate-600 text-xs">Built by <%= link_to "Wintech", "mailto:wintan1418@gmail.com", class: "text-slate-400 hover:text-orange-400 font-medium transition-colors" %></span>
-          </div>
+        <%# Bottom bar — copyright + version chip %>
+        <div class="mt-14 pt-6 border-t border-line flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <p class="text-ink-3 text-[13px]">&copy; <%= Date.current.year %> Radius · Built by <%= link_to "Wintech", "mailto:wintan1418@gmail.com", class: "text-ink-2 hover:text-ink underline-offset-2 hover:underline" %></p>
+          <span class="version-chip">v 1.0 · 2026</span>
         </div>
       </div>
     </footer>
