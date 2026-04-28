@@ -1,197 +1,141 @@
 <%
-  # Pre-select role from URL param (e.g. ?role=provider)
   preselected_role = params[:role].to_s.downcase
   preselected_role = nil unless %w[customer provider].include?(preselected_role)
 %>
 
-<div class="min-h-screen flex">
-  <%# ===== LEFT: Image Panel (hidden on mobile) ===== %>
-  <div class="hidden lg:flex lg:w-1/2 relative bg-slate-900 items-center justify-center overflow-hidden">
-    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200&q=80"
-         alt="Team collaboration"
-         class="absolute inset-0 w-full h-full object-cover opacity-30">
-    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/40 to-slate-900/80"></div>
-    <div class="relative z-10 max-w-md px-12 text-center">
-      <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center mx-auto mb-8">
-        <svg class="w-8 h-8 text-orange-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-      </div>
-      <h2 class="text-3xl font-bold text-white mb-4">Join Radius<br>today</h2>
-      <p class="text-slate-300 text-base leading-relaxed">Whether you need a service or provide one — we make it easy to connect with your local community.</p>
+<div class="min-h-screen flex bg-cream">
 
-      <%# Benefits list %>
-      <div class="mt-10 space-y-4 text-left">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-check text-orange-400 text-xs"></i>
+  <%# ===== LEFT: editorial panel ===== %>
+  <div class="hidden lg:flex lg:w-1/2 relative items-center justify-center overflow-hidden border-r border-line" style="background-color: #1d1813;">
+    <div class="relative z-10 max-w-md px-12">
+      <span class="brand-mark brand-mark--on-dark mb-8 inline-block"></span>
+      <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/55 mb-4">join radius</div>
+      <h2 class="display text-cream leading-[1] tracking-[-0.02em]" style="font-size: clamp(40px, 4.5vw, 64px);">
+        Run your business, <em class="italic-wonk" style="color: #d96a3a;">finally</em>.
+      </h2>
+      <p class="mt-5 text-[15px] leading-[1.55] text-cream/65 max-w-sm">Whether you need a service or you provide one — Radius is built for both sides.</p>
+
+      <div class="mt-10 space-y-3">
+        <% [
+          "Free for customers — no hidden fees",
+          "Verified pros, background-checked",
+          "Stripe-secured payments",
+          "Real reviews from real customers"
+        ].each do |item| %>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full border border-cream/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i class="fas fa-check text-cream text-[10px]"></i>
+            </div>
+            <span class="text-[14px] text-cream/75 leading-[1.5]"><%= item %></span>
           </div>
-          <span class="text-sm text-slate-300">Free for customers — no hidden fees</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-check text-orange-400 text-xs"></i>
-          </div>
-          <span class="text-sm text-slate-300">Verified & trusted service providers</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-check text-orange-400 text-xs"></i>
-          </div>
-          <span class="text-sm text-slate-300">Secure payments powered by Stripe</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-check text-orange-400 text-xs"></i>
-          </div>
-          <span class="text-sm text-slate-300">Real reviews from real customers</span>
-        </div>
+        <% end %>
       </div>
     </div>
   </div>
 
-  <%# ===== RIGHT: Sign Up Form ===== %>
-  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-slate-50">
+  <%# ===== RIGHT: form ===== %>
+  <div class="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-cream">
     <div class="w-full max-w-md">
-      <%# Logo %>
-      <div class="text-center mb-10">
+      <div class="text-center mb-10 lg:hidden">
         <a href="<%= root_path %>" class="inline-flex items-center gap-2.5 group">
-          <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-sm">
-            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-          </div>
-          <span class="text-xl font-bold text-slate-900">Rad<span class="text-orange-500">ius</span></span>
+          <span class="brand-mark"></span>
+          <span class="font-display text-[22px] font-medium tracking-tight text-ink">radius</span>
         </a>
       </div>
 
-      <%# Card %>
-      <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 sm:p-10">
-        <div class="mb-8">
-          <h1 class="text-2xl font-bold text-slate-900">Create your account</h1>
-          <p class="mt-2 text-sm text-slate-500">
-            Already have an account?
-            <a href="<%= new_session_path(resource_name) %>" class="font-semibold text-orange-500 hover:text-orange-600 transition-colors">Sign in</a>
+      <div class="bg-cream-elevated border border-line rounded-xl p-8 sm:p-10">
+        <div class="mb-7">
+          <div class="eyebrow mb-3">sign up</div>
+          <h1 class="display text-[32px] text-ink leading-[1.05] tracking-[-0.02em]">Create your <em class="italic-wonk" style="color: #1f4d3a;">account</em>.</h1>
+          <p class="mt-2 text-[14px] text-ink-2">
+            Already have one?
+            <%= link_to "Sign in", new_session_path(resource_name), class: "font-semibold text-ink hover:underline underline-offset-2" %>
           </p>
         </div>
 
-        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { data: { turbo: false } }) do |f| %>
-          <%# Error messages %>
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { data: { turbo: false }, class: "space-y-5" }) do |f| %>
           <% if resource.errors.any? %>
-            <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100">
-              <div class="flex items-center gap-2 mb-2">
-                <i class="fas fa-exclamation-circle text-red-400"></i>
-                <h3 class="text-sm font-semibold text-red-700">Please fix the following:</h3>
+            <div class="p-3 rounded-lg bg-rose-50 border border-rose-200">
+              <div class="flex items-center gap-2 mb-1">
+                <i class="fas fa-exclamation-circle text-rose-500 text-[12px]"></i>
+                <span class="font-mono text-[10px] uppercase tracking-[0.12em] text-rose-700">please fix:</span>
               </div>
-              <ul class="space-y-1 ml-6">
+              <ul class="space-y-0.5 ml-5">
                 <% resource.errors.full_messages.each do |msg| %>
-                  <li class="text-sm text-red-600 list-disc"><%= msg %></li>
+                  <li class="text-[13px] text-rose-700 list-disc"><%= msg %></li>
                 <% end %>
               </ul>
             </div>
           <% end %>
 
-          <div class="space-y-5">
-            <%# Role Selection — card-style toggle %>
-            <div>
-              <label class="block text-sm font-medium text-slate-700 mb-2.5">I want to</label>
-              <div class="grid grid-cols-2 gap-3">
-                <label class="relative cursor-pointer">
-                  <input type="radio" name="user[user_role]" value="customer"
-                         <%= 'checked' if preselected_role == 'customer' || (!preselected_role && !resource.user_role.present?) || resource.user_role == 'customer' %>
-                         class="peer sr-only" required>
-                  <div class="p-4 rounded-xl border-2 border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-slate-300 transition-all text-center">
-                    <div class="w-10 h-10 rounded-xl bg-slate-100 peer-checked:bg-orange-100 flex items-center justify-center mx-auto mb-2.5">
-                      <i class="fas fa-search text-slate-400 text-sm"></i>
-                    </div>
-                    <div class="text-sm font-semibold text-slate-900">Find Services</div>
-                    <div class="text-xs text-slate-500 mt-0.5">I need help</div>
-                  </div>
-                </label>
-                <label class="relative cursor-pointer">
-                  <input type="radio" name="user[user_role]" value="provider"
-                         <%= 'checked' if preselected_role == 'provider' || resource.user_role == 'provider' %>
-                         class="peer sr-only" required>
-                  <div class="p-4 rounded-xl border-2 border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 hover:border-slate-300 transition-all text-center">
-                    <div class="w-10 h-10 rounded-xl bg-slate-100 peer-checked:bg-orange-100 flex items-center justify-center mx-auto mb-2.5">
-                      <i class="fas fa-briefcase text-slate-400 text-sm"></i>
-                    </div>
-                    <div class="text-sm font-semibold text-slate-900">Offer Services</div>
-                    <div class="text-xs text-slate-500 mt-0.5">I'm a provider</div>
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <%# Email %>
-            <div>
-              <label for="user_email" class="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-envelope text-slate-400 text-sm"></i>
+          <%# Role selection %>
+          <div>
+            <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2.5 block">I want to</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="cursor-pointer">
+                <input type="radio" name="user[user_role]" value="customer"
+                       <%= 'checked' if preselected_role == 'customer' || (!preselected_role && !resource.user_role.present?) || resource.user_role == 'customer' %>
+                       class="peer sr-only" required>
+                <div class="p-4 rounded-xl border border-line bg-cream-elevated peer-checked:border-ink peer-checked:bg-cream-sunken/40 hover:border-line-strong transition-all">
+                  <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 peer-checked:text-ink mb-1">find services</div>
+                  <div class="display text-[18px] text-ink leading-[1.1]">I need help</div>
                 </div>
-                <%= f.email_field :email, autofocus: true, autocomplete: "email",
-                    placeholder: "you@example.com",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-              </div>
-            </div>
-
-            <%# Password %>
-            <div>
-              <label for="user_password" class="block text-sm font-medium text-slate-700 mb-1.5">
-                Password
-                <% if @minimum_password_length %>
-                  <span class="font-normal text-slate-400">(<%= @minimum_password_length %> characters min)</span>
-                <% end %>
               </label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-lock text-slate-400 text-sm"></i>
+              <label class="cursor-pointer">
+                <input type="radio" name="user[user_role]" value="provider"
+                       <%= 'checked' if preselected_role == 'provider' || resource.user_role == 'provider' %>
+                       class="peer sr-only" required>
+                <div class="p-4 rounded-xl border border-line bg-cream-elevated peer-checked:border-ink peer-checked:bg-cream-sunken/40 hover:border-line-strong transition-all">
+                  <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 peer-checked:text-ink mb-1">offer services</div>
+                  <div class="display text-[18px] text-ink leading-[1.1]">I'm a pro</div>
                 </div>
-                <%= f.password_field :password, autocomplete: "new-password",
-                    placeholder: "Create a password",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-              </div>
+              </label>
             </div>
-
-            <%# Password Confirmation %>
-            <div>
-              <label for="user_password_confirmation" class="block text-sm font-medium text-slate-700 mb-1.5">Confirm password</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-lock text-slate-400 text-sm"></i>
-                </div>
-                <%= f.password_field :password_confirmation, autocomplete: "new-password",
-                    placeholder: "Confirm your password",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-              </div>
-            </div>
-
-            <%# Submit %>
-            <button type="submit"
-                    class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2">
-              <i class="fas fa-user-plus"></i>
-              Create Account
-            </button>
           </div>
+
+          <%# Email %>
+          <div>
+            <label for="user_email" class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Email</label>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email",
+                placeholder: "you@example.com",
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink placeholder-ink-4 focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+          </div>
+
+          <%# Password %>
+          <div>
+            <label for="user_password" class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">
+              Password<% if @minimum_password_length %><span class="text-ink-4 normal-case ml-1">(<%= @minimum_password_length %>+ chars)</span><% end %>
+            </label>
+            <%= f.password_field :password, autocomplete: "new-password",
+                placeholder: "Create a password",
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink placeholder-ink-4 focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+          </div>
+
+          <%# Confirmation %>
+          <div>
+            <label for="user_password_confirmation" class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Confirm password</label>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password",
+                placeholder: "Confirm your password",
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink placeholder-ink-4 focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+          </div>
+
+          <button type="submit" class="w-full bg-ink hover:bg-ink-2 text-cream py-3.5 rounded-pill font-semibold text-sm transition-colors active:translate-y-px">
+            Create account
+          </button>
         <% end %>
 
-        <%# Divider %>
-        <div class="relative my-8">
-          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
-          <div class="relative flex justify-center"><span class="bg-white px-4 text-xs text-slate-400 uppercase tracking-wider">or sign up with</span></div>
+        <div class="relative my-7">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-line"></div></div>
+          <div class="relative flex justify-center"><span class="bg-cream-elevated px-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">or</span></div>
         </div>
 
-        <%# Google Sign Up %>
-        <%= button_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: "w-full inline-flex items-center justify-center gap-3 py-3 px-4 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors text-sm font-medium text-slate-700" do %>
-          <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        <%= button_to user_google_oauth2_omniauth_authorize_path, data: { turbo: false }, class: "w-full inline-flex items-center justify-center gap-3 py-3 px-4 rounded-pill border border-line bg-cream-elevated hover:bg-cream-sunken transition-colors text-sm font-medium text-ink" do %>
+          <svg class="w-4 h-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
           Continue with Google
         <% end %>
       </div>
 
-      <%# Footer %>
-      <p class="mt-8 text-center text-xs text-slate-400">
-        By creating an account, you agree to our
-        <a href="#" class="text-slate-500 hover:text-slate-700 underline">Terms of Service</a>
-        and
-        <a href="#" class="text-slate-500 hover:text-slate-700 underline">Privacy Policy</a>.
-      </p>
+      <p class="mt-6 text-center font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">By signing up you agree to our terms & privacy</p>
     </div>
   </div>
 </div>

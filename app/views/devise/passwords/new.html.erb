@@ -1,70 +1,45 @@
-<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-slate-50">
+<div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 bg-cream">
   <div class="w-full max-w-md">
-    <%# Logo %>
     <div class="text-center mb-10">
-      <a href="<%= root_path %>" class="inline-flex items-center gap-2.5 group">
-        <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-sm">
-          <i class="fas fa-map-marker-alt text-white text-sm"></i>
-        </div>
-        <span class="text-xl font-bold text-slate-900">Local<span class="text-orange-500">ServiceHub</span></span>
+      <a href="<%= root_path %>" class="inline-flex items-center gap-2.5">
+        <span class="brand-mark"></span>
+        <span class="font-display text-[22px] font-medium tracking-tight text-ink">radius</span>
       </a>
     </div>
 
-    <%# Card %>
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-8 sm:p-10">
-      <div class="text-center mb-8">
-        <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
-          <i class="fas fa-key text-orange-500 text-xl"></i>
-        </div>
-        <h1 class="text-2xl font-bold text-slate-900">Forgot your password?</h1>
-        <p class="mt-2 text-sm text-slate-500">No worries — enter your email and we'll send you reset instructions.</p>
+    <div class="bg-cream-elevated border border-line rounded-xl p-8 sm:p-10">
+      <div class="mb-7">
+        <div class="eyebrow mb-3">forgot password</div>
+        <h1 class="display text-[28px] sm:text-[32px] text-ink leading-[1.05] tracking-[-0.02em]">No worries, <em class="italic-wonk" style="color: #1f4d3a;">happens</em>.</h1>
+        <p class="mt-2 text-[14px] text-ink-2 leading-[1.5]">Enter your email and we'll send reset instructions.</p>
       </div>
 
-      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-        <%# Error messages %>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post, class: "space-y-5" }) do |f| %>
         <% if resource.errors.any? %>
-          <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100">
-            <div class="flex items-center gap-2 mb-2">
-              <i class="fas fa-exclamation-circle text-red-400"></i>
-              <h3 class="text-sm font-semibold text-red-700">Please fix the following:</h3>
-            </div>
-            <ul class="space-y-1 ml-6">
+          <div class="p-3 rounded-lg bg-rose-50 border border-rose-200">
+            <ul class="space-y-0.5 ml-5">
               <% resource.errors.full_messages.each do |msg| %>
-                <li class="text-sm text-red-600 list-disc"><%= msg %></li>
+                <li class="text-[13px] text-rose-700 list-disc"><%= msg %></li>
               <% end %>
             </ul>
           </div>
         <% end %>
 
-        <div class="space-y-5">
-          <%# Email %>
-          <div>
-            <label for="user_email" class="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fas fa-envelope text-slate-400 text-sm"></i>
-              </div>
-              <%= f.email_field :email, autofocus: true, autocomplete: "email",
-                  placeholder: "you@example.com",
-                  class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-            </div>
-          </div>
-
-          <%# Submit %>
-          <button type="submit"
-                  class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2">
-            <i class="fas fa-paper-plane"></i>
-            Send Reset Instructions
-          </button>
+        <div>
+          <label for="user_email" class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Email</label>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com",
+              class: "w-full px-4 py-3 rounded-pill border border-line text-ink placeholder-ink-4 focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
         </div>
+
+        <button type="submit" class="w-full bg-ink hover:bg-ink-2 text-cream py-3.5 rounded-pill font-semibold text-sm transition-colors active:translate-y-px">
+          Send reset instructions
+        </button>
       <% end %>
 
-      <%# Back to sign in %>
       <div class="mt-6 text-center">
-        <a href="<%= new_session_path(resource_name) %>" class="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-slate-700 transition-colors">
-          <i class="fas fa-arrow-left text-xs"></i>
-          Back to sign in
-        </a>
+        <%= link_to new_session_path(resource_name), class: "inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 hover:text-ink" do %>
+          <i class="fas fa-arrow-left text-[10px]"></i>back to sign in
+        <% end %>
       </div>
     </div>
   </div>
