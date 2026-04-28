@@ -1,43 +1,57 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="mb-8">
-      <h1 class="text-2xl font-black text-slate-900">My Pros</h1>
-      <p class="text-sm text-slate-500 mt-1">Your favorite service providers.</p>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="mb-8 sm:mb-10">
+      <div class="eyebrow mb-3">my pros</div>
+      <h1 class="display text-[36px] sm:text-[48px] text-ink leading-[1] tracking-[-0.02em]">Pros you've <em class="italic-wonk" style="color: #1f4d3a;">saved</em>.</h1>
+      <p class="mt-3 text-ink-2 text-[15px] sm:text-[17px] leading-[1.55] max-w-xl">Quick rebooking with the providers you trust.</p>
     </div>
 
     <% if @providers.any? %>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
         <% @providers.each do |provider| %>
-          <%= link_to provider_path(provider), class: "group block bg-white rounded-xl border border-slate-100 p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" do %>
-            <div class="flex items-center gap-3 mb-3">
+          <%= link_to provider_path(provider), class: "group block bg-cream-elevated rounded-xl border border-line overflow-hidden hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200" do %>
+            <div class="relative aspect-[4/5] bg-cream-sunken">
               <% if provider.profile_picture.attached? %>
-                <%= image_tag provider.profile_picture, class: "w-12 h-12 rounded-xl object-cover" %>
+                <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover" %>
               <% else %>
-                <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-base font-bold text-slate-400">
-                  <%= provider.display_name.first.upcase %>
+                <img src="https://i.pravatar.cc/400?u=provider<%= provider.id %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= provider.display_name %>">
+              <% end %>
+              <% if provider.average_rating >= 4.8 %>
+                <div class="absolute top-3 left-3 bg-cream-elevated border border-line rounded-pill px-2.5 py-1 flex items-center gap-1.5 shadow-card">
+                  <i class="fas fa-star text-amber-500 text-[9px]"></i>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink">top-rated</span>
                 </div>
               <% end %>
-              <div class="min-w-0">
-                <div class="text-sm font-bold text-slate-900 truncate group-hover:text-orange-600 transition-colors"><%= provider.business_name || provider.display_name %></div>
-                <div class="flex items-center gap-1 mt-0.5">
-                  <% 5.times do |i| %><i class="fas fa-star text-[9px] <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
-                  <span class="text-xs text-slate-400 ml-1"><%= provider.average_rating %></span>
-                </div>
+              <div class="absolute top-3 right-3 w-8 h-8 rounded-full bg-cream-elevated border border-line flex items-center justify-center">
+                <i class="fas fa-heart text-rose-500 text-xs"></i>
               </div>
             </div>
-            <p class="text-xs text-slate-500"><%= provider.services.count %> service<%= provider.services.count == 1 ? '' : 's' %> · <%= provider.total_completed_bookings %> jobs</p>
+            <div class="p-4">
+              <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5"><%= provider.services.first&.category&.name || "pro" %></div>
+              <div class="display text-[18px] leading-[1.15] tracking-[-0.01em] text-ink truncate"><%= provider.business_name.presence || provider.display_name %></div>
+              <div class="mt-3 flex items-center justify-between">
+                <% if provider.average_rating > 0 %>
+                  <div class="flex items-center gap-1.5 text-[13px] text-ink-2">
+                    <i class="fas fa-star text-amber-500 text-[10px]"></i>
+                    <span class="font-medium"><%= provider.average_rating %></span>
+                    <span class="text-ink-3">(<%= provider.total_reviews %>)</span>
+                  </div>
+                <% else %>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">new pro</span>
+                <% end %>
+                <span class="font-mono text-[10px] text-ink-3"><%= provider.respond_to?(:total_completed_bookings) ? "#{provider.total_completed_bookings} jobs" : "" %></span>
+              </div>
+            </div>
           <% end %>
         <% end %>
       </div>
     <% else %>
-      <div class="bg-white rounded-xl border border-slate-100 p-12 text-center">
-        <i class="far fa-heart text-3xl text-slate-300 mb-3"></i>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">No favorites yet</h3>
-        <p class="text-sm text-slate-500 mb-6">Save providers you love for quick rebooking.</p>
-        <%= link_to services_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600" do %>
-          <i class="fas fa-search mr-2 text-xs"></i>Find Providers
-        <% end %>
-      </div>
+      <%= render "shared/empty_state",
+          icon: "fa-heart",
+          title: "No favorites yet",
+          message: "Tap the heart on any provider to save them here for quick rebooking.",
+          cta_text: "Browse pros",
+          cta_path: services_path %>
     <% end %>
   </div>
 </div>

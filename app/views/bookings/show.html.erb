@@ -1,94 +1,92 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
     <%# Back link %>
-    <% if current_user.customer? %>
-      <%= link_to customer_dashboard_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
-        <i class="fas fa-arrow-left text-xs"></i> Back to Dashboard
+    <div class="mb-6">
+      <% back_path = current_user.customer? ? customer_dashboard_path : provider_dashboard_path %>
+      <%= link_to back_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+        <i class="fas fa-arrow-left text-[10px]"></i>Back to dashboard
       <% end %>
-    <% elsif current_user.provider? %>
-      <%= link_to provider_dashboard_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
-        <i class="fas fa-arrow-left text-xs"></i> Back to Dashboard
-      <% end %>
-    <% end %>
+    </div>
 
-    <div class="grid lg:grid-cols-3 gap-6">
-      <%# ===== Main Content ===== %>
-      <div class="lg:col-span-2 space-y-6">
-        <%# Status header %>
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <div class="flex items-start justify-between mb-4">
-            <div>
-              <h1 class="text-xl font-black text-slate-900">Booking #<%= @booking.id %></h1>
-              <p class="text-sm text-slate-500 mt-1">Created <%= time_ago_in_words(@booking.created_at) %> ago</p>
-            </div>
-            <% status_styles = {
-              "pending" => "bg-amber-50 text-amber-700 border-amber-200",
-              "confirmed" => "bg-emerald-50 text-emerald-700 border-emerald-200",
-              "completed" => "bg-sky-50 text-sky-700 border-sky-200",
-              "cancelled" => "bg-red-50 text-red-700 border-red-200"
-            } %>
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border <%= status_styles[@booking.status] %>">
-              <%= @booking.status.titleize %>
-            </span>
-          </div>
+    <%# Status header %>
+    <div class="mb-8">
+      <div class="eyebrow mb-2">booking #<%= @booking.id %></div>
+      <div class="flex items-end justify-between gap-4 flex-wrap">
+        <h1 class="display text-[36px] sm:text-[48px] text-ink leading-[1] tracking-[-0.02em]"><%= @booking.service.title %></h1>
+        <% status_styles = {
+          "pending" => [ "bg-amber-100/60", "text-amber-800", "border-amber-200" ],
+          "confirmed" => [ "bg-forest-soft", "text-forest", "border-forest/20" ],
+          "completed" => [ "bg-cream-sunken", "text-ink-2", "border-line-strong" ],
+          "cancelled" => [ "bg-rose-100/60", "text-rose-700", "border-rose-200" ]
+        } %>
+        <% c = status_styles[@booking.status] || [ "bg-cream-sunken", "text-ink-2", "border-line" ] %>
+        <span class="inline-flex items-center font-mono text-[11px] uppercase tracking-[0.12em] px-3 py-1.5 rounded-pill <%= c[0] %> <%= c[1] %> border <%= c[2] %>"><%= @booking.status %></span>
+      </div>
+      <div class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mt-2">created <%= time_ago_in_words(@booking.created_at) %> ago</div>
 
-          <% if @booking.paid? %>
-            <div class="flex items-center gap-2 text-sm text-emerald-600 bg-emerald-50 rounded-lg px-4 py-2">
-              <i class="fas fa-check-circle"></i>
-              <span class="font-semibold">Payment received via Stripe</span>
-            </div>
-          <% end %>
+      <% if @booking.paid? %>
+        <div class="mt-4 inline-flex items-center gap-2 text-[13px] text-forest bg-forest-soft border border-forest/20 rounded-pill px-3 py-1.5">
+          <i class="fas fa-check-circle text-[11px]"></i><span class="font-semibold">Payment received</span>
         </div>
+      <% end %>
+    </div>
 
-        <%# Service details %>
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Service</h2>
+    <div class="grid lg:grid-cols-[1fr_360px] gap-6 lg:gap-8">
+
+      <%# ===== MAIN COLUMN ===== %>
+      <div class="space-y-6">
+
+        <%# Service card %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">service</div>
           <%= link_to service_path(@booking.service), class: "flex items-center gap-4 group" do %>
-            <div class="w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
-              <i class="fas fa-concierge-bell text-slate-400 text-lg"></i>
+            <div class="w-14 h-14 rounded-xl bg-cream-sunken flex items-center justify-center flex-shrink-0 border border-line">
+              <i class="fas fa-concierge-bell text-ink-3"></i>
             </div>
             <div class="flex-1 min-w-0">
-              <h3 class="text-base font-bold text-slate-900 group-hover:text-orange-600 transition-colors"><%= @booking.service.title %></h3>
-              <p class="text-sm text-slate-500"><%= @booking.service.category.name %></p>
-              <p class="text-xs text-slate-400 mt-1 line-clamp-1"><%= @booking.service.description %></p>
+              <div class="display text-[18px] text-ink leading-[1.15] group-hover:underline underline-offset-2"><%= @booking.service.title %></div>
+              <div class="text-[12px] text-ink-3 mt-0.5"><%= @booking.service.category.name %></div>
             </div>
-            <i class="fas fa-arrow-right text-slate-300 group-hover:text-orange-400 transition-colors"></i>
+            <i class="fas fa-arrow-right text-ink-3 text-[12px] group-hover:text-ink transition-colors"></i>
           <% end %>
         </div>
 
-        <%# Schedule & price %>
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Details</h2>
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div class="p-4 rounded-lg bg-slate-50">
-              <div class="text-xs text-slate-400 mb-1">Scheduled Date</div>
-              <div class="text-sm font-bold text-slate-900"><%= @booking.scheduled_at.strftime("%B %d, %Y") %></div>
-              <div class="text-xs text-slate-500"><%= @booking.scheduled_at.strftime("%I:%M %p") %></div>
+        <%# Schedule + price %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">details</div>
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div class="p-4 rounded-lg bg-cream-sunken/40 border border-line">
+              <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mb-1">scheduled</div>
+              <div class="display text-[20px] text-ink leading-[1.1]"><%= @booking.scheduled_at.strftime("%B %-d, %Y") %></div>
+              <div class="text-[12px] text-ink-3 mt-0.5"><%= @booking.scheduled_at.strftime("%-I:%M %p") %></div>
             </div>
-            <div class="p-4 rounded-lg bg-slate-50">
-              <div class="text-xs text-slate-400 mb-1">Total Price</div>
-              <div class="text-2xl font-black text-slate-900">$<%= number_with_precision(@booking.total_price, precision: 2) %></div>
+            <div class="p-4 rounded-lg bg-cream-sunken/40 border border-line">
+              <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mb-1">total</div>
+              <div class="display text-[28px] text-ink leading-none">$<%= number_with_precision(@booking.total_price, precision: 2) %></div>
               <% if (@booking.tip_amount || 0) > 0 %>
-                <div class="text-xs text-emerald-600 font-semibold mt-1">+ $<%= number_with_precision(@booking.tip_amount, precision: 2) %> tip</div>
+                <div class="text-[11px] text-forest font-semibold mt-1">+ $<%= number_with_precision(@booking.tip_amount, precision: 2) %> tip</div>
               <% end %>
-              <div class="text-xs text-slate-500"><%= @booking.service.price_type&.titleize %></div>
+              <div class="text-[12px] text-ink-3 mt-0.5"><%= @booking.service.price_type&.titleize %></div>
             </div>
           </div>
           <% if @booking.urgent? %>
-            <div class="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold"><i class="fas fa-bolt"></i>Urgent booking</div>
+            <div class="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-terracotta/10 border border-terracotta/30 text-terracotta text-[12px] font-semibold">
+              <i class="fas fa-bolt text-[11px]"></i>Urgent
+            </div>
           <% end %>
 
           <%# Tipping %>
           <% if @booking.completed? && @booking.customer == current_user && (@booking.tip_amount || 0) == 0 %>
-            <div class="mt-4 p-4 rounded-xl bg-gradient-to-br from-emerald-50 to-sky-50 border border-emerald-100">
-              <div class="text-sm font-bold text-slate-900 mb-1">🎉 Loved the service? Add a tip!</div>
-              <p class="text-xs text-slate-500 mb-3">100% goes to your provider. Optional.</p>
-              <%= form_with url: add_tip_booking_path(@booking), method: :patch, local: true, class: "flex items-center gap-2" do %>
-                <% [5, 10, 15, 20].each do |amt| %>
-                  <button type="submit" name="tip_amount" value="<%= amt %>" class="flex-1 px-3 py-2 rounded-lg bg-white border border-emerald-200 hover:border-emerald-500 hover:bg-emerald-50 text-sm font-bold text-slate-900 transition-colors cursor-pointer">$<%= amt %></button>
+            <div class="mt-5 p-4 rounded-xl bg-forest-soft border border-forest/20">
+              <div class="display text-[18px] text-forest leading-[1.15]">Loved it? Add a <em class="italic-wonk">tip</em>.</div>
+              <p class="text-[12px] text-ink-2 mt-1 mb-3">100% goes to your provider.</p>
+              <%= form_with url: add_tip_booking_path(@booking), method: :patch, local: true, class: "flex items-center gap-2 flex-wrap" do %>
+                <% [ 5, 10, 15, 20 ].each do |amt| %>
+                  <button type="submit" name="tip_amount" value="<%= amt %>" class="px-4 py-2 rounded-pill bg-cream-elevated border border-forest/30 hover:border-forest hover:bg-forest hover:text-cream text-[13px] font-semibold text-ink transition-colors cursor-pointer">$<%= amt %></button>
                 <% end %>
-                <input type="number" name="tip_amount" step="0.01" placeholder="Custom" class="w-20 px-3 py-2 rounded-lg border border-emerald-200 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20">
-                <button type="submit" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-bold cursor-pointer">Tip</button>
+                <input type="number" name="tip_amount" step="0.01" placeholder="Custom" class="w-24 px-3 py-2 rounded-pill border border-forest/30 text-[13px] focus:outline-none focus:ring-2 focus:ring-forest/20 bg-cream-elevated">
+                <button type="submit" class="bg-forest hover:opacity-90 text-cream px-4 py-2 rounded-pill text-[13px] font-semibold cursor-pointer">Tip</button>
               <% end %>
             </div>
           <% end %>
@@ -96,92 +94,90 @@
 
         <%# Customer notes %>
         <% if @booking.notes_from_customer.present? %>
-          <div class="bg-white rounded-xl border border-slate-100 p-6">
-            <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Notes from customer</h2>
-            <p class="text-sm text-slate-600 leading-relaxed"><%= @booking.notes_from_customer %></p>
+          <div class="bg-cream-elevated border border-line rounded-xl p-5">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">notes from customer</div>
+            <p class="text-[14px] text-ink-2 leading-[1.6]"><%= @booking.notes_from_customer %></p>
           </div>
         <% end %>
 
         <%# Photos %>
         <% if @booking.photos.attached? %>
-          <div class="bg-white rounded-xl border border-slate-100 p-6">
-            <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Photos</h2>
-            <div class="grid grid-cols-3 gap-3">
+          <div class="bg-cream-elevated border border-line rounded-xl p-5">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">photos</div>
+            <div class="grid grid-cols-3 gap-2">
               <% @booking.photos.each do |photo| %>
-                <%= image_tag photo, class: "w-full h-28 rounded-lg object-cover" rescue '' %>
+                <%= image_tag photo, class: "w-full h-28 rounded-lg object-cover border border-line" rescue '' %>
               <% end %>
             </div>
           </div>
         <% end %>
 
-        <%# Review section %>
+        <%# Review %>
         <% if @booking.completed? %>
-          <div class="bg-white rounded-xl border border-slate-100 p-6">
-            <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Review</h2>
+          <div class="bg-cream-elevated border border-line rounded-xl p-5">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">review</div>
             <% if @booking.review %>
               <div class="flex items-start gap-3">
                 <div class="flex gap-0.5 mt-0.5">
-                  <% 5.times do |i| %><i class="fas fa-star text-sm <%= i < @booking.review.rating ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
+                  <% 5.times do |i| %><i class="fas fa-star text-[12px] <%= i < @booking.review.rating ? 'text-amber-500' : 'text-line' %>"></i><% end %>
                 </div>
                 <div>
-                  <p class="text-sm text-slate-700 leading-relaxed"><%= @booking.review.comment %></p>
-                  <p class="text-xs text-slate-400 mt-2">Reviewed <%= time_ago_in_words(@booking.review.created_at) %> ago</p>
+                  <p class="text-[14px] text-ink-2 leading-[1.6]"><%= @booking.review.comment %></p>
+                  <p class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mt-2"><%= time_ago_in_words(@booking.review.created_at) %> ago</p>
                 </div>
               </div>
             <% elsif current_user.customer? %>
-              <div class="text-center py-4">
-                <p class="text-sm text-slate-500 mb-3">How was the service? Your feedback helps the community.</p>
-                <%= link_to new_booking_review_path(@booking), class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
-                  <i class="fas fa-star mr-2 text-xs"></i>Leave a Review
+              <div class="text-center py-3">
+                <p class="text-[13px] text-ink-2 mb-3">How was the service?</p>
+                <%= link_to new_booking_review_path(@booking), class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink hover:bg-ink-2 text-cream transition-colors" do %>
+                  <i class="fas fa-star text-[10px]"></i>Leave a review
                 <% end %>
               </div>
             <% else %>
-              <p class="text-sm text-slate-400 text-center py-2">No review yet.</p>
+              <p class="text-[13px] text-ink-3 text-center py-2">No review yet.</p>
             <% end %>
           </div>
         <% end %>
 
         <%# Expense tracking (provider only) %>
         <% if current_user.provider? && current_user == @booking.service.provider %>
-          <div class="bg-white rounded-xl border border-slate-100 p-6">
+          <div class="bg-cream-elevated border border-line rounded-xl p-5">
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Expenses & Profit</h2>
+              <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">expenses & profit</div>
               <div class="text-right">
-                <div class="text-xs text-slate-400">Profit</div>
-                <div class="text-lg font-black <%= @booking.profit >= 0 ? 'text-emerald-600' : 'text-red-500' %>">
-                  $<%= number_with_precision(@booking.profit, precision: 2) %>
-                </div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3">profit</div>
+                <div class="display text-[20px] leading-none <%= @booking.profit >= 0 ? 'text-forest' : 'text-rose-600' %>">$<%= number_with_precision(@booking.profit, precision: 2) %></div>
               </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-3 mb-4 text-center">
-              <div class="p-3 rounded-lg bg-sky-50">
-                <div class="text-[10px] font-bold text-sky-600 uppercase">Revenue</div>
-                <div class="text-sm font-black text-slate-900">$<%= number_with_precision(@booking.total_price, precision: 2) %></div>
+            <div class="grid grid-cols-3 gap-2 mb-4">
+              <div class="p-3 rounded-lg bg-cream-sunken/40 border border-line text-center">
+                <div class="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-3">revenue</div>
+                <div class="display text-[16px] text-ink mt-1">$<%= number_with_precision(@booking.total_price, precision: 0) %></div>
               </div>
-              <div class="p-3 rounded-lg bg-red-50">
-                <div class="text-[10px] font-bold text-red-600 uppercase">Expenses</div>
-                <div class="text-sm font-black text-slate-900">$<%= number_with_precision(@booking.total_expenses, precision: 2) %></div>
+              <div class="p-3 rounded-lg bg-cream-sunken/40 border border-line text-center">
+                <div class="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-3">expenses</div>
+                <div class="display text-[16px] text-ink mt-1">$<%= number_with_precision(@booking.total_expenses, precision: 0) %></div>
               </div>
-              <div class="p-3 rounded-lg bg-emerald-50">
-                <div class="text-[10px] font-bold text-emerald-600 uppercase">Profit</div>
-                <div class="text-sm font-black text-slate-900">$<%= number_with_precision(@booking.profit, precision: 2) %></div>
+              <div class="p-3 rounded-lg bg-forest-soft border border-forest/20 text-center">
+                <div class="font-mono text-[9px] uppercase tracking-[0.1em] text-forest">profit</div>
+                <div class="display text-[16px] text-forest mt-1">$<%= number_with_precision(@booking.profit, precision: 0) %></div>
               </div>
             </div>
 
             <% if @booking.expenses.any? %>
-              <div class="space-y-2 mb-4">
+              <div class="space-y-1.5 mb-4">
                 <% @booking.expenses.each do |expense| %>
-                  <div class="flex items-center justify-between p-3 rounded-lg bg-slate-50">
+                  <div class="flex items-center justify-between p-3 rounded-lg bg-cream-sunken/30 border border-line">
                     <div>
-                      <div class="text-sm font-semibold text-slate-900"><%= expense.description %></div>
+                      <div class="text-[13px] font-semibold text-ink"><%= expense.description %></div>
                       <% if expense.category.present? %>
-                        <div class="text-[10px] text-slate-400 uppercase"><%= expense.category %></div>
+                        <div class="font-mono text-[9px] uppercase tracking-[0.1em] text-ink-3 mt-0.5"><%= expense.category %></div>
                       <% end %>
                     </div>
                     <div class="flex items-center gap-3">
-                      <span class="text-sm font-bold text-red-600">-$<%= number_with_precision(expense.amount, precision: 2) %></span>
-                      <%= button_to booking_expense_path(@booking, expense), method: :delete, data: { turbo_confirm: "Remove this expense?" }, class: "text-xs text-slate-400 hover:text-red-500 cursor-pointer" do %>
+                      <span class="display text-[14px] text-rose-600">−$<%= number_with_precision(expense.amount, precision: 2) %></span>
+                      <%= button_to booking_expense_path(@booking, expense), method: :delete, data: { turbo_confirm: "Remove this expense?" }, class: "text-[11px] text-ink-3 hover:text-rose-600 cursor-pointer" do %>
                         <i class="fas fa-times"></i>
                       <% end %>
                     </div>
@@ -190,181 +186,162 @@
               </div>
             <% end %>
 
-            <%# Add expense form %>
-            <%= form_with url: booking_expenses_path(@booking), local: true, class: "pt-4 border-t border-slate-100" do |f| %>
-              <div class="flex gap-2">
-                <%= f.text_field :description, placeholder: "Expense description", class: "flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", name: "expense[description]" %>
-                <%= f.number_field :amount, placeholder: "0.00", step: 0.01, class: "w-24 px-3 py-2 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", name: "expense[amount]" %>
-                <%= f.select :category, options_for_select(Expense::CATEGORIES.map { |c| [c.titleize, c] }), {}, class: "w-28 px-3 py-2 rounded-lg border border-slate-200 text-sm bg-white", name: "expense[category]" %>
-                <button type="submit" class="px-4 py-2 rounded-lg text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors">Add</button>
+            <%= form_with url: booking_expenses_path(@booking), local: true, class: "pt-4 border-t border-line" do |f| %>
+              <div class="flex gap-2 flex-wrap">
+                <%= f.text_field :description, placeholder: "Expense description", class: "flex-1 min-w-[160px] px-3 py-2 rounded-lg border border-line text-[13px] focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated", name: "expense[description]" %>
+                <%= f.number_field :amount, placeholder: "0.00", step: 0.01, class: "w-24 px-3 py-2 rounded-lg border border-line text-[13px] focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated", name: "expense[amount]" %>
+                <%= f.select :category, options_for_select(Expense::CATEGORIES.map { |c| [ c.titleize, c ] }), {}, class: "w-28 px-3 py-2 rounded-lg border border-line text-[13px] bg-cream-elevated", name: "expense[category]" %>
+                <button type="submit" class="px-4 py-2 rounded-pill text-[13px] font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors">Add</button>
               </div>
             <% end %>
           </div>
         <% end %>
       </div>
 
-      <%# ===== Sidebar ===== %>
-      <div class="space-y-6">
-        <%# Provider/Customer info (depending on who's viewing) %>
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <% if current_user.customer? %>
-            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Your Provider</h3>
-            <% provider = @booking.service.provider %>
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-lg font-bold text-slate-400">
-                <%= provider.display_name.first.upcase %>
-              </div>
-              <div>
-                <%= link_to provider.business_name || provider.display_name, provider_path(provider), class: "text-sm font-bold text-slate-900 hover:text-orange-600 transition-colors" %>
-                <div class="flex items-center gap-1 mt-0.5">
-                  <% 5.times do |i| %><i class="fas fa-star text-[9px] <%= i < provider.average_rating.round ? 'text-amber-400' : 'text-slate-200' %>"></i><% end %>
-                  <span class="text-xs text-slate-500 ml-1"><%= provider.average_rating %></span>
-                </div>
-              </div>
-            </div>
-          <% else %>
-            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Customer</h3>
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center text-lg font-bold text-slate-400">
-                <%= @booking.customer.display_name.first.upcase %>
-              </div>
-              <div>
-                <div class="text-sm font-bold text-slate-900"><%= @booking.customer.display_name %></div>
-                <div class="text-xs text-slate-500"><%= @booking.customer.email %></div>
-              </div>
-            </div>
-          <% end %>
+      <%# ===== SIDEBAR ===== %>
+      <aside class="space-y-4">
 
-          <%# Chat button %>
+        <%# Other party %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3"><%= current_user.customer? ? "your provider" : "customer" %></div>
           <% other_user = current_user.customer? ? @booking.service.provider : @booking.customer %>
-          <%= form_with url: conversations_path, method: :post, local: true, class: "w-full" do |form| %>
+          <div class="flex items-center gap-3 mb-4">
+            <% if other_user.profile_picture.attached? %>
+              <%= image_tag other_user.profile_picture, class: "w-12 h-12 rounded-full object-cover border border-line" %>
+            <% else %>
+              <img src="https://i.pravatar.cc/96?u=user<%= other_user.id %>" class="w-12 h-12 rounded-full object-cover border border-line">
+            <% end %>
+            <div class="min-w-0 flex-1">
+              <% if current_user.customer? %>
+                <%= link_to other_user.business_name.presence || other_user.display_name, provider_path(other_user), class: "text-[14px] font-semibold text-ink hover:underline underline-offset-2 truncate block" %>
+                <div class="flex items-center gap-1 mt-0.5">
+                  <% 5.times do |i| %><i class="fas fa-star text-[9px] <%= i < other_user.average_rating.round ? 'text-amber-500' : 'text-line' %>"></i><% end %>
+                  <span class="text-[11px] text-ink-3 ml-1"><%= other_user.average_rating %></span>
+                </div>
+              <% else %>
+                <div class="text-[14px] font-semibold text-ink truncate"><%= other_user.display_name %></div>
+                <div class="text-[11px] text-ink-3 truncate"><%= other_user.email %></div>
+              <% end %>
+            </div>
+          </div>
+
+          <%= form_with url: conversations_path, method: :post, local: true do |form| %>
             <%= form.hidden_field :user_id, value: other_user.id %>
-            <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all cursor-pointer">
-              <i class="fas fa-comments mr-2 text-xs"></i>Message <%= current_user.customer? ? 'Provider' : 'Customer' %>
+            <button type="submit" class="w-full px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors flex items-center justify-center gap-2">
+              <i class="fas fa-comments text-xs"></i>Message
             </button>
           <% end %>
 
-          <%# View profile %>
           <% if current_user.customer? %>
-            <%= link_to provider_path(@booking.service.provider), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all mt-2" do %>
-              <i class="fas fa-user mr-2 text-xs"></i>View Profile
+            <%= link_to provider_path(@booking.service.provider), class: "mt-2 w-full px-5 py-2.5 rounded-pill text-sm font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors flex items-center justify-center gap-2" do %>
+              <i class="fas fa-user text-xs"></i>View profile
             <% end %>
           <% end %>
         </div>
 
         <%# Actions %>
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Actions</h3>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">actions</div>
           <div class="space-y-2">
             <% if current_user.provider? %>
               <% if @booking.pending? %>
-                <%= button_to confirm_provider_booking_path(@booking), method: :patch, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-emerald-500 text-white hover:bg-emerald-600 transition-all cursor-pointer" do %>
-                  <i class="fas fa-check mr-2 text-xs"></i>Accept Booking
+                <%= button_to confirm_provider_booking_path(@booking), method: :patch, class: "w-full px-5 py-2.5 rounded-pill text-sm font-semibold bg-forest hover:opacity-90 text-cream transition-opacity flex items-center justify-center gap-2 cursor-pointer" do %>
+                  <i class="fas fa-check text-xs"></i>Accept booking
                 <% end %>
-                <%= button_to cancel_provider_booking_path(@booking), method: :patch, data: { turbo_confirm: "Reject this booking?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-all cursor-pointer" do %>
-                  <i class="fas fa-times mr-2 text-xs"></i>Reject
+                <%= button_to cancel_provider_booking_path(@booking), method: :patch, data: { turbo_confirm: "Reject this booking?" }, class: "w-full px-5 py-2.5 rounded-pill text-sm font-semibold border border-rose-300 text-rose-700 hover:bg-rose-50 transition-colors flex items-center justify-center gap-2 cursor-pointer" do %>
+                  <i class="fas fa-times text-xs"></i>Reject
                 <% end %>
               <% elsif @booking.confirmed? %>
-                <%= button_to complete_provider_booking_path(@booking), method: :patch, data: { turbo_confirm: "Mark as completed?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-sky-500 text-white hover:bg-sky-600 transition-all cursor-pointer" do %>
-                  <i class="fas fa-check-double mr-2 text-xs"></i>Mark Completed
+                <%= button_to complete_provider_booking_path(@booking), method: :patch, data: { turbo_confirm: "Mark as completed?" }, class: "w-full px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors flex items-center justify-center gap-2 cursor-pointer" do %>
+                  <i class="fas fa-check-double text-xs"></i>Mark completed
                 <% end %>
               <% end %>
             <% elsif current_user.customer? %>
               <% if @booking.pending? %>
-                <%= button_to booking_path(@booking), method: :delete, data: { turbo_confirm: "Cancel this booking?" }, class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-red-200 text-red-600 hover:bg-red-50 transition-all cursor-pointer" do %>
-                  <i class="fas fa-times mr-2 text-xs"></i>Cancel Booking
+                <%= button_to booking_path(@booking), method: :delete, data: { turbo_confirm: "Cancel this booking?" }, class: "w-full px-5 py-2.5 rounded-pill text-sm font-semibold border border-rose-300 text-rose-700 hover:bg-rose-50 transition-colors flex items-center justify-center gap-2 cursor-pointer" do %>
+                  <i class="fas fa-times text-xs"></i>Cancel booking
                 <% end %>
               <% end %>
             <% end %>
 
-            <%# Invoice %>
             <% if @booking.completed? && @booking.invoice.present? %>
-              <%= link_to booking_invoice_path(@booking), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>
-                <i class="fas fa-file-invoice mr-2 text-xs"></i>View Invoice
+              <%= link_to booking_invoice_path(@booking), class: "w-full px-5 py-2.5 rounded-pill text-sm font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors flex items-center justify-center gap-2" do %>
+                <i class="fas fa-file-invoice text-xs"></i>View invoice
               <% end %>
             <% end %>
 
-            <%# Dispute %>
             <% if (@booking.completed? || @booking.confirmed?) && (@booking.customer == current_user || @booking.service.provider == current_user) %>
               <% if @booking.dispute.present? %>
-                <%= link_to booking_dispute_path(@booking), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-amber-50 border border-amber-200 text-amber-700 hover:bg-amber-100 transition-all" do %>
-                  <i class="fas fa-exclamation-triangle mr-2 text-xs"></i>View Dispute
+                <%= link_to booking_dispute_path(@booking), class: "w-full px-5 py-2.5 rounded-pill text-sm font-semibold bg-amber-100/60 border border-amber-200 text-amber-800 hover:bg-amber-100 transition-colors flex items-center justify-center gap-2" do %>
+                  <i class="fas fa-exclamation-triangle text-xs"></i>View dispute
                 <% end %>
               <% else %>
-                <%= link_to new_booking_dispute_path(@booking), class: "w-full inline-flex items-center justify-center px-4 py-2.5 text-xs font-semibold text-slate-400 hover:text-red-600 transition-colors" do %>
-                  <i class="fas fa-flag mr-1.5 text-[10px]"></i>Report an issue
+                <%= link_to new_booking_dispute_path(@booking), class: "w-full px-5 py-2 text-[12px] font-semibold text-ink-3 hover:text-rose-600 transition-colors flex items-center justify-center gap-1.5" do %>
+                  <i class="fas fa-flag text-[10px]"></i>Report an issue
                 <% end %>
               <% end %>
             <% end %>
 
-            <%# Rebook %>
             <% if current_user.customer? && (@booking.completed? || @booking.cancelled?) %>
-              <%= link_to service_path(@booking.service), class: "w-full inline-flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-all" do %>
-                <i class="fas fa-redo mr-2 text-xs"></i>Book Again
+              <%= link_to service_path(@booking.service), class: "w-full px-5 py-2.5 rounded-pill text-sm font-semibold bg-terracotta hover:opacity-90 text-cream transition-opacity flex items-center justify-center gap-2" do %>
+                <i class="fas fa-redo text-xs"></i>Book again
               <% end %>
             <% end %>
           </div>
 
-          <%# Reschedule (pending/confirmed only) %>
           <% if (@booking.pending? || @booking.confirmed?) %>
-            <details class="mt-3 pt-3 border-t border-slate-100">
-              <summary class="cursor-pointer text-xs font-semibold text-slate-500 hover:text-slate-700">
+            <details class="mt-4 pt-4 border-t border-line">
+              <summary class="cursor-pointer font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 hover:text-ink">
                 <i class="fas fa-clock mr-1"></i>Reschedule
               </summary>
-              <%= form_with url: reschedule_booking_path(@booking), method: :patch, local: true, class: "mt-3" do |f| %>
-                <%= f.datetime_field :scheduled_at, value: @booking.scheduled_at.strftime("%Y-%m-%dT%H:%M"), class: "w-full px-3 py-2 rounded-lg border border-slate-200 text-sm mb-2" %>
-                <button type="submit" class="w-full px-4 py-2 rounded-lg text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-colors">Update Time</button>
+              <%= form_with url: reschedule_booking_path(@booking), method: :patch, local: true, class: "mt-3 space-y-2" do |f| %>
+                <%= f.datetime_field :scheduled_at, value: @booking.scheduled_at.strftime("%Y-%m-%dT%H:%M"), class: "w-full px-3 py-2 rounded-lg border border-line text-[13px] bg-cream-elevated focus:outline-none focus:ring-2 focus:ring-ink/20" %>
+                <button type="submit" class="w-full px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors">Update time</button>
               <% end %>
             </details>
           <% end %>
         </div>
 
         <%# Timeline %>
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Timeline</h3>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-4">timeline</div>
           <div class="space-y-4">
             <div class="flex items-start gap-3">
-              <div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                <i class="fas fa-plus text-slate-400 text-[8px]"></i>
+              <div class="w-6 h-6 rounded-full bg-cream-sunken border border-line flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i class="fas fa-plus text-ink-3 text-[8px]"></i>
               </div>
               <div>
-                <div class="text-xs font-semibold text-slate-900">Booking created</div>
-                <div class="text-[10px] text-slate-400"><%= @booking.created_at.strftime("%b %d, %Y at %I:%M %p") %></div>
+                <div class="text-[13px] font-semibold text-ink">Booking created</div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3"><%= @booking.created_at.strftime("%b %-d, %Y · %I:%M %p") %></div>
               </div>
             </div>
             <% if @booking.confirmed? || @booking.completed? %>
               <div class="flex items-start gap-3">
-                <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <i class="fas fa-check text-emerald-600 text-[8px]"></i>
+                <div class="w-6 h-6 rounded-full bg-forest-soft border border-forest/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-check text-forest text-[8px]"></i>
                 </div>
-                <div>
-                  <div class="text-xs font-semibold text-slate-900">Confirmed by provider</div>
-                </div>
+                <div class="text-[13px] font-semibold text-ink">Confirmed by provider</div>
               </div>
             <% end %>
             <% if @booking.completed? %>
               <div class="flex items-start gap-3">
-                <div class="w-6 h-6 rounded-full bg-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <i class="fas fa-check-double text-sky-600 text-[8px]"></i>
+                <div class="w-6 h-6 rounded-full bg-cream-sunken border border-ink flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-check-double text-ink text-[8px]"></i>
                 </div>
-                <div>
-                  <div class="text-xs font-semibold text-slate-900">Job completed</div>
-                </div>
+                <div class="text-[13px] font-semibold text-ink">Job completed</div>
               </div>
             <% end %>
             <% if @booking.cancelled? %>
               <div class="flex items-start gap-3">
-                <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                  <i class="fas fa-times text-red-600 text-[8px]"></i>
+                <div class="w-6 h-6 rounded-full bg-rose-100 border border-rose-200 flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <i class="fas fa-times text-rose-600 text-[8px]"></i>
                 </div>
-                <div>
-                  <div class="text-xs font-semibold text-slate-900">Booking cancelled</div>
-                </div>
+                <div class="text-[13px] font-semibold text-ink">Booking cancelled</div>
               </div>
             <% end %>
           </div>
         </div>
-      </div>
+      </aside>
     </div>
   </div>
 </div>
