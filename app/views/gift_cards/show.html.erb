@@ -1,40 +1,47 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <%= link_to gift_cards_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
-      <i class="fas fa-arrow-left text-xs"></i>Back
+<div class="min-h-screen bg-cream">
+  <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+
+    <%= link_to gift_cards_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors mb-6" do %>
+      <i class="fas fa-arrow-left text-[10px]"></i>Back
     <% end %>
 
-    <%# Gift card design %>
-    <div class="relative overflow-hidden bg-gradient-to-br from-violet-600 via-purple-600 to-pink-600 rounded-2xl p-10 text-white shadow-2xl mb-6">
-      <div class="absolute top-0 right-0 opacity-10"><i class="fas fa-gift text-[240px]"></i></div>
+    <%# Gift card visual %>
+    <div class="relative overflow-hidden rounded-[20px] p-10 text-cream mb-5 shadow-card-lg" style="background: linear-gradient(135deg, #d96a3a, #b8551c);">
+      <div class="absolute -top-4 -right-4 opacity-15"><i class="fas fa-gift text-cream text-[240px]"></i></div>
       <div class="relative">
-        <div class="text-xs font-bold uppercase tracking-widest opacity-80">Radius Gift Card</div>
-        <div class="mt-4 text-5xl font-black">$<%= number_with_precision(@gift_card.balance, precision: 2) %></div>
-        <div class="text-sm opacity-70 mt-1">of $<%= number_with_precision(@gift_card.amount, precision: 2) %> total</div>
+        <div class="font-mono text-[11px] uppercase tracking-[0.16em] opacity-80">Radius Gift Card</div>
+        <div class="display mt-5 leading-none" style="font-size: clamp(48px, 9vw, 72px);">$<%= number_with_precision(@gift_card.balance, precision: 2) %></div>
+        <div class="font-mono text-[11px] uppercase tracking-[0.1em] opacity-75 mt-2">of $<%= number_with_precision(@gift_card.amount, precision: 2) %> total</div>
         <div class="mt-8">
-          <div class="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-1">Redemption Code</div>
-          <div class="text-xl font-mono font-bold tracking-widest"><%= @gift_card.formatted_code %></div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.16em] opacity-80 mb-2">redemption code</div>
+          <div class="font-mono text-[20px] font-bold tracking-[0.18em]"><%= @gift_card.formatted_code %></div>
         </div>
       </div>
     </div>
 
     <% if @gift_card.message.present? %>
-      <div class="bg-white rounded-xl border border-slate-100 p-5 mb-4">
-        <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Message</div>
-        <p class="text-sm text-slate-700 italic">"<%= @gift_card.message %>"</p>
+      <div class="bg-cream-elevated border border-line rounded-xl p-5 mb-3">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">message</div>
+        <p class="display text-[18px] text-ink leading-[1.3] italic">"<%= @gift_card.message %>"</p>
       </div>
     <% end %>
 
-    <div class="bg-white rounded-xl border border-slate-100 p-5 space-y-2 text-sm">
-      <div class="flex justify-between"><span class="text-slate-500">Status</span><span class="font-bold text-slate-900"><%= @gift_card.status.titleize %></span></div>
-      <% if @gift_card.recipient_name.present? %>
-        <div class="flex justify-between"><span class="text-slate-500">For</span><span class="font-bold text-slate-900"><%= @gift_card.recipient_name %></span></div>
+    <div class="bg-cream-elevated border border-line rounded-xl divide-y divide-line">
+      <% [
+        [ "Status", @gift_card.status.titleize ],
+        @gift_card.recipient_name.present? ? [ "For", @gift_card.recipient_name ] : nil,
+        [ "Purchased", @gift_card.created_at.strftime("%b %-d, %Y") ]
+      ].compact.each do |label, value| %>
+        <div class="flex justify-between items-center px-5 py-3.5">
+          <span class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3"><%= label %></span>
+          <span class="text-[14px] font-semibold text-ink"><%= value %></span>
+        </div>
       <% end %>
-      <div class="flex justify-between"><span class="text-slate-500">Purchased</span><span class="font-bold text-slate-900"><%= @gift_card.created_at.strftime("%b %d, %Y") %></span></div>
     </div>
 
-    <button onclick="navigator.clipboard.writeText('<%= @gift_card.code %>'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy Code', 2000)" class="mt-6 w-full bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-xl font-bold text-sm cursor-pointer">
-      Copy Code
+    <button onclick="navigator.clipboard.writeText('<%= @gift_card.code %>'); this.textContent='Copied!'; setTimeout(()=>this.textContent='Copy code', 2000)"
+            class="mt-6 w-full bg-ink hover:bg-ink-2 text-cream py-3 rounded-pill font-semibold text-sm cursor-pointer transition-colors active:translate-y-px">
+      Copy code
     </button>
   </div>
 </div>

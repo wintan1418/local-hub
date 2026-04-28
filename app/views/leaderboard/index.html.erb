@@ -1,46 +1,49 @@
-<div class="min-h-screen bg-slate-50">
-  <%# Hero %>
-  <section class="bg-slate-900 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <div class="text-center max-w-2xl mx-auto">
-        <div class="inline-flex items-center px-4 py-1.5 rounded-full bg-orange-500/20 border border-orange-500/30 mb-6">
-          <i class="fas fa-trophy text-orange-400 mr-2 text-sm"></i>
-          <span class="text-orange-300 text-sm font-medium">Leaderboard</span>
-        </div>
-        <h1 class="text-4xl sm:text-5xl font-bold">Top Providers</h1>
-        <p class="mt-4 text-lg text-slate-400">Discover the highest-rated service providers in your area</p>
+<div class="min-h-screen bg-cream">
+
+  <%# Header section %>
+  <section class="bg-cream border-b border-line">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+      <div class="max-w-3xl">
+        <div class="eyebrow mb-4">leaderboard</div>
+        <h1 class="display text-ink leading-[0.95] tracking-[-0.035em]" style="font-size: clamp(40px, 7vw, 80px);">
+          Top pros, ranked <em class="italic-wonk" style="color: #1f4d3a;">honestly</em>.
+        </h1>
+        <p class="mt-4 text-[16px] sm:text-[19px] leading-[1.55] text-ink-2 max-w-xl">
+          The highest-rated, most-booked, most-reviewed providers in your area.
+        </p>
       </div>
     </div>
   </section>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
     <%# Filters %>
-    <div class="bg-white rounded-xl border border-slate-100 p-5 mb-8">
+    <div class="bg-cream-elevated border border-line rounded-xl p-4 sm:p-5 mb-8">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-1.5">
           <% [
-            { key: 'rating', icon: 'fa-star', label: 'Top Rated' },
-            { key: 'bookings', icon: 'fa-calendar-check', label: 'Most Bookings' },
-            { key: 'revenue', icon: 'fa-dollar-sign', label: 'Top Earning' },
-            { key: 'recent', icon: 'fa-clock', label: 'Most Active' }
+            { key: "rating", label: "Top rated" },
+            { key: "bookings", label: "Most booked" },
+            { key: "revenue", label: "Top earning" },
+            { key: "recent", label: "Most active" }
           ].each do |tab| %>
             <%= link_to leaderboard_index_path(filter: tab[:key], category_id: params[:category_id]),
-                class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium transition-colors #{@filter == tab[:key] ? 'bg-orange-500 text-white shadow-sm' : 'bg-slate-50 text-slate-600 hover:bg-slate-100'}" do %>
-              <i class="fas <%= tab[:icon] %> mr-2 text-xs"></i><%= tab[:label] %>
+                class: "inline-flex items-center px-4 py-2 rounded-pill text-[13px] font-medium transition-colors #{@filter == tab[:key] ? 'bg-ink text-cream' : 'bg-cream-sunken/50 text-ink-2 hover:bg-cream-sunken'}" do %>
+              <%= tab[:label] %>
             <% end %>
           <% end %>
         </div>
 
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
           <%= form_with url: leaderboard_index_path, method: :get, local: true, class: "flex items-center gap-2" do |form| %>
             <%= form.hidden_field :filter, value: @filter %>
             <%= form.collection_select :category_id, @categories, :id, :name,
-                { prompt: "All Categories", selected: @category_id },
-                { class: "px-4 py-2 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white", onchange: "this.form.submit();" } %>
+                { prompt: "All categories", selected: @category_id },
+                { class: "px-4 py-2 rounded-pill border border-line text-[13px] focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated", onchange: "this.form.submit();" } %>
           <% end %>
           <% if @selected_category %>
-            <%= link_to leaderboard_index_path(filter: @filter), class: "text-sm text-slate-400 hover:text-slate-600" do %>
-              <i class="fas fa-times"></i>
+            <%= link_to leaderboard_index_path(filter: @filter), class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 hover:text-ink" do %>
+              clear
             <% end %>
           <% end %>
         </div>
@@ -48,100 +51,65 @@
     </div>
 
     <%# Provider list %>
-    <div class="space-y-4">
+    <div class="space-y-2">
       <% @providers.each_with_index do |provider, index| %>
-        <%= link_to leaderboard_path(provider), class: "group block bg-white rounded-xl border border-slate-100 hover:shadow-lg hover:border-slate-200 transition-all duration-200 p-6" do %>
-          <div class="flex items-center gap-5">
+        <%= link_to leaderboard_path(provider), class: "group block bg-cream-elevated rounded-xl border border-line hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200 p-5" do %>
+          <div class="flex items-center gap-4 sm:gap-5">
             <%# Rank %>
-            <div class="flex-shrink-0">
-              <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold
-                  <%= case index
-                      when 0 then 'bg-amber-50 text-amber-600'
-                      when 1 then 'bg-slate-100 text-slate-500'
-                      when 2 then 'bg-orange-50 text-orange-500'
-                      else 'bg-slate-50 text-slate-400'
-                      end %>">
-                <% if index < 3 %>
-                  <i class="fas fa-trophy text-lg"></i>
-                <% else %>
-                  <span class="text-lg">#<%= index + 1 %></span>
-                <% end %>
-              </div>
-            </div>
-
-            <%# Avatar %>
-            <div class="flex-shrink-0">
-              <% if provider.profile_picture.attached? %>
-                <%= image_tag provider.profile_picture, class: "h-14 w-14 rounded-xl object-cover" %>
+            <div class="flex-shrink-0 w-12 text-center">
+              <% if index < 3 %>
+                <% trophy_color = [ "#d96a3a", "#766853", "#b8551c" ][index] %>
+                <div class="display text-[28px] sm:text-[36px] leading-none" style="color: <%= trophy_color %>; font-style: italic; font-variation-settings: 'SOFT' 100, 'WONK' 1;"><%= index + 1 %></div>
               <% else %>
-                <div class="h-14 w-14 rounded-xl bg-orange-100 flex items-center justify-center text-lg font-semibold text-orange-600">
-                  <%= provider.display_name.first.upcase %>
-                </div>
+                <div class="display text-[24px] text-ink-3 leading-none"><%= index + 1 %></div>
               <% end %>
             </div>
 
+            <%# Avatar %>
+            <% if provider.profile_picture.attached? %>
+              <%= image_tag provider.profile_picture, class: "h-14 w-14 rounded-full object-cover border border-line flex-shrink-0" %>
+            <% else %>
+              <img src="https://i.pravatar.cc/120?u=provider<%= provider.id %>" class="h-14 w-14 rounded-full object-cover border border-line flex-shrink-0" alt="<%= provider.display_name %>">
+            <% end %>
+
             <%# Info %>
-            <div class="flex-grow min-w-0">
+            <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-1 flex-wrap">
-                <h3 class="text-lg font-semibold text-slate-900 group-hover:text-orange-600 transition-colors truncate">
-                  <%= provider.business_name || provider.full_name %>
-                </h3>
+                <div class="display text-[18px] sm:text-[20px] text-ink leading-[1.15] tracking-[-0.01em] truncate"><%= provider.business_name.presence || provider.full_name %></div>
                 <% badge = provider.provider_badge %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-<%= badge[:color] %>-50 text-<%= badge[:color] %>-700">
-                  <i class="<%= badge[:icon] %> mr-1"></i><%= badge[:name] %>
-                </span>
+                <% if badge && badge[:name] != "New" %>
+                  <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill bg-cream-sunken text-ink-2">
+                    <%= badge[:name] %>
+                  </span>
+                <% end %>
                 <% if provider.verified? %>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                    <i class="fas fa-check-circle mr-1"></i>Verified
+                  <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill bg-forest-soft text-forest">
+                    <i class="fas fa-check text-[8px] mr-0.5"></i>verified
                   </span>
                 <% end %>
               </div>
 
               <% if provider.bio.present? %>
-                <p class="text-sm text-slate-500 mb-3 line-clamp-1"><%= provider.bio %></p>
+                <p class="text-[12px] text-ink-3 mb-2 line-clamp-1"><%= provider.bio %></p>
               <% end %>
 
               <%# Stats row %>
-              <div class="flex flex-wrap gap-6 text-sm">
-                <div class="flex items-center gap-1.5">
-                  <i class="fas fa-star text-amber-400 text-xs"></i>
-                  <span class="font-semibold text-slate-900">
-                    <%= provider.respond_to?(:avg_rating) ? (provider.avg_rating&.round(1) || 0) : provider.average_rating %>
-                  </span>
-                  <span class="text-slate-400">rating</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <i class="fas fa-check-circle text-green-500 text-xs"></i>
-                  <span class="font-semibold text-slate-900">
-                    <%= provider.respond_to?(:completed_count) ? provider.completed_count : provider.total_completed_bookings %>
-                  </span>
-                  <span class="text-slate-400">completed</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <i class="fas fa-comment text-blue-400 text-xs"></i>
-                  <span class="font-semibold text-slate-900"><%= provider.total_reviews %></span>
-                  <span class="text-slate-400">reviews</span>
-                </div>
+              <div class="flex flex-wrap gap-x-5 gap-y-1 mt-1 font-mono text-[11px] uppercase tracking-[0.08em] text-ink-3">
+                <div class="flex items-center gap-1.5"><i class="fas fa-star text-amber-500 text-[10px]"></i><span class="font-semibold text-ink"><%= provider.respond_to?(:avg_rating) ? (provider.avg_rating&.round(1) || 0) : provider.average_rating %></span> rating</div>
+                <div class="flex items-center gap-1.5"><i class="fas fa-check-circle text-forest text-[10px]"></i><span class="font-semibold text-ink"><%= provider.respond_to?(:completed_count) ? provider.completed_count : provider.total_completed_bookings %></span> done</div>
+                <div class="flex items-center gap-1.5"><i class="fas fa-comment text-ink-3 text-[10px]"></i><span class="font-semibold text-ink"><%= provider.total_reviews %></span> reviews</div>
                 <% if @filter == 'revenue' && provider.respond_to?(:total_revenue) %>
-                  <div class="flex items-center gap-1.5">
-                    <i class="fas fa-dollar-sign text-green-500 text-xs"></i>
-                    <span class="font-semibold text-slate-900">$<%= number_with_delimiter(provider.total_revenue.to_i) %></span>
-                    <span class="text-slate-400">earned</span>
-                  </div>
+                  <div class="flex items-center gap-1.5"><i class="fas fa-dollar-sign text-forest text-[10px]"></i><span class="font-semibold text-ink">$<%= number_with_delimiter(provider.total_revenue.to_i) %></span> earned</div>
                 <% else %>
-                  <div class="flex items-center gap-1.5">
-                    <i class="fas fa-chart-line text-orange-400 text-xs"></i>
-                    <span class="font-semibold text-slate-900"><%= provider.completion_rate %>%</span>
-                    <span class="text-slate-400">success</span>
-                  </div>
+                  <div class="flex items-center gap-1.5"><i class="fas fa-chart-line text-ink-3 text-[10px]"></i><span class="font-semibold text-ink"><%= provider.completion_rate %>%</span> success</div>
                 <% end %>
               </div>
             </div>
 
             <%# Arrow %>
             <div class="flex-shrink-0 hidden sm:block">
-              <div class="w-10 h-10 rounded-xl bg-slate-50 group-hover:bg-orange-50 flex items-center justify-center transition-colors">
-                <i class="fas fa-chevron-right text-slate-400 group-hover:text-orange-500 text-sm transition-colors"></i>
+              <div class="w-9 h-9 rounded-full border border-line group-hover:bg-ink group-hover:border-ink flex items-center justify-center transition-colors">
+                <i class="fas fa-chevron-right text-ink-3 group-hover:text-cream text-[10px] transition-colors"></i>
               </div>
             </div>
           </div>
@@ -149,13 +117,10 @@
       <% end %>
 
       <% if @providers.empty? %>
-        <div class="text-center py-20">
-          <div class="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-xl flex items-center justify-center">
-            <i class="fas fa-trophy text-slate-400 text-2xl"></i>
-          </div>
-          <h3 class="text-lg font-semibold text-slate-900 mb-2">No providers found</h3>
-          <p class="text-slate-500">Try adjusting your filters or check back later.</p>
-        </div>
+        <%= render "shared/empty_state",
+            icon: "fa-trophy",
+            title: "No providers found",
+            message: "Try adjusting your filters or check back later." %>
       <% end %>
     </div>
   </div>

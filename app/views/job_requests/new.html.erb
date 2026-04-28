@@ -1,76 +1,54 @@
-<div class="min-h-screen bg-slate-50 relative overflow-hidden">
-  <%# Ambient background %>
-  <div class="absolute top-0 right-0 w-96 h-96 bg-orange-100/40 rounded-full blur-[100px] pointer-events-none"></div>
-  <div class="absolute bottom-0 left-0 w-96 h-96 bg-sky-100/40 rounded-full blur-[100px] pointer-events-none"></div>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
 
-  <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <%= link_to job_requests_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 mb-8 group" do %>
-      <i class="fas fa-arrow-left text-xs group-hover:-translate-x-1 transition-transform"></i>
-      <span>Back to Job Requests</span>
+    <%= link_to job_requests_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors mb-6" do %>
+      <i class="fas fa-arrow-left text-[10px]"></i>Back to job requests
     <% end %>
 
-    <%# Page header with icon %>
-    <div class="mb-10">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-bullhorn text-[10px]"></i>
-        Reverse Marketplace
-      </div>
-      <h1 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Post a Job</h1>
-      <p class="mt-2 text-slate-500">Describe what you need. Verified providers will send you quotes within hours.</p>
+    <div class="mb-8">
+      <div class="eyebrow mb-3">post a job</div>
+      <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">Tell us what you <em class="italic-wonk" style="color: #1f4d3a;">need</em>.</h1>
+      <p class="mt-2 text-[14px] text-ink-2">Verified providers will send you quotes within hours. Free to post.</p>
     </div>
 
-    <%# Steps indicator %>
-    <div class="flex items-center gap-2 mb-8">
-      <div class="flex-1 h-1.5 rounded-full bg-gradient-to-r from-orange-500 to-rose-500"></div>
-      <div class="flex-1 h-1.5 rounded-full bg-slate-200"></div>
-      <div class="flex-1 h-1.5 rounded-full bg-slate-200"></div>
+    <%# Step indicator %>
+    <div class="flex items-center gap-1.5 mb-2">
+      <div class="flex-1 h-1 rounded-pill bg-ink"></div>
+      <div class="flex-1 h-1 rounded-pill bg-line"></div>
+      <div class="flex-1 h-1 rounded-pill bg-line"></div>
     </div>
-    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-6">Step 1 of 3 · Tell us about your job</p>
+    <p class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-6">step 1 of 3 · about your job</p>
 
-    <div class="bg-white rounded-2xl border border-slate-100 shadow-xl shadow-slate-900/[0.04] p-6 sm:p-10">
-      <%= form_with(model: @job_request, local: true, class: "space-y-8") do |f| %>
+    <div class="bg-cream-elevated border border-line rounded-xl p-6 sm:p-8">
+      <%= form_with(model: @job_request, local: true, class: "space-y-6") do |f| %>
         <% if @job_request.errors.any? %>
-          <div class="flex items-start gap-3 p-4 rounded-xl bg-red-50 border border-red-200">
-            <i class="fas fa-exclamation-circle text-red-500 mt-0.5"></i>
-            <div>
-              <p class="text-sm font-bold text-red-800">Please fix the following:</p>
-              <ul class="mt-1 text-sm text-red-700 space-y-0.5">
-                <% @job_request.errors.full_messages.each do |msg| %><li>• <%= msg %></li><% end %>
-              </ul>
-            </div>
+          <div class="p-3 rounded-lg bg-rose-50 border border-rose-200">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-rose-700 mb-1">please fix:</div>
+            <ul class="space-y-0.5 ml-5">
+              <% @job_request.errors.full_messages.each do |msg| %>
+                <li class="text-[13px] text-rose-700 list-disc"><%= msg %></li>
+              <% end %>
+            </ul>
           </div>
         <% end %>
 
         <%# Title %>
         <div>
-          <%= f.label :title, class: "block text-sm font-bold text-slate-900 mb-2" do %>
-            What do you need? <span class="text-red-500">*</span>
-          <% end %>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-              <i class="fas fa-lightbulb text-slate-300"></i>
-            </div>
-            <%= f.text_field :title, placeholder: "e.g. Fix leaking kitchen faucet",
-                class: "w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all" %>
-          </div>
-          <p class="mt-1.5 text-xs text-slate-400 flex items-center gap-1">
-            <i class="fas fa-info-circle"></i>
-            Be specific — "Fix leaking kitchen faucet" is better than "Plumbing help"
-          </p>
+          <%= f.label :title, "What do you need?", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+          <%= f.text_field :title, placeholder: "e.g. Fix leaking kitchen faucet",
+              class: "w-full px-4 py-3 rounded-pill border border-line text-ink placeholder-ink-4 focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+          <p class="mt-1.5 text-[11px] text-ink-3">Be specific — "Fix leaking kitchen faucet" beats "Plumbing help"</p>
         </div>
 
-        <%# Category — custom pill-style selector %>
+        <%# Category — pill-style chips %>
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-2">Category <span class="text-red-500">*</span></label>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2 block">Category</label>
+          <div class="flex flex-wrap gap-1.5">
             <% @categories.each do |cat| %>
-              <label class="relative cursor-pointer group">
-                <input type="radio" name="job_request[category_id]" value="<%= cat.id %>" class="peer absolute opacity-0" required>
-                <div class="flex items-center gap-2.5 px-3 py-3 rounded-xl border-2 border-slate-100 hover:border-slate-200 peer-checked:border-orange-500 peer-checked:bg-orange-50 transition-all">
-                  <% if cat.icon.present? %>
-                    <i class="<%= cat.icon %> text-slate-400 peer-checked:group-has-[:checked]:text-orange-500 text-sm"></i>
-                  <% end %>
-                  <span class="text-sm font-semibold text-slate-700 group-has-[:checked]:text-orange-700"><%= cat.name %></span>
+              <label class="cursor-pointer">
+                <input type="radio" name="job_request[category_id]" value="<%= cat.id %>" class="peer sr-only" required>
+                <div class="px-4 py-2 rounded-pill border border-line bg-cream-elevated text-[13px] font-medium text-ink-2 hover:border-line-strong peer-checked:bg-ink peer-checked:text-cream peer-checked:border-ink transition-colors">
+                  <%= cat.name %>
                 </div>
               </label>
             <% end %>
@@ -79,110 +57,86 @@
 
         <%# Description %>
         <div>
-          <%= f.label :description, class: "block text-sm font-bold text-slate-900 mb-2" do %>
-            Describe the job <span class="text-red-500">*</span>
-          <% end %>
-          <%= f.text_area :description, rows: 5, placeholder: "What's the problem? When did it start? Any special requirements? The more detail you give, the better quotes you'll get.",
-              class: "w-full px-4 py-3.5 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all resize-none" %>
+          <%= f.label :description, "Describe the job", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+          <%= f.text_area :description, rows: 5, placeholder: "What's the problem? When did it start? Any special requirements? More detail = better quotes.",
+              class: "w-full px-4 py-3 rounded-2xl border border-line text-ink placeholder-ink-4 focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none" %>
           <div class="mt-1.5 flex items-center justify-between">
-            <p class="text-xs text-slate-400"><i class="fas fa-camera mr-1"></i>Photos help too — add them after posting</p>
-            <span class="text-xs text-slate-400" id="desc-count">0 characters</span>
+            <p class="text-[11px] text-ink-3"><i class="fas fa-camera mr-1"></i>Add photos after posting</p>
+            <span class="font-mono text-[10px] text-ink-3" id="desc-count">0 chars</span>
           </div>
         </div>
 
-        <%# Budget — two fields with visual range %>
+        <%# Budget %>
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-2">Budget range</label>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Budget range (optional)</label>
           <div class="grid grid-cols-2 gap-3">
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span class="text-slate-400 text-sm font-medium">$</span>
-              </div>
-              <%= f.number_field :budget_min, step: 1, placeholder: "50",
-                  class: "w-full pl-8 pr-16 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all" %>
-              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <span class="text-xs text-slate-400">min</span>
-              </div>
+              <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-ink-3 text-sm">$</span>
+              <%= f.number_field :budget_min, step: 1, placeholder: "Min",
+                  class: "w-full pl-8 pr-4 py-3 rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
             </div>
             <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <span class="text-slate-400 text-sm font-medium">$</span>
-              </div>
-              <%= f.number_field :budget_max, step: 1, placeholder: "200",
-                  class: "w-full pl-8 pr-16 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all" %>
-              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <span class="text-xs text-slate-400">max</span>
-              </div>
+              <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-ink-3 text-sm">$</span>
+              <%= f.number_field :budget_max, step: 1, placeholder: "Max",
+                  class: "w-full pl-8 pr-4 py-3 rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
             </div>
           </div>
-          <p class="mt-1.5 text-xs text-slate-400">Optional — leaving blank lets providers price freely</p>
         </div>
 
-        <%# Needed by + Location %>
+        <%# Needed by + ZIP %>
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <%= f.label :needed_by, "When do you need this?", class: "block text-sm font-bold text-slate-900 mb-2" %>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fas fa-calendar-alt text-slate-300"></i>
-              </div>
-              <%= f.datetime_field :needed_by, class: "w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all" %>
-            </div>
+            <%= f.label :needed_by, "When do you need this?", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+            <%= f.datetime_field :needed_by, class: "w-full px-4 py-3 rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
           </div>
           <div>
-            <label class="block text-sm font-bold text-slate-900 mb-2">ZIP code</label>
-            <div class="relative">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <i class="fas fa-map-marker-alt text-slate-300"></i>
-              </div>
-              <%= f.text_field :zip, placeholder: "12345", maxlength: 5, class: "w-full pl-11 pr-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all" %>
-            </div>
+            <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">ZIP</label>
+            <%= f.text_field :zip, placeholder: "12345", maxlength: 5,
+                class: "w-full px-4 py-3 rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
           </div>
         </div>
 
         <%# City + state %>
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-bold text-slate-900 mb-2">City</label>
-            <%= f.text_field :city, placeholder: "e.g. New York", class: "w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all" %>
+            <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">City</label>
+            <%= f.text_field :city, placeholder: "e.g. New York",
+                class: "w-full px-4 py-3 rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
           </div>
           <div>
-            <label class="block text-sm font-bold text-slate-900 mb-2">State</label>
-            <%= f.text_field :state, placeholder: "e.g. NY", maxlength: 2, class: "w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all" %>
+            <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">State</label>
+            <%= f.text_field :state, placeholder: "NY", maxlength: 2,
+                class: "w-full px-4 py-3 rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
           </div>
         </div>
 
         <%# Submit %>
-        <div class="flex items-center justify-between pt-6 border-t border-slate-100">
-          <%= link_to job_requests_path, class: "text-sm font-semibold text-slate-500 hover:text-slate-700" do %>
-            Cancel
-          <% end %>
-          <button type="submit" class="btn-shine group inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all hover:shadow-lg hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer">
-            Post Job
-            <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+        <div class="flex items-center justify-between pt-5 border-t border-line">
+          <%= link_to "Cancel", job_requests_path, class: "font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 hover:text-ink" %>
+          <button type="submit" class="inline-flex items-center gap-2 bg-ink hover:bg-ink-2 text-cream px-7 py-3 rounded-pill font-semibold text-sm transition-colors active:translate-y-px">
+            Post job <i class="fas fa-arrow-right text-[10px]"></i>
           </button>
         </div>
       <% end %>
     </div>
 
-    <%# Trust signals under form %>
-    <div class="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500">
-      <div class="flex items-center gap-1.5"><i class="fas fa-shield-alt text-emerald-500"></i>Free to post</div>
-      <div class="flex items-center gap-1.5"><i class="fas fa-bolt text-amber-500"></i>Quotes within hours</div>
-      <div class="flex items-center gap-1.5"><i class="fas fa-user-check text-sky-500"></i>All providers verified</div>
+    <%# Trust signals %>
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-6 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3">
+      <div class="flex items-center gap-1.5"><i class="fas fa-shield-alt text-forest"></i>free to post</div>
+      <div class="flex items-center gap-1.5"><i class="fas fa-bolt text-amber-600"></i>quotes within hours</div>
+      <div class="flex items-center gap-1.5"><i class="fas fa-user-check text-forest"></i>verified providers</div>
     </div>
   </div>
 </div>
 
 <script>
-// Character counter
 document.addEventListener('DOMContentLoaded', function() {
   var desc = document.querySelector('textarea[name="job_request[description]"]');
   var count = document.getElementById('desc-count');
   if (desc && count) {
-    var updateCount = function() { count.textContent = desc.value.length + ' characters'; };
-    desc.addEventListener('input', updateCount);
-    updateCount();
+    var update = function() { count.textContent = desc.value.length + ' chars'; };
+    desc.addEventListener('input', update);
+    update();
   }
 });
 </script>

@@ -1,27 +1,31 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <%= link_to gift_cards_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
-      <i class="fas fa-arrow-left text-xs"></i>Back
+<div class="min-h-screen bg-cream">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+
+    <%= link_to gift_cards_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors mb-6" do %>
+      <i class="fas fa-arrow-left text-[10px]"></i>Back
     <% end %>
 
-    <h1 class="text-2xl font-black text-slate-900 mb-8">Buy a Gift Card</h1>
+    <div class="mb-8">
+      <div class="eyebrow mb-3">buy a gift card</div>
+      <h1 class="display text-[32px] sm:text-[40px] text-ink leading-[1] tracking-[-0.02em]">Send a <em class="italic-wonk" style="color: #1f4d3a;">surprise</em>.</h1>
+    </div>
 
-    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8">
+    <div class="bg-cream-elevated border border-line rounded-xl p-6 sm:p-8">
       <%= form_with model: @gift_card, local: true, class: "space-y-6" do |f| %>
         <% if @gift_card.errors.any? %>
-          <div class="p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700">
+          <div class="p-3 rounded-lg bg-rose-50 border border-rose-200 text-[13px] text-rose-700">
             <%= @gift_card.errors.full_messages.join(", ") %>
           </div>
         <% end %>
 
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-3">Amount</label>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3 block">Amount</label>
           <div class="grid grid-cols-5 gap-2">
             <% GiftCard::AMOUNTS.each do |amt| %>
-              <label class="relative cursor-pointer">
-                <input type="radio" name="gift_card[amount]" value="<%= amt %>" class="peer absolute opacity-0" <%= 'checked' if (params[:amount].to_i == amt) || (amt == 50 && params[:amount].blank?) %>>
-                <div class="text-center p-3 rounded-xl border-2 border-slate-100 peer-checked:border-violet-500 peer-checked:bg-violet-50 transition-all">
-                  <div class="text-base font-black text-slate-900">$<%= amt %></div>
+              <label class="cursor-pointer">
+                <input type="radio" name="gift_card[amount]" value="<%= amt %>" class="peer sr-only" <%= 'checked' if (params[:amount].to_i == amt) || (amt == 50 && params[:amount].blank?) %>>
+                <div class="text-center p-4 rounded-xl border border-line bg-cream-elevated peer-checked:border-ink peer-checked:bg-cream-sunken/40 transition-all">
+                  <div class="display text-[22px] text-ink leading-none">$<%= amt %></div>
                 </div>
               </label>
             <% end %>
@@ -30,29 +34,30 @@
 
         <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-sm font-bold text-slate-900 mb-2">Recipient Name</label>
-            <%= f.text_field :recipient_name, placeholder: "Jane Doe", class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-500" %>
+            <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Recipient name</label>
+            <%= f.text_field :recipient_name, placeholder: "Jane Doe",
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
           </div>
           <div>
-            <label class="block text-sm font-bold text-slate-900 mb-2">Recipient Email</label>
-            <%= f.email_field :recipient_email, placeholder: "jane@example.com", class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-500" %>
+            <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Recipient email</label>
+            <%= f.email_field :recipient_email, placeholder: "jane@example.com",
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
           </div>
         </div>
 
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-2">Personal Message (optional)</label>
-          <%= f.text_area :message, rows: 3, placeholder: "Happy birthday! Enjoy some pampering on me.", class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-4 focus:ring-violet-500/10 focus:border-violet-500 resize-none" %>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Personal message (optional)</label>
+          <%= f.text_area :message, rows: 3, placeholder: "Happy birthday! Enjoy some pampering on me.",
+              class: "w-full px-4 py-3 rounded-2xl border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none" %>
         </div>
 
-        <div class="p-4 rounded-xl bg-violet-50 border border-violet-100 flex items-start gap-3">
-          <i class="fas fa-info-circle text-violet-600 mt-0.5"></i>
-          <div class="text-xs text-violet-800">
-            After purchase, the recipient gets an email with the code. Never expires. Redeem against any booking.
-          </div>
+        <div class="p-4 rounded-xl bg-forest-soft border border-forest/20 flex items-start gap-3">
+          <i class="fas fa-info-circle text-forest mt-0.5 text-[12px]"></i>
+          <div class="text-[12px] text-ink-2 leading-[1.5]">After purchase, the recipient gets an email with the code. Never expires. Redeem against any booking.</div>
         </div>
 
-        <button type="submit" class="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white px-8 py-3.5 rounded-xl font-bold text-sm cursor-pointer transition-all">
-          Purchase Gift Card
+        <button type="submit" class="w-full bg-ink hover:bg-ink-2 text-cream py-3.5 rounded-pill font-semibold text-sm cursor-pointer transition-colors active:translate-y-px">
+          Purchase gift card
         </button>
       <% end %>
     </div>

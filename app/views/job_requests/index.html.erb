@@ -1,41 +1,55 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex items-center justify-between mb-8">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+
+    <div class="flex items-end justify-between gap-3 mb-8">
       <div>
-        <h1 class="text-2xl font-black text-slate-900"><%= current_user.customer? ? 'My Job Requests' : 'Open Job Requests' %></h1>
-        <p class="text-sm text-slate-500 mt-1"><%= current_user.customer? ? 'Post a job and get quotes from pros' : 'Customers looking for pros — submit a quote' %></p>
+        <div class="eyebrow mb-3">job requests</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">
+          <% if current_user.customer? %>
+            Pros come to <em class="italic-wonk" style="color: #1f4d3a;">you</em>.
+          <% else %>
+            Open <em class="italic-wonk" style="color: #1f4d3a;">opportunities</em>.
+          <% end %>
+        </h1>
+        <p class="mt-2 text-[14px] text-ink-2"><%= current_user.customer? ? "Post a job and get quotes from verified pros." : "Customers looking for pros — submit a quote." %></p>
       </div>
       <% if current_user.customer? %>
-        <%= link_to new_job_request_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
-          <i class="fas fa-plus mr-2 text-xs"></i>Post a Job
+        <%= link_to new_job_request_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors active:translate-y-px" do %>
+          <i class="fas fa-plus text-[10px]"></i>Post a job
         <% end %>
       <% end %>
     </div>
 
     <% if @job_requests.any? %>
-      <div class="space-y-3">
+      <div class="space-y-2">
         <% @job_requests.each do |jr| %>
-          <%= link_to job_request_path(jr), class: "block bg-white rounded-xl border border-slate-100 p-5 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200" do %>
-            <div class="flex items-center justify-between gap-4">
+          <%= link_to job_request_path(jr), class: "block bg-cream-elevated rounded-xl border border-line p-5 hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200" do %>
+            <div class="flex items-start justify-between gap-4">
               <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2 mb-1">
-                  <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full"><%= jr.category.name %></span>
-                  <% status_colors = { "open" => "emerald", "awarded" => "violet", "closed" => "slate", "cancelled" => "red" } %>
-                  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[jr.status] %>-50 text-<%= status_colors[jr.status] %>-700"><%= jr.status.titleize %></span>
+                <div class="flex items-center gap-2 mb-2 flex-wrap">
+                  <span class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3"><%= jr.category.name %></span>
+                  <% status_colors = {
+                    "open" => [ "bg-forest-soft", "text-forest" ],
+                    "awarded" => [ "bg-cream-sunken", "text-ink-2" ],
+                    "closed" => [ "bg-cream-sunken", "text-ink-3" ],
+                    "cancelled" => [ "bg-rose-100/60", "text-rose-700" ]
+                  } %>
+                  <% c = status_colors[jr.status] || [ "bg-cream-sunken", "text-ink-3" ] %>
+                  <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill <%= c[0] %> <%= c[1] %>"><%= jr.status %></span>
                 </div>
-                <h3 class="text-base font-bold text-slate-900 truncate"><%= jr.title %></h3>
-                <p class="text-xs text-slate-500 line-clamp-1 mt-1"><%= jr.description %></p>
-                <div class="flex items-center gap-3 mt-2 text-xs text-slate-400">
-                  <% if jr.city.present? %><span><i class="fas fa-map-marker-alt mr-1"></i><%= [jr.city, jr.state].compact.join(', ') %></span><% end %>
-                  <% if jr.needed_by.present? %><span><i class="fas fa-clock mr-1"></i>By <%= jr.needed_by.strftime("%b %d") %></span><% end %>
+                <div class="display text-[18px] sm:text-[20px] text-ink leading-[1.15] tracking-[-0.01em] truncate"><%= jr.title %></div>
+                <p class="text-[13px] text-ink-3 line-clamp-1 mt-1"><%= jr.description %></p>
+                <div class="flex items-center gap-4 mt-3 font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">
+                  <% if jr.city.present? %><span><i class="fas fa-map-marker-alt mr-1"></i><%= [ jr.city, jr.state ].compact.join(", ") %></span><% end %>
+                  <% if jr.needed_by.present? %><span><i class="fas fa-clock mr-1"></i>by <%= jr.needed_by.strftime("%b %-d") %></span><% end %>
                   <span><i class="fas fa-comment-dollar mr-1"></i><%= jr.quotes.count %> quote<%= jr.quotes.count == 1 ? '' : 's' %></span>
                 </div>
               </div>
               <% if jr.budget_min.present? || jr.budget_max.present? %>
                 <div class="text-right flex-shrink-0">
-                  <div class="text-xs text-slate-400">Budget</div>
-                  <div class="text-sm font-bold text-slate-900">
-                    $<%= jr.budget_min.to_i %><% if jr.budget_max.present? && jr.budget_max != jr.budget_min %>-$<%= jr.budget_max.to_i %><% end %>
+                  <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">budget</div>
+                  <div class="display text-[18px] text-ink leading-none mt-1">
+                    $<%= jr.budget_min.to_i %><% if jr.budget_max.present? && jr.budget_max != jr.budget_min %><span class="text-ink-3">–</span>$<%= jr.budget_max.to_i %><% end %>
                   </div>
                 </div>
               <% end %>
@@ -44,18 +58,13 @@
         <% end %>
       </div>
     <% else %>
-      <div class="bg-white rounded-xl border border-slate-100 p-12 text-center">
-        <i class="fas fa-briefcase text-3xl text-slate-300 mb-3"></i>
-        <h3 class="text-lg font-bold text-slate-900 mb-2"><%= current_user.customer? ? 'No job requests yet' : 'No open requests' %></h3>
-        <p class="text-sm text-slate-500 mb-6">
-          <%= current_user.customer? ? "Post what you need and let providers come to you." : "Check back later — customers post new jobs daily." %>
-        </p>
-        <% if current_user.customer? %>
-          <%= link_to new_job_request_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white" do %>
-            <i class="fas fa-plus mr-2 text-xs"></i>Post Your First Job
-          <% end %>
-        <% end %>
-      </div>
+      <%= render "shared/empty_state",
+          icon: "fa-briefcase",
+          title: current_user.customer? ? "No job requests yet" : "No open requests",
+          message: current_user.customer? ? "Post what you need and let providers come to you." : "Check back later — customers post new jobs daily.",
+          cta_text: current_user.customer? ? "Post your first job" : nil,
+          cta_path: current_user.customer? ? new_job_request_path : nil,
+          cta_icon: "fa-plus" %>
     <% end %>
   </div>
 </div>
