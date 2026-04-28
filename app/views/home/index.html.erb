@@ -35,79 +35,74 @@
     <div class="max-w-3xl mx-auto">
 
       <div class="relative text-center">
-        <%# Badge %>
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.06] border border-white/[0.08] mb-8 hero-reveal" style="--delay: 0s">
+        <%# Eyebrow %>
+        <div class="hero-reveal mb-6 sm:mb-8 inline-flex items-center gap-2.5" style="--delay: 0s">
           <span class="relative flex h-2 w-2">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span class="text-white/70 text-sm font-medium"><%= number_with_delimiter(@total_providers) %> pros available now</span>
+          <span class="font-mono text-[11px] uppercase tracking-[0.16em] text-white/55"><%= number_with_delimiter(@total_providers) %> pros available now</span>
         </div>
 
-        <%# Headline %>
-        <h1 class="hero-reveal" style="--delay: 0.1s">
-          <span class="block text-5xl sm:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight">
-            Stop searching.
+        <%# Headline — Fraunces with italic-wonk emphasis %>
+        <h1 class="hero-reveal display text-white" style="--delay: 0.1s">
+          <span class="block text-[clamp(48px,9vw,104px)] leading-[0.95] tracking-[-0.035em]">
+            Local pros,
           </span>
-          <span class="block text-5xl sm:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight mt-2 hero-gradient-text">
-            Start booking.
+          <span class="block text-[clamp(48px,9vw,104px)] leading-[0.95] tracking-[-0.035em] mt-1">
+            <em class="italic-wonk text-terracotta">actually</em> good.
           </span>
         </h1>
 
-        <p class="mt-8 text-lg sm:text-xl text-white/50 max-w-xl mx-auto leading-relaxed hero-reveal" style="--delay: 0.2s">
-          Verified plumbers, electricians, cleaners, and more — at your fingertips. Compare prices, read real reviews, book and pay securely. Done.
+        <p class="mt-6 sm:mt-8 text-base sm:text-lg text-white/55 max-w-xl mx-auto leading-[1.55] hero-reveal" style="--delay: 0.2s">
+          Verified plumbers, electricians, cleaners and more. Compare prices, read real reviews, book and pay in one place. Done in minutes.
         </p>
 
-        <%# Search bar %>
+        <%# Search bar — pill, two-field %>
         <div class="mt-10 max-w-2xl mx-auto hero-reveal" style="--delay: 0.3s">
           <%= form_tag services_path, method: :get do %>
-            <div class="search-glow flex flex-col sm:flex-row bg-white rounded-2xl shadow-2xl shadow-black/20 p-2 focus-within:shadow-[0_0_80px_-10px_rgba(249,115,22,0.2)] transition-all duration-500">
-              <div class="relative flex-1">
+            <div class="flex items-center gap-2 bg-white rounded-pill shadow-card-lg p-1.5">
+              <div class="relative flex-1 min-w-0">
                 <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                  <i class="fas fa-search text-slate-300 text-lg"></i>
+                  <i class="fas fa-search text-ink-4 text-sm"></i>
                 </div>
                 <%= text_field_tag :query, nil,
                     placeholder: "What do you need help with?",
-                    class: "w-full pl-[3.25rem] pr-4 py-4 sm:py-5 bg-transparent text-slate-900 placeholder-slate-400 text-lg focus:outline-none rounded-xl" %>
+                    class: "w-full pl-12 pr-4 py-3.5 bg-transparent text-ink placeholder-ink-4 text-base font-medium focus:outline-none rounded-pill" %>
               </div>
-              <button type="submit" class="btn-shine group bg-orange-500 hover:bg-orange-600 text-white px-10 py-4 sm:py-5 rounded-xl font-bold text-base transition-all duration-300 cursor-pointer mt-2 sm:mt-0 whitespace-nowrap hover:shadow-lg hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98]">
-                Search Pros
-                <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform duration-200"></i>
+              <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-7 py-3.5 rounded-pill font-semibold text-sm transition-colors cursor-pointer whitespace-nowrap inline-flex items-center gap-2">
+                <span class="hidden sm:inline">Find pros</span>
+                <i class="fas fa-arrow-right text-xs"></i>
               </button>
             </div>
           <% end %>
         </div>
 
         <%# Category pills %>
-        <div class="mt-8 flex flex-wrap justify-center gap-2 hero-reveal" style="--delay: 0.4s">
+        <div class="mt-7 flex flex-wrap justify-center gap-2 hero-reveal" style="--delay: 0.4s">
           <% @categories.limit(5).each do |cat| %>
-            <% color = category_colors[cat.slug] || "gray" %>
             <%= link_to services_path(category_id: cat.id),
-                class: "group inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-white/[0.06] border border-white/[0.08] text-white/60 hover:bg-white/[0.12] hover:text-white hover:border-white/[0.2] transition-all duration-200" do %>
-              <i class="fas <%= category_icons[cat.slug] || 'fa-cog' %> text-xs text-<%= color %>-400 opacity-70"></i>
+                class: "group inline-flex items-center gap-2 px-3.5 py-2 rounded-pill text-[13px] font-medium bg-white/[0.05] border border-white/[0.1] text-white/60 hover:bg-white/[0.1] hover:text-white hover:border-white/[0.18] transition-all duration-200" do %>
+              <i class="fas <%= category_icons[cat.slug] || 'fa-cog' %> text-[10px]"></i>
               <%= cat.name %>
             <% end %>
           <% end %>
         </div>
 
-        <%# Social proof %>
-        <div class="mt-12 hero-reveal" style="--delay: 0.5s">
-          <div class="inline-flex flex-wrap items-center justify-center gap-6 sm:gap-8 px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/[0.06]">
-            <div class="flex items-center gap-2.5">
-              <div class="flex -space-x-2">
-                <img src="https://i.pravatar.cc/32?u=h1" class="w-7 h-7 rounded-full ring-2 ring-slate-950" alt="">
-                <img src="https://i.pravatar.cc/32?u=h2" class="w-7 h-7 rounded-full ring-2 ring-slate-950" alt="">
-                <img src="https://i.pravatar.cc/32?u=h3" class="w-7 h-7 rounded-full ring-2 ring-slate-950" alt="">
-              </div>
-              <span class="text-white/60 text-sm font-medium"><%= number_with_delimiter(@total_providers) %>+ pros</span>
+        <%# Trust strip %>
+        <div class="mt-12 sm:mt-14 hero-reveal max-w-2xl mx-auto" style="--delay: 0.5s">
+          <div class="grid grid-cols-3 gap-px bg-white/[0.08] rounded-pill overflow-hidden">
+            <div class="px-4 py-3 bg-slate-950/40 backdrop-blur flex items-center justify-center gap-2 text-white/55 text-xs">
+              <i class="fas fa-shield-alt text-emerald-400/80 text-[10px]"></i>
+              <span class="font-mono uppercase tracking-[0.08em] text-[10px]">Verified</span>
             </div>
-            <div class="hidden sm:flex items-center gap-1.5">
-              <div class="flex gap-0.5"><% 5.times do %><i class="fas fa-star text-amber-400 text-[10px]"></i><% end %></div>
-              <span class="text-white/60 text-sm font-medium">4.9 avg</span>
+            <div class="px-4 py-3 bg-slate-950/40 backdrop-blur flex items-center justify-center gap-2 text-white/55 text-xs">
+              <i class="fas fa-bolt text-amber-400/80 text-[10px]"></i>
+              <span class="font-mono uppercase tracking-[0.08em] text-[10px]">Same-day</span>
             </div>
-            <div class="hidden md:flex items-center gap-1.5">
-              <i class="fas fa-shield-alt text-emerald-400 text-[10px]"></i>
-              <span class="text-white/60 text-sm font-medium">Verified</span>
+            <div class="px-4 py-3 bg-slate-950/40 backdrop-blur flex items-center justify-center gap-2 text-white/55 text-xs">
+              <i class="fas fa-check text-sky-400/80 text-[10px]"></i>
+              <span class="font-mono uppercase tracking-[0.08em] text-[10px]">Guaranteed</span>
             </div>
           </div>
         </div>
@@ -115,8 +110,8 @@
     </div>
   </div>
 
-  <%# Bottom fade to white %>
-  <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent z-20"></div>
+  <%# Bottom fade to cream canvas %>
+  <div class="absolute bottom-0 inset-x-0 h-32 bg-gradient-to-t from-cream via-cream/80 to-transparent z-20"></div>
 </section>
 
 <%# ================================================================
@@ -140,35 +135,31 @@
 <%# ================================================================
     CATEGORIES — Bento-style icon cards
     ================================================================ %>
-<section class="py-20 bg-white" id="services">
+<section class="py-16 sm:py-24 bg-cream" id="services">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-12" data-aos="fade-up">
+    <div class="flex items-end justify-between mb-10 sm:mb-12 gap-4" data-aos="fade-up">
       <div>
-        <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">What do you need?</h2>
-        <p class="mt-2 text-slate-500 text-lg">Choose a category to find the right pro.</p>
+        <div class="eyebrow mb-3">Browse · 01</div>
+        <h2 class="display text-[28px] sm:text-[40px] text-ink">What do you <em class="italic-wonk text-terracotta">actually</em> need?</h2>
       </div>
       <div class="hidden sm:block">
-        <%= link_to services_path, class: "group inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-orange-600 transition-colors" do %>
-          Browse all <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+        <%= link_to services_path, class: "group inline-flex items-center gap-1.5 text-sm font-medium text-ink-2 hover:text-ink transition-colors" do %>
+          Browse all <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
         <% end %>
       </div>
     </div>
 
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4" data-aos="fade-up" data-aos-delay="100">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" data-aos="fade-up" data-aos-delay="100">
       <% @categories.each_with_index do |category, i| %>
-        <% color = category_colors[category.slug] || "gray" %>
         <%= link_to services_path(category_id: category.id),
-            class: "cat-card tilt-card group relative flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl border border-slate-100 bg-white hover:border-#{color}-200 hover:bg-#{color}-50/30 transition-all duration-300 overflow-hidden",
-            style: "--glow-color: var(--tw-#{color}-100, rgba(249,115,22,0.06))",
-            data: { aos: "fade-up", "aos-delay": i * 40 } do %>
-          <%# Glow on hover %>
-          <div class="absolute inset-0 bg-gradient-to-br from-<%= color %>-100/0 to-<%= color %>-100/0 group-hover:from-<%= color %>-100/30 group-hover:to-transparent transition-all duration-500 rounded-2xl"></div>
-          <div class="relative">
-            <div class="w-14 h-14 rounded-2xl bg-<%= color %>-50 border border-<%= color %>-100 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:shadow-md group-hover:shadow-<%= color %>-500/10 transition-all duration-300">
-              <i class="fas <%= category_icons[category.slug] || 'fa-cog' %> text-xl text-<%= color %>-500"></i>
-            </div>
-            <span class="text-sm font-bold text-slate-800 group-hover:text-<%= color %>-700 transition-colors"><%= category.name %></span>
-            <span class="block text-xs text-slate-400 mt-1"><%= category.services.count %> pros</span>
+            class: "group flex flex-col p-5 sm:p-6 rounded-xl border border-line bg-cream-elevated hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200 min-h-[160px]",
+            data: { aos: "fade-up", "aos-delay": i * 30 } do %>
+          <div class="w-9 h-9 rounded-full bg-forest-soft flex items-center justify-center mb-auto">
+            <i class="fas <%= category_icons[category.slug] || 'fa-cog' %> text-forest text-sm"></i>
+          </div>
+          <div class="mt-6">
+            <div class="display text-[22px] leading-[1.1] text-ink"><%= category.name %></div>
+            <div class="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-3 mt-1.5"><%= category.services.count %> pros</div>
           </div>
         <% end %>
       <% end %>
@@ -180,34 +171,27 @@
     FEATURED SERVICES — with animated border + fire emoji
     ================================================================ %>
 <% if @featured_services.any? %>
-<section class="py-24 bg-gradient-to-b from-slate-50/80 to-white relative overflow-hidden">
-  <%# Subtle decorative element %>
-  <div class="absolute top-0 right-0 w-72 h-72 bg-orange-100/40 rounded-full blur-[100px] -translate-y-1/2"></div>
-
+<section class="py-16 sm:py-24 bg-cream-sunken">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex items-end justify-between mb-14" data-aos="fade-up">
+    <div class="flex items-end justify-between mb-10 sm:mb-12 gap-4" data-aos="fade-up">
       <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-50 border border-orange-100 text-orange-600 text-xs font-bold uppercase tracking-wider mb-4">
-          <span class="w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse"></span>
-          Trending
-        </div>
-        <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Popular right now</h2>
-        <p class="mt-2 text-slate-500">Services customers are booking this week.</p>
+        <div class="eyebrow mb-3">Featured · 02</div>
+        <h2 class="display text-[28px] sm:text-[40px] text-ink">Trusted this <em class="italic-wonk text-terracotta">week</em></h2>
       </div>
       <div class="hidden sm:block">
-        <%= link_to services_path, class: "btn-shine group inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-slate-900 text-white hover:bg-slate-800 transition-all hover:shadow-lg hover:shadow-slate-900/20" do %>
-          See all services <i class="fas fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+        <%= link_to services_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-medium bg-ink text-cream hover:bg-ink-2 transition-colors" do %>
+          See all <i class="fas fa-arrow-right text-[10px]"></i>
         <% end %>
       </div>
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
       <%= render partial: 'services/service_card', collection: @featured_services, as: :service %>
     </div>
 
-    <div class="text-center mt-10 sm:hidden">
-      <%= link_to services_path, class: "inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-slate-900 text-white" do %>
-        See all services <i class="fas fa-arrow-right text-xs ml-1"></i>
+    <div class="text-center mt-8 sm:hidden">
+      <%= link_to services_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-medium bg-ink text-cream" do %>
+        See all services <i class="fas fa-arrow-right text-[10px]"></i>
       <% end %>
     </div>
   </div>

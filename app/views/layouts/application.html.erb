@@ -41,16 +41,79 @@
         theme: {
           extend: {
             maxWidth: {
-              '7xl': '1200px',
+              '7xl': '1280px',
+            },
+            colors: {
+              cream: '#f7f4ee',
+              'cream-elevated': '#ffffff',
+              'cream-sunken': '#efeae0',
+              ink: '#1a1a17',
+              'ink-2': '#3d3a33',
+              'ink-3': '#6f6a5e',
+              'ink-4': '#a09a8a',
+              line: '#e3ddd0',
+              'line-strong': '#c9c2b1',
+              forest: '#1f4d3a',
+              'forest-soft': '#e8efe8',
+              terracotta: '#d96a3a',
+            },
+            fontFamily: {
+              display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+            },
+            borderRadius: {
+              'pill': '999px',
             },
             boxShadow: {
-              'card': '0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
+              'card': '0 1px 2px rgba(26,26,23,0.04), 0 1px 1px rgba(26,26,23,0.03)',
+              'card-md': '0 4px 16px rgba(26,26,23,0.06), 0 1px 2px rgba(26,26,23,0.04)',
+              'card-lg': '0 12px 40px rgba(26,26,23,0.08), 0 2px 6px rgba(26,26,23,0.04)',
               'card-hover': '0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04)',
             },
           }
         }
       }
     </script>
+    <style>
+      /* Editorial display typography — Fraunces with WONK + SOFT axes */
+      .display {
+        font-family: 'Fraunces', ui-serif, Georgia, serif;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
+        font-variation-settings: 'SOFT' 30, 'WONK' 0;
+      }
+      .display em, .italic-wonk {
+        font-style: italic;
+        font-variation-settings: 'SOFT' 100, 'WONK' 1;
+        font-feature-settings: 'ss01';
+      }
+      .eyebrow {
+        font-family: 'JetBrains Mono', ui-monospace, monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #6f6a5e;
+      }
+      /* Brand mark — concentric ring */
+      .brand-mark {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #f97316;
+        position: relative;
+        flex-shrink: 0;
+      }
+      .brand-mark::after {
+        content: '';
+        position: absolute;
+        inset: 6px;
+        border: 1.5px solid #f7f4ee;
+        border-radius: 50%;
+      }
+      .brand-mark--on-dark::after { border-color: #0f172a; }
+    </style>
     <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css", rel: "stylesheet" %>
 
     <!-- Font Awesome -->
@@ -66,7 +129,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,30..100,0..1;1,9..144,300..900,30..100,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <%= yield(:head) if content_for?(:head) %>
 
@@ -76,21 +139,19 @@
     </script>
   </head>
 
-  <body class="min-h-screen font-sans antialiased text-slate-800 bg-white" style="font-family: 'Inter', system-ui, sans-serif;">
+  <body class="min-h-screen font-sans antialiased text-ink bg-cream" style="font-family: 'Inter', system-ui, sans-serif;">
 
     <%# ========== NAVIGATION ========== %>
-    <nav class="sticky top-0 z-50 bg-white border-b border-slate-200/80 shadow-sm">
+    <nav class="sticky top-0 z-50 border-b border-line" style="background: color-mix(in oklab, #f7f4ee 88%, transparent); backdrop-filter: saturate(140%) blur(10px);">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
 
           <%# Left: Logo + Nav Links %>
-          <div class="flex items-center gap-8">
-            <%# Logo %>
-            <%= link_to root_path, class: "flex items-center gap-2 group" do %>
-              <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center group-hover:bg-orange-600 transition-colors">
-                <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-              </div>
-              <span class="text-lg font-bold text-slate-900 hidden sm:inline">Rad<span class="text-orange-500">ius</span></span>
+          <div class="flex items-center gap-7">
+            <%# Logo — brand mark + Fraunces wordmark %>
+            <%= link_to root_path, class: "flex items-center gap-2.5 group" do %>
+              <span class="brand-mark group-hover:scale-105 transition-transform"></span>
+              <span class="font-display text-[22px] font-medium tracking-tight text-ink hidden sm:inline">radius</span>
             <% end %>
 
             <%# Desktop Nav Links %>
@@ -106,7 +167,7 @@
               %>
               <% nav_links.each do |link| %>
                 <%= link_to link[:name], link[:path],
-                    class: "px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150 #{link[:active] ? 'bg-orange-50 text-orange-600' : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'}" %>
+                    class: "px-3.5 py-2 rounded-lg text-sm font-medium transition-colors duration-150 #{link[:active] ? 'bg-cream-sunken text-ink' : 'text-ink-2 hover:text-ink hover:bg-cream-sunken'}" %>
               <% end %>
             </div>
           </div>
