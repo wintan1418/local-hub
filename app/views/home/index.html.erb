@@ -270,7 +270,430 @@
 <% end %>
 
 <%# ================================================================
-    6. CTA BANNER — ink bg, italic emphasis word in terracotta
+    6. TRUST STATS — numbers row on cream
+    ================================================================ %>
+<section class="bg-cream py-12 sm:py-16 border-y border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 lg:grid-cols-4 divide-x divide-line">
+      <% [
+        { num: number_with_delimiter(@total_providers), label: "Verified pros" },
+        { num: number_with_delimiter(@total_bookings), label: "Bookings completed" },
+        { num: "4.9", label: "Average rating", suffix: "★" },
+        { num: "12m", label: "Avg response time" }
+      ].each_with_index do |stat, i| %>
+        <div class="<%= 'pl-6' if i > 0 %> <%= 'pr-6' if i < 3 %> py-2 <%= 'pl-0' if i == 0 || i == 2 %>">
+          <div class="display text-[44px] sm:text-[56px] text-ink leading-none">
+            <%= stat[:num] %><% if stat[:suffix] %><span class="text-terracotta text-[28px]"><%= stat[:suffix] %></span><% end %>
+          </div>
+          <div class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mt-2"><%= stat[:label] %></div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
+    7. FEATURE SHOWCASE — 6 mockup cards in asymmetric grid
+    ================================================================ %>
+<section class="bg-cream py-14 sm:py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 sm:mb-10">
+      <div class="eyebrow mb-3">what's new · 05</div>
+      <h2 class="display text-[28px] sm:text-[40px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">More than a marketplace, <em class="italic-wonk" style="color: #1f4d3a;">honestly</em>.</h2>
+      <p class="mt-3 text-ink-2 text-[15px] sm:text-[17px] leading-[1.55] max-w-xl">Forty-plus features no other platform ships. Here's what sets Radius apart.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-6 gap-4">
+      <%# Website Builder — wide left %>
+      <div class="lg:col-span-4 bg-cream-elevated border border-line rounded-xl p-7 sm:p-8">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-3">Website Builder</div>
+        <h3 class="display text-[24px] text-ink leading-[1.1]">Your own branded site</h3>
+        <p class="mt-2 text-[14px] leading-[1.55] text-ink-2 max-w-md">Every pro gets a mini-site at <span class="font-mono text-[12px] text-terracotta">/pros/your-name</span>. Pick a theme, set your colors, ship in minutes.</p>
+
+        <%# Mock browser frame %>
+        <div class="mt-6 bg-ink rounded-lg overflow-hidden border border-line-strong">
+          <div class="flex items-center gap-1.5 px-3 py-2 bg-black/20 border-b border-white/10">
+            <div class="w-2.5 h-2.5 rounded-full bg-rose-400/60"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-amber-400/60"></div>
+            <div class="w-2.5 h-2.5 rounded-full bg-emerald-400/60"></div>
+            <div class="ml-2 flex-1 text-[10px] font-mono text-cream/40 truncate">radiusapp.com/pros/johns-plumbing</div>
+          </div>
+          <div class="p-6 min-h-[180px]" style="background: radial-gradient(circle at 70% 30%, rgba(217,106,58,0.25), transparent 50%);">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-pill bg-cream/15 text-[9px] font-bold text-cream">
+              <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>Verified
+            </div>
+            <div class="display text-[22px] text-cream mt-3 leading-tight">John's Plumbing Co.</div>
+            <div class="text-[11px] text-cream/60 mt-1">Trusted since 2003</div>
+            <div class="mt-4 flex gap-2">
+              <div class="px-3 py-1.5 rounded-pill bg-terracotta text-cream text-[10px] font-semibold">Book now</div>
+              <div class="px-3 py-1.5 rounded-pill bg-cream/15 text-cream text-[10px] font-semibold">Contact</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%# Stripe Payouts — narrow right %>
+      <div class="lg:col-span-2 bg-cream-elevated border border-line rounded-xl p-7">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-3">Payouts</div>
+        <h3 class="display text-[22px] text-ink leading-[1.1]">Direct to your bank</h3>
+
+        <div class="mt-6 rounded-xl p-5" style="background-color: #1f4d3a; color: #fdf8ed;">
+          <div class="font-mono text-[9px] uppercase tracking-[0.16em] opacity-70">This month</div>
+          <div class="display text-[36px] mt-1 leading-none">$4,287<span class="text-[18px] opacity-60">.50</span></div>
+          <div class="text-[10px] opacity-80 mt-2 flex items-center gap-1"><i class="fas fa-arrow-up"></i> +$642 vs last</div>
+          <div class="mt-4 pt-3 border-t border-cream/20 text-[10px] opacity-75">Next payout · <span class="font-semibold opacity-100">Tomorrow, 9am</span></div>
+        </div>
+        <p class="text-[12px] text-ink-3 mt-4">Stripe Connect, 90/10 split, next-day deposits.</p>
+      </div>
+
+      <%# Gift Cards — narrow %>
+      <div class="lg:col-span-2 bg-cream-elevated border border-line rounded-xl p-7">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-3">Gift Cards</div>
+        <h3 class="display text-[22px] text-ink leading-[1.1]">Give services</h3>
+
+        <div class="mt-6 rounded-xl p-5 relative overflow-hidden" style="background: linear-gradient(135deg, #d96a3a, #b8551c); transform: rotate(-2deg);">
+          <div class="absolute top-2 right-2 opacity-20"><i class="fas fa-gift text-cream text-5xl"></i></div>
+          <div class="relative">
+            <div class="font-mono text-[9px] uppercase tracking-[0.16em] text-cream/85">Radius</div>
+            <div class="display text-[28px] text-cream mt-1 leading-none">$100.00</div>
+            <div class="font-mono text-[10px] mt-3 text-cream/85">A8F4-2B9D-7C3E</div>
+          </div>
+        </div>
+        <p class="text-[12px] text-ink-3 mt-4">$25 to $500. Redeem on any service.</p>
+      </div>
+
+      <%# Reverse Marketplace — wide %>
+      <div class="lg:col-span-4 bg-cream-elevated border border-line rounded-xl p-7 sm:p-8">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-3">Reverse Marketplace</div>
+        <h3 class="display text-[24px] text-ink leading-[1.1]">Pros come to you</h3>
+        <p class="mt-2 text-[14px] leading-[1.55] text-ink-2 max-w-md">Post a job. Verified pros submit quotes. Pick the best one.</p>
+
+        <div class="mt-6 space-y-2">
+          <div class="bg-cream-sunken/50 border border-line rounded-lg p-3">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="text-[13px] font-semibold text-ink">Kitchen sink leaking</div>
+                <div class="text-[11px] text-ink-3 mt-0.5">Posted 2h ago · Budget $100–250</div>
+              </div>
+              <span class="font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill bg-forest-soft text-forest">Open</span>
+            </div>
+          </div>
+          <% [
+            { name: "James R.", rating: "4.9", price: "$120", msg: "Can be there today, 20+ yrs exp." },
+            { name: "Maria L.", rating: "5.0", price: "$145", msg: "Available tomorrow morning." },
+            { name: "David K.", rating: "4.8", price: "$95", msg: "Cheapest fix — I'll bring parts." }
+          ].each do |q| %>
+            <div class="bg-cream-elevated border border-line rounded-lg p-3 flex items-center gap-3 ml-6">
+              <div class="w-7 h-7 rounded-full bg-forest-soft text-forest flex items-center justify-center text-[11px] font-bold"><%= q[:name][0] %></div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-2">
+                  <span class="text-[12px] font-semibold text-ink"><%= q[:name] %></span>
+                  <span class="text-[10px] text-amber-600"><i class="fas fa-star"></i> <%= q[:rating] %></span>
+                </div>
+                <div class="text-[11px] text-ink-3 truncate"><%= q[:msg] %></div>
+              </div>
+              <div class="display text-[16px] text-ink"><%= q[:price] %></div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Calendar with DnD %>
+      <div class="lg:col-span-3 bg-cream-elevated border border-line rounded-xl p-7">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-3">Visual Calendar</div>
+        <h3 class="display text-[22px] text-ink leading-[1.1]">Drag. Drop. Reschedule.</h3>
+        <p class="mt-2 text-[13px] text-ink-3">Move bookings between days with your mouse.</p>
+
+        <div class="mt-5 bg-cream-sunken/50 rounded-lg border border-line p-3">
+          <div class="grid grid-cols-7 gap-1 mb-2">
+            <% %w[S M T W T F S].each do |d| %>
+              <div class="text-center font-mono text-[9px] font-semibold text-ink-3"><%= d %></div>
+            <% end %>
+          </div>
+          <div class="grid grid-cols-7 gap-1">
+            <% (1..21).each do |day| %>
+              <div class="aspect-square rounded font-mono text-[9px] text-ink-3 flex flex-col items-start p-1 <%= day == 15 ? 'bg-forest-soft border border-forest/40' : 'bg-cream-elevated border border-line' %>">
+                <%= day %>
+                <% if day == 12 %>
+                  <div class="mt-0.5 w-full h-1 rounded bg-forest"></div>
+                <% elsif day == 15 %>
+                  <div class="mt-0.5 w-full h-1 rounded bg-terracotta"></div>
+                  <div class="mt-0.5 w-full h-1 rounded bg-amber-500"></div>
+                <% elsif day == 17 %>
+                  <div class="mt-0.5 w-full h-1 rounded bg-forest"></div>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%# Loyalty Tiers %>
+      <div class="lg:col-span-3 bg-cream-elevated border border-line rounded-xl p-7">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-3">Loyalty Tiers</div>
+        <h3 class="display text-[22px] text-ink leading-[1.1]">Book more, save more</h3>
+        <p class="mt-2 text-[13px] text-ink-3">Automatic tier upgrades unlock perks.</p>
+
+        <div class="mt-5 space-y-1.5">
+          <% [
+            { name: "Bronze", icon: "fa-star", min: "0+", current: false },
+            { name: "Silver", icon: "fa-award", min: "5+", current: false },
+            { name: "Gold", icon: "fa-medal", min: "20+", current: true },
+            { name: "Platinum", icon: "fa-crown", min: "50+", current: false }
+          ].each do |tier| %>
+            <div class="flex items-center gap-3 p-2.5 rounded-lg <%= tier[:current] ? 'bg-forest-soft border border-forest/30' : 'bg-cream-sunken/30 border border-line' %>">
+              <div class="w-7 h-7 rounded-full <%= tier[:current] ? 'bg-forest text-cream' : 'bg-cream-elevated text-ink-3 border border-line' %> flex items-center justify-center">
+                <i class="fas <%= tier[:icon] %> text-[10px]"></i>
+              </div>
+              <div class="flex-1 text-[13px] font-semibold text-ink">
+                <%= tier[:name] %><% if tier[:current] %> <span class="text-[10px] text-forest font-mono uppercase tracking-[0.1em] ml-1">← you</span><% end %>
+              </div>
+              <span class="font-mono text-[10px] text-ink-3"><%= tier[:min] %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%# Feature cloud %>
+    <div class="mt-12">
+      <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-4 text-center">Plus all these essentials</div>
+      <div class="flex flex-wrap justify-center gap-1.5 max-w-4xl mx-auto">
+        <% [
+          "Stripe Payments", "Automated Invoicing", "Real-time Chat", "Provider Verification",
+          "Reviews & Ratings", "Booking Reminders", "Recurring Bookings", "Deposits", "Tipping",
+          "Expense Tracking", "Team Management", "CSV Exports", "Dispute Resolution",
+          "Referral Program", "Favorites", "Map View", "Vacation Mode", "Job Requests",
+          "PWA Install", "Push Notifications", "Analytics", "CRM Campaigns"
+        ].each do |f| %>
+          <span class="inline-flex items-center px-3 py-1 rounded-pill text-[12px] font-medium bg-cream-elevated border border-line text-ink-2"><%= f %></span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
+    8. TESTIMONIALS — featured pull quote + grid
+    ================================================================ %>
+<section class="bg-cream-sunken py-14 sm:py-20 border-y border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 sm:mb-10">
+      <div class="eyebrow mb-3">customer love · 06</div>
+      <h2 class="display text-[28px] sm:text-[40px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Loved, <em class="italic-wonk" style="color: #1f4d3a;">actually</em>.</h2>
+    </div>
+
+    <%# Featured pull quote %>
+    <div class="bg-cream-elevated border border-line rounded-xl p-8 sm:p-12 mb-6 relative overflow-hidden">
+      <div class="absolute top-4 right-8 display text-[120px] leading-none text-line select-none pointer-events-none">"</div>
+      <div class="relative grid md:grid-cols-[1fr_auto] gap-8 items-center">
+        <div>
+          <div class="flex gap-0.5 mb-5">
+            <% 5.times do %><i class="fas fa-star text-amber-500 text-sm"></i><% end %>
+          </div>
+          <p class="display text-[22px] sm:text-[28px] text-ink leading-[1.25] tracking-[-0.01em] max-w-2xl">
+            I was skeptical at first, but Radius completely changed how I find help for my home. The plumber I booked was at my door in 2 hours — on a Sunday. <em class="italic-wonk" style="color: #1f4d3a;">Verified</em>, professional, fairly priced.
+          </p>
+        </div>
+        <div class="flex md:flex-col items-center gap-4 md:text-center">
+          <img src="https://i.pravatar.cc/120?u=featured1" alt="Sarah Johnson" class="w-16 h-16 rounded-full border border-line">
+          <div>
+            <div class="text-[14px] font-semibold text-ink">Sarah Johnson</div>
+            <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mt-0.5">Homeowner</div>
+            <div class="font-mono text-[10px] text-terracotta mt-1">6 bookings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# Secondary reviews %>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+      <% [
+        { name: "Mike C.", role: "Business Owner", review: "We use Radius for all our office maintenance. Providers are consistently reliable and pricing is transparent. Saved hours of calling around.", rating: 5, avatar: "https://i.pravatar.cc/96?u=mike2", bookings: "12 bookings" },
+        { name: "Emily R.", role: "Property Manager", review: "Managing 8 rental properties used to be a nightmare. Now all my contractors are in one place — scheduling, payments, everything.", rating: 5, avatar: "https://i.pravatar.cc/96?u=emily3", bookings: "23 bookings" },
+        { name: "David K.", role: "New Homeowner", review: "Just bought my first house. Radius made it easy to find a painter, electrician, and landscaper — all vetted, all in one place.", rating: 4, avatar: "https://i.pravatar.cc/96?u=david4", bookings: "4 bookings" }
+      ].each do |t| %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-6">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex gap-0.5">
+              <% t[:rating].times do %><i class="fas fa-star text-amber-500 text-[12px]"></i><% end %>
+              <% (5 - t[:rating]).times do %><i class="fas fa-star text-line text-[12px]"></i><% end %>
+            </div>
+            <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-forest bg-forest-soft px-2 py-0.5 rounded-pill">Verified</span>
+          </div>
+          <p class="text-[14px] leading-[1.55] text-ink-2 mb-5">"<%= t[:review] %>"</p>
+          <div class="flex items-center justify-between pt-4 border-t border-line">
+            <div class="flex items-center gap-3">
+              <img src="<%= t[:avatar] %>" alt="" class="w-9 h-9 rounded-full border border-line">
+              <div>
+                <div class="text-[13px] font-semibold text-ink"><%= t[:name] %></div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3"><%= t[:role] %></div>
+              </div>
+            </div>
+            <span class="font-mono text-[10px] text-ink-3"><%= t[:bookings] %></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
+    9. BUILT FOR BOTH SIDES — customer + provider, editorial cards
+    ================================================================ %>
+<section class="bg-cream py-14 sm:py-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 sm:mb-10">
+      <div class="eyebrow mb-3">two sides · 07</div>
+      <h2 class="display text-[28px] sm:text-[40px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Built for <em class="italic-wonk" style="color: #1f4d3a;">everyone</em>.</h2>
+      <p class="mt-3 text-ink-2 text-[15px] sm:text-[17px] leading-[1.55] max-w-xl">Whether you need help or you provide it, Radius works for you.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-5">
+      <%# Customer side %>
+      <div class="bg-cream-elevated border border-line rounded-xl p-8 sm:p-10">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-4">For customers</div>
+        <h3 class="display text-[28px] sm:text-[32px] text-ink leading-[1.05]">Need help with <em class="italic-wonk" style="color: #1f4d3a;">something</em>?</h3>
+
+        <div class="mt-6 space-y-3">
+          <% [
+            "Search verified pros by category, location, and price",
+            "Chat directly with providers before you book",
+            "Pay securely — funds released only when the job is done",
+            "Get reminders, invoices, and review your provider"
+          ].each do |item| %>
+            <div class="flex items-start gap-3 pt-3 border-t border-line first:border-t-0 first:pt-0">
+              <i class="fas fa-check text-forest text-sm mt-1"></i>
+              <span class="text-[14px] text-ink-2 leading-[1.5]"><%= item %></span>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-8">
+          <%= link_to user_signed_in? ? services_path : new_user_registration_path(role: 'customer'),
+              class: "inline-flex items-center gap-2 px-6 py-3 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors active:translate-y-px" do %>
+            <%= user_signed_in? ? "Browse services" : "Sign up free" %> <i class="fas fa-arrow-right text-[10px]"></i>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Provider side %>
+      <div class="bg-cream-elevated border border-line rounded-xl p-8 sm:p-10">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-terracotta mb-4">For pros</div>
+        <h3 class="display text-[28px] sm:text-[32px] text-ink leading-[1.05]">Run your <em class="italic-wonk" style="color: #1f4d3a;">business</em>?</h3>
+
+        <div class="mt-6 space-y-3">
+          <% [
+            "Get discovered by customers in your area",
+            "Send quotes, accept bookings, generate invoices",
+            "Visual calendar, analytics, and CRM tools built in",
+            "Track revenue, build reputation, grow the business"
+          ].each do |item| %>
+            <div class="flex items-start gap-3 pt-3 border-t border-line first:border-t-0 first:pt-0">
+              <i class="fas fa-check text-terracotta text-sm mt-1"></i>
+              <span class="text-[14px] text-ink-2 leading-[1.5]"><%= item %></span>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="mt-8">
+          <%= link_to user_signed_in? && current_user.provider? ? provider_dashboard_path : new_user_registration_path(role: 'provider'),
+              class: "inline-flex items-center gap-2 px-6 py-3 rounded-pill text-sm font-semibold text-cream hover:opacity-90 transition-opacity active:translate-y-px",
+              style: "background-color: #d96a3a;" do %>
+            <%= user_signed_in? && current_user.provider? ? "Go to dashboard" : "Become a pro" %> <i class="fas fa-arrow-right text-[10px]"></i>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%# ================================================================
+    10. PRICING — provider plans
+    ================================================================ %>
+<% if @plans.present? && @plans.any? %>
+<section class="bg-cream-sunken py-14 sm:py-20 border-y border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 sm:mb-10 text-center">
+      <div class="eyebrow mb-3">pricing · 08</div>
+      <h2 class="display text-[28px] sm:text-[40px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Start free. Upgrade when <em class="italic-wonk" style="color: #1f4d3a;">ready</em>.</h2>
+      <p class="mt-3 text-ink-2 text-[15px] sm:text-[17px] leading-[1.55] max-w-xl mx-auto">Provider plans designed to grow with your business.</p>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 max-w-5xl mx-auto">
+      <% @plans.first(3).each_with_index do |plan, i| %>
+        <% is_featured = i == 1 %>
+        <div class="bg-cream-elevated <%= is_featured ? 'border-2 border-forest shadow-card-md' : 'border border-line' %> rounded-xl p-6 sm:p-7 relative">
+          <% if is_featured %>
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-pill bg-forest text-cream font-mono text-[10px] uppercase tracking-[0.12em]">Most popular</div>
+          <% end %>
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2"><%= plan.name %></div>
+          <div class="display text-ink leading-none">
+            <span class="text-[44px]">$<%= plan.price.to_i %></span><span class="text-[14px] text-ink-3 font-sans">/mo</span>
+          </div>
+          <p class="text-[13px] text-ink-3 mt-3 min-h-[40px]"><%= plan.description.to_s.presence || "All the essentials to get started." %></p>
+
+          <div class="my-6 h-px bg-line"></div>
+
+          <ul class="space-y-2.5">
+            <% (plan.features.presence || []).first(6).each do |feature| %>
+              <li class="flex items-start gap-2.5 text-[13px] text-ink-2">
+                <i class="fas fa-check text-forest text-[11px] mt-1"></i>
+                <span><%= feature %></span>
+              </li>
+            <% end %>
+          </ul>
+
+          <%= link_to new_user_registration_path(role: 'provider'),
+              class: "mt-6 w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold transition-colors #{is_featured ? 'bg-ink text-cream hover:bg-ink-2' : 'bg-cream-sunken text-ink hover:bg-line'}" do %>
+            Get started
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+<% end %>
+
+<%# ================================================================
+    11. FAQ — quick answers
+    ================================================================ %>
+<section class="bg-cream py-14 sm:py-20">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-8 sm:mb-10">
+      <div class="eyebrow mb-3">questions · 09</div>
+      <h2 class="display text-[28px] sm:text-[40px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Got <em class="italic-wonk" style="color: #1f4d3a;">questions</em>?</h2>
+    </div>
+
+    <div class="border-t border-line">
+      <% [
+        { q: "How does Radius work?", a: "Customers search verified local pros, compare ratings and prices, and book instantly. Pros manage everything from one dashboard — bookings, quotes, invoices, calendar, and analytics." },
+        { q: "Is Radius free for customers?", a: "Completely free. You only pay for the services you book. No subscription, no hidden fees." },
+        { q: "How are providers verified?", a: "Every provider submits business licenses, insurance certificates, and government ID. Our admin team reviews each application before granting verified status." },
+        { q: "How do payments work?", a: "Customers pay securely through Stripe at booking. Funds are held until the job is completed. Card details never touch our servers." },
+        { q: "Can providers send quotes?", a: "Yes. Pros create detailed quotes with line items, send them to customers, and convert approved quotes to bookings with one click." },
+        { q: "What if I'm not satisfied with the service?", a: "Talk to your provider first — most issues resolve directly. You can also contact our support team. We stand behind every booking." }
+      ].each do |faq| %>
+        <details class="group border-b border-line">
+          <summary class="flex items-center justify-between cursor-pointer py-5 text-left">
+            <span class="display text-[18px] sm:text-[20px] text-ink leading-[1.2] pr-4"><%= faq[:q] %></span>
+            <span class="flex-shrink-0 w-7 h-7 rounded-full border border-line flex items-center justify-center transition-colors group-open:bg-ink group-open:border-ink">
+              <i class="fas fa-plus text-ink-3 text-[10px] transition-all group-open:rotate-45 group-open:text-cream"></i>
+            </span>
+          </summary>
+          <div class="pb-5 -mt-1">
+            <p class="text-[14px] text-ink-2 leading-[1.6] max-w-2xl"><%= faq[:a] %></p>
+          </div>
+        </details>
+      <% end %>
+    </div>
+
+    <div class="mt-8 text-[13px] text-ink-3 text-center">Still curious? <%= link_to "Contact us", contact_path, class: "text-ink hover:underline underline-offset-2 font-medium" %> or <%= link_to "see how it works", how_it_works_path, class: "text-ink hover:underline underline-offset-2 font-medium" %>.</div>
+  </div>
+</section>
+
+<%# ================================================================
+    12. FINAL CTA BANNER — ink bg, italic emphasis word in terracotta
     ================================================================ %>
 <section class="bg-cream py-14 sm:py-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
