@@ -124,7 +124,7 @@
       <% end %>
     </div>
 
-    <% cat_swatches = [ "#1f4d3a", "#d96a3a", "#3d3a33", "#6f6a5e", "#1f4d3a", "#d96a3a", "#3d3a33", "#6f6a5e", "#1f4d3a", "#d96a3a" ] %>
+    <% cat_swatches = [ "#1f4d3a", "#d96a3a", "#1d1813", "#766853", "#b8551c", "#1f4d3a", "#d96a3a", "#1d1813", "#766853", "#b8551c" ] %>
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
       <% @categories.limit(8).each_with_index do |category, i| %>
         <%= link_to services_path(category_id: category.id),
@@ -162,15 +162,12 @@
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
       <% @top_providers.first(4).each do |provider| %>
         <%= link_to provider_path(provider), class: "group block bg-cream-elevated rounded-xl border border-line overflow-hidden hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200" do %>
-          <%# Image area — striped placeholder or photo %>
-          <div class="relative aspect-[4/5]">
+          <%# Image area — provider photo (pravatar fallback) %>
+          <div class="relative aspect-[4/5] bg-cream-sunken">
             <% if provider.profile_picture.attached? %>
               <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover" %>
             <% else %>
-              <div class="absolute inset-0" style="background: repeating-linear-gradient(135deg, #d8d2c4 0px, #d8d2c4 1px, #efeae0 1px, #efeae0 9px);"></div>
-              <div class="absolute inset-0 flex items-center justify-center">
-                <span class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 bg-cream border border-line px-2 py-1 rounded"><%= provider.display_name.split(" ").first.downcase %>-1.jpg · main</span>
-              </div>
+              <img src="https://i.pravatar.cc/400?u=provider<%= provider.id %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= provider.display_name %>">
             <% end %>
             <%# Top-rated badge overlay %>
             <% if provider.average_rating >= 4.8 %>
@@ -251,11 +248,11 @@
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
       <% @top_providers[4..7].to_a.each do |provider| %>
         <%= link_to provider_path(provider), class: "group block bg-cream-elevated rounded-xl border border-line overflow-hidden hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200" do %>
-          <div class="relative aspect-[4/5]">
+          <div class="relative aspect-[4/5] bg-cream-sunken">
             <% if provider.profile_picture.attached? %>
               <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover" %>
             <% else %>
-              <div class="absolute inset-0" style="background: repeating-linear-gradient(135deg, #d8d2c4 0px, #d8d2c4 1px, #efeae0 1px, #efeae0 9px);"></div>
+              <img src="https://i.pravatar.cc/400?u=provider<%= provider.id %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= provider.display_name %>">
             <% end %>
           </div>
           <div class="p-4">
@@ -277,7 +274,7 @@
     ================================================================ %>
 <section class="bg-cream py-14 sm:py-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="rounded-[20px] p-10 sm:p-14 lg:p-16 grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-10 items-center" style="background-color: #1a1a17;">
+    <div class="rounded-[20px] p-10 sm:p-14 lg:p-16 grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-10 items-center" style="background-color: #1d1813;">
       <div>
         <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/55 mb-4">For service pros</div>
         <h2 class="display text-cream" style="font-size: clamp(36px, 5vw, 56px); line-height: 1; letter-spacing: -0.02em;">
@@ -314,9 +311,9 @@
     justify-content: center;
     overflow: hidden;
     animation: bubbleFall linear infinite, bubbleDrift ease-in-out infinite, bubbleTwinkle ease-in-out infinite;
-    box-shadow: 0 2px 8px rgba(26, 26, 23, 0.06);
-    border: 1px solid #e3ddd0;
-    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(29, 24, 19, 0.08);
+    border: 1px solid #ddc9a8;
+    background: #fdf8ed;
   }
   #particle-canvas .pro-bubble img {
     width: 100%;
@@ -332,13 +329,13 @@
     width: 42%;
     height: 42%;
     border-radius: 50%;
-    background: #1a1a17;
-    border: 1.5px solid #f7f4ee;
+    background: #1d1813;
+    border: 1.5px solid #fdf8ed;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 45%;
-    color: #f7f4ee;
+    color: #fdf8ed;
   }
   #particle-canvas .pro-bubble .bubble-ring {
     position: absolute;
@@ -349,7 +346,7 @@
   }
   @keyframes bubbleFall {
     0% { transform: translateY(-120px); }
-    100% { transform: translateY(calc(100% + 120px)); }
+    100% { transform: translateY(800px); }
   }
   @keyframes bubbleDrift {
     0%, 100% { margin-left: 0; }

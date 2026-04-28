@@ -44,18 +44,20 @@
               '7xl': '1280px',
             },
             colors: {
-              cream: '#f7f4ee',
-              'cream-elevated': '#ffffff',
-              'cream-sunken': '#efeae0',
-              ink: '#1a1a17',
-              'ink-2': '#3d3a33',
-              'ink-3': '#6f6a5e',
-              'ink-4': '#a09a8a',
-              line: '#e3ddd0',
-              'line-strong': '#c9c2b1',
+              // Champagne/sand — warmer, more distinctive than generic cream
+              cream: '#f3ead8',
+              'cream-elevated': '#fdf8ed',
+              'cream-sunken': '#e6d8bf',
+              ink: '#1d1813',
+              'ink-2': '#3d3327',
+              'ink-3': '#766853',
+              'ink-4': '#a89779',
+              line: '#ddc9a8',
+              'line-strong': '#c4ab85',
               forest: '#1f4d3a',
-              'forest-soft': '#e8efe8',
+              'forest-soft': '#dce5d4',
               terracotta: '#d96a3a',
+              clay: '#b8551c',
             },
             fontFamily: {
               display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
@@ -109,19 +111,19 @@
         content: '';
         position: absolute;
         inset: 6px;
-        border: 1.5px solid #f7f4ee;
+        border: 1.5px solid #f3ead8;
         border-radius: 50%;
       }
-      .brand-mark--on-dark::after { border-color: #1a1a17; }
+      .brand-mark--on-dark::after { border-color: #1d1813; }
       /* Footer version chip */
       .version-chip {
         font-family: 'JetBrains Mono', ui-monospace, monospace;
         font-size: 11px;
         text-transform: uppercase;
         letter-spacing: 0.08em;
-        color: #6f6a5e;
+        color: #766853;
         padding: 4px 10px;
-        border: 1px solid #e3ddd0;
+        border: 1px solid #ddc9a8;
         border-radius: 999px;
       }
     </style>
@@ -153,7 +155,7 @@
   <body class="min-h-screen font-sans antialiased text-ink bg-cream" style="font-family: 'Inter', system-ui, sans-serif;">
 
     <%# ========== NAVIGATION ========== %>
-    <nav class="sticky top-0 z-50 border-b border-line" style="background: color-mix(in oklab, #f7f4ee 88%, transparent); backdrop-filter: saturate(140%) blur(10px);">
+    <nav class="sticky top-0 z-50 border-b border-line" style="background: color-mix(in oklab, #f3ead8 88%, transparent); backdrop-filter: saturate(140%) blur(10px);">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
 
