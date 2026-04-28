@@ -90,10 +90,11 @@ Rails.application.routes.draw do
     get "payouts/refresh", to: "payouts#refresh", as: :refresh_payouts
 
     # Website builder
-    resource :site, only: [:edit, :update], controller: "sites" do
+    resource :site, only: [ :edit, :update ], controller: "sites" do
+      get :preview
       post :publish
       post :unpublish
-      resources :faqs, controller: "provider_faqs", only: [:create, :update, :destroy]
+      resources :faqs, controller: "provider_faqs", only: [ :create, :update, :destroy ]
     end
 
     # Team
@@ -166,7 +167,10 @@ Rails.application.routes.draw do
   get "pros/:slug", to: "provider_sites#show", as: :public_provider_site
 
   # Gift cards (public purchase + redemption)
-  resources :gift_cards, only: [:index, :new, :create, :show] do
+  resources :gift_cards, only: [ :index, :new, :create, :show ] do
+    member do
+      get :payment_success
+    end
     collection do
       post :redeem
     end
@@ -177,7 +181,7 @@ Rails.application.routes.draw do
 
   # Job requests (reverse marketplace)
   resources :job_requests do
-    resources :quotes, controller: "job_request_quotes", only: [:create] do
+    resources :quotes, controller: "job_request_quotes", only: [ :create, :edit, :update ] do
       member do
         patch :accept
       end

@@ -2,8 +2,8 @@ class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable,
-         :omniauthable, omniauth_providers: [:google_oauth2]
+         :recoverable, :rememberable, :timeoutable, :validatable,
+         :omniauthable, omniauth_providers: [ :google_oauth2 ]
 
   # Explicitly declare attribute types for Rails 8 support
   attribute :user_role, :integer, default: 0

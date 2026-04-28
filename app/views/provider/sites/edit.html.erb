@@ -5,7 +5,10 @@
         <h1 class="text-2xl font-black text-slate-900">My Website</h1>
         <p class="text-sm text-slate-500 mt-1">Your branded mini-site at <code class="text-xs font-mono bg-slate-100 px-1.5 py-0.5 rounded">radiusapp.com<%= @user.site_url %></code></p>
       </div>
-      <div class="flex gap-2">
+      <div class="flex gap-2 flex-wrap">
+        <%= link_to preview_provider_site_path, target: "_blank", class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>
+          <i class="fas fa-eye mr-2 text-xs"></i>Preview
+        <% end %>
         <% if @user.site_published? %>
           <%= link_to public_provider_site_path(slug: @user.slug), target: "_blank", class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>
             <i class="fas fa-external-link-alt mr-2 text-xs"></i>View Live

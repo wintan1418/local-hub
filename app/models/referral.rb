@@ -6,11 +6,20 @@ class Referral < ApplicationRecord
 
   CREDIT_AMOUNT = 10.00
 
-  before_create :generate_code
+  before_validation :generate_code, on: :create
+
+  validates :code, presence: true, uniqueness: true
+  validates :referrer_id, presence: true
+
+  scope :recent, -> { order(created_at: :desc) }
 
   private
 
   def generate_code
-    self.code ||= "REF-#{SecureRandom.hex(4).upcase}"
+    return if code.present?
+    loop do
+      self.code = "REF-#{SecureRandom.hex(4).upcase}"
+      break unless Referral.exists?(code: code)
+    end
   end
 end

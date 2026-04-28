@@ -1,5 +1,11 @@
 <% theme = @provider.site_theme.to_s %>
 
+<% if @preview_mode %>
+  <div class="bg-amber-500 text-amber-950 text-center py-2 text-xs sm:text-sm font-bold sticky top-0 z-50 shadow">
+    <i class="fas fa-eye mr-1.5"></i>Preview mode — only you can see this. <%= @provider.site_published? ? "Your site is currently live." : "Publish from your dashboard to make it live." %>
+  </div>
+<% end %>
+
 <%# ============= HERO ============= %>
 <% if theme == "bold" %>
   <section class="relative bg-slate-950 text-white overflow-hidden">

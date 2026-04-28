@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_28_200000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,9 +76,12 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
     t.string "gift_card_code"
     t.decimal "gift_card_amount_used", precision: 10, scale: 2, default: "0.0"
     t.integer "assigned_team_member_id"
+    t.index ["created_at"], name: "index_bookings_on_created_at"
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["referral_id"], name: "index_bookings_on_referral_id"
+    t.index ["scheduled_at"], name: "index_bookings_on_scheduled_at"
     t.index ["service_id"], name: "index_bookings_on_service_id"
+    t.index ["status", "scheduled_at"], name: "index_bookings_on_status_and_scheduled_at"
   end
 
   create_table "campaign_recipients", force: :cascade do |t|
@@ -166,6 +169,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["booking_id"], name: "index_disputes_on_booking_id"
+    t.index ["status"], name: "index_disputes_on_status"
   end
 
   create_table "expenses", force: :cascade do |t|
@@ -201,6 +205,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_gift_cards_on_code", unique: true
+    t.index ["status"], name: "index_gift_cards_on_status"
   end
 
   create_table "invoices", force: :cascade do |t|
@@ -243,6 +248,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_job_requests_on_category_id"
     t.index ["customer_id"], name: "index_job_requests_on_customer_id"
+    t.index ["status", "created_at"], name: "index_job_requests_on_status_and_created_at"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -254,6 +260,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["booking_id"], name: "index_messages_on_booking_id"
+    t.index ["created_at"], name: "index_messages_on_created_at"
     t.index ["recipient_id"], name: "index_messages_on_recipient_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
@@ -363,6 +370,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
     t.decimal "credit_amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_referrals_on_code", unique: true
+    t.index ["referee_id"], name: "index_referrals_on_referee_id"
+    t.index ["referrer_id"], name: "index_referrals_on_referrer_id"
+    t.index ["status"], name: "index_referrals_on_status"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -372,6 +383,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["booking_id"], name: "index_reviews_on_booking_id"
+    t.index ["created_at"], name: "index_reviews_on_created_at"
   end
 
   create_table "service_areas", force: :cascade do |t|
@@ -406,6 +418,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_21_192332) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["category_id"], name: "index_services_on_category_id"
+    t.index ["created_at"], name: "index_services_on_created_at"
     t.index ["provider_id"], name: "index_services_on_provider_id"
   end
 

@@ -18,8 +18,8 @@ class Provider::TeamMembersController < ApplicationController
     @team_member.status = existing ? :active : :invited
 
     if @team_member.save
-      # TODO: send invitation email with invite_token
-      redirect_to provider_team_members_path, notice: "Team member #{existing ? 'added' : 'invited'}."
+      TeamMemberMailer.invitation(@team_member).deliver_later unless existing
+      redirect_to provider_team_members_path, notice: existing ? "#{@team_member.invite_email} added to your team." : "Invitation sent to #{@team_member.invite_email}."
     else
       render :new, status: :unprocessable_entity
     end

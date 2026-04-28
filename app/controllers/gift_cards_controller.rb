@@ -14,11 +14,16 @@ class GiftCardsController < ApplicationController
     @gift_card = GiftCard.new(gift_card_params)
     @gift_card.purchaser = current_user
     @gift_card.balance = @gift_card.amount
-    @gift_card.status = :active
+    @gift_card.status = :pending
 
     if @gift_card.save
-      # TODO: trigger Stripe charge for purchase amount
-      redirect_to gift_card_path(@gift_card), notice: "Gift card created! Share the code: #{@gift_card.formatted_code}"
+      result = StripeService.create_gift_card_checkout(@gift_card, current_user)
+      if result && result[:checkout_url]
+        redirect_to result[:checkout_url], allow_other_host: true
+      else
+        @gift_card.destroy
+        redirect_to new_gift_card_path, alert: "Could not start checkout. Please try again."
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,6 +34,25 @@ class GiftCardsController < ApplicationController
     unless @gift_card.purchaser == current_user || @gift_card.redeemed_by == current_user
       redirect_to gift_cards_path, alert: "Access denied."
     end
+  end
+
+  def payment_success
+    @gift_card = current_user.gift_cards_purchased.find(params[:id])
+    session_id = params[:session_id]
+
+    if session_id.present? && @gift_card.pending?
+      begin
+        session = Stripe::Checkout::Session.retrieve(session_id)
+        if session.payment_status == "paid"
+          @gift_card.update(status: :active)
+          GiftCardMailer.recipient_notification(@gift_card).deliver_later if @gift_card.recipient_email.present?
+        end
+      rescue Stripe::StripeError => e
+        Rails.logger.error "Stripe gift card session error: #{e.message}"
+      end
+    end
+
+    redirect_to gift_card_path(@gift_card), notice: "Payment received! Share the code: #{@gift_card.formatted_code}"
   end
 
   def redeem

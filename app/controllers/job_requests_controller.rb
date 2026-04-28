@@ -4,11 +4,15 @@ class JobRequestsController < ApplicationController
 
   def index
     if current_user.customer?
-      @job_requests = current_user.job_requests.includes(:category, :quotes).order(created_at: :desc)
+      @job_requests = current_user.job_requests.includes(:category, :quotes)
     else
-      # Providers see open requests
-      @job_requests = JobRequest.open.includes(:category, :customer).order(created_at: :desc).limit(30)
+      @job_requests = JobRequest.includes(:category, :customer)
+      @job_requests = @job_requests.where(status: params[:status].presence || :open)
     end
+
+    @job_requests = @job_requests.where(category_id: params[:category_id]) if params[:category_id].present?
+    @job_requests = @job_requests.order(created_at: :desc).page(params[:page]).per(20)
+    @categories = Category.order(:name) if current_user.provider?
   end
 
   def show

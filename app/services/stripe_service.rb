@@ -152,6 +152,58 @@ class StripeService
   # Platform commission: 10% of booking
   PLATFORM_COMMISSION_RATE = 0.10
 
+  def self.create_gift_card_checkout(gift_card, buyer)
+    stripe_customer = buyer.stripe_customer_id.present? ?
+                      Stripe::Customer.retrieve(buyer.stripe_customer_id) :
+                      create_customer(buyer)
+    return nil unless stripe_customer
+
+    amount_cents = (gift_card.amount.to_f * 100).to_i
+
+    session = Stripe::Checkout::Session.create({
+      customer: stripe_customer.id,
+      payment_method_types: [ "card" ],
+      line_items: [ {
+        price_data: {
+          currency: "usd",
+          product_data: {
+            name: "Gift Card — $#{gift_card.amount}",
+            description: gift_card.recipient_name.present? ? "For #{gift_card.recipient_name}" : "Radius gift card"
+          },
+          unit_amount: amount_cents
+        },
+        quantity: 1
+      } ],
+      mode: "payment",
+      success_url: "#{Rails.application.routes.url_helpers.payment_success_gift_card_url(gift_card)}?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: Rails.application.routes.url_helpers.gift_cards_url,
+      metadata: {
+        gift_card_id: gift_card.id,
+        buyer_id: buyer.id,
+        type: "gift_card"
+      }
+    })
+
+    { checkout_url: session.url, session_id: session.id }
+  rescue Stripe::StripeError => e
+    Rails.logger.error "Stripe Gift Card Checkout Error: #{e.message}"
+    nil
+  end
+
+  def self.refund_booking(booking, reason: "requested_by_customer")
+    return { error: "No payment to refund" } unless booking.stripe_payment_intent_id.present?
+
+    refund = Stripe::Refund.create(
+      payment_intent: booking.stripe_payment_intent_id,
+      reason: reason,
+      metadata: { booking_id: booking.id }
+    )
+    { refund_id: refund.id, amount: refund.amount.to_f / 100.0 }
+  rescue Stripe::StripeError => e
+    Rails.logger.error "Stripe Refund Error: #{e.message}"
+    { error: e.message }
+  end
+
   def self.create_connect_account(user)
     return user.stripe_connect_id if user.stripe_connect_id.present?
     account = Stripe::Account.create({

@@ -1,0 +1,25 @@
+<%#
+  Shared empty state partial.
+  Locals:
+    icon:      Font Awesome class (e.g. "fa-calendar-plus") — required
+    title:     headline                                       — required
+    message:   supporting copy                                — required
+    cta_text:  optional CTA button label
+    cta_path:  optional CTA path (required if cta_text)
+    cta_icon:  optional FA icon class for CTA button
+%>
+<div class="bg-white rounded-xl border border-slate-100 px-6 py-10 sm:py-16 text-center">
+  <div class="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-slate-50 mb-4">
+    <i class="fas <%= icon %> text-2xl sm:text-3xl text-slate-400"></i>
+  </div>
+  <h3 class="text-base sm:text-lg font-bold text-slate-900 mb-1.5"><%= title %></h3>
+  <p class="text-sm text-slate-500 max-w-sm mx-auto"><%= message %></p>
+  <% if local_assigns[:cta_text].present? && local_assigns[:cta_path].present? %>
+    <div class="mt-6">
+      <%= link_to cta_path, class: "inline-flex items-center px-5 py-2.5 rounded-lg text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-colors" do %>
+        <% if local_assigns[:cta_icon].present? %><i class="fas <%= cta_icon %> mr-2 text-xs"></i><% end %>
+        <%= cta_text %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

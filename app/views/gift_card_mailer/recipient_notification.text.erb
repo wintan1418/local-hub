@@ -1,0 +1,14 @@
+Hi <%= @recipient_name %>,
+
+<%= @purchaser.display_name %> sent you a $<%= @amount %> Radius gift card!
+
+<% if @message.present? %>
+Personal message:
+<%= @message %>
+
+<% end %>
+Your code: <%= @code %>
+
+Redeem at: <%= @redeem_url %>
+
+Apply your code at checkout when booking any service through Radius.

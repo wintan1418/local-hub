@@ -18,6 +18,20 @@ class Provider::SitesController < ApplicationController
     end
   end
 
+  def preview
+    @provider = current_user
+    @provider.ensure_slug if @provider.slug.blank?
+    @services = @provider.services.includes(:category)
+    @reviews = Review.joins(booking: :service)
+                     .where(services: { provider_id: @provider.id })
+                     .includes(booking: :customer)
+                     .order(created_at: :desc).limit(6)
+    @faqs = @provider.provider_faqs
+    @brand_color = @provider.site_brand_color.presence || "#f97316"
+    @preview_mode = true
+    render template: "provider_sites/show", layout: "provider_site"
+  end
+
   def publish
     current_user.update(site_published: true)
     redirect_to edit_provider_site_path, notice: "Site published at #{current_user.site_url}"

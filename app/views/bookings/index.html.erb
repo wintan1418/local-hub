@@ -12,19 +12,42 @@
       <% end %>
     </div>
 
-    <%# Status filter tabs %>
-    <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-1">
-      <% [
-        ["All", nil],
-        ["Pending", "pending"],
-        ["Confirmed", "confirmed"],
-        ["Completed", "completed"],
-        ["Cancelled", "cancelled"]
-      ].each do |label, status| %>
-        <%= link_to bookings_path(status: status), class: "inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors #{params[:status] == status ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}" do %>
-          <%= label %>
-        <% end %>
+    <%# Search + sort + status filters %>
+    <div class="bg-white rounded-xl border border-slate-100 p-3 sm:p-4 mb-4 sm:mb-6 space-y-3">
+      <%= form_with url: bookings_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-2" do |f| %>
+        <%= f.hidden_field :status, value: params[:status] %>
+        <%= f.hidden_field :sort, value: params[:sort] %>
+        <div class="relative flex-1">
+          <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+          <%= f.text_field :q, value: params[:q], placeholder: "Search bookings by service title…", class: "w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
+        </div>
+        <%= f.select :sort_select,
+                    options_for_select([
+                      [ "Newest first", "newest" ],
+                      [ "Oldest first", "oldest" ],
+                      [ "Soonest upcoming", "upcoming" ],
+                      [ "Price: high → low", "price_high" ],
+                      [ "Price: low → high", "price_low" ]
+                    ], params[:sort].presence || "newest"),
+                    {},
+                    name: "sort",
+                    class: "px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 bg-white" %>
+        <button type="submit" class="bg-slate-900 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-colors">Apply</button>
       <% end %>
+
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+        <% [
+          [ "All", nil ],
+          [ "Pending", "pending" ],
+          [ "Confirmed", "confirmed" ],
+          [ "Completed", "completed" ],
+          [ "Cancelled", "cancelled" ]
+        ].each do |label, status| %>
+          <%= link_to bookings_path(status: status, q: params[:q], sort: params[:sort]), class: "inline-flex items-center px-3 sm:px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium whitespace-nowrap transition-colors #{params[:status] == status ? 'bg-slate-900 text-white' : 'bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100'}" do %>
+            <%= label %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
 
     <% if @bookings.any? %>
@@ -66,19 +89,19 @@
         <div class="mt-6 flex justify-center">
           <nav class="flex items-center gap-1">
             <% if @bookings.prev_page %>
-              <%= link_to bookings_path(status: params[:status], page: @bookings.prev_page), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50" do %><i class="fas fa-chevron-left text-xs"></i><% end %>
+              <%= link_to bookings_path(status: params[:status], q: params[:q], sort: params[:sort], page: @bookings.prev_page), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50" do %><i class="fas fa-chevron-left text-xs"></i><% end %>
             <% end %>
             <% (1..@bookings.total_pages).each do |p| %>
               <% if p == @bookings.current_page %>
                 <span class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center text-sm font-medium"><%= p %></span>
               <% elsif (p - @bookings.current_page).abs <= 2 || p == 1 || p == @bookings.total_pages %>
-                <%= link_to bookings_path(status: params[:status], page: p), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 text-sm" do %><%= p %><% end %>
+                <%= link_to bookings_path(status: params[:status], q: params[:q], sort: params[:sort], page: p), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 text-sm" do %><%= p %><% end %>
               <% elsif (p - @bookings.current_page).abs == 3 %>
                 <span class="w-9 h-9 flex items-center justify-center text-slate-400 text-sm">&hellip;</span>
               <% end %>
             <% end %>
             <% if @bookings.next_page %>
-              <%= link_to bookings_path(status: params[:status], page: @bookings.next_page), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50" do %><i class="fas fa-chevron-right text-xs"></i><% end %>
+              <%= link_to bookings_path(status: params[:status], q: params[:q], sort: params[:sort], page: @bookings.next_page), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50" do %><i class="fas fa-chevron-right text-xs"></i><% end %>
             <% end %>
           </nav>
         </div>

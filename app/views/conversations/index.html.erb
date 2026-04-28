@@ -65,21 +65,13 @@
       <% end %>
     </div>
   <% else %>
-    <div class="text-center py-12">
-      <i class="fas fa-comments text-slate-400 text-6xl mb-4"></i>
-      <h3 class="text-lg font-medium text-slate-900 mb-2">No conversations yet</h3>
-      <p class="text-slate-500 mb-6">
-        <%= current_user.customer? ? 
-          "Start a conversation with a service provider to get help with your needs." :
-          "Customers will contact you here when they're interested in your services."
-        %>
-      </p>
-      <% if current_user.customer? %>
-        <button onclick="openProviderSearch()" class="bg-blue-600 text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition duration-200 text-lg">
-          <i class="fas fa-plus mr-2"></i>Start Your First Chat
-        </button>
-      <% end %>
-    </div>
+    <%= render "shared/empty_state",
+              icon: "fa-comments",
+              title: "No conversations yet",
+              message: current_user.customer? ? "Start a conversation with a provider to get help with your needs." : "Customers will message you here when they're interested in your services.",
+              cta_text: current_user.customer? ? "Find providers" : nil,
+              cta_path: current_user.customer? ? services_path : nil,
+              cta_icon: "fa-search" %>
   <% end %>
 </div>
 

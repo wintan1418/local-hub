@@ -1,0 +1,31 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 24px;">
+  <div style="background: #0f172a; border-radius: 16px; padding: 32px; color: white; text-align: center;">
+    <div style="display: inline-block; background: #f97316; width: 48px; height: 48px; border-radius: 12px; line-height: 48px; font-size: 20px; font-weight: 800; margin-bottom: 16px;">R</div>
+    <h1 style="margin: 0 0 8px; font-size: 24px; font-weight: 800;">You're invited to join the team</h1>
+    <p style="margin: 0; font-size: 14px; color: #94a3b8;"><%= @provider.display_name %> wants you on their crew at <strong style="color: #fff;"><%= @business_name %></strong></p>
+  </div>
+
+  <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; margin-top: 16px;">
+    <p style="margin: 0 0 12px; font-size: 16px; color: #0f172a;">Hi there,</p>
+    <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: #475569;"><strong><%= @provider.display_name %></strong> has invited you to join <strong><%= @business_name %></strong> as a <strong><%= @role %></strong>. Accept the invitation to start receiving job assignments and managing bookings on Radius.</p>
+
+    <div style="background: #f8fafc; border-radius: 12px; padding: 16px; margin: 16px 0;">
+      <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+        <span style="color: #64748b; font-size: 13px;">Business</span>
+        <span style="color: #0f172a; font-size: 13px; font-weight: 600;"><%= @business_name %></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e2e8f0;">
+        <span style="color: #64748b; font-size: 13px;">Role</span>
+        <span style="color: #0f172a; font-size: 13px; font-weight: 600;"><%= @role %></span>
+      </div>
+      <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+        <span style="color: #64748b; font-size: 13px;">Invited by</span>
+        <span style="color: #0f172a; font-size: 13px; font-weight: 600;"><%= @provider.display_name %></span>
+      </div>
+    </div>
+
+    <a href="<%= @sign_up_url %>" style="display: block; background: #f97316; color: #fff; text-decoration: none; text-align: center; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 14px;">Accept invitation</a>
+
+    <p style="margin: 24px 0 0; font-size: 12px; color: #94a3b8; text-align: center;">If you didn't expect this invitation, you can safely ignore this email.</p>
+  </div>
+</div>

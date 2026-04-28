@@ -20,9 +20,18 @@ module Admin
 
     def refund
       amount = params[:refund_amount].to_f
+      booking = @dispute.booking
+
+      result = StripeService.refund_booking(booking)
+      if result[:error]
+        redirect_to admin_dispute_path(@dispute), alert: "Stripe refund failed: #{result[:error]}"
+        return
+      end
+
       @dispute.update(status: :refunded, refund_amount: amount, resolution: params[:resolution], resolved_at: Time.current)
-      # TODO: trigger actual Stripe refund here once Connect is live
-      redirect_to admin_dispute_path(@dispute), notice: "Refund of $#{amount} processed."
+      booking.update(paid: false)
+      Notification.create_for_booking(booking, :updated, "Your refund of $#{amount} has been processed.") if defined?(Notification.create_for_booking)
+      redirect_to admin_dispute_path(@dispute), notice: "Refund of $#{amount} processed via Stripe."
     end
 
     def dismiss
