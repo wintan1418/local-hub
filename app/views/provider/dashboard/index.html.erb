@@ -1,123 +1,101 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-    <!-- Header -->
-    <div class="mb-6 sm:mb-8">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+
+    <%# ===== HEADER ===== %>
+    <div class="mb-8 sm:mb-10">
+      <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 class="text-xl sm:text-3xl font-bold text-slate-900">Provider Dashboard</h1>
-          <p class="mt-1 text-xs sm:text-sm text-slate-600">Welcome back, <%= current_user.display_name %>!</p>
+          <div class="eyebrow mb-3">provider dashboard</div>
+          <h1 class="display text-[36px] sm:text-[48px] text-ink leading-[1] tracking-[-0.02em]">Welcome back, <em class="italic-wonk" style="color: #1f4d3a;"><%= current_user.display_name %></em>.</h1>
         </div>
         <div class="flex gap-2">
-          <%= link_to new_provider_service_path, class: "flex-1 sm:flex-none bg-orange-500 hover:bg-orange-600 text-white px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center" do %>
-            <i class="fas fa-plus mr-2 text-xs"></i>Add Service
+          <%= link_to new_provider_service_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors active:translate-y-px" do %>
+            <i class="fas fa-plus text-[10px]"></i>Add service
           <% end %>
         </div>
       </div>
     </div>
 
-    <!-- Stats Cards — 2-col on mobile, compact -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
-      <div class="bg-white rounded-xl border border-slate-100 p-4 sm:p-5">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-dollar-sign text-orange-600 text-sm sm:text-base"></i>
+    <%# ===== KPI ROW ===== %>
+    <div class="bg-cream-elevated border border-line rounded-xl mb-8 sm:mb-10">
+      <div class="grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-line">
+        <% [
+          { label: "Revenue", value: "$#{number_with_delimiter(@total_revenue)}", color: "ink" },
+          { label: "Bookings", value: @total_bookings.to_s, color: "ink" },
+          { label: "Rating", value: @avg_rating.to_s, suffix: "★", color: "amber" },
+          { label: "Services", value: @total_services.to_s, color: "ink" }
+        ].each do |stat| %>
+          <div class="p-5 sm:p-6">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3"><%= stat[:label] %></div>
+            <div class="display text-[36px] sm:text-[44px] text-ink leading-none mt-2 truncate">
+              <%= stat[:value] %><% if stat[:suffix] %><span class="text-amber-500 text-[20px] ml-1"><%= stat[:suffix] %></span><% end %>
+            </div>
           </div>
-          <div class="min-w-0">
-            <p class="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wider">Revenue</p>
-            <p class="text-base sm:text-2xl font-black text-slate-900 truncate">$<%= number_with_delimiter(@total_revenue) %></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-100 p-4 sm:p-5">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-calendar-check text-blue-600 text-sm sm:text-base"></i>
-          </div>
-          <div class="min-w-0">
-            <p class="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wider">Bookings</p>
-            <p class="text-base sm:text-2xl font-black text-slate-900"><%= @total_bookings %></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-100 p-4 sm:p-5">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-star text-green-600 text-sm sm:text-base"></i>
-          </div>
-          <div class="ml-4">
-            <p class="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wider">Rating</p>
-            <p class="text-base sm:text-2xl font-black text-slate-900"><%= @avg_rating %><span class="text-xs text-amber-400 ml-0.5">★</span></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-xl border border-slate-100 p-4 sm:p-5">
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-cog text-purple-600 text-sm sm:text-base"></i>
-          </div>
-          <div class="min-w-0">
-            <p class="text-[10px] sm:text-xs font-medium text-slate-500 uppercase tracking-wider">Services</p>
-            <p class="text-base sm:text-2xl font-black text-slate-900"><%= @total_services %></p>
-          </div>
-        </div>
+        <% end %>
       </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <!-- Recent Bookings -->
-      <div class="lg:col-span-2">
-        <div class="bg-white rounded-xl border border-slate-100">
-          <div class="p-6 border-b border-slate-200">
-            <div class="flex items-center justify-between">
-              <h2 class="text-lg font-semibold text-slate-900">Recent Bookings</h2>
-              <div class="flex space-x-2">
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                  <i class="fas fa-clock mr-1"></i><%= @pending_count %> Pending
+    <%# ===== MAIN GRID ===== %>
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:gap-8">
+
+      <%# LEFT — recent bookings %>
+      <div>
+        <div class="bg-cream-elevated border border-line rounded-xl">
+          <div class="px-5 sm:px-6 py-4 border-b border-line flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+            <div>
+              <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1">recent bookings</div>
+              <div class="display text-[20px] text-ink leading-[1.1]"><%= @recent_bookings.count %> recent · <%= @this_month_bookings %> this month</div>
+            </div>
+            <div class="flex gap-1.5 flex-wrap">
+              <% if @pending_count > 0 %>
+                <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2.5 py-0.5 rounded-pill bg-amber-100/60 text-amber-800 border border-amber-200">
+                  <%= @pending_count %> pending
                 </span>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                  <i class="fas fa-calendar-alt mr-1"></i><%= @this_month_bookings %> This Month
-                </span>
-              </div>
+              <% end %>
+              <%= link_to bookings_path, class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 hover:text-ink ml-1 self-center" do %>see all →<% end %>
             </div>
           </div>
-          <div class="p-6">
+
+          <div class="p-3 sm:p-4">
             <% if @recent_bookings.any? %>
-              <div class="space-y-4">
+              <div class="space-y-2">
                 <% @recent_bookings.each do |booking| %>
-                  <div class="border border-slate-200 rounded-lg hover:border-slate-300 transition-colors overflow-hidden">
-                    <%= link_to booking_path(booking), class: "flex items-start gap-3 p-3 sm:p-4 hover:bg-slate-50 transition-colors" do %>
-                      <div class="h-9 w-9 rounded-full bg-orange-100 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-user text-orange-600 text-xs"></i>
+                  <div class="rounded-lg border border-line overflow-hidden">
+                    <%= link_to booking_path(booking), class: "flex items-start gap-3 p-3 sm:p-4 hover:bg-cream-sunken/40 transition-colors" do %>
+                      <div class="h-10 w-10 rounded-full bg-cream-sunken border border-line flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user text-ink-3 text-xs"></i>
                       </div>
                       <div class="flex-1 min-w-0">
                         <div class="flex items-start justify-between gap-2">
-                          <h3 class="font-semibold text-slate-900 text-sm truncate"><%= booking.service.title %></h3>
-                          <% status_colors = { 'pending' => 'bg-yellow-100 text-yellow-800', 'confirmed' => 'bg-green-100 text-green-800', 'completed' => 'bg-blue-100 text-blue-800', 'cancelled' => 'bg-red-100 text-red-800' } %>
-                          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold flex-shrink-0 <%= status_colors[booking.status] %>"><%= booking.status.titleize %></span>
+                          <div class="display text-[16px] text-ink leading-[1.15] truncate"><%= booking.service.title %></div>
+                          <% status_colors = {
+                            "pending" => [ "bg-amber-100/60", "text-amber-800" ],
+                            "confirmed" => [ "bg-forest-soft", "text-forest" ],
+                            "completed" => [ "bg-cream-sunken", "text-ink-2" ],
+                            "cancelled" => [ "bg-rose-100/60", "text-rose-700" ]
+                          } %>
+                          <% c = status_colors[booking.status] || [ "bg-cream-sunken", "text-ink-2" ] %>
+                          <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill <%= c[0] %> <%= c[1] %> flex-shrink-0"><%= booking.status %></span>
                         </div>
-                        <p class="text-xs text-slate-500 truncate"><%= booking.customer.display_name %></p>
-                        <div class="flex items-center gap-2 mt-1 text-xs text-slate-400">
-                          <span class="truncate"><i class="fas fa-clock mr-1 text-[10px]"></i><%= booking.scheduled_at.strftime("%b %d, %-I:%M %p") %></span>
-                          <span class="flex-shrink-0 font-bold text-slate-900">$<%= booking.total_price %></span>
+                        <div class="font-mono text-[11px] uppercase tracking-[0.08em] text-ink-3 mt-0.5 truncate"><%= booking.customer.display_name %></div>
+                        <div class="flex items-center justify-between gap-2 mt-1.5">
+                          <div class="text-[12px] text-ink-3"><%= booking.scheduled_at.strftime("%b %-d · %-I:%M %p") %></div>
+                          <div class="display text-[15px] text-ink leading-none">$<%= number_with_precision(booking.total_price, precision: 0) %></div>
                         </div>
                       </div>
                     <% end %>
                     <% if booking.pending? || booking.confirmed? %>
-                      <div class="flex gap-2 px-3 pb-3 sm:px-4 sm:pb-4 border-t border-slate-100 pt-3">
+                      <div class="flex gap-2 px-3 sm:px-4 py-3 border-t border-line bg-cream-sunken/30">
                         <% if booking.pending? %>
-                          <%= button_to confirm_provider_booking_path(booking), method: :patch, class: "flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-colors cursor-pointer" do %>
-                            <i class="fas fa-check mr-1"></i>Accept
+                          <%= button_to confirm_provider_booking_path(booking), method: :patch, class: "flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-pill text-[12px] font-semibold bg-forest hover:opacity-90 text-cream transition-opacity cursor-pointer" do %>
+                            <i class="fas fa-check text-[10px]"></i>Accept
                           <% end %>
-                          <%= button_to cancel_provider_booking_path(booking), method: :patch, data: { turbo_confirm: "Reject this booking?" }, class: "flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs font-semibold bg-red-50 text-red-600 hover:bg-red-100 transition-colors cursor-pointer" do %>
-                            <i class="fas fa-times mr-1"></i>Reject
+                          <%= button_to cancel_provider_booking_path(booking), method: :patch, data: { turbo_confirm: "Reject this booking?" }, class: "flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-pill text-[12px] font-semibold border border-rose-300 text-rose-700 hover:bg-rose-50 transition-colors cursor-pointer" do %>
+                            <i class="fas fa-times text-[10px]"></i>Reject
                           <% end %>
                         <% elsif booking.confirmed? %>
-                          <%= button_to complete_provider_booking_path(booking), method: :patch, data: { turbo_confirm: "Mark this booking as completed?" }, class: "flex-1 inline-flex items-center justify-center px-3 py-2 rounded-lg text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors cursor-pointer" do %>
-                            <i class="fas fa-check-double mr-1"></i>Mark Complete
+                          <%= button_to complete_provider_booking_path(booking), method: :patch, data: { turbo_confirm: "Mark as completed?" }, class: "flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-pill text-[12px] font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors cursor-pointer" do %>
+                            <i class="fas fa-check-double text-[10px]"></i>Mark complete
                           <% end %>
                         <% end %>
                       </div>
@@ -125,177 +103,152 @@
                   </div>
                 <% end %>
               </div>
-              <div class="mt-6 text-center">
-                <button class="text-orange-600 hover:text-orange-700 font-medium text-sm">
-                  View All Bookings <i class="fas fa-arrow-right ml-1"></i>
-                </button>
-              </div>
             <% else %>
-              <div class="text-center py-12">
-                <i class="fas fa-calendar-alt text-4xl text-slate-400 mb-4"></i>
-                <h3 class="text-lg font-medium text-slate-900 mb-2">No bookings yet</h3>
-                <p class="text-slate-500">Start by adding some services to attract customers!</p>
-                <%= link_to new_provider_service_path, class: "mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-500 hover:bg-orange-600" do %>
-                  <i class="fas fa-plus mr-2"></i>Add Your First Service
-                <% end %>
-              </div>
+              <%= render "shared/empty_state",
+                  icon: "fa-calendar-alt",
+                  title: "No bookings yet",
+                  message: "Add some services to start getting booked.",
+                  cta_text: "Add your first service",
+                  cta_path: new_provider_service_path,
+                  cta_icon: "fa-plus" %>
             <% end %>
           </div>
         </div>
       </div>
 
-      <!-- Sidebar -->
-      <div class="space-y-4 sm:space-y-6">
-        <!-- Quick Actions — icon grid (more compact, scales with screen) -->
-        <div class="bg-white rounded-xl border border-slate-100 p-4 sm:p-5">
-          <h2 class="text-sm font-bold text-slate-900 mb-3">Quick Actions</h2>
-          <div class="grid grid-cols-4 sm:grid-cols-3 gap-2">
+      <%# RIGHT — sidebar %>
+      <aside class="space-y-4">
+
+        <%# Quick actions — icon grid %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">quick actions</div>
+          <div class="grid grid-cols-4 sm:grid-cols-3 gap-1.5">
             <% [
-              { path: new_provider_service_path, icon: "fa-plus", label: "Add", color: "orange", primary: true },
-              { path: provider_quotes_path, icon: "fa-file-invoice-dollar", label: "Quotes", color: "slate" },
-              { path: provider_calendar_path, icon: "fa-calendar-alt", label: "Calendar", color: "slate" },
-              { path: provider_analytics_path, icon: "fa-chart-line", label: "Analytics", color: "slate" },
-              { path: provider_payouts_path, icon: "fa-dollar-sign", label: "Payouts", color: "emerald" },
-              { path: edit_provider_site_path, icon: "fa-globe", label: "Website", color: "violet" },
-              { path: provider_team_members_path, icon: "fa-users", label: "Team", color: "slate" },
-              { path: job_requests_path, icon: "fa-briefcase", label: "Jobs", color: "slate" },
-              { path: conversations_path, icon: "fa-comments", label: "Messages", color: "slate" },
-              { path: provider_profile_path, icon: "fa-user", label: "Profile", color: "slate" },
-              { path: provider_subscriptions_path, icon: "fa-credit-card", label: "Plan", color: "slate" },
-              { path: provider_export_bookings_path, icon: "fa-file-export", label: "Export", color: "slate" }
+              { path: new_provider_service_path, icon: "fa-plus", label: "Add", primary: true },
+              { path: provider_quotes_path, icon: "fa-file-invoice-dollar", label: "Quotes" },
+              { path: provider_calendar_path, icon: "fa-calendar-alt", label: "Calendar" },
+              { path: provider_analytics_path, icon: "fa-chart-line", label: "Analytics" },
+              { path: provider_payouts_path, icon: "fa-dollar-sign", label: "Payouts" },
+              { path: edit_provider_site_path, icon: "fa-globe", label: "Website" },
+              { path: provider_team_members_path, icon: "fa-users", label: "Team" },
+              { path: job_requests_path, icon: "fa-briefcase", label: "Jobs" },
+              { path: conversations_path, icon: "fa-comments", label: "Messages" },
+              { path: provider_profile_path, icon: "fa-user", label: "Profile" },
+              { path: provider_subscriptions_path, icon: "fa-credit-card", label: "Plan" },
+              { path: provider_export_bookings_path, icon: "fa-file-export", label: "Export" }
             ].each do |action| %>
-              <%= link_to action[:path], class: "group flex flex-col items-center gap-1.5 p-2.5 rounded-lg #{action[:primary] ? 'bg-orange-500 hover:bg-orange-600 text-white' : action[:color] != 'slate' ? "bg-#{action[:color]}-50 hover:bg-#{action[:color]}-100 text-#{action[:color]}-700" : 'bg-slate-50 hover:bg-slate-100 text-slate-700'} transition-colors" do %>
-                <i class="fas <%= action[:icon] %> text-sm"></i>
-                <span class="text-[10px] font-semibold text-center leading-tight"><%= action[:label] %></span>
+              <% cls = action[:primary] ? "bg-ink text-cream hover:bg-ink-2" : "bg-cream-sunken/40 text-ink-2 hover:bg-cream-sunken" %>
+              <%= link_to action[:path], class: "#{cls} flex flex-col items-center gap-1 p-2.5 rounded-lg transition-colors" do %>
+                <i class="fas <%= action[:icon] %> text-[13px]"></i>
+                <span class="text-[10px] font-medium leading-tight text-center"><%= action[:label] %></span>
               <% end %>
             <% end %>
           </div>
         </div>
 
-        <!-- Vacation Mode -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <h2 class="text-sm font-bold text-slate-900 mb-3"><i class="fas fa-umbrella-beach mr-1.5 text-amber-500"></i>Vacation Mode</h2>
+        <%# Vacation Mode %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2"><i class="fas fa-umbrella-beach text-amber-500 mr-1.5 text-[11px]"></i>vacation mode</div>
           <% if current_user.on_vacation? %>
-            <div class="text-sm text-amber-700 bg-amber-50 rounded-lg p-3 border border-amber-100 mb-3">
-              Away until <%= current_user.vacation_until.strftime("%b %d, %Y") %>. New customers can't book you.
+            <div class="text-[13px] text-amber-800 bg-amber-100/60 rounded-lg p-3 border border-amber-200 mb-3">
+              Away until <strong><%= current_user.vacation_until.strftime("%b %-d, %Y") %></strong>. New bookings paused.
             </div>
-            <%= button_to provider_profile_path, method: :patch, params: { user: { vacation_until: nil } }, class: "w-full text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg cursor-pointer" do %>
-              Resume Bookings
+            <%= button_to provider_profile_path, method: :patch, params: { user: { vacation_until: nil } }, class: "w-full px-5 py-2.5 rounded-pill text-sm font-semibold bg-cream-sunken hover:bg-line text-ink transition-colors cursor-pointer" do %>
+              Resume bookings
             <% end %>
           <% else %>
-            <p class="text-xs text-slate-500 mb-3">Pause new bookings when you're away.</p>
-            <%= form_with url: provider_profile_path, method: :patch, local: true do |f| %>
-              <%= f.date_field "user[vacation_until]", min: Date.current.to_s, class: "w-full px-3 py-2 mb-2 rounded-lg border border-slate-200 text-sm" %>
-              <button type="submit" class="w-full text-sm font-semibold text-white bg-amber-500 hover:bg-amber-600 px-4 py-2 rounded-lg">Set Away Date</button>
+            <p class="text-[12px] text-ink-3 mb-3">Pause new bookings when you're away.</p>
+            <%= form_with url: provider_profile_path, method: :patch, local: true, class: "space-y-2" do |f| %>
+              <%= f.date_field "user[vacation_until]", min: Date.current.to_s, class: "w-full px-3 py-2 rounded-pill border border-line text-sm bg-cream-elevated focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink" %>
+              <button type="submit" class="w-full px-5 py-2.5 rounded-pill text-sm font-semibold bg-amber-500 hover:bg-amber-600 text-cream transition-colors cursor-pointer">Set away date</button>
             <% end %>
           <% end %>
         </div>
 
-        <!-- Profile Status -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <h2 class="text-lg font-semibold mb-4 text-slate-900">Profile Status</h2>
-          <div class="space-y-3">
+        <%# Profile status %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">profile status</div>
+          <div class="space-y-2.5">
             <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-600">Profile Complete</span>
+              <span class="text-[13px] text-ink-2">Profile</span>
               <% if current_user.profile_complete? %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  <i class="fas fa-check mr-1"></i>Complete
-                </span>
+                <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-forest"><i class="fas fa-check mr-1"></i>complete</span>
               <% else %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                  <i class="fas fa-exclamation mr-1"></i>Incomplete
-                </span>
+                <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-amber-700"><i class="fas fa-exclamation mr-1"></i>incomplete</span>
               <% end %>
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-600">Verification</span>
+              <span class="text-[13px] text-ink-2">Verification</span>
               <% if current_user.verified? %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                  <i class="fas fa-check-circle mr-1"></i>Verified
-                </span>
+                <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-forest"><i class="fas fa-check-circle mr-1"></i>verified</span>
               <% else %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                  <i class="fas fa-clock mr-1"></i>Pending
-                </span>
+                <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-amber-700"><i class="fas fa-clock mr-1"></i>pending</span>
               <% end %>
             </div>
             <% unless current_user.profile_complete? %>
-              <%= link_to edit_provider_profile_path, class: "block w-full text-center text-sm text-blue-600 hover:text-blue-700 mt-3" do %>
-                Complete Your Profile <i class="fas fa-arrow-right ml-1"></i>
+              <%= link_to edit_provider_profile_path, class: "block w-full mt-3 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors text-center" do %>
+                Complete profile
               <% end %>
             <% end %>
           </div>
         </div>
 
-        <!-- Your Services -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-slate-900">Your Services</h2>
-            <span class="text-sm text-slate-500"><%= @total_services %> services</span>
+        <%# Your services %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="flex items-end justify-between mb-3">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">your services</div>
+            <span class="font-mono text-[11px] text-ink-3"><%= @total_services %></span>
           </div>
           <% if @services.any? %>
-            <div class="space-y-3">
+            <div class="space-y-1.5">
               <% @services.limit(4).each do |service| %>
-                <div class="flex items-center justify-between p-3 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-                  <div class="flex items-center space-x-3">
+                <div class="flex items-center justify-between gap-3 p-3 rounded-lg border border-line">
+                  <div class="flex items-center gap-3 min-w-0">
                     <% if service.images.any? %>
-                      <%= image_tag service.images.first, class: "h-8 w-8 rounded object-cover" %>
+                      <%= image_tag service.images.first, class: "w-9 h-9 rounded-lg object-cover border border-line flex-shrink-0" %>
                     <% else %>
-                      <div class="h-8 w-8 rounded bg-slate-200 flex items-center justify-center">
-                        <i class="fas fa-image text-slate-400 text-sm"></i>
+                      <div class="w-9 h-9 rounded-lg bg-cream-sunken border border-line flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-image text-ink-3 text-xs"></i>
                       </div>
                     <% end %>
-                    <div>
-                      <h3 class="font-medium text-sm text-slate-900"><%= service.title %></h3>
-                      <p class="text-xs text-slate-600"><%= service.category.name %></p>
+                    <div class="min-w-0">
+                      <div class="text-[13px] font-semibold text-ink truncate"><%= service.title %></div>
+                      <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3 truncate"><%= service.category.name %></div>
                     </div>
                   </div>
-                  <div class="text-right">
-                    <p class="text-sm font-medium text-slate-900">$<%= service.base_price %></p>
-                    <p class="text-xs text-slate-500"><%= service.price_type.titleize %></p>
+                  <div class="text-right flex-shrink-0">
+                    <div class="display text-[14px] text-ink leading-none">$<%= service.base_price %></div>
                   </div>
                 </div>
               <% end %>
             </div>
-            <% if @services.count > 4 %>
-              <div class="mt-4 text-center">
-                <button class="text-orange-600 hover:text-orange-700 font-medium text-sm">
-                  View All Services <i class="fas fa-arrow-right ml-1"></i>
-                </button>
-              </div>
-            <% end %>
           <% else %>
-            <div class="text-center py-6">
-              <i class="fas fa-plus-circle text-3xl text-slate-400 mb-3"></i>
-              <p class="text-slate-500 text-sm mb-3">No services added yet.</p>
-              <%= link_to new_provider_service_path, class: "text-orange-600 hover:text-orange-700 font-medium text-sm" do %>
-                Add Your First Service <i class="fas fa-arrow-right ml-1"></i>
-              <% end %>
-            </div>
+            <p class="text-[13px] text-ink-3 text-center py-3">No services yet.</p>
+            <%= link_to new_provider_service_path, class: "block w-full mt-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors text-center" do %>
+              Add first service
+            <% end %>
           <% end %>
         </div>
 
-        <!-- Performance Overview -->
-        <div class="bg-white rounded-xl border border-slate-100 p-6">
-          <h2 class="text-lg font-semibold mb-4 text-slate-900">Performance Overview</h2>
-          <div class="space-y-4">
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-600">Total Reviews</span>
-              <span class="text-sm font-medium text-slate-900"><%= @total_reviews %></span>
+        <%# Performance %>
+        <div class="bg-cream-elevated border border-line rounded-xl p-5">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">performance</div>
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-[13px]">
+              <span class="text-ink-2">Reviews</span>
+              <span class="font-semibold text-ink"><%= @total_reviews %></span>
             </div>
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-600">Completion Rate</span>
-              <span class="text-sm font-medium text-slate-900">
-                <%= @total_bookings > 0 ? ((@completed_bookings.count.to_f / @total_bookings) * 100).round(1) : 0 %>%
-              </span>
+            <div class="flex items-center justify-between text-[13px]">
+              <span class="text-ink-2">Completion</span>
+              <span class="font-semibold text-ink"><%= @total_bookings > 0 ? ((@completed_bookings.count.to_f / @total_bookings) * 100).round(1) : 0 %>%</span>
             </div>
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-slate-600">Response Time</span>
-              <span class="text-sm font-medium text-slate-900">< 2 hours</span>
+            <div class="flex items-center justify-between text-[13px]">
+              <span class="text-ink-2">Response</span>
+              <span class="font-semibold text-ink">&lt; 2h</span>
             </div>
           </div>
         </div>
-      </div>
+      </aside>
     </div>
   </div>
 </div>
