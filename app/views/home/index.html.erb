@@ -629,14 +629,17 @@
           <% end %>
           <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2"><%= plan.name %></div>
           <div class="display text-ink leading-none">
-            <span class="text-[44px]">$<%= plan.price.to_i %></span><span class="text-[14px] text-ink-3 font-sans">/mo</span>
+            <% if plan.price.to_f.zero? %>
+              <span class="text-[44px]">Free</span>
+            <% else %>
+              <span class="text-[44px]">$<%= plan.price.to_i %></span><span class="text-[14px] text-ink-3 font-sans">/<%= plan.billing_period.to_s == "yearly" ? "yr" : "mo" %></span>
+            <% end %>
           </div>
-          <p class="text-[13px] text-ink-3 mt-3 min-h-[40px]"><%= plan.description.to_s.presence || "All the essentials to get started." %></p>
 
           <div class="my-6 h-px bg-line"></div>
 
           <ul class="space-y-2.5">
-            <% (plan.features.presence || []).first(6).each do |feature| %>
+            <% Array(plan.features).first(6).each do |feature| %>
               <li class="flex items-start gap-2.5 text-[13px] text-ink-2">
                 <i class="fas fa-check text-forest text-[11px] mt-1"></i>
                 <span><%= feature %></span>
