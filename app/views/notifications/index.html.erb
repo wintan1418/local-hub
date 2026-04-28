@@ -1,91 +1,75 @@
-<div class="min-h-screen bg-slate-50">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="bg-white rounded-xl border border-slate-100">
-    <!-- Header -->
-    <div class="px-6 py-4 border-b border-slate-200">
-      <div class="flex justify-between items-center">
-        <h2 class="text-2xl font-bold text-slate-900">
-          <i class="fas fa-bell mr-2 text-blue-500"></i>
-          Notifications
-        </h2>
-        <% if @notifications.unread.any? %>
-          <%= link_to mark_all_as_read_notifications_path, method: :patch, 
-                      class: "bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200" do %>
-            <i class="fas fa-check-double mr-1"></i>
-            Mark All as Read
-          <% end %>
-        <% end %>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+
+    <%# Header %>
+    <div class="flex items-end justify-between gap-3 mb-8">
+      <div>
+        <div class="eyebrow mb-3">notifications</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">What's <em class="italic-wonk" style="color: #1f4d3a;">new</em>.</h1>
       </div>
+      <% if @notifications.unread.any? %>
+        <%= link_to mark_all_as_read_notifications_path, method: :patch,
+              class: "inline-flex items-center gap-2 px-4 py-2 rounded-pill text-[12px] font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors whitespace-nowrap" do %>
+          <i class="fas fa-check-double text-[10px]"></i>Mark all read
+        <% end %>
+      <% end %>
     </div>
 
-    <!-- Notifications List -->
-    <div class="divide-y divide-slate-200">
-      <% if @notifications.any? %>
-        <% @notifications.each do |notification| %>
-          <div class="<%= notification.background_class %> p-4 hover:bg-slate-50 transition duration-200">
-            <div class="flex items-start space-x-3">
-              <!-- Icon -->
-              <div class="flex-shrink-0 mt-1">
-                <i class="<%= notification.icon_class %> text-lg"></i>
-              </div>
+    <% if @notifications.any? %>
+      <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+        <div class="divide-y divide-line">
+          <% @notifications.each do |notification| %>
+            <div class="<%= notification.read? ? '' : 'bg-cream-sunken/30' %> px-5 sm:px-6 py-4 hover:bg-cream-sunken/40 transition-colors">
+              <div class="flex items-start gap-4">
+                <%# Icon — uniform circle %>
+                <div class="w-10 h-10 rounded-full bg-cream-sunken border border-line flex items-center justify-center flex-shrink-0">
+                  <i class="<%= notification.icon_class %> text-ink-2 text-sm"></i>
+                </div>
 
-              <!-- Content -->
-              <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between">
-                  <div class="flex-1">
-                    <%= link_to notification_path(notification), class: "block hover:bg-slate-25 -m-2 p-2 rounded" do %>
-                      <h3 class="text-sm font-semibold text-slate-900 mb-1">
-                        <%= notification.title %>
-                        <% unless notification.read? %>
-                          <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 ml-2">
-                            New
-                          </span>
+                <div class="flex-1 min-w-0">
+                  <%= link_to notification_path(notification), class: "block group" do %>
+                    <div class="flex items-start justify-between gap-2 mb-1">
+                      <div class="display text-[16px] sm:text-[17px] text-ink leading-[1.2] group-hover:underline underline-offset-2 truncate"><%= notification.title %></div>
+                      <% unless notification.read? %>
+                        <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] text-forest bg-forest-soft px-2 py-0.5 rounded-pill flex-shrink-0">new</span>
+                      <% end %>
+                    </div>
+                    <p class="text-[13px] text-ink-2 leading-[1.5]"><%= notification.message %></p>
+                  <% end %>
+
+                  <div class="flex items-center justify-between gap-2 mt-2.5">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3"><%= time_ago_in_words(notification.created_at) %> ago</span>
+                    <div class="flex gap-3">
+                      <% unless notification.read? %>
+                        <%= link_to mark_as_read_notification_path(notification), method: :patch,
+                              class: "font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 hover:text-ink" do %>
+                          mark read
                         <% end %>
-                      </h3>
-                      <p class="text-sm text-slate-600 mb-2">
-                        <%= notification.message %>
-                      </p>
-                    <% end %>
-                    <div class="flex items-center justify-between">
-                      <p class="text-xs text-slate-500">
-                        <i class="fas fa-clock mr-1"></i>
-                        <%= time_ago_in_words(notification.created_at) %> ago
-                      </p>
-                      <div class="flex space-x-2">
-                        <% unless notification.read? %>
-                          <%= link_to mark_as_read_notification_path(notification), method: :patch,
-                                      class: "text-blue-500 hover:text-blue-700 text-xs font-medium" do %>
-                            <i class="fas fa-check mr-1"></i>Mark as Read
-                          <% end %>
-                        <% end %>
-                        <%= link_to notification_path(notification), method: :delete,
-                                    data: { confirm: "Are you sure?" },
-                                    class: "text-red-500 hover:text-red-700 text-xs font-medium" do %>
-                          <i class="fas fa-trash mr-1"></i>Delete
-                        <% end %>
-                      </div>
+                      <% end %>
+                      <%= link_to notification_path(notification), method: :delete, data: { turbo_confirm: "Delete this notification?" },
+                            class: "font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 hover:text-rose-700" do %>
+                        delete
+                      <% end %>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        <% end %>
+          <% end %>
+        </div>
 
-        <!-- Pagination -->
-        <% if defined?(Kaminari) && @notifications.respond_to?(:current_page) %>
-          <div class="px-6 py-4 bg-slate-50">
+        <%# Pagination %>
+        <% if defined?(Kaminari) && @notifications.respond_to?(:current_page) && @notifications.total_pages > 1 %>
+          <div class="px-6 py-4 border-t border-line bg-cream-sunken/30">
             <%= paginate @notifications %>
           </div>
         <% end %>
-
-      <% else %>
-        <%= render "shared/empty_state",
-                  icon: "fa-bell",
-                  title: "You're all caught up",
-                  message: "New notifications will appear here when something happens." %>
-      <% end %>
-    </div>
+      </div>
+    <% else %>
+      <%= render "shared/empty_state",
+            icon: "fa-bell",
+            title: "You're all caught up",
+            message: "New notifications will appear here when something happens." %>
+    <% end %>
   </div>
-</div>
 </div>

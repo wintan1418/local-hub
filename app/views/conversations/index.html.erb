@@ -1,184 +1,164 @@
-<div class="min-h-screen bg-slate-50">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="mb-6 flex justify-between items-center">
-    <div>
-      <h1 class="text-3xl font-bold text-slate-900">Messages</h1>
-      <p class="text-slate-600">Manage your conversations with <%= current_user.customer? ? 'service providers' : 'customers' %></p>
-    </div>
-    <% if current_user.customer? %>
-      <button onclick="openProviderSearch()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition duration-200 flex items-center">
-        <i class="fas fa-plus mr-2"></i>Start New Chat
-      </button>
-    <% end %>
-  </div>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
 
-  <% if @conversations.present? %>
-    <div class="bg-white shadow rounded-lg overflow-hidden">
-      <% @conversations.each do |conversation| %>
-        <% other_user = conversation.other_participant(current_user) %>
-        <% unread_count = conversation.unread_count_for(current_user) %>
-        <%= link_to conversation_path(conversation), class: "block hover:bg-slate-50 border-b border-slate-200 last:border-0" do %>
-          <div class="p-4 flex items-center space-x-4">
-            <div class="flex-shrink-0">
-              <% if other_user.profile_picture.attached? %>
-                <%= image_tag other_user.profile_picture, class: "h-12 w-12 rounded-full object-cover" %>
-              <% else %>
-                <div class="h-12 w-12 rounded-full bg-slate-300 flex items-center justify-center">
-                  <i class="fas fa-user text-slate-600"></i>
-                </div>
-              <% end %>
-            </div>
-            
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between">
-                <p class="text-sm font-medium text-slate-900 truncate">
-                  <%= other_user.display_name %>
-                  <% if other_user.provider? && other_user.business_name.present? %>
-                    <span class="text-slate-500">- <%= other_user.business_name %></span>
-                  <% end %>
-                </p>
-                <div class="flex items-center space-x-2">
-                  <% if unread_count > 0 %>
-                    <span class="bg-blue-600 text-white text-xs font-medium px-2 py-1 rounded-full">
-                      <%= unread_count %>
-                    </span>
-                  <% end %>
-                  <p class="text-xs text-slate-500">
-                    <%= conversation.last_message_at ? time_ago_in_words(conversation.last_message_at) + " ago" : "Just now" %>
-                  </p>
-                </div>
-              </div>
-              
-              <% if conversation.last_message %>
-                <p class="text-sm text-slate-600 truncate mt-1">
-                  <% if conversation.last_message.sender == current_user %>
-                    <span class="text-slate-500">You:</span>
-                  <% end %>
-                  <%= conversation.last_message.content %>
-                </p>
-              <% else %>
-                <p class="text-sm text-slate-500 italic mt-1">No messages yet</p>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
+    <%# Header %>
+    <div class="flex items-end justify-between gap-3 mb-8">
+      <div>
+        <div class="eyebrow mb-3">messages</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">
+          Talk to <em class="italic-wonk" style="color: #1f4d3a;"><%= current_user.customer? ? "providers" : "customers" %></em>.
+        </h1>
+      </div>
+      <% if current_user.customer? %>
+        <button onclick="openProviderSearch()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors active:translate-y-px">
+          <i class="fas fa-plus text-[10px]"></i>New chat
+        </button>
       <% end %>
     </div>
-  <% else %>
-    <%= render "shared/empty_state",
-              icon: "fa-comments",
-              title: "No conversations yet",
-              message: current_user.customer? ? "Start a conversation with a provider to get help with your needs." : "Customers will message you here when they're interested in your services.",
-              cta_text: current_user.customer? ? "Find providers" : nil,
-              cta_path: current_user.customer? ? services_path : nil,
-              cta_icon: "fa-search" %>
-  <% end %>
-</div>
 
-<!-- Provider Search Modal -->
-<% if current_user.customer? %>
-<div id="providerSearchModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
-  <div class="flex items-center justify-center min-h-screen p-4">
-    <div class="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-hidden">
-      <div class="p-6 border-b border-slate-200">
-        <div class="flex justify-between items-center">
-          <h3 class="text-lg font-semibold text-slate-900">Start a conversation</h3>
-          <button onclick="closeProviderSearch()" class="text-slate-400 hover:text-slate-600">
-            <i class="fas fa-times text-xl"></i>
-          </button>
-        </div>
-        <div class="mt-4">
-          <input type="text" id="providerSearch" placeholder="Search providers by name or service..." 
-                 class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                 oninput="searchProviders()">
+    <% if @conversations.present? %>
+      <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+        <div class="divide-y divide-line">
+          <% @conversations.each do |conversation| %>
+            <% other_user = conversation.other_participant(current_user) %>
+            <% unread_count = conversation.unread_count_for(current_user) %>
+            <%= link_to conversation_path(conversation), class: "block hover:bg-cream-sunken/40 transition-colors" do %>
+              <div class="px-5 sm:px-6 py-4 flex items-start gap-4">
+                <% if other_user.profile_picture.attached? %>
+                  <%= image_tag other_user.profile_picture, class: "h-12 w-12 rounded-full object-cover border border-line flex-shrink-0" %>
+                <% else %>
+                  <img src="https://i.pravatar.cc/96?u=user<%= other_user.id %>" class="h-12 w-12 rounded-full object-cover border border-line flex-shrink-0" alt="<%= other_user.display_name %>">
+                <% end %>
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="min-w-0">
+                      <div class="display text-[16px] text-ink leading-[1.15] truncate">
+                        <%= other_user.display_name %>
+                        <% if other_user.provider? && other_user.business_name.present? %>
+                          <span class="font-sans text-[13px] text-ink-3 font-normal">· <%= other_user.business_name %></span>
+                        <% end %>
+                      </div>
+                    </div>
+                    <div class="flex items-center gap-2 flex-shrink-0">
+                      <% if unread_count > 0 %>
+                        <span class="font-mono text-[10px] uppercase tracking-[0.08em] bg-ink text-cream px-2 py-0.5 rounded-pill"><%= unread_count %></span>
+                      <% end %>
+                      <span class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 whitespace-nowrap">
+                        <%= conversation.last_message_at ? "#{time_ago_in_words(conversation.last_message_at)} ago" : "just now" %>
+                      </span>
+                    </div>
+                  </div>
+
+                  <% if conversation.last_message %>
+                    <p class="text-[13px] text-ink-2 truncate mt-1.5">
+                      <% if conversation.last_message.sender == current_user %>
+                        <span class="text-ink-3">You:</span>
+                      <% end %>
+                      <%= conversation.last_message.content %>
+                    </p>
+                  <% else %>
+                    <p class="text-[13px] text-ink-3 italic mt-1.5">No messages yet</p>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          <% end %>
         </div>
       </div>
-      
-      <div class="p-6 max-h-96 overflow-y-auto">
-        <div id="providerResults">
-          <div class="text-center text-slate-500 py-8">
-            <i class="fas fa-search text-4xl mb-2"></i>
-            <p>Search for providers to start chatting</p>
+    <% else %>
+      <%= render "shared/empty_state",
+            icon: "fa-comments",
+            title: "No conversations yet",
+            message: current_user.customer? ? "Start a conversation with a provider to get help with your needs." : "Customers will message you here when they're interested in your services.",
+            cta_text: current_user.customer? ? "Find providers" : nil,
+            cta_path: current_user.customer? ? services_path : nil,
+            cta_icon: "fa-search" %>
+    <% end %>
+  </div>
+</div>
+
+<%# Provider Search Modal %>
+<% if current_user.customer? %>
+  <div id="providerSearchModal" class="fixed inset-0 bg-ink/60 hidden z-50 backdrop-blur-sm">
+    <div class="flex items-start sm:items-center justify-center min-h-screen p-4 pt-16 sm:pt-4">
+      <div class="bg-cream-elevated rounded-xl border border-line max-w-2xl w-full max-h-[80vh] overflow-hidden shadow-card-lg">
+        <div class="px-5 sm:px-6 py-4 border-b border-line">
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="eyebrow mb-1">new chat</div>
+              <h3 class="display text-[20px] text-ink leading-[1.1]">Start a conversation</h3>
+            </div>
+            <button onclick="closeProviderSearch()" class="w-9 h-9 rounded-full border border-line text-ink-3 hover:bg-cream-sunken hover:text-ink transition-colors">
+              <i class="fas fa-times text-[12px]"></i>
+            </button>
+          </div>
+          <input type="text" id="providerSearch" placeholder="Search providers by name or service…"
+                 class="w-full mt-4 px-4 py-2.5 rounded-pill border border-line text-ink placeholder-ink-4 focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm"
+                 oninput="searchProviders()">
+        </div>
+        <div class="px-3 sm:px-4 py-3 max-h-96 overflow-y-auto">
+          <div id="providerResults">
+            <div class="text-center py-10">
+              <i class="fas fa-search text-2xl text-ink-3 mb-2"></i>
+              <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">search to start chatting</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 <% end %>
-</div>
 
 <script>
 function openProviderSearch() {
   document.getElementById('providerSearchModal').classList.remove('hidden');
   loadAllProviders();
 }
-
 function closeProviderSearch() {
   document.getElementById('providerSearchModal').classList.add('hidden');
   document.getElementById('providerSearch').value = '';
 }
-
 function loadAllProviders() {
   fetch('/api/providers')
-    .then(response => response.json())
+    .then(r => r.json())
     .then(providers => displayProviders(providers))
-    .catch(error => console.error('Error:', error));
+    .catch(e => console.error('Error:', e));
 }
-
 function searchProviders() {
   const query = document.getElementById('providerSearch').value;
-  if (query.length < 2) {
-    loadAllProviders();
-    return;
-  }
-  
+  if (query.length < 2) { loadAllProviders(); return; }
   fetch(`/api/providers?search=${encodeURIComponent(query)}`)
-    .then(response => response.json())
+    .then(r => r.json())
     .then(providers => displayProviders(providers))
-    .catch(error => console.error('Error:', error));
+    .catch(e => console.error('Error:', e));
 }
-
 function displayProviders(providers) {
-  const resultsDiv = document.getElementById('providerResults');
-  
+  const div = document.getElementById('providerResults');
   if (providers.length === 0) {
-    resultsDiv.innerHTML = `
-      <div class="text-center text-slate-500 py-8">
-        <i class="fas fa-user-slash text-4xl mb-2"></i>
-        <p>No providers found</p>
-      </div>
-    `;
+    div.innerHTML = `
+      <div class="text-center py-10">
+        <i class="fas fa-user-slash text-2xl text-ink-3 mb-2"></i>
+        <p class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">no providers found</p>
+      </div>`;
     return;
   }
-  
-  resultsDiv.innerHTML = providers.map(provider => `
-    <div class="flex items-center p-3 hover:bg-slate-50 rounded-lg cursor-pointer" onclick="startConversation(${provider.id})">
-      <div class="flex-shrink-0">
-        ${provider.profile_picture_url ? 
-          `<img src="${provider.profile_picture_url}" class="h-12 w-12 rounded-full object-cover">` :
-          `<div class="h-12 w-12 rounded-full bg-slate-300 flex items-center justify-center">
-             <i class="fas fa-user text-slate-600"></i>
-           </div>`
-        }
-      </div>
-      <div class="ml-4 flex-1">
-        <p class="text-sm font-medium text-slate-900">${provider.display_name}</p>
-        ${provider.business_name ? `<p class="text-sm text-slate-600">${provider.business_name}</p>` : ''}
-        <div class="flex items-center mt-1">
-          <div class="flex text-yellow-400">
-            ${'★'.repeat(Math.floor(provider.average_rating || 0))}${'☆'.repeat(5 - Math.floor(provider.average_rating || 0))}
-          </div>
-          <span class="ml-2 text-xs text-slate-500">(${provider.total_reviews || 0} reviews)</span>
+  div.innerHTML = providers.map(p => `
+    <div class="flex items-center gap-3 p-3 hover:bg-cream-sunken/40 rounded-lg cursor-pointer" onclick="startConversation(${p.id})">
+      ${p.profile_picture_url
+        ? `<img src="${p.profile_picture_url}" class="h-10 w-10 rounded-full object-cover border border-line">`
+        : `<div class="h-10 w-10 rounded-full bg-cream-sunken border border-line flex items-center justify-center"><i class="fas fa-user text-ink-3 text-xs"></i></div>`}
+      <div class="flex-1 min-w-0">
+        <div class="text-[14px] font-semibold text-ink truncate">${p.display_name}</div>
+        ${p.business_name ? `<div class="text-[12px] text-ink-3 truncate">${p.business_name}</div>` : ''}
+        <div class="flex items-center gap-1 mt-0.5">
+          <i class="fas fa-star text-amber-500 text-[9px]"></i>
+          <span class="font-mono text-[10px] text-ink-3">${(p.average_rating || 0).toFixed ? (p.average_rating || 0).toFixed(1) : (p.average_rating || 0)} · ${p.total_reviews || 0} reviews</span>
         </div>
       </div>
-      <div class="text-sm text-blue-600">
-        <i class="fas fa-comment"></i>
-      </div>
-    </div>
-  `).join('');
+      <i class="fas fa-arrow-right text-ink-3 text-[10px]"></i>
+    </div>`).join('');
 }
-
 function startConversation(providerId) {
   fetch('/conversations', {
     method: 'POST',
@@ -188,25 +168,10 @@ function startConversation(providerId) {
     },
     body: JSON.stringify({ user_id: providerId })
   })
-  .then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-    throw new Error('Failed to create conversation');
-  })
-  .then(data => {
-    window.location.href = `/conversations/${data.conversation_id}`;
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    alert('Failed to start conversation');
-  });
+  .then(r => r.ok ? r.json() : Promise.reject('Failed'))
+  .then(d => { window.location.href = `/conversations/${d.conversation_id}`; })
+  .catch(e => alert('Failed to start conversation'));
 }
-
-// Close modal when clicking outside
-document.getElementById('providerSearchModal').addEventListener('click', function(e) {
-  if (e.target === this) {
-    closeProviderSearch();
-  }
-});
+const __modal = document.getElementById('providerSearchModal');
+if (__modal) __modal.addEventListener('click', function(e) { if (e.target === this) closeProviderSearch(); });
 </script>

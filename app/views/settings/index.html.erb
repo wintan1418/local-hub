@@ -1,309 +1,251 @@
 <% content_for :page_title, "Account Settings" %>
 <% content_for :page_description, "Manage your account settings, notifications, and preferences." %>
 
-<div class="min-h-screen bg-slate-50 py-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="text-center mb-12" data-aos="fade-up">
-      <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-        Account Settings
-      </h1>
-      <p class="text-lg text-slate-500">Manage your profile, notifications, and account preferences</p>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+
+    <%# Header %>
+    <div class="mb-8 sm:mb-10">
+      <div class="eyebrow mb-3">settings</div>
+      <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">Manage your <em class="italic-wonk" style="color: #1f4d3a;">account</em>.</h1>
     </div>
 
-    <div class="grid lg:grid-cols-4 gap-8">
-      <!-- Sidebar Navigation -->
-      <div class="lg:col-span-1" data-aos="fade-right">
-        <div class="bg-white rounded-xl border border-slate-100 overflow-hidden sticky top-8">
-          <div class="p-6">
-            <div class="flex items-center space-x-4 mb-6">
-              <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                <%= current_user.first_name&.first || current_user.email.first.upcase %>
-              </div>
-              <div>
-                <h3 class="font-semibold text-slate-900"><%= current_user.display_name %></h3>
-                <p class="text-sm text-slate-600"><%= current_user.user_role.humanize %></p>
+    <div class="grid lg:grid-cols-[260px_1fr] gap-8">
+
+      <%# Sidebar %>
+      <aside>
+        <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden lg:sticky lg:top-24">
+          <div class="p-5 border-b border-line">
+            <div class="flex items-center gap-3">
+              <% if current_user.profile_picture.attached? %>
+                <%= image_tag current_user.profile_picture, class: "w-12 h-12 rounded-full object-cover border border-line" %>
+              <% else %>
+                <div class="w-12 h-12 rounded-full bg-cream-sunken text-ink-2 flex items-center justify-center text-[15px] font-semibold border border-line"><%= (current_user.first_name&.first || current_user.email.first).upcase %></div>
+              <% end %>
+              <div class="min-w-0">
+                <div class="text-[14px] font-semibold text-ink truncate"><%= current_user.display_name %></div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3"><%= current_user.user_role %></div>
               </div>
             </div>
-            
-            <nav class="space-y-2">
-              <a href="#profile" class="settings-tab-link active flex items-center px-4 py-3 rounded-xl text-orange-600 bg-orange-50 font-medium transition-all duration-300">
-                <i class="fas fa-user mr-3"></i>
-                Profile
-              </a>
-              <a href="#notifications" class="settings-tab-link flex items-center px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-medium transition-all duration-300">
-                <i class="fas fa-bell mr-3"></i>
-                Notifications
-              </a>
-              <a href="#security" class="settings-tab-link flex items-center px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-medium transition-all duration-300">
-                <i class="fas fa-shield-alt mr-3"></i>
-                Security
-              </a>
-              <a href="#billing" class="settings-tab-link flex items-center px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 font-medium transition-all duration-300">
-                <i class="fas fa-credit-card mr-3"></i>
-                Billing
-              </a>
-              <a href="#danger" class="settings-tab-link flex items-center px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 font-medium transition-all duration-300">
-                <i class="fas fa-exclamation-triangle mr-3"></i>
-                Danger Zone
-              </a>
-            </nav>
           </div>
-        </div>
-      </div>
 
-      <!-- Settings Content -->
-      <div class="lg:col-span-3 space-y-8">
-        <!-- Profile Settings -->
-        <div id="profile" class="settings-section bg-white rounded-xl border border-slate-100 overflow-hidden" data-aos="fade-left" data-aos-delay="100">
-          <div class="p-8">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
-              <i class="fas fa-user text-orange-500 mr-3"></i>
-              Profile Information
-            </h2>
-            
-            <%= form_with model: @user, url: settings_profile_path, method: :patch, local: true, class: "space-y-6" do |f| %>
-              <div class="grid md:grid-cols-2 gap-6">
+          <nav class="p-2 space-y-0.5">
+            <% [
+              { id: "profile", label: "Profile", icon: "fa-user" },
+              { id: "notifications", label: "Notifications", icon: "fa-bell" },
+              { id: "security", label: "Security", icon: "fa-shield-alt" },
+              { id: "billing", label: "Billing", icon: "fa-credit-card" },
+              { id: "danger", label: "Danger zone", icon: "fa-exclamation-triangle", danger: true }
+            ].each_with_index do |t, i| %>
+              <a href="#<%= t[:id] %>" class="settings-tab-link <%= 'active' if i == 0 %> flex items-center gap-3 px-3 py-2 rounded-lg text-[14px] font-medium transition-colors <%= i == 0 ? 'bg-cream-sunken text-ink' : 'text-ink-2 hover:bg-cream-sunken/60' %>">
+                <i class="fas <%= t[:icon] %> text-[12px] <%= t[:danger] ? 'text-rose-700' : 'text-ink-3' %> w-4 text-center"></i>
+                <span class="<%= t[:danger] ? 'text-rose-700' : '' %>"><%= t[:label] %></span>
+              </a>
+            <% end %>
+          </nav>
+        </div>
+      </aside>
+
+      <%# Content %>
+      <div class="space-y-6">
+
+        <%# Profile %>
+        <div id="profile" class="settings-section bg-cream-elevated border border-line rounded-xl">
+          <div class="p-6 sm:p-8">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">profile</div>
+            <h2 class="display text-[24px] sm:text-[28px] text-ink leading-[1.05] mb-6">Your <em class="italic-wonk" style="color: #1f4d3a;">information</em></h2>
+
+            <%= form_with model: @user, url: settings_profile_path, method: :patch, local: true, class: "space-y-5" do |f| %>
+              <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                  <%= f.label :first_name, "First Name", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                  <%= f.text_field :first_name, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
+                  <%= f.label :first_name, "First name", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                  <%= f.text_field :first_name, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
                 </div>
                 <div>
-                  <%= f.label :last_name, "Last Name", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                  <%= f.text_field :last_name, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
+                  <%= f.label :last_name, "Last name", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                  <%= f.text_field :last_name, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
                 </div>
               </div>
-              
+
               <div>
-                <%= f.label :email, "Email Address", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                <%= f.email_field :email, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
+                <%= f.label :email, "Email", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                <%= f.email_field :email, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
               </div>
-              
+
               <div>
-                <%= f.label :phone_number, "Phone Number", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                <%= f.telephone_field :phone_number, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
+                <%= f.label :phone_number, "Phone", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                <%= f.telephone_field :phone_number, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
               </div>
-              
+
               <div>
-                <%= f.label :bio, "Bio", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                <%= f.text_area :bio, rows: 4, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300", placeholder: "Tell us about yourself..." %>
+                <%= f.label :bio, "Bio", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                <%= f.text_area :bio, rows: 4, class: "w-full px-4 py-3 rounded-2xl border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none", placeholder: "Tell us about yourself…" %>
               </div>
-              
-              <div class="grid md:grid-cols-2 gap-6">
+
+              <div class="grid md:grid-cols-2 gap-4">
                 <div>
-                  <%= f.label :location, "Location", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                  <%= f.text_field :location, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300", placeholder: "City, State" %>
+                  <%= f.label :location, "Location", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                  <%= f.text_field :location, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm", placeholder: "City, State" %>
                 </div>
                 <div>
-                  <%= f.label :website_url, "Website", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                  <%= f.url_field :website_url, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300", placeholder: "https://yourwebsite.com" %>
+                  <%= f.label :website_url, "Website", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                  <%= f.url_field :website_url, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm", placeholder: "https://" %>
                 </div>
               </div>
-              
-              <div class="pt-4">
-                <%= f.submit "Update Profile", class: "btn-modern bg-gradient-to-r from-orange-600 to-orange-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-orange-700 hover:to-orange-600 transition-all duration-300 glow-on-hover" %>
+
+              <div class="pt-2">
+                <%= f.submit "Update profile", class: "bg-ink hover:bg-ink-2 text-cream px-7 py-3 rounded-pill font-semibold text-sm transition-colors active:translate-y-px cursor-pointer" %>
               </div>
             <% end %>
           </div>
         </div>
 
-        <!-- Notification Settings -->
-        <div id="notifications" class="settings-section bg-white rounded-xl border border-slate-100 overflow-hidden hidden" data-aos="fade-left" data-aos-delay="200">
-          <div class="p-8">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
-              <i class="fas fa-bell text-orange-500 mr-3"></i>
-              Notification Preferences
-            </h2>
-            
+        <%# Notifications %>
+        <div id="notifications" class="settings-section bg-cream-elevated border border-line rounded-xl hidden">
+          <div class="p-6 sm:p-8">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">notifications</div>
+            <h2 class="display text-[24px] sm:text-[28px] text-ink leading-[1.05] mb-6">How should we <em class="italic-wonk" style="color: #1f4d3a;">reach</em> you</h2>
+
             <%= form_with model: @notification_preference, url: settings_notifications_path, method: :patch, local: true, class: "space-y-6" do |f| %>
-              <!-- Communication Methods -->
-              <div class="bg-slate-50 rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-slate-900 mb-4">Communication Methods</h3>
-                <div class="space-y-4">
-                  <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-slate-200">
-                    <div class="flex items-center">
-                      <i class="fas fa-envelope text-blue-500 mr-3"></i>
-                      <div>
-                        <h4 class="font-medium text-slate-900">Email Notifications</h4>
-                        <p class="text-sm text-slate-600">Receive updates via email</p>
+              <div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">communication methods</div>
+                <div class="border-t border-line">
+                  <% [
+                    { field: :email_enabled, icon: "fa-envelope", title: "Email", note: "Updates via email" },
+                    { field: :sms_enabled, icon: "fa-sms", title: "SMS", note: "Text message updates" },
+                    { field: :whatsapp_enabled, icon: "fa-whatsapp", icon_brand: true, title: "WhatsApp", note: "Updates via WhatsApp" }
+                  ].each do |opt| %>
+                    <label class="flex items-center justify-between py-4 border-b border-line cursor-pointer">
+                      <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-cream-sunken border border-line flex items-center justify-center">
+                          <i class="<%= opt[:icon_brand] ? 'fab' : 'fas' %> <%= opt[:icon] %> text-ink-2 text-[12px]"></i>
+                        </div>
+                        <div>
+                          <div class="text-[14px] font-semibold text-ink"><%= opt[:title] %></div>
+                          <div class="text-[12px] text-ink-3"><%= opt[:note] %></div>
+                        </div>
                       </div>
-                    </div>
-                    <%= f.check_box :email_enabled, class: "toggle-switch", data: { toggle: "switch" } %>
+                      <%= f.check_box opt[:field], class: "toggle-switch", data: { toggle: "switch" } %>
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+
+              <div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">what to notify me about</div>
+                <div class="border-t border-line">
+                  <% [
+                    { field: :booking_reminders, icon: "fa-calendar", title: "Booking reminders", note: "Reminders about upcoming bookings" },
+                    { field: :service_updates, icon: "fa-tools", title: "Service updates", note: "Updates about your services and bookings" },
+                    { field: :marketing_messages, icon: "fa-bullhorn", title: "Marketing", note: "Promotional offers and updates" }
+                  ].each do |opt| %>
+                    <label class="flex items-center justify-between py-4 border-b border-line cursor-pointer">
+                      <div class="flex items-center gap-3">
+                        <div class="w-9 h-9 rounded-full bg-cream-sunken border border-line flex items-center justify-center">
+                          <i class="fas <%= opt[:icon] %> text-ink-2 text-[12px]"></i>
+                        </div>
+                        <div>
+                          <div class="text-[14px] font-semibold text-ink"><%= opt[:title] %></div>
+                          <div class="text-[12px] text-ink-3"><%= opt[:note] %></div>
+                        </div>
+                      </div>
+                      <%= f.check_box opt[:field], class: "toggle-switch", data: { toggle: "switch" } %>
+                    </label>
+                  <% end %>
+                </div>
+              </div>
+
+              <div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">quiet hours</div>
+                <p class="text-[12px] text-ink-3 mb-3">Hours when notifications are paused.</p>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <%= f.label :quiet_hours_start, "Start", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                    <%= f.time_field :quiet_hours_start, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
                   </div>
-                  
-                  <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-slate-200">
-                    <div class="flex items-center">
-                      <i class="fas fa-sms text-green-500 mr-3"></i>
-                      <div>
-                        <h4 class="font-medium text-slate-900">SMS Notifications</h4>
-                        <p class="text-sm text-slate-600">Get text message updates</p>
-                      </div>
-                    </div>
-                    <%= f.check_box :sms_enabled, class: "toggle-switch", data: { toggle: "switch" } %>
-                  </div>
-                  
-                  <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-slate-200">
-                    <div class="flex items-center">
-                      <i class="fab fa-whatsapp text-green-600 mr-3"></i>
-                      <div>
-                        <h4 class="font-medium text-slate-900">WhatsApp Messages</h4>
-                        <p class="text-sm text-slate-600">Receive updates on WhatsApp</p>
-                      </div>
-                    </div>
-                    <%= f.check_box :whatsapp_enabled, class: "toggle-switch", data: { toggle: "switch" } %>
+                  <div>
+                    <%= f.label :quiet_hours_end, "End", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                    <%= f.time_field :quiet_hours_end, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
                   </div>
                 </div>
               </div>
 
-              <!-- Notification Types -->
-              <div class="bg-slate-50 rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-slate-900 mb-4">What to notify me about</h3>
-                <div class="space-y-4">
-                  <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-slate-200">
-                    <div class="flex items-center">
-                      <i class="fas fa-calendar text-purple-500 mr-3"></i>
-                      <div>
-                        <h4 class="font-medium text-slate-900">Booking Reminders</h4>
-                        <p class="text-sm text-slate-600">Reminders about upcoming bookings</p>
-                      </div>
-                    </div>
-                    <%= f.check_box :booking_reminders, class: "toggle-switch", data: { toggle: "switch" } %>
-                  </div>
-                  
-                  <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-slate-200">
-                    <div class="flex items-center">
-                      <i class="fas fa-tools text-blue-500 mr-3"></i>
-                      <div>
-                        <h4 class="font-medium text-slate-900">Service Updates</h4>
-                        <p class="text-sm text-slate-600">Updates about your services and bookings</p>
-                      </div>
-                    </div>
-                    <%= f.check_box :service_updates, class: "toggle-switch", data: { toggle: "switch" } %>
-                  </div>
-                  
-                  <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-slate-200">
-                    <div class="flex items-center">
-                      <i class="fas fa-bullhorn text-orange-500 mr-3"></i>
-                      <div>
-                        <h4 class="font-medium text-slate-900">Marketing Messages</h4>
-                        <p class="text-sm text-slate-600">Promotional offers and updates</p>
-                      </div>
-                    </div>
-                    <%= f.check_box :marketing_messages, class: "toggle-switch", data: { toggle: "switch" } %>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Quiet Hours -->
-              <div class="bg-slate-50 rounded-xl p-6">
-                <h3 class="text-lg font-semibold text-slate-900 mb-4">Quiet Hours</h3>
-                <p class="text-sm text-slate-600 mb-4">Set hours when you don't want to receive notifications</p>
-                <div class="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <%= f.label :quiet_hours_start, "Start Time", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                    <%= f.time_field :quiet_hours_start, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
-                  </div>
-                  <div>
-                    <%= f.label :quiet_hours_end, "End Time", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                    <%= f.time_field :quiet_hours_end, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="pt-4">
-                <%= f.submit "Update Notifications", class: "btn-modern bg-gradient-to-r from-blue-600 to-blue-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-blue-600 transition-all duration-300 glow-on-hover" %>
+              <div class="pt-2">
+                <%= f.submit "Update notifications", class: "bg-ink hover:bg-ink-2 text-cream px-7 py-3 rounded-pill font-semibold text-sm transition-colors active:translate-y-px cursor-pointer" %>
               </div>
             <% end %>
           </div>
         </div>
 
-        <!-- Security Settings -->
-        <div id="security" class="settings-section bg-white rounded-xl border border-slate-100 overflow-hidden hidden" data-aos="fade-left" data-aos-delay="300">
-          <div class="p-8">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
-              <i class="fas fa-shield-alt text-orange-500 mr-3"></i>
-              Security Settings
-            </h2>
-            
-            <%= form_with model: @user, url: settings_password_path, method: :patch, local: true, class: "space-y-6" do |f| %>
+        <%# Security %>
+        <div id="security" class="settings-section bg-cream-elevated border border-line rounded-xl hidden">
+          <div class="p-6 sm:p-8">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">security</div>
+            <h2 class="display text-[24px] sm:text-[28px] text-ink leading-[1.05] mb-6">Lock it <em class="italic-wonk" style="color: #1f4d3a;">down</em></h2>
+
+            <%= form_with model: @user, url: settings_password_path, method: :patch, local: true, class: "space-y-5" do |f| %>
               <div>
-                <%= f.label :current_password, "Current Password", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                <%= f.password_field :current_password, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
+                <%= f.label :current_password, "Current password", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                <%= f.password_field :current_password, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
               </div>
-              
               <div>
-                <%= f.label :password, "New Password", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                <%= f.password_field :password, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
+                <%= f.label :password, "New password", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                <%= f.password_field :password, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
               </div>
-              
               <div>
-                <%= f.label :password_confirmation, "Confirm New Password", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-                <%= f.password_field :password_confirmation, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-300" %>
+                <%= f.label :password_confirmation, "Confirm new password", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                <%= f.password_field :password_confirmation, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
               </div>
-              
-              <div class="pt-4">
-                <%= f.submit "Update Password", class: "btn-modern bg-gradient-to-r from-green-600 to-green-500 text-white px-8 py-3 rounded-xl font-semibold hover:from-green-700 hover:to-green-600 transition-all duration-300 glow-on-hover" %>
+              <div class="pt-2">
+                <%= f.submit "Update password", class: "bg-ink hover:bg-ink-2 text-cream px-7 py-3 rounded-pill font-semibold text-sm transition-colors active:translate-y-px cursor-pointer" %>
               </div>
             <% end %>
 
-            <!-- Two-Factor Authentication -->
-            <div class="mt-8 pt-8 border-t border-slate-200">
-              <h3 class="text-lg font-semibold text-slate-900 mb-4">Two-Factor Authentication</h3>
-              <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
-                <div class="flex items-center">
-                  <i class="fas fa-info-circle text-yellow-600 mr-3"></i>
-                  <div>
-                    <h4 class="font-medium text-yellow-800">Coming Soon</h4>
-                    <p class="text-sm text-yellow-700">Two-factor authentication will be available in a future update.</p>
-                  </div>
+            <div class="mt-8 pt-8 border-t border-line">
+              <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">two-factor</div>
+              <div class="bg-amber-100/40 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                <i class="fas fa-info-circle text-amber-700 mt-0.5"></i>
+                <div>
+                  <div class="text-[13px] font-semibold text-amber-900">Coming soon</div>
+                  <p class="text-[12px] text-amber-800 mt-0.5">Two-factor authentication ships in a future update.</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Billing Settings -->
-        <div id="billing" class="settings-section bg-white rounded-xl border border-slate-100 overflow-hidden hidden" data-aos="fade-left" data-aos-delay="400">
-          <div class="p-8">
-            <h2 class="text-2xl font-bold text-slate-900 mb-6 flex items-center">
-              <i class="fas fa-credit-card text-orange-500 mr-3"></i>
-              Billing & Subscription
-            </h2>
-            
+        <%# Billing %>
+        <div id="billing" class="settings-section bg-cream-elevated border border-line rounded-xl hidden">
+          <div class="p-6 sm:p-8">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">billing</div>
+            <h2 class="display text-[24px] sm:text-[28px] text-ink leading-[1.05] mb-6">Plans &amp; <em class="italic-wonk" style="color: #1f4d3a;">payments</em></h2>
+
             <% if current_user.provider? && current_user.subscriptions.active.any? %>
               <% subscription = current_user.subscriptions.active.first %>
-              <div class="bg-green-50 border border-green-200 rounded-xl p-6 mb-6">
-                <div class="flex items-center justify-between">
+              <div class="bg-forest-soft border border-forest/20 rounded-xl p-5 mb-6">
+                <div class="flex items-center justify-between gap-3 flex-wrap">
                   <div>
-                    <h3 class="text-lg font-semibold text-green-800"><%= subscription.plan.name %></h3>
-                    <p class="text-green-600">Active until <%= subscription.current_period_end.strftime("%B %d, %Y") %></p>
+                    <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-1">active plan</div>
+                    <div class="display text-[24px] text-ink leading-[1.1]"><%= subscription.plan.name %></div>
+                    <div class="text-[12px] text-ink-3 mt-1">Active until <%= subscription.current_period_end.strftime("%B %-d, %Y") %></div>
                   </div>
                   <div class="text-right">
-                    <p class="text-2xl font-bold text-green-800">$<%= subscription.plan.price %></p>
-                    <p class="text-sm text-green-600">per month</p>
+                    <div class="display text-[28px] text-ink leading-none">$<%= subscription.plan.price %></div>
+                    <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3">per month</div>
                   </div>
                 </div>
               </div>
-              
-              <%= link_to provider_subscriptions_path, class: "inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-all duration-300" do %>
-                <i class="fas fa-cog mr-2"></i>
-                Manage Subscription
+              <%= link_to provider_subscriptions_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors" do %>
+                <i class="fas fa-cog text-[10px]"></i>Manage subscription
               <% end %>
             <% else %>
-              <div class="bg-slate-50 border border-slate-200 rounded-xl p-6 text-center">
-                <i class="fas fa-credit-card text-slate-400 text-4xl mb-4"></i>
-                <h3 class="text-lg font-semibold text-slate-700 mb-2">No Active Subscription</h3>
-                <p class="text-slate-600 mb-4">
-                  <% if current_user.provider? %>
-                    Subscribe to a plan to start offering your services.
-                  <% else %>
-                    You don't have any active subscriptions.
-                  <% end %>
-                </p>
+              <div class="bg-cream-sunken/40 border border-line rounded-xl p-8 text-center">
+                <i class="fas fa-credit-card text-ink-3 text-2xl mb-3"></i>
+                <h3 class="display text-[20px] text-ink leading-[1.1] mb-2">No active plan</h3>
+                <p class="text-[14px] text-ink-2 mb-5"><%= current_user.provider? ? "Subscribe to start offering your services." : "You don't have any active subscriptions." %></p>
                 <% if current_user.provider? %>
-                  <%= link_to new_provider_subscription_path, class: "inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-xl font-semibold hover:bg-orange-700 transition-all duration-300" do %>
-                    <i class="fas fa-plus mr-2"></i>
-                    Choose a Plan
+                  <%= link_to new_provider_subscription_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors" do %>
+                    <i class="fas fa-plus text-[10px]"></i>Choose a plan
                   <% end %>
                 <% end %>
               </div>
@@ -311,22 +253,17 @@
           </div>
         </div>
 
-        <!-- Danger Zone -->
-        <div id="danger" class="settings-section bg-white rounded-2xl shadow-lg border border-red-200 overflow-hidden hidden" data-aos="fade-left" data-aos-delay="500">
-          <div class="p-8">
-            <h2 class="text-2xl font-bold text-red-600 mb-6 flex items-center">
-              <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
-              Danger Zone
-            </h2>
-            
-            <div class="bg-red-50 border border-red-200 rounded-xl p-6">
-              <h3 class="text-lg font-semibold text-red-800 mb-4">Delete Account</h3>
-              <p class="text-red-700 mb-6">Once you delete your account, there is no going back. Please be certain.</p>
-              
-              <button type="button" onclick="showDeleteModal()" class="bg-red-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-red-700 transition-all duration-300">
-                Delete My Account
-              </button>
-            </div>
+        <%# Danger zone %>
+        <div id="danger" class="settings-section bg-rose-50 border border-rose-200 rounded-xl hidden">
+          <div class="p-6 sm:p-8">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-rose-700 mb-2">danger zone</div>
+            <h2 class="display text-[24px] sm:text-[28px] text-ink leading-[1.05] mb-6">Delete <em class="italic-wonk" style="color: #b8551c;">account</em></h2>
+
+            <p class="text-[14px] text-ink-2 mb-5">Once you delete your account, there's no going back. All your data is permanently removed.</p>
+
+            <button type="button" onclick="showDeleteModal()" class="bg-rose-700 hover:bg-rose-800 text-cream px-5 py-2.5 rounded-pill text-sm font-semibold transition-colors">
+              Delete my account
+            </button>
           </div>
         </div>
       </div>
@@ -334,136 +271,92 @@
   </div>
 </div>
 
-<!-- Delete Account Modal -->
-<div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="deleteModalContent">
+<%# Delete Account Modal %>
+<div id="deleteModal" class="fixed inset-0 bg-ink/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <div class="bg-cream-elevated border border-line rounded-xl p-7 max-w-md w-full mx-4 shadow-card-lg" id="deleteModalContent">
     <div class="text-center mb-6">
-      <i class="fas fa-exclamation-triangle text-red-500 text-5xl mb-4"></i>
-      <h3 class="text-xl font-bold text-slate-900 mb-2">Delete Account</h3>
-      <p class="text-slate-600">This action cannot be undone. All your data will be permanently deleted.</p>
-    </div>
-    
-    <%= form_with url: delete_account_path, method: :delete, local: true, id: "deleteForm" do |f| %>
-      <div class="mb-6">
-        <%= f.label :password, "Enter your password to confirm:", class: "block text-sm font-semibold text-slate-700 mb-2" %>
-        <%= f.password_field :password, class: "w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent", required: true %>
+      <div class="w-12 h-12 rounded-full bg-rose-100 border border-rose-200 flex items-center justify-center mx-auto mb-4">
+        <i class="fas fa-exclamation-triangle text-rose-700"></i>
       </div>
-      
-      <div class="flex space-x-4">
-        <button type="button" onclick="hideDeleteModal()" class="flex-1 px-4 py-3 bg-slate-200 text-slate-700 rounded-xl font-semibold hover:bg-slate-300 transition-all duration-300">
-          Cancel
-        </button>
-        <%= f.submit "Delete Account", class: "flex-1 px-4 py-3 bg-red-600 text-white rounded-xl font-semibold hover:bg-red-700 transition-all duration-300", data: { confirm: "Are you absolutely sure you want to delete your account?" } %>
+      <h3 class="display text-[22px] text-ink leading-[1.1]">Delete account?</h3>
+      <p class="text-[14px] text-ink-2 mt-2">This cannot be undone. All your data will be permanently deleted.</p>
+    </div>
+
+    <%= form_with url: delete_account_path, method: :delete, local: true, id: "deleteForm" do |f| %>
+      <div class="mb-5">
+        <%= f.label :password, "Confirm with your password", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+        <%= f.password_field :password, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-rose-500/30 focus:border-rose-500 bg-cream-elevated text-sm", required: true %>
+      </div>
+
+      <div class="flex gap-2">
+        <button type="button" onclick="hideDeleteModal()" class="flex-1 px-5 py-2.5 rounded-pill bg-cream-sunken text-ink hover:bg-line text-sm font-semibold transition-colors">Cancel</button>
+        <%= f.submit "Delete account", class: "flex-1 px-5 py-2.5 rounded-pill bg-rose-700 hover:bg-rose-800 text-cream text-sm font-semibold transition-colors cursor-pointer" %>
       </div>
     <% end %>
   </div>
 </div>
 
 <script>
-  // Settings Tab Navigation
-  document.addEventListener('DOMContentLoaded', function() {
-    const tabLinks = document.querySelectorAll('.settings-tab-link');
-    const sections = document.querySelectorAll('.settings-section');
-    
-    tabLinks.forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Remove active class from all tabs
-        tabLinks.forEach(tab => {
-          tab.classList.remove('active', 'text-orange-600', 'bg-orange-50');
-          tab.classList.add('text-slate-700');
-        });
-        
-        // Hide all sections
-        sections.forEach(section => {
-          section.classList.add('hidden');
-        });
-        
-        // Activate current tab
-        this.classList.add('active', 'text-orange-600', 'bg-orange-50');
-        this.classList.remove('text-slate-700');
-        
-        // Show corresponding section
-        const targetId = this.getAttribute('href').substring(1);
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-          targetSection.classList.remove('hidden');
-        }
+document.addEventListener('DOMContentLoaded', function() {
+  const tabLinks = document.querySelectorAll('.settings-tab-link');
+  const sections = document.querySelectorAll('.settings-section');
+
+  tabLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      tabLinks.forEach(t => {
+        t.classList.remove('active', 'bg-cream-sunken', 'text-ink');
+        t.classList.add('text-ink-2');
       });
+      sections.forEach(s => s.classList.add('hidden'));
+      this.classList.add('active', 'bg-cream-sunken', 'text-ink');
+      this.classList.remove('text-ink-2');
+      const target = document.getElementById(this.getAttribute('href').substring(1));
+      if (target) target.classList.remove('hidden');
     });
   });
+});
 
-  // Delete Modal Functions
-  function showDeleteModal() {
-    const modal = document.getElementById('deleteModal');
-    const content = document.getElementById('deleteModalContent');
-    
-    modal.classList.remove('hidden');
-    setTimeout(() => {
-      content.classList.remove('scale-95', 'opacity-0');
-      content.classList.add('scale-100', 'opacity-100');
-    }, 10);
-  }
+function showDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('hidden');
+}
+function hideDeleteModal() {
+  document.getElementById('deleteModal').classList.add('hidden');
+}
 
-  function hideDeleteModal() {
-    const modal = document.getElementById('deleteModal');
-    const content = document.getElementById('deleteModalContent');
-    
-    content.classList.remove('scale-100', 'opacity-100');
-    content.classList.add('scale-95', 'opacity-0');
-    
-    setTimeout(() => {
-      modal.classList.add('hidden');
-    }, 300);
-  }
-
-  // Toggle Switches
-  document.addEventListener('DOMContentLoaded', function() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    
-    checkboxes.forEach(checkbox => {
-      // Create custom toggle switch
-      const wrapper = document.createElement('label');
-      wrapper.className = 'relative inline-flex items-center cursor-pointer';
-      
-      const toggle = document.createElement('div');
-      toggle.className = `relative w-12 h-6 ${checkbox.checked ? 'bg-orange-600' : 'bg-slate-200'} rounded-full transition-colors duration-300`;
-      
-      const knob = document.createElement('div');
-      knob.className = `absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-300 ${checkbox.checked ? 'translate-x-6' : 'translate-x-0'}`;
-      
-      toggle.appendChild(knob);
-      wrapper.appendChild(checkbox);
-      wrapper.appendChild(toggle);
-      
-      // Hide original checkbox
-      checkbox.style.display = 'none';
-      
-      // Insert after the original checkbox
-      checkbox.parentNode.insertBefore(wrapper, checkbox.nextSibling);
-      
-      // Handle changes
-      wrapper.addEventListener('click', function() {
-        checkbox.checked = !checkbox.checked;
-        if (checkbox.checked) {
-          toggle.classList.remove('bg-slate-200');
-          toggle.classList.add('bg-orange-600');
-          knob.classList.remove('translate-x-0');
-          knob.classList.add('translate-x-6');
-        } else {
-          toggle.classList.remove('bg-orange-600');
-          toggle.classList.add('bg-slate-200');
-          knob.classList.remove('translate-x-6');
-          knob.classList.add('translate-x-0');
-        }
-      });
+// Custom toggle switches in editorial style
+document.addEventListener('DOMContentLoaded', function() {
+  const checkboxes = document.querySelectorAll('input.toggle-switch');
+  checkboxes.forEach(cb => {
+    if (cb._wrapped) return;
+    cb._wrapped = true;
+    const wrapper = document.createElement('label');
+    wrapper.className = 'relative inline-flex items-center cursor-pointer';
+    const track = document.createElement('div');
+    track.className = `relative w-11 h-6 rounded-pill transition-colors ${cb.checked ? '' : 'bg-cream-sunken border border-line'}`;
+    if (cb.checked) track.style.backgroundColor = '#1f4d3a';
+    const knob = document.createElement('div');
+    knob.className = `absolute top-0.5 left-0.5 w-5 h-5 bg-cream-elevated border border-line rounded-full transition-transform ${cb.checked ? 'translate-x-5' : 'translate-x-0'}`;
+    track.appendChild(knob);
+    wrapper.appendChild(cb);
+    wrapper.appendChild(track);
+    cb.style.display = 'none';
+    cb.parentNode.insertBefore(wrapper, cb.nextSibling);
+    wrapper.addEventListener('click', function(e) {
+      if (e.target === cb) return;
+      cb.checked = !cb.checked;
+      if (cb.checked) {
+        track.style.backgroundColor = '#1f4d3a';
+        track.classList.remove('bg-cream-sunken', 'border', 'border-line');
+        knob.classList.remove('translate-x-0');
+        knob.classList.add('translate-x-5');
+      } else {
+        track.style.backgroundColor = '';
+        track.classList.add('bg-cream-sunken', 'border', 'border-line');
+        knob.classList.remove('translate-x-5');
+        knob.classList.add('translate-x-0');
+      }
     });
   });
+});
 </script>
-
-<style>
-  .toggle-switch {
-    appearance: none;
-  }
-</style>

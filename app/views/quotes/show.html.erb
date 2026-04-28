@@ -1,43 +1,54 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden shadow-lg">
-      <%# Header %>
-      <div class="bg-slate-900 px-6 sm:px-8 py-6 text-white">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-9 h-9 rounded-lg bg-orange-500 flex items-center justify-center">
-            <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-          </div>
-          <span class="text-lg font-black">Radius</span>
-        </div>
-        <h1 class="text-xl font-black"><%= @quote.title %></h1>
-        <p class="text-slate-400 text-sm mt-1">Quote from <%= @quote.provider.business_name || @quote.provider.display_name %></p>
-      </div>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
 
-      <%# Details %>
-      <div class="px-6 sm:px-8 py-5 border-b border-slate-100">
-        <div class="grid sm:grid-cols-2 gap-4 text-sm">
-          <div><span class="text-slate-400">Service:</span> <span class="font-semibold text-slate-900"><%= @quote.service.title %></span></div>
-          <div><span class="text-slate-400">Provider:</span> <span class="font-semibold text-slate-900"><%= @quote.provider.display_name %></span></div>
-          <div><span class="text-slate-400">Date:</span> <span class="font-semibold text-slate-900"><%= @quote.created_at.strftime("%B %d, %Y") %></span></div>
-          <div><span class="text-slate-400">Valid until:</span> <span class="font-semibold text-slate-900"><%= @quote.valid_until&.strftime("%B %d, %Y") || "No expiry" %></span></div>
-        </div>
+    <%# Back link %>
+    <div class="mb-6">
+      <%= link_to (current_user.customer? ? customer_dashboard_path : :back), class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+        <i class="fas fa-arrow-left text-[10px]"></i>Back
+      <% end %>
+    </div>
+
+    <%# Header %>
+    <div class="mb-6">
+      <div class="eyebrow mb-3">quote · #<%= @quote.id %></div>
+      <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]"><%= @quote.title %></h1>
+      <p class="mt-2 text-[15px] text-ink-2">From <%= @quote.provider.business_name.presence || @quote.provider.display_name %></p>
+    </div>
+
+    <%# Card %>
+    <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+
+      <%# Details grid %>
+      <div class="px-5 sm:px-6 py-5 grid sm:grid-cols-2 gap-x-6 gap-y-4 border-b border-line">
+        <% [
+          { label: "Service", value: @quote.service.title },
+          { label: "Provider", value: @quote.provider.display_name },
+          { label: "Issued", value: @quote.created_at.strftime("%B %-d, %Y") },
+          { label: "Valid until", value: @quote.valid_until&.strftime("%B %-d, %Y") || "No expiry" }
+        ].each do |row| %>
+          <div>
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1"><%= row[:label] %></div>
+            <div class="text-[14px] font-semibold text-ink"><%= row[:value] %></div>
+          </div>
+        <% end %>
       </div>
 
       <% if @quote.description.present? %>
-        <div class="px-6 sm:px-8 py-5 border-b border-slate-100">
-          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Scope of Work</h3>
-          <p class="text-sm text-slate-600 leading-relaxed"><%= @quote.description %></p>
+        <div class="px-5 sm:px-6 py-5 border-b border-line">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">scope of work</div>
+          <p class="text-[14px] text-ink-2 leading-[1.65] whitespace-pre-line"><%= @quote.description %></p>
         </div>
       <% end %>
 
       <%# Line items %>
       <% if @quote.line_items.any? %>
-        <div class="px-6 sm:px-8 py-5 border-b border-slate-100">
-          <div class="space-y-2">
+        <div class="px-5 sm:px-6 py-5 border-b border-line">
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">line items</div>
+          <div class="divide-y divide-line">
             <% @quote.line_items.each do |li| %>
-              <div class="flex items-center justify-between py-2 border-b border-slate-50 last:border-0">
-                <span class="text-sm text-slate-700"><%= li.description %></span>
-                <span class="text-sm font-bold text-slate-900">$<%= number_with_precision(li.total, precision: 2) %></span>
+              <div class="flex items-center justify-between py-3">
+                <span class="text-[14px] text-ink-2"><%= li.description %></span>
+                <span class="display text-[16px] text-ink leading-none">$<%= number_with_precision(li.total, precision: 2) %></span>
               </div>
             <% end %>
           </div>
@@ -45,32 +56,32 @@
       <% end %>
 
       <%# Total %>
-      <div class="px-6 sm:px-8 py-6 bg-slate-50">
+      <div class="px-5 sm:px-6 py-6 bg-cream-sunken/40">
         <div class="flex items-center justify-between">
-          <span class="text-base font-bold text-slate-900">Total Amount</span>
-          <span class="text-3xl font-black text-slate-900">$<%= number_with_precision(@quote.total_price, precision: 2) %></span>
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">total</span>
+          <span class="display text-[40px] sm:text-[44px] text-ink leading-none">$<%= number_with_precision(@quote.total_price, precision: 2) %></span>
         </div>
       </div>
 
-      <%# Actions %>
+      <%# Actions / status %>
       <% if @quote.sent? && @quote.customer == current_user %>
-        <div class="px-6 sm:px-8 py-6 flex flex-col sm:flex-row gap-3">
+        <div class="px-5 sm:px-6 py-5 flex flex-col sm:flex-row gap-2 border-t border-line">
           <%= link_to approve_quote_path(@quote), data: { turbo_method: :patch, turbo_confirm: "Approve this quote and create a booking?" },
-              class: "flex-1 inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-bold bg-emerald-500 hover:bg-emerald-600 text-white transition-all" do %>
-            <i class="fas fa-check mr-2"></i>Approve & Book
+              class: "flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-pill text-sm font-semibold bg-ink hover:bg-ink-2 text-cream transition-colors active:translate-y-px" do %>
+            <i class="fas fa-check text-[10px]"></i>Approve &amp; book
           <% end %>
           <%= link_to reject_quote_path(@quote), data: { turbo_method: :patch, turbo_confirm: "Decline this quote?" },
-              class: "flex-1 inline-flex items-center justify-center px-6 py-3.5 rounded-xl text-sm font-bold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>
-            <i class="fas fa-times mr-2"></i>Decline
+              class: "flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-pill text-sm font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+            Decline
           <% end %>
         </div>
       <% elsif @quote.approved? || @quote.converted? %>
-        <div class="px-6 sm:px-8 py-5 text-center">
-          <span class="text-sm font-bold text-emerald-600"><i class="fas fa-check-circle mr-1"></i> Quote approved</span>
+        <div class="px-5 sm:px-6 py-5 border-t border-line text-center">
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-forest"><i class="fas fa-check-circle mr-1.5"></i>quote approved</span>
         </div>
       <% elsif @quote.rejected? %>
-        <div class="px-6 sm:px-8 py-5 text-center">
-          <span class="text-sm text-red-500"><i class="fas fa-times-circle mr-1"></i> Quote declined</span>
+        <div class="px-5 sm:px-6 py-5 border-t border-line text-center">
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-rose-700"><i class="fas fa-times-circle mr-1.5"></i>quote declined</span>
         </div>
       <% end %>
     </div>
