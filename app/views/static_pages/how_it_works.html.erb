@@ -1,248 +1,180 @@
 <% content_for :page_title, @page_title %>
 <% content_for :page_description, @page_description %>
 
-<%# ========== HERO ========== %>
-<section class="relative bg-slate-950 overflow-hidden min-h-[480px] flex items-center">
-  <div class="absolute inset-0">
-    <div class="absolute top-0 left-1/3 w-96 h-96 bg-orange-500/[0.08] rounded-full blur-[120px]"></div>
-    <div class="absolute bottom-0 right-1/4 w-64 h-64 bg-violet-500/[0.06] rounded-full blur-[100px]"></div>
-  </div>
-  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 40px 40px;"></div>
-
-  <div class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
-    <div class="max-w-3xl mx-auto text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] border border-white/[0.08] text-white/70 text-xs font-bold uppercase tracking-wider mb-6">
-        <i class="fas fa-play-circle text-orange-400 text-[10px]"></i>
-        How It Works
-      </div>
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-[1.08] tracking-tight">
-        Three steps to<br>
-        <span class="hero-gradient-text">getting it done.</span>
+<%# ===== HERO ===== %>
+<section class="bg-cream border-b border-line">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+    <div class="max-w-3xl">
+      <div class="eyebrow mb-4">how it works</div>
+      <h1 class="display text-ink leading-[0.95] tracking-[-0.035em]" style="font-size: clamp(48px, 8vw, 96px);">
+        Three steps to <em class="italic-wonk" style="color: #1f4d3a;">getting</em> it done.
       </h1>
-      <p class="mt-6 text-lg sm:text-xl text-slate-400 max-w-xl mx-auto leading-relaxed">
+      <p class="mt-6 text-[17px] sm:text-[19px] leading-[1.55] text-ink-2 max-w-2xl">
         Whether you need a plumber at midnight or a painter for next week — Radius gets you matched, booked, and sorted.
       </p>
     </div>
   </div>
-  <div class="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-white to-transparent"></div>
 </section>
 
-<%# ========== FOR CUSTOMERS — 3 Steps ========== %>
-<section class="py-24 bg-white">
+<%# ===== FOR CUSTOMERS — 3 steps ===== %>
+<section class="py-16 sm:py-20 bg-cream">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-16" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-sky-600 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-user text-[10px]"></i>
-        For Customers
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Find, book, and pay — in minutes</h2>
-      <p class="mt-3 text-slate-500 text-lg max-w-xl mx-auto">No more calling around, no more guesswork. Here's how it works.</p>
+    <div class="mb-12 sm:mb-16">
+      <div class="eyebrow mb-3">for customers</div>
+      <h2 class="display text-[32px] sm:text-[44px] text-ink leading-[1.05] tracking-[-0.02em]">Find, book, pay — in <em class="italic-wonk" style="color: #1f4d3a;">minutes</em>.</h2>
     </div>
 
-    <div class="space-y-24">
-      <%# Step 1 %>
-      <div class="grid lg:grid-cols-2 gap-16 items-center" data-aos="fade-up">
-        <div>
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-50 border border-orange-100 mb-6">
-            <span class="text-2xl font-black text-orange-500">1</span>
-          </div>
-          <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">Search & compare</h3>
-          <p class="text-slate-500 leading-relaxed text-lg mb-6">
-            Tell us what you need. Browse verified professionals by category, location, price, and rating. Read real reviews from customers who actually booked — not anonymous strangers.
-          </p>
-          <ul class="space-y-3">
-            <% ["Search by service, city, or ZIP code", "Filter by price, rating, and availability", "Compare multiple providers side by side", "Read verified customer reviews"].each do |item| %>
-              <li class="flex items-center gap-3 text-sm text-slate-600">
-                <i class="fas fa-check text-emerald-500 text-xs"></i>
-                <%= item %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-        <div class="hidden lg:block">
-          <div class="rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/10 border border-slate-200">
-            <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=800&q=80" alt="Searching for services" class="w-full h-[360px] object-cover" loading="lazy">
-          </div>
-        </div>
-      </div>
-
-      <%# Step 2 %>
-      <div class="grid lg:grid-cols-2 gap-16 items-center" data-aos="fade-up">
-        <div class="hidden lg:block lg:order-1">
-          <div class="rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/10 border border-slate-200">
-            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="Booking a service" class="w-full h-[360px] object-cover" loading="lazy">
-          </div>
-        </div>
-        <div class="lg:order-2">
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-sky-50 border border-sky-100 mb-6">
-            <span class="text-2xl font-black text-sky-500">2</span>
-          </div>
-          <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">Book & pay securely</h3>
-          <p class="text-slate-500 leading-relaxed text-lg mb-6">
-            Found your pro? Pick a date and time that works. Pay securely through Stripe — your money is protected until the job is done. Or request a custom quote first.
-          </p>
-          <ul class="space-y-3">
-            <% ["Instant booking with date/time selection", "Secure Stripe checkout — card protected", "Request a custom quote for complex jobs", "Chat with the provider before booking"].each do |item| %>
-              <li class="flex items-center gap-3 text-sm text-slate-600">
-                <i class="fas fa-check text-emerald-500 text-xs"></i>
-                <%= item %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      </div>
-
-      <%# Step 3 %>
-      <div class="grid lg:grid-cols-2 gap-16 items-center" data-aos="fade-up">
-        <div>
-          <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-100 mb-6">
-            <span class="text-2xl font-black text-emerald-500">3</span>
-          </div>
-          <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mb-4">Get it done & review</h3>
-          <p class="text-slate-500 leading-relaxed text-lg mb-6">
-            Your pro handles the work. Get reminders before your appointment, an invoice when it's done, and leave a review to help the community. That's it — simple.
-          </p>
-          <ul class="space-y-3">
-            <% ["24-hour booking reminders via email", "Professional invoice auto-generated", "Leave a verified review after completion", "Rebook your favorite providers anytime"].each do |item| %>
-              <li class="flex items-center gap-3 text-sm text-slate-600">
-                <i class="fas fa-check text-emerald-500 text-xs"></i>
-                <%= item %>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-        <div class="hidden lg:block">
-          <div class="rounded-2xl overflow-hidden shadow-2xl shadow-slate-900/10 border border-slate-200">
-            <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80" alt="Job completed" class="w-full h-[360px] object-cover" loading="lazy">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<%# ========== FOR PROVIDERS — Business tools ========== %>
-<section class="py-24 bg-slate-950 relative overflow-hidden">
-  <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/[0.06] rounded-full blur-[120px]"></div>
-  <div class="absolute bottom-0 left-0 w-[400px] h-[400px] bg-violet-500/[0.04] rounded-full blur-[100px]"></div>
-  <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 32px 32px;"></div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-16" data-aos="fade-up">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider mb-4">
-        <i class="fas fa-briefcase text-[10px]"></i>
-        For Providers
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">Run your business, not just your calendar</h2>
-      <p class="mt-3 text-slate-400 text-lg max-w-xl mx-auto">Radius isn't just a directory. It's a complete business management platform.</p>
-    </div>
-
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" data-aos="fade-up" data-aos-delay="100">
+    <div class="space-y-16 sm:space-y-20">
       <% [
-        { icon: "fa-magnifying-glass-location", title: "Get Discovered", desc: "Customers find you by searching your area. No cold calling, no advertising — they come to you.", color: "sky" },
-        { icon: "fa-file-invoice-dollar", title: "Send Quotes", desc: "Create professional quotes with line items. Customers approve with one click and it auto-creates a booking.", color: "orange" },
-        { icon: "fa-calendar-check", title: "Manage Bookings", desc: "Accept, reject, or complete bookings from your dashboard. Customers get notified at every step.", color: "emerald" },
-        { icon: "fa-calendar-alt", title: "Visual Calendar", desc: "See your entire month at a glance. Color-coded bookings, quick navigation, never double-book.", color: "violet" },
-        { icon: "fa-chart-line", title: "Track Revenue", desc: "Monthly revenue charts, booking trends, top services, completion rates — all in your analytics dashboard.", color: "amber" },
-        { icon: "fa-file-invoice", title: "Auto Invoicing", desc: "Invoices generated automatically when you mark a job complete. Professional, printable, branded.", color: "rose" },
-        { icon: "fa-star", title: "Build Reputation", desc: "Every completed booking earns a verified review. Climb the leaderboard and earn Elite, Professional, or Trusted badges.", color: "amber" },
-        { icon: "fa-comments", title: "Chat with Clients", desc: "In-app messaging with file sharing, pinned messages, and reply threads. Stay organized.", color: "teal" },
-        { icon: "fa-bullhorn", title: "Run Campaigns", desc: "SMS and email campaigns to your customer base. Re-engage past clients and promote special offers.", color: "indigo" }
-      ].each_with_index do |feature, i| %>
-        <div class="group p-6 rounded-2xl bg-white/[0.04] border border-white/[0.06] hover:bg-white/[0.08] hover:border-white/[0.12] transition-all duration-300" data-aos="fade-up" data-aos-delay="<%= 100 + i * 60 %>">
-          <div class="w-11 h-11 rounded-xl bg-<%= feature[:color] %>-500/15 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-            <i class="fas <%= feature[:icon] %> text-<%= feature[:color] %>-400"></i>
+        {
+          num: "1", title: "Search & compare",
+          body: "Tell us what you need. Browse verified pros by category, location, price, and rating. Read real reviews from customers who actually booked.",
+          bullets: [ "Search by service, city, or ZIP", "Filter by price, rating, availability", "Compare side by side", "Read verified reviews" ],
+          img: "https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=800&q=80",
+          flip: false
+        },
+        {
+          num: "2", title: "Book & pay securely",
+          body: "Found your pro? Pick a time. Pay through Stripe — your money is protected until the job is done. Or request a custom quote first.",
+          bullets: [ "Instant booking with date/time", "Secure Stripe checkout", "Custom quotes for complex jobs", "Chat before you commit" ],
+          img: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80",
+          flip: true
+        },
+        {
+          num: "3", title: "Get it done & review",
+          body: "Your pro handles the work. Reminders before, an invoice when it's done, and a chance to leave a review. That's it.",
+          bullets: [ "24-hour booking reminders", "Auto-generated invoices", "Verified post-job reviews", "Rebook your favorites" ],
+          img: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80",
+          flip: false
+        }
+      ].each do |step| %>
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div class="<%= step[:flip] ? 'lg:order-2' : '' %>">
+            <div class="display italic-wonk text-[88px] leading-none" style="color: #1f4d3a; font-style: italic;"><%= step[:num] %></div>
+            <h3 class="display text-[28px] sm:text-[36px] text-ink leading-[1.05] tracking-[-0.02em] mt-4"><%= step[:title] %></h3>
+            <p class="mt-4 text-[15px] text-ink-2 leading-[1.65]"><%= step[:body] %></p>
+            <ul class="mt-6 space-y-2.5">
+              <% step[:bullets].each do |b| %>
+                <li class="flex items-start gap-2.5 text-[14px] text-ink-2">
+                  <i class="fas fa-check text-forest text-[11px] mt-1.5"></i><%= b %>
+                </li>
+              <% end %>
+            </ul>
           </div>
-          <h3 class="text-sm font-bold text-white mb-1.5"><%= feature[:title] %></h3>
-          <p class="text-xs text-slate-400 leading-relaxed"><%= feature[:desc] %></p>
+          <div class="hidden lg:block <%= step[:flip] ? 'lg:order-1' : '' %>">
+            <div class="aspect-[4/3] rounded-[20px] overflow-hidden border border-line bg-cream-sunken">
+              <img src="<%= step[:img] %>" alt="<%= step[:title] %>" class="w-full h-full object-cover" loading="lazy">
+            </div>
+          </div>
         </div>
       <% end %>
     </div>
   </div>
 </section>
 
-<%# ========== TRUST SIGNALS ========== %>
-<section class="py-24 bg-white">
+<%# ===== FOR PROVIDERS — feature grid ===== %>
+<section class="py-16 sm:py-20 bg-cream-sunken border-y border-line">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-16" data-aos="fade-up">
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Why people trust Radius</h2>
+    <div class="mb-10 sm:mb-12">
+      <div class="eyebrow mb-3">for providers</div>
+      <h2 class="display text-[32px] sm:text-[44px] text-ink leading-[1.05] tracking-[-0.02em]">Run your business, <em class="italic-wonk" style="color: #1f4d3a;">finally</em>.</h2>
+      <p class="mt-3 text-[15px] sm:text-[17px] text-ink-2 leading-[1.55] max-w-xl">Radius isn't just a directory. It's a complete business management platform.</p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-8" data-aos="fade-up" data-aos-delay="100">
-      <div class="text-center p-8 rounded-2xl bg-slate-50 border border-slate-100">
-        <div class="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-5">
-          <i class="fas fa-shield-alt text-emerald-500 text-2xl"></i>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+      <% [
+        [ "Get Discovered", "Customers find you by searching your area. No cold calling. They come to you." ],
+        [ "Send Quotes", "Quotes with line items. Customers approve in one click — auto-creates a booking." ],
+        [ "Manage Bookings", "Accept, reject, or complete bookings from your dashboard. Customers notified each step." ],
+        [ "Visual Calendar", "Your entire month at a glance. Color-coded bookings, drag-and-drop reschedule." ],
+        [ "Track Revenue", "Monthly revenue charts, top services, completion rate — all in one analytics view." ],
+        [ "Auto Invoicing", "Invoices generated when you mark a job complete. Professional, printable, branded." ],
+        [ "Build Reputation", "Every completed booking earns a verified review. Climb the leaderboard." ],
+        [ "Chat with Clients", "In-app messaging with files, pinned messages, and reply threads." ],
+        [ "Run Campaigns", "SMS and email campaigns to your customer base. Re-engage and promote." ]
+      ].each do |title, desc| %>
+        <div class="bg-cream-elevated rounded-xl border border-line p-6">
+          <h3 class="display text-[20px] text-ink leading-[1.15]"><%= title %></h3>
+          <p class="mt-2 text-[13px] text-ink-2 leading-[1.6]"><%= desc %></p>
         </div>
-        <h3 class="text-lg font-black text-slate-900 mb-3">Every pro is verified</h3>
-        <p class="text-sm text-slate-500 leading-relaxed">We check business licenses, insurance certificates, professional credentials, and government ID. No shortcuts.</p>
-      </div>
-
-      <div class="text-center p-8 rounded-2xl bg-slate-50 border border-slate-100">
-        <div class="w-16 h-16 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-5">
-          <i class="fas fa-star text-amber-500 text-2xl"></i>
-        </div>
-        <h3 class="text-lg font-black text-slate-900 mb-3">Reviews you can trust</h3>
-        <p class="text-sm text-slate-500 leading-relaxed">Only customers who completed and paid for a booking can leave a review. No fake reviews, no manipulation, no anonymous feedback.</p>
-      </div>
-
-      <div class="text-center p-8 rounded-2xl bg-slate-50 border border-slate-100">
-        <div class="w-16 h-16 rounded-2xl bg-sky-50 flex items-center justify-center mx-auto mb-5">
-          <i class="fas fa-lock text-sky-500 text-2xl"></i>
-        </div>
-        <h3 class="text-lg font-black text-slate-900 mb-3">Payments are protected</h3>
-        <p class="text-sm text-slate-500 leading-relaxed">All payments go through Stripe — the same payment processor used by Amazon and Google. Your card details never touch our servers.</p>
-      </div>
+      <% end %>
     </div>
   </div>
 </section>
 
-<%# ========== NUMBERS ========== %>
-<section class="py-20 bg-slate-900 relative overflow-hidden">
-  <div class="absolute top-0 left-1/3 w-96 h-96 bg-orange-500/[0.06] rounded-full blur-[120px]"></div>
-  <div class="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
+<%# ===== TRUST SIGNALS ===== %>
+<section class="py-16 sm:py-20 bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="mb-10 sm:mb-12">
+      <div class="eyebrow mb-3">why trust us</div>
+      <h2 class="display text-[32px] sm:text-[40px] text-ink leading-[1.05] tracking-[-0.02em]">Every move is <em class="italic-wonk" style="color: #1f4d3a;">checked</em>.</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4 sm:gap-5">
       <% [
-        { value: @total_providers, label: "Verified Providers" },
-        { value: @total_bookings, label: "Bookings Made" },
-        { value: @total_reviews, label: "Customer Reviews" },
-        { value: "4.9", label: "Average Rating", no_plus: true }
+        { icon: "fa-shield-alt", title: "Every pro is verified", desc: "Business licenses, insurance certificates, professional credentials, and government ID — checked by hand." },
+        { icon: "fa-star", title: "Reviews you can trust", desc: "Only customers who completed and paid for a booking can leave a review. Zero fakes, zero gaming." },
+        { icon: "fa-lock", title: "Payments are protected", desc: "All payments via Stripe — same processor as Amazon and Google. Card details never touch our servers." }
+      ].each do |item| %>
+        <div class="bg-cream-elevated rounded-xl border border-line p-7">
+          <div class="w-11 h-11 rounded-full bg-forest-soft flex items-center justify-center mb-5">
+            <i class="fas <%= item[:icon] %> text-forest"></i>
+          </div>
+          <h3 class="display text-[20px] text-ink leading-[1.15]"><%= item[:title] %></h3>
+          <p class="mt-2 text-[14px] text-ink-2 leading-[1.6]"><%= item[:desc] %></p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%# ===== STATS ===== %>
+<section class="py-12 sm:py-16 bg-cream-sunken border-y border-line">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-line">
+      <% [
+        { value: number_with_delimiter(@total_providers) + "+", label: "Verified Pros" },
+        { value: number_with_delimiter(@total_bookings) + "+", label: "Bookings" },
+        { value: number_with_delimiter(@total_reviews) + "+", label: "Reviews" },
+        { value: "4.9", label: "Avg Rating", suffix: "★" }
       ].each do |stat| %>
-        <div>
-          <div class="text-3xl sm:text-4xl font-black text-white"><%= stat[:no_plus] ? stat[:value] : "#{number_with_delimiter(stat[:value])}+" %></div>
-          <div class="text-xs text-slate-500 mt-2 font-medium uppercase tracking-wider"><%= stat[:label] %></div>
+        <div class="px-3 py-5 sm:py-2">
+          <div class="display text-[28px] sm:text-[36px] text-ink leading-none"><%= stat[:value] %><% if stat[:suffix] %><span class="text-amber-500 text-[20px]"><%= stat[:suffix] %></span><% end %></div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mt-2"><%= stat[:label] %></div>
         </div>
       <% end %>
     </div>
   </div>
 </section>
 
-<%# ========== FAQ ========== %>
-<section class="py-24 bg-white">
+<%# ===== FAQ ===== %>
+<section class="py-16 sm:py-20 bg-cream">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14" data-aos="fade-up">
-      <h2 class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Common questions</h2>
+    <div class="mb-10 sm:mb-12">
+      <div class="eyebrow mb-3">questions</div>
+      <h2 class="display text-[32px] sm:text-[40px] text-ink leading-[1.05] tracking-[-0.02em]">Common <em class="italic-wonk" style="color: #1f4d3a;">questions</em>.</h2>
     </div>
 
-    <div class="space-y-3" data-aos="fade-up" data-aos-delay="100">
+    <div class="border-t border-line">
       <% [
         { q: "Is Radius free for customers?", a: "Yes, completely free. You only pay for the services you book. No subscription, no hidden fees, no catches." },
         { q: "How are providers verified?", a: "Every provider submits business licenses, insurance certificates, professional credentials, and government ID. Our admin team reviews each application before granting verified status." },
-        { q: "How do payments work?", a: "When you book a service, you pay securely through Stripe. Your card details are never stored on our servers. The provider gets paid after the job is completed." },
-        { q: "What if I'm not happy with the service?", a: "First, talk to your provider — most issues can be resolved directly. You can also contact our support team. We stand behind every booking." },
-        { q: "Can I request a quote before booking?", a: "Yes! Providers can send you a detailed quote with line items and pricing. You review it and approve with one click — it automatically creates a booking." },
-        { q: "How much does it cost for providers?", a: "Providers can start with a free plan (1 service listing). Professional ($29/mo) and Business ($99/mo) plans unlock more services, analytics, verified badges, and marketing tools." },
-        { q: "Do I get reminders before my appointment?", a: "Yes. We send email reminders 24 hours before your booking. After completion, we'll also ask you to leave a review." },
-        { q: "Can I see invoices for my bookings?", a: "Yes. An invoice is automatically generated when your booking is marked as completed. You can view and print it from your dashboard." }
+        { q: "How do payments work?", a: "When you book a service, you pay securely through Stripe. Card details never touch our servers. Funds are held until the job is completed." },
+        { q: "What if I'm not happy with the service?", a: "Talk to your provider first — most issues resolve directly. You can also contact our support team. We stand behind every booking." },
+        { q: "Can I request a quote before booking?", a: "Yes. Providers can send a detailed quote with line items and pricing. You review and approve with one click — it auto-creates a booking." },
+        { q: "How much does it cost for providers?", a: "Free plan to start (1 service listing). Professional ($29/mo) and Business ($99/mo) plans unlock more services, analytics, badges, and marketing tools." },
+        { q: "Do I get reminders before my appointment?", a: "Yes — email reminders 24 hours before. After completion, we'll also ask you to leave a review." },
+        { q: "Can I see invoices for my bookings?", a: "Yes. Invoices are auto-generated when your booking is marked complete. View and print from your dashboard." }
       ].each do |faq| %>
-        <details class="group bg-slate-50 rounded-xl border border-slate-100 overflow-hidden">
-          <summary class="flex items-center justify-between cursor-pointer px-6 py-5 text-left">
-            <span class="text-sm font-bold text-slate-900 pr-4"><%= faq[:q] %></span>
-            <span class="flex-shrink-0 w-7 h-7 rounded-lg bg-white group-open:bg-orange-50 flex items-center justify-center transition-colors border border-slate-200 group-open:border-orange-200">
-              <i class="fas fa-chevron-down text-slate-400 group-open:text-orange-500 text-[10px] transition-transform group-open:rotate-180"></i>
+        <details class="group border-b border-line">
+          <summary class="flex items-center justify-between cursor-pointer py-5 text-left">
+            <span class="display text-[18px] sm:text-[20px] text-ink leading-[1.2] pr-4"><%= faq[:q] %></span>
+            <span class="flex-shrink-0 w-7 h-7 rounded-full border border-line flex items-center justify-center transition-colors group-open:bg-ink group-open:border-ink">
+              <i class="fas fa-plus text-ink-3 text-[10px] transition-all group-open:rotate-45 group-open:text-cream"></i>
             </span>
           </summary>
-          <div class="px-6 pb-5">
-            <p class="text-sm text-slate-500 leading-relaxed"><%= faq[:a] %></p>
+          <div class="pb-5 -mt-1">
+            <p class="text-[14px] text-ink-2 leading-[1.6] max-w-2xl"><%= faq[:a] %></p>
           </div>
         </details>
       <% end %>
@@ -250,28 +182,31 @@
   </div>
 </section>
 
-<%# ========== CTA ========== %>
-<section class="py-24 relative overflow-hidden">
-  <div class="absolute inset-0 bg-gradient-to-br from-orange-500 via-orange-600 to-rose-600"></div>
-  <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, #fff 1px, transparent 1px); background-size: 24px 24px;"></div>
-
-  <div class="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-    <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight" data-aos="fade-up">Ready to try it?</h2>
-    <p class="mt-4 text-white/80 text-lg" data-aos="fade-up" data-aos-delay="100">Join thousands of customers and providers on Radius. Free to start.</p>
-
-    <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
-      <% if user_signed_in? %>
-        <%= link_to services_path, class: "group bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-sm hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all" do %>
-          Browse Services <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+<%# ===== FINAL CTA ===== %>
+<section class="py-16 sm:py-20 bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="rounded-[20px] p-10 sm:p-14 lg:p-16 grid lg:grid-cols-[1.5fr_1fr] gap-8 items-center" style="background-color: #1d1813;">
+      <div>
+        <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/55 mb-4">ready to try</div>
+        <h2 class="display text-cream" style="font-size: clamp(36px, 5vw, 56px); line-height: 1; letter-spacing: -0.02em;">
+          Get started, <em class="italic-wonk" style="color: #d96a3a;">free</em>.
+        </h2>
+        <p class="mt-5 text-cream/70 text-[15px] sm:text-[17px] leading-[1.5] max-w-md">Join thousands of customers and providers on Radius.</p>
+      </div>
+      <div class="flex flex-col sm:flex-row lg:flex-col gap-3">
+        <% if user_signed_in? %>
+          <%= link_to services_path, class: "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-pill text-sm font-semibold bg-cream text-ink hover:bg-cream-sunken transition-colors active:translate-y-px" do %>
+            Browse services <i class="fas fa-arrow-right text-[10px]"></i>
+          <% end %>
+        <% else %>
+          <%= link_to new_user_registration_path(role: 'customer'), class: "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-pill text-sm font-semibold bg-cream text-ink hover:bg-cream-sunken transition-colors active:translate-y-px" do %>
+            Find a pro <i class="fas fa-arrow-right text-[10px]"></i>
+          <% end %>
+          <%= link_to new_user_registration_path(role: 'provider'), class: "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-pill text-sm font-medium text-cream/80 hover:text-cream border border-cream/20 hover:border-cream/40 transition-colors" do %>
+            Join as a pro
+          <% end %>
         <% end %>
-      <% else %>
-        <%= link_to new_user_registration_path(role: 'customer'), class: "group bg-white text-slate-900 px-8 py-4 rounded-xl font-bold text-sm hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all" do %>
-          Find a Pro <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-        <% end %>
-        <%= link_to new_user_registration_path(role: 'provider'), class: "text-white/90 hover:text-white px-8 py-4 rounded-xl font-bold text-sm border-2 border-white/30 hover:border-white/60 transition-all" do %>
-          Join as Provider
-        <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
 </section>
