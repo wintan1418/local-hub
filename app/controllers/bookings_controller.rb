@@ -18,12 +18,12 @@ class BookingsController < ApplicationController
     end
 
     @bookings = case params[:sort]
-                when "oldest"     then @bookings.order(created_at: :asc)
-                when "upcoming"   then @bookings.order(scheduled_at: :asc)
-                when "price_high" then @bookings.order(total_price: :desc)
-                when "price_low"  then @bookings.order(total_price: :asc)
-                else                   @bookings.order(created_at: :desc)
-                end
+    when "oldest"     then @bookings.order(created_at: :asc)
+    when "upcoming"   then @bookings.order(scheduled_at: :asc)
+    when "price_high" then @bookings.order(total_price: :desc)
+    when "price_low"  then @bookings.order(total_price: :asc)
+    else                   @bookings.order(created_at: :desc)
+    end
 
     @bookings = @bookings.page(params[:page]).per(15)
   end
@@ -38,11 +38,17 @@ class BookingsController < ApplicationController
 
   def create
     @service = Service.find(params[:service_id])
-    @booking = Booking.new(booking_params)
+    @booking = Booking.new(booking_params.except(:service_package_id))
     @booking.customer = current_user
     @booking.service = @service
     @booking.status = :pending
     @booking.paid = false
+
+    package = selected_package
+    return if performed?
+
+    @booking.service_package = package
+    @booking.total_price = calculated_booking_price(package)
 
     if @booking.save
       result = StripeService.create_booking_checkout(@booking)
@@ -60,23 +66,31 @@ class BookingsController < ApplicationController
   def payment_success
     @booking = current_user.bookings.find(params[:id])
     session_id = params[:session_id]
+    payment_verified = @booking.paid?
 
     if session_id.present?
       begin
         session = Stripe::Checkout::Session.retrieve(session_id)
-        if session.payment_status == "paid"
+        if StripeService.checkout_session_paid_for_booking?(session, @booking)
           @booking.update(
             paid: true,
             stripe_payment_intent_id: session.payment_intent,
             stripe_checkout_session_id: session_id
           )
+          payment_verified = true
+        else
+          Rails.logger.warn "Stripe checkout session verification failed for booking #{@booking.id}"
         end
       rescue Stripe::StripeError => e
         Rails.logger.error "Stripe session retrieve error: #{e.message}"
       end
     end
 
-    redirect_to booking_path(@booking), notice: "Booking confirmed and payment received!"
+    if payment_verified
+      redirect_to booking_path(@booking), notice: "Booking confirmed and payment received!"
+    else
+      redirect_to booking_path(@booking), alert: "Payment could not be verified yet."
+    end
   end
 
   def reschedule
@@ -135,11 +149,26 @@ class BookingsController < ApplicationController
   private
 
   def booking_params
-    params.require(:booking).permit(:scheduled_at, :total_price, :recurrence, :urgent, :service_package_id, :notes_from_customer, photos: [])
+    params.require(:booking).permit(:scheduled_at, :recurrence, :urgent, :service_package_id, :notes_from_customer, photos: [])
   end
 
   def ensure_customer!
     redirect_to root_path, alert: "Access denied." unless current_user&.customer?
+  end
+
+  def selected_package
+    package_id = booking_params[:service_package_id]
+    return nil if package_id.blank?
+
+    package = @service.packages.find_by(id: package_id)
+    return package if package
+
+    redirect_to service_path(@service), alert: "Selected package is not available for this service."
+    nil
+  end
+
+  def calculated_booking_price(package)
+    package&.price || @service.base_price
   end
 
   def parse_scheduled_at(raw)

@@ -59,7 +59,7 @@ class SettingsController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :phone_number, :bio, :location, :website_url)
+    params.require(:user).permit(:first_name, :last_name, :email, :phone, :bio, :address, :city, :state, :zip_code)
   end
 
   def notification_params

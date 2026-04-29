@@ -70,18 +70,23 @@ class Provider::SubscriptionsController < ApplicationController
 
       # Check if subscription was actually created
       if session.subscription
+        # Find the plan and user from metadata
+        plan = Plan.active.find_by(id: stripe_metadata_value(session, "plan_id"))
+
+        unless plan && StripeService.checkout_session_for_subscription?(session, current_user, plan)
+          Rails.logger.warn "Stripe subscription checkout session verification failed for user #{current_user.id}"
+          redirect_to provider_subscriptions_path, alert: "Payment could not be verified yet."
+          return
+        end
+
         subscription = Stripe::Subscription.retrieve(session.subscription)
 
-        # Find the plan and user from metadata
-        plan = Plan.find(session.metadata.plan_id)
-        user = User.find(session.metadata.user_id)
-
         # Create local subscription record
-        local_subscription = user.subscriptions.create!(
+        local_subscription = current_user.subscriptions.create!(
           plan: plan,
           stripe_subscription_id: subscription.id,
           stripe_customer_id: session.customer,
-          status: subscription.status&.to_sym || :active,
+          status: Subscription.statuses.key?(subscription.status) ? subscription.status : :incomplete,
           current_period_start: Time.current,
           current_period_end: 1.month.from_now
         )
@@ -109,5 +114,12 @@ class Provider::SubscriptionsController < ApplicationController
     if current_user.has_active_subscription?
       redirect_to provider_subscriptions_path, alert: "You already have an active subscription."
     end
+  end
+
+  def stripe_metadata_value(session, key)
+    metadata = session.metadata || {}
+    metadata.respond_to?(:[]) ? metadata[key] : metadata.public_send(key)
+  rescue NoMethodError
+    nil
   end
 end

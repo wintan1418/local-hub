@@ -73,8 +73,8 @@
               </div>
 
               <div>
-                <%= f.label :phone_number, "Phone", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
-                <%= f.telephone_field :phone_number, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+                <%= f.label :phone, "Phone", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                <%= f.telephone_field :phone, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
               </div>
 
               <div>
@@ -82,14 +82,23 @@
                 <%= f.text_area :bio, rows: 4, class: "w-full px-4 py-3 rounded-2xl border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none", placeholder: "Tell us about yourself…" %>
               </div>
 
-              <div class="grid md:grid-cols-2 gap-4">
+              <div>
+                <%= f.label :address, "Address", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                <%= f.text_field :address, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+              </div>
+
+              <div class="grid md:grid-cols-3 gap-4">
                 <div>
-                  <%= f.label :location, "Location", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
-                  <%= f.text_field :location, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm", placeholder: "City, State" %>
+                  <%= f.label :city, "City", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                  <%= f.text_field :city, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
                 </div>
                 <div>
-                  <%= f.label :website_url, "Website", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
-                  <%= f.url_field :website_url, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm", placeholder: "https://" %>
+                  <%= f.label :state, "State", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                  <%= f.text_field :state, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+                </div>
+                <div>
+                  <%= f.label :zip_code, "Zip", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+                  <%= f.text_field :zip_code, class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
                 </div>
               </div>
 

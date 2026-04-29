@@ -10,9 +10,13 @@ class ApplicationController < ActionController::Base
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.permit(:sign_up, keys: [ :user_role ])
+    devise_parameter_sanitizer.permit(:sign_up) do |user_params|
+      permitted = user_params.permit(:email, :password, :password_confirmation, :user_role)
+      permitted[:user_role] = safe_signup_role(permitted[:user_role])
+      permitted
+    end
     devise_parameter_sanitizer.permit(:account_update, keys: [
-      :user_role, :first_name, :last_name, :phone, :bio,
+      :first_name, :last_name, :phone, :bio,
       :business_name, :business_license, :insurance_number,
       :years_experience, :address, :city, :state, :zip_code,
       :profile_picture
@@ -43,6 +47,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def safe_signup_role(role)
+    %w[customer provider].include?(role.to_s) ? role : "customer"
+  end
 
   def user_not_authorized
     flash[:alert] = "You are not authorized to perform this action."

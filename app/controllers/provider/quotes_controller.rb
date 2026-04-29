@@ -14,9 +14,11 @@ class Provider::QuotesController < ApplicationController
   end
 
   def create
-    @quote = Quote.new(quote_params)
+    @quote = Quote.new(quote_params.except(:service_id))
     @quote.provider = current_user
     @quote.status = :draft
+    assign_quote_service(@quote)
+    return if performed?
 
     if @quote.save
       redirect_to provider_quote_path(@quote), notice: "Quote created!"
@@ -39,6 +41,9 @@ class Provider::QuotesController < ApplicationController
 
   def update
     @quote = current_user_quotes.find(params[:id])
+    assign_quote_service(@quote)
+    return if performed?
+
     if @quote.update(quote_params)
       redirect_to provider_quote_path(@quote), notice: "Quote updated!"
     else
@@ -73,7 +78,19 @@ class Provider::QuotesController < ApplicationController
 
   def quote_params
     params.require(:quote).permit(:service_id, :customer_id, :title, :description, :total_price, :valid_until, :notes,
-      line_items_attributes: [:id, :description, :quantity, :unit_price, :_destroy])
+      line_items_attributes: [ :id, :description, :quantity, :unit_price, :_destroy ])
+  end
+
+  def assign_quote_service(quote)
+    service_id = quote_params[:service_id]
+    return if service_id.blank?
+
+    service = current_user.services.find_by(id: service_id)
+    if service
+      quote.service = service
+    else
+      redirect_to provider_quotes_path, alert: "Selected service is not available."
+    end
   end
 
   def ensure_provider!

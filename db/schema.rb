@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_28_200000) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_29_193000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -76,6 +76,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_28_200000) do
     t.string "gift_card_code"
     t.decimal "gift_card_amount_used", precision: 10, scale: 2, default: "0.0"
     t.integer "assigned_team_member_id"
+    t.integer "platform_fee_cents", default: 0
+    t.integer "provider_payout_cents", default: 0
+    t.string "stripe_transfer_id"
     t.index ["created_at"], name: "index_bookings_on_created_at"
     t.index ["customer_id"], name: "index_bookings_on_customer_id"
     t.index ["referral_id"], name: "index_bookings_on_referral_id"
@@ -513,6 +516,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_28_200000) do
     t.string "site_tagline"
     t.text "site_about"
     t.boolean "site_published", default: false
+    t.string "stripe_connect_id"
+    t.boolean "stripe_connect_onboarded", default: false
+    t.boolean "stripe_connect_charges_enabled", default: false
+    t.boolean "stripe_connect_payouts_enabled", default: false
     t.index ["admin_role"], name: "index_users_on_admin_role"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

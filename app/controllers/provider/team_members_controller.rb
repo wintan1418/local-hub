@@ -12,6 +12,7 @@ class Provider::TeamMembersController < ApplicationController
 
   def create
     @team_member = current_user.team_members.build(team_member_params)
+    @team_member.role = safe_team_member_role
     # Link if email exists
     existing = User.find_by(email: @team_member.invite_email)
     @team_member.member = existing if existing
@@ -34,7 +35,12 @@ class Provider::TeamMembersController < ApplicationController
   private
 
   def team_member_params
-    params.require(:team_member).permit(:invite_email, :role)
+    params.require(:team_member).permit(:invite_email)
+  end
+
+  def safe_team_member_role
+    requested_role = params.dig(:team_member, :role).to_s
+    TeamMember::ROLES.include?(requested_role) ? requested_role : "technician"
   end
 
   def ensure_provider!

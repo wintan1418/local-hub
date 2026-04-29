@@ -112,8 +112,8 @@ class StripeService
 
     session = Stripe::Checkout::Session.create({
       customer: stripe_customer.id,
-      payment_method_types: ["card"],
-      line_items: [{
+      payment_method_types: [ "card" ],
+      line_items: [ {
         price_data: {
           currency: "usd",
           product_data: {
@@ -123,7 +123,7 @@ class StripeService
           unit_amount: amount_cents
         },
         quantity: 1
-      }],
+      } ],
       mode: "payment",
       success_url: "#{Rails.application.routes.url_helpers.booking_payment_success_url(booking)}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: Rails.application.routes.url_helpers.service_url(service),
@@ -147,6 +147,37 @@ class StripeService
   rescue Stripe::StripeError => e
     Rails.logger.error "Stripe Booking Checkout Error: #{e.message}"
     nil
+  end
+
+  def self.checkout_session_paid_for_booking?(session, booking)
+    expected_amount_cents = (booking.final_amount_due.to_d * 100).to_i
+
+    session.payment_status == "paid" &&
+      session.id == booking.stripe_checkout_session_id &&
+      metadata_value(session, "booking_id").to_s == booking.id.to_s &&
+      metadata_value(session, "user_id").to_s == booking.customer_id.to_s &&
+      metadata_value(session, "service_id").to_s == booking.service_id.to_s &&
+      session.amount_total.to_i == expected_amount_cents
+  end
+
+  def self.checkout_session_paid_for_gift_card?(session, gift_card, buyer)
+    expected_amount_cents = (gift_card.amount.to_d * 100).to_i
+
+    session.payment_status == "paid" &&
+      session.mode == "payment" &&
+      metadata_value(session, "type") == "gift_card" &&
+      metadata_value(session, "gift_card_id").to_s == gift_card.id.to_s &&
+      metadata_value(session, "buyer_id").to_s == buyer.id.to_s &&
+      session.customer.to_s == buyer.stripe_customer_id.to_s &&
+      session.amount_total.to_i == expected_amount_cents
+  end
+
+  def self.checkout_session_for_subscription?(session, user, plan)
+    session.mode == "subscription" &&
+      session.subscription.present? &&
+      metadata_value(session, "user_id").to_s == user.id.to_s &&
+      metadata_value(session, "plan_id").to_s == plan.id.to_s &&
+      session.customer.to_s == user.stripe_customer_id.to_s
   end
 
   # Platform commission: 10% of booking
@@ -311,6 +342,13 @@ class StripeService
   end
 
   private
+
+  def self.metadata_value(session, key)
+    metadata = session.metadata || {}
+    metadata.respond_to?(:[]) ? metadata[key] : metadata.public_send(key)
+  rescue NoMethodError
+    nil
+  end
 
   def self.map_stripe_status(stripe_status)
     case stripe_status

@@ -57,7 +57,7 @@ class Webhooks::StripeController < ApplicationController
     when "gift_card"
       gc_id = session.metadata && session.metadata["gift_card_id"]
       gift_card = gc_id && GiftCard.find_by(id: gc_id)
-      if gift_card&.pending?
+      if gift_card&.pending? && gift_card.purchaser && StripeService.checkout_session_paid_for_gift_card?(session, gift_card, gift_card.purchaser)
         gift_card.update(status: :active)
         if gift_card.recipient_email.present?
           GiftCardMailer.recipient_notification(gift_card).deliver_later
@@ -68,7 +68,7 @@ class Webhooks::StripeController < ApplicationController
       # Booking checkout (default for older sessions without explicit type)
       booking_id = session.metadata && session.metadata["booking_id"]
       booking = booking_id && Booking.find_by(id: booking_id)
-      if booking && !booking.paid?
+      if booking && !booking.paid? && StripeService.checkout_session_paid_for_booking?(session, booking)
         booking.update(
           paid: true,
           stripe_payment_intent_id: session.payment_intent,
@@ -163,7 +163,13 @@ class Webhooks::StripeController < ApplicationController
   def verify_stripe_signature
     payload = request.body.read
     sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
-    endpoint_secret = ENV["STRIPE_WEBHOOK_SECRET"] || "whsec_test_secret"
+    endpoint_secret = ENV["STRIPE_WEBHOOK_SECRET"]
+
+    if endpoint_secret.blank?
+      Rails.logger.error "STRIPE_WEBHOOK_SECRET is not configured"
+      render json: { error: "Webhook secret not configured" }, status: :service_unavailable
+      return
+    end
 
     @event = Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
   rescue JSON::ParserError

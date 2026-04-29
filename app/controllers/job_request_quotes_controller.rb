@@ -33,10 +33,15 @@ class JobRequestQuotesController < ApplicationController
     unless @job_request.customer == current_user
       redirect_to root_path, alert: "Access denied." and return
     end
+    unless @job_request.open? && @quote.pending?
+      redirect_to job_request_path(@job_request), alert: "This quote can no longer be accepted." and return
+    end
 
-    @quote.accepted!
-    @job_request.awarded!
-    @job_request.quotes.where.not(id: @quote.id).update_all(status: JobRequestQuote.statuses[:declined])
+    JobRequest.transaction do
+      @quote.accepted!
+      @job_request.awarded!
+      @job_request.quotes.where.not(id: @quote.id).update_all(status: JobRequestQuote.statuses[:declined])
+    end
     redirect_to job_request_path(@job_request), notice: "Quote accepted. Contact #{@quote.provider.display_name} to proceed."
   end
 

@@ -22,12 +22,6 @@ Rails.application.routes.draw do
   # Devise routes for user authentication
   devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 
-
-  # Password reset routes
-  resources :password_resets, only: [ :new, :create, :show, :update ], param: :token
-  get 'password_reset/:token', to: 'password_resets#show', as: :edit_password_reset
-  patch 'password_reset/:token', to: 'password_resets#update'
-
   # User dashboard
   get "dashboard", to: "dashboard#index", as: :user_dashboard
 

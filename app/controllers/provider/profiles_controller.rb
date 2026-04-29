@@ -30,30 +30,10 @@ class Provider::ProfilesController < ApplicationController
     uploaded_count = 0
     errors = []
 
-    # Handle individual document uploads
-    if params[:business_license_file].present?
-      @user.business_license_file.attach(params[:business_license_file])
-      @user.update(business_license_document: true)
-      uploaded_count += 1
-    end
-
-    if params[:insurance_certificate_file].present?
-      @user.insurance_certificate_file.attach(params[:insurance_certificate_file])
-      @user.update(insurance_certificate_document: true)
-      uploaded_count += 1
-    end
-
-    if params[:professional_certifications_file].present?
-      @user.professional_certifications_file.attach(params[:professional_certifications_file])
-      @user.update(professional_certifications_document: true)
-      uploaded_count += 1
-    end
-
-    if params[:government_id_file].present?
-      @user.government_id_file.attach(params[:government_id_file])
-      @user.update(government_id_document: true)
-      uploaded_count += 1
-    end
+    uploaded_count += attach_verification_document(:business_license_file, :business_license_document, errors)
+    uploaded_count += attach_verification_document(:insurance_certificate_file, :insurance_certificate_document, errors)
+    uploaded_count += attach_verification_document(:professional_certifications_file, :professional_certifications_document, errors)
+    uploaded_count += attach_verification_document(:government_id_file, :government_id_document, errors)
 
     if uploaded_count > 0
       # Send verification pending email
@@ -72,6 +52,8 @@ class Provider::ProfilesController < ApplicationController
 
       notice_message = "#{uploaded_count} document(s) uploaded successfully. We will review them shortly."
       redirect_to verification_provider_profile_path, notice: notice_message
+    elsif errors.any?
+      redirect_to verification_provider_profile_path, alert: errors.to_sentence
     else
       redirect_to verification_provider_profile_path, alert: "Please select at least one document to upload."
     end
@@ -86,6 +68,13 @@ class Provider::ProfilesController < ApplicationController
     @user = current_user
 
     if params[:portfolio_images].present?
+      invalid = params[:portfolio_images].reject { |image| valid_portfolio_image?(image) }
+
+      if invalid.any?
+        redirect_to portfolio_provider_profile_path, alert: "Portfolio images must be JPG, PNG, GIF, or WebP files under 10MB."
+        return
+      end
+
       params[:portfolio_images].each do |image|
         @user.portfolio_images.attach(image)
       end
@@ -114,5 +103,36 @@ class Provider::ProfilesController < ApplicationController
       :years_experience, :address, :city, :state, :zip_code,
       :profile_picture, :vacation_until
     )
+  end
+
+  def attach_verification_document(param_name, flag_name, errors)
+    upload = params[param_name]
+    return 0 if upload.blank?
+
+    unless valid_verification_document?(upload)
+      errors << "#{param_name.to_s.humanize} must be a PDF, image, or Word document under 10MB."
+      return 0
+    end
+
+    @user.public_send(param_name).attach(upload)
+    @user.update(flag_name => true)
+    1
+  end
+
+  def valid_verification_document?(upload)
+    allowed_types = %w[
+      application/pdf
+      application/msword
+      application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      image/jpeg
+      image/png
+      image/webp
+    ]
+
+    allowed_types.include?(upload.content_type) && upload.size <= 10.megabytes
+  end
+
+  def valid_portfolio_image?(upload)
+    %w[image/jpeg image/png image/gif image/webp].include?(upload.content_type) && upload.size <= 10.megabytes
   end
 end

@@ -1,5 +1,5 @@
 class GiftCardsController < ApplicationController
-  before_action :authenticate_user!, except: [:redeem]
+  before_action :authenticate_user!, except: [ :redeem ]
 
   def index
     @my_cards = current_user.gift_cards_purchased.order(created_at: :desc)
@@ -43,16 +43,22 @@ class GiftCardsController < ApplicationController
     if session_id.present? && @gift_card.pending?
       begin
         session = Stripe::Checkout::Session.retrieve(session_id)
-        if session.payment_status == "paid"
+        if StripeService.checkout_session_paid_for_gift_card?(session, @gift_card, current_user)
           @gift_card.update(status: :active)
           GiftCardMailer.recipient_notification(@gift_card).deliver_later if @gift_card.recipient_email.present?
+        else
+          Rails.logger.warn "Stripe gift card checkout session verification failed for gift card #{@gift_card.id}"
         end
       rescue Stripe::StripeError => e
         Rails.logger.error "Stripe gift card session error: #{e.message}"
       end
     end
 
-    redirect_to gift_card_path(@gift_card), notice: "Payment received! Share the code: #{@gift_card.formatted_code}"
+    if @gift_card.active?
+      redirect_to gift_card_path(@gift_card), notice: "Payment received! Share the code: #{@gift_card.formatted_code}"
+    else
+      redirect_to gift_card_path(@gift_card), alert: "Payment could not be verified yet."
+    end
   end
 
   def redeem

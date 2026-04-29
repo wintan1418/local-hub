@@ -30,8 +30,8 @@ class TwilioService
         Booking confirmed!#{' '}
         Service: #{service.title}
         Provider: #{provider.business_name || provider.full_name}
-        Date: #{booking.booking_date.strftime('%B %d, %Y')}
-        Time: #{booking.booking_time}
+        Date: #{booking.scheduled_at.strftime('%B %d, %Y')}
+        Time: #{booking.scheduled_at.strftime('%-I:%M %p')}
         Total: $#{booking.total_price}
       MSG
 
@@ -50,8 +50,8 @@ class TwilioService
       message = <<~MSG
         Reminder: You have a booking tomorrow!
         Service: #{service.title}
-        Time: #{booking.booking_time}
-        Location: #{booking.location || 'See booking details'}
+        Time: #{booking.scheduled_at.strftime('%-I:%M %p')}
+        Location: #{booking.service.provider.complete_address.presence || 'See booking details'}
       MSG
 
       send_sms(customer.phone, message.strip, :booking_reminder, customer)
