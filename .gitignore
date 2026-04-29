@@ -62,6 +62,9 @@
 # Ignore master key for decrypting credentials
 /config/master.key
 /config/credentials/*.key
+/config/*.key.backup
+/config/*.yml.enc.backup
+LOGIN_CREDENTIALS.md
 
 # Ignore npm debug logs
 npm-debug.log*
