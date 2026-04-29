@@ -67,16 +67,16 @@
         # Verified Unsplash photo IDs — all known-good, with safe fallback
         fallback_img = "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=900&q=80&auto=format&fit=crop"
         provider_slides = [
-          { img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80&auto=format&fit=crop", first: "Maya", last: "Rodriguez", cat: "Cleaning", city: "Brooklyn", rating: "4.96", reviews: 127, response: "8 min", jobs: 312 },
-          { img: "https://images.unsplash.com/photo-1486754735734-325b5831c3ad?w=900&q=80&auto=format&fit=crop", first: "Marcus", last: "Webb", cat: "Auto Repair", city: "Bronx", rating: "4.88", reviews: 156, response: "20 min", jobs: 298 },
-          { img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=900&q=80&auto=format&fit=crop", first: "Diego", last: "Alvarez", cat: "Catering", city: "Brooklyn", rating: "4.94", reviews: 92, response: "15 min", jobs: 186 },
-          { img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=900&q=80&auto=format&fit=crop", first: "Sarah", last: "Chen", cat: "Tutoring", city: "Manhattan", rating: "5.00", reviews: 64, response: "5 min", jobs: 142 },
-          { img: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=900&q=80&auto=format&fit=crop", first: "James", last: "Mendoza", cat: "Plumbing", city: "Queens", rating: "4.92", reviews: 89, response: "12 min", jobs: 218 },
-          { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=900&q=80&auto=format&fit=crop", first: "Aisha", last: "Thompson", cat: "Landscaping", city: "Queens", rating: "4.95", reviews: 78, response: "18 min", jobs: 164 },
-          { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&q=80&auto=format&fit=crop", first: "Carlos", last: "Reyes", cat: "Personal Training", city: "Manhattan", rating: "4.97", reviews: 203, response: "10 min", jobs: 412 },
-          { img: "https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=900&q=80&auto=format&fit=crop", first: "Olivia", last: "Bennett", cat: "Painting", city: "Brooklyn", rating: "4.91", reviews: 84, response: "14 min", jobs: 156 },
-          { img: "https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?w=900&q=80&auto=format&fit=crop", first: "Trevor", last: "Singh", cat: "Electrical", city: "Queens", rating: "4.93", reviews: 118, response: "11 min", jobs: 246 },
-          { img: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=80&auto=format&fit=crop", first: "Naomi", last: "Park", cat: "Pet Care", city: "Brooklyn", rating: "4.99", reviews: 71, response: "6 min", jobs: 134 }
+          { img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80&auto=format&fit=crop", first: "Maya", last: "Rodriguez", cat: "Cleaning", city: "Brooklyn", rating: "4.96", reviews: 127, response: "8 min", jobs: 312, b_when: "2m", b_meta: "3hr · $147", r_initial: "L", r_quote: "Spotless work", r_when: "just now" },
+          { img: "https://images.unsplash.com/photo-1486754735734-325b5831c3ad?w=900&q=80&auto=format&fit=crop", first: "Marcus", last: "Webb", cat: "Auto Repair", city: "Bronx", rating: "4.88", reviews: 156, response: "20 min", jobs: 298, b_when: "4m", b_meta: "2hr · $220", r_initial: "R", r_quote: "Brakes fixed fast", r_when: "1m" },
+          { img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=900&q=80&auto=format&fit=crop", first: "Diego", last: "Alvarez", cat: "Catering", city: "Brooklyn", rating: "4.94", reviews: 92, response: "15 min", jobs: 186, b_when: "8m", b_meta: "Event · $420", r_initial: "K", r_quote: "Food was incredible", r_when: "just now" },
+          { img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=900&q=80&auto=format&fit=crop", first: "Sarah", last: "Chen", cat: "Tutoring", city: "Manhattan", rating: "5.00", reviews: 64, response: "5 min", jobs: 142, b_when: "12m", b_meta: "1hr · $65", r_initial: "P", r_quote: "Daughter loved her", r_when: "5m" },
+          { img: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=900&q=80&auto=format&fit=crop", first: "James", last: "Mendoza", cat: "Plumbing", city: "Queens", rating: "4.92", reviews: 89, response: "12 min", jobs: 218, b_when: "1m", b_meta: "Same-day · $189", r_initial: "D", r_quote: "Saved my Sunday", r_when: "just now" },
+          { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=900&q=80&auto=format&fit=crop", first: "Aisha", last: "Thompson", cat: "Landscaping", city: "Queens", rating: "4.95", reviews: 78, response: "18 min", jobs: 164, b_when: "6m", b_meta: "Half-day · $310", r_initial: "N", r_quote: "Yard looks new", r_when: "3m" },
+          { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&q=80&auto=format&fit=crop", first: "Carlos", last: "Reyes", cat: "Personal Training", city: "Manhattan", rating: "4.97", reviews: 203, response: "10 min", jobs: 412, b_when: "3m", b_meta: "1hr · $95", r_initial: "J", r_quote: "Great workout", r_when: "just now" },
+          { img: "https://images.unsplash.com/photo-1562259929-b4e1fd3aef09?w=900&q=80&auto=format&fit=crop", first: "Olivia", last: "Bennett", cat: "Painting", city: "Brooklyn", rating: "4.91", reviews: 84, response: "14 min", jobs: 156, b_when: "9m", b_meta: "Full-day · $480", r_initial: "T", r_quote: "Clean lines", r_when: "4m" },
+          { img: "https://images.unsplash.com/photo-1555963966-b7ae5404b6ed?w=900&q=80&auto=format&fit=crop", first: "Trevor", last: "Singh", cat: "Electrical", city: "Queens", rating: "4.93", reviews: 118, response: "11 min", jobs: 246, b_when: "2m", b_meta: "Service · $175", r_initial: "M", r_quote: "Fast and clean", r_when: "just now" },
+          { img: "https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=80&auto=format&fit=crop", first: "Naomi", last: "Park", cat: "Pet Care", city: "Brooklyn", rating: "4.99", reviews: 71, response: "6 min", jobs: 134, b_when: "5m", b_meta: "Daily · $42", r_initial: "S", r_quote: "She loves Naomi", r_when: "2m" }
         ]
       %>
 
@@ -112,7 +112,13 @@
 
           <%# Slides %>
           <% provider_slides.each_with_index do |s, i| %>
-            <div class="provider-slide absolute inset-0 <%= i == 0 ? 'is-active is-initial' : '' %>" data-slide="<%= i %>">
+            <div class="provider-slide absolute inset-0 <%= i == 0 ? 'is-active is-initial' : '' %>"
+                 data-slide="<%= i %>"
+                 data-b-when="<%= s[:b_when] %>"
+                 data-b-meta="<%= s[:b_meta] %>"
+                 data-r-initial="<%= s[:r_initial] %>"
+                 data-r-quote="<%= s[:r_quote] %>"
+                 data-r-when="<%= s[:r_when] %>">
               <img src="<%= s[:img] %>"
                    data-fallback="<%= fallback_img %>"
                    onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback;}"
@@ -157,28 +163,28 @@
           </div>
         </div>
 
-        <%# Floating chip — top-left, breaks bounds (live booking pulse) %>
-        <div class="absolute top-12 sm:top-16 z-30 hidden sm:block" style="left: -22px;">
-          <div class="bg-cream-elevated border border-line rounded-pill pl-3 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
+        <%# Floating chip — top-left, breaks bounds (live booking, swaps per slide) %>
+        <div class="absolute top-12 sm:top-16 z-30 hidden sm:block" style="left: -22px;" id="chip-booking">
+          <div class="chip-inner bg-cream-elevated border border-line rounded-pill pl-3 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: #2d6e4e;"></span>
               <span class="relative inline-flex rounded-full h-2 w-2" style="background-color: #2d6e4e;"></span>
             </span>
             <div class="leading-tight">
-              <div class="text-[12px] font-semibold text-ink">Just booked · 2m</div>
-              <div class="font-mono text-[10px] text-ink-3">3hr · $147</div>
+              <div class="text-[12px] font-semibold text-ink">Just booked · <span data-chip="b_when">2m</span></div>
+              <div class="font-mono text-[10px] text-ink-3" data-chip="b_meta">3hr · $147</div>
             </div>
           </div>
         </div>
 
-        <%# Floating chip — bottom-right, breaks bounds (review just dropped) %>
-        <div class="absolute bottom-16 sm:bottom-20 z-30 hidden sm:block" style="right: -28px;">
-          <div class="bg-cream-elevated border border-line rounded-pill pl-1.5 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
-            <div class="w-7 h-7 rounded-full bg-cream-sunken text-ink-2 flex items-center justify-center text-[10px] font-bold border border-line">L</div>
+        <%# Floating chip — bottom-right, breaks bounds (review, swaps per slide) %>
+        <div class="absolute bottom-16 sm:bottom-20 z-30 hidden sm:block" style="right: -28px;" id="chip-review">
+          <div class="chip-inner bg-cream-elevated border border-line rounded-pill pl-1.5 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
+            <div class="w-7 h-7 rounded-full bg-cream-sunken text-ink-2 flex items-center justify-center text-[10px] font-bold border border-line" data-chip="r_initial">L</div>
             <div class="leading-tight">
-              <div class="text-[12px] font-semibold text-ink">"Showed up early"</div>
+              <div class="text-[12px] font-semibold text-ink">"<span data-chip="r_quote">Spotless work</span>"</div>
               <div class="font-mono text-[10px] text-ink-3 flex items-center gap-1">
-                <% 5.times do %><i class="fas fa-star text-amber-500 text-[7px]"></i><% end %><span class="ml-0.5">just now</span>
+                <% 5.times do %><i class="fas fa-star text-amber-500 text-[7px]"></i><% end %><span class="ml-0.5" data-chip="r_when">just now</span>
               </div>
             </div>
           </div>
@@ -350,7 +356,7 @@
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-      <% @recently_active.first(4).each do |provider| %>
+      <% @recently_active.first(8).each do |provider| %>
         <%= link_to provider_path(provider), class: "group block bg-cream-elevated rounded-xl border border-line overflow-hidden hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200" do %>
           <%# 4:5 image %>
           <div class="relative aspect-[4/5] bg-cream-sunken">
@@ -938,6 +944,15 @@
   }
 
   .deck-dot { transition: all 0.4s ease; cursor: pointer; }
+
+  /* Chip swap animation — fires when content updates with each shatter */
+  .chip-inner {
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s ease-out;
+  }
+  .chip-inner.is-swapping {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
 </style>
 
 <script>
@@ -1049,6 +1064,36 @@
     if (noLabel) noLabel.textContent = String(idx + 1).padStart(2, '0');
   }
 
+  // Swap chip content (booking pill + review pill) to match the new slide
+  var chipBookingEl = document.getElementById('chip-booking');
+  var chipReviewEl = document.getElementById('chip-review');
+
+  function updateChips(idx) {
+    var slide = slides[idx];
+    if (!slide) return;
+    var data = slide.dataset;
+    var pairs = [
+      [ chipBookingEl, [ [ 'b_when', data.bWhen ], [ 'b_meta', data.bMeta ] ] ],
+      [ chipReviewEl,  [ [ 'r_initial', data.rInitial ], [ 'r_quote', data.rQuote ], [ 'r_when', data.rWhen ] ] ]
+    ];
+    pairs.forEach(function(pair) {
+      var chip = pair[0];
+      if (!chip) return;
+      var inner = chip.querySelector('.chip-inner');
+      if (!inner) return;
+
+      // Animate chip out, swap text, animate back in
+      inner.classList.add('is-swapping');
+      setTimeout(function() {
+        pair[1].forEach(function(kv) {
+          var node = chip.querySelector('[data-chip="' + kv[0] + '"]');
+          if (node && kv[1] != null) node.textContent = kv[1];
+        });
+        inner.classList.remove('is-swapping');
+      }, 350);
+    });
+  }
+
   function goTo(idx) {
     if (idx === current || transitioning) return;
     transitioning = true;
@@ -1058,6 +1103,9 @@
     // Reveal incoming slide underneath the shards
     entering.classList.remove('is-initial');
     entering.classList.add('is-active');
+
+    // Kick off chip swap right with the shatter — feels like a single beat
+    updateChips(idx);
 
     shatter(leaving, function() {
       leaving.classList.remove('is-active');

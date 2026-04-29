@@ -19,16 +19,28 @@ class HomeController < ApplicationController
     recently_active_ids = Booking.joins(:service)
                                  .where.not(services: { provider_id: top_ids })
                                  .order(created_at: :desc)
-                                 .limit(20)
+                                 .limit(40)
                                  .pluck("services.provider_id")
                                  .uniq
-                                 .first(4)
+                                 .first(8)
     @recently_active = User.provider
                            .where(id: recently_active_ids)
                            .includes(profile_picture_attachment: :blob)
                            .index_by(&:id)
                            .values_at(*recently_active_ids)
                            .compact
+
+    # Backfill if fewer than 8 active — pad with newest providers not in featured
+    if @recently_active.length < 8
+      need = 8 - @recently_active.length
+      have_ids = top_ids + @recently_active.map(&:id)
+      filler = User.provider
+                   .where.not(id: have_ids)
+                   .includes(profile_picture_attachment: :blob)
+                   .order(created_at: :desc)
+                   .limit(need)
+      @recently_active += filler.to_a
+    end
     @plans = Plan.where(active: true).order(:position)
   end
 end
