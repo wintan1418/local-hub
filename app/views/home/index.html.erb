@@ -62,46 +62,102 @@
         </div>
       </div>
 
-      <%# RIGHT: image area — falling balls cascade through %>
+      <%# RIGHT: sliding editorial showcase — real pros at work %>
+      <%
+        provider_slides = [
+          { img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80&auto=format&fit=crop", first: "Maya", last: "Rodriguez", cat: "Cleaning", city: "Brooklyn", rating: "4.96", reviews: 127, response: "8 min", jobs: 312, no: "01" },
+          { img: "https://images.unsplash.com/photo-1632823469850-2f77dd9c52a1?w=900&q=80&auto=format&fit=crop", first: "Marcus", last: "Webb", cat: "Auto Repair", city: "Bronx", rating: "4.88", reviews: 156, response: "20 min", jobs: 298, no: "02" },
+          { img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=900&q=80&auto=format&fit=crop", first: "Diego", last: "Alvarez", cat: "Catering", city: "Brooklyn", rating: "4.94", reviews: 92, response: "15 min", jobs: 186, no: "03" },
+          { img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=900&q=80&auto=format&fit=crop", first: "Sarah", last: "Chen", cat: "Tutoring", city: "Manhattan", rating: "5.00", reviews: 64, response: "5 min", jobs: 142, no: "04" },
+          { img: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=900&q=80&auto=format&fit=crop", first: "James", last: "Mendoza", cat: "Plumbing", city: "Queens", rating: "4.92", reviews: 89, response: "12 min", jobs: 218, no: "05" }
+        ]
+      %>
+
       <div class="relative hero-reveal" style="--delay: 0.1s">
-        <div class="relative rounded-[20px] bg-cream-sunken border border-line overflow-hidden" style="aspect-ratio: 4/5; min-height: 460px;">
-          <%# Particle canvas — falling pro bubbles render here %>
-          <div class="absolute inset-0 overflow-hidden" id="particle-canvas"></div>
 
-          <%# Subtle inner gradient for depth %>
-          <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-cream-sunken/60 pointer-events-none"></div>
+        <%# Main hero card with sliding deck %>
+        <div class="provider-deck relative rounded-[20px] overflow-hidden border border-line shadow-card-lg bg-cream-sunken" style="aspect-ratio: 4/5; min-height: 480px;" id="provider-deck">
 
-          <%# Image label chip (mono) %>
-          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 bg-cream/90 border border-line px-2.5 py-1 rounded">
-            verified-pros · live
-          </div>
-        </div>
+          <%# Slides %>
+          <% provider_slides.each_with_index do |s, i| %>
+            <div class="provider-slide absolute inset-0 <%= i == 0 ? 'is-active' : '' %>" data-slide="<%= i %>">
+              <img src="<%= s[:img] %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= s[:first] %> <%= s[:last] %> · <%= s[:cat] %>" loading="<%= i == 0 ? 'eager' : 'lazy' %>">
 
-        <%# Floating chip — top-left, breaks bounds %>
-        <div class="absolute top-8 sm:top-12" style="left: -20px;">
-          <div class="bg-cream-elevated border border-line rounded-pill pl-1.5 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
-            <div class="w-8 h-8 rounded-full bg-forest-soft text-forest flex items-center justify-center text-[11px] font-bold">M</div>
-            <div class="leading-tight">
-              <div class="text-[12px] font-semibold text-ink">Maya R.</div>
-              <div class="text-[10px] text-ink-3 flex items-center gap-1">
-                <i class="fas fa-star text-amber-500 text-[8px]"></i>
-                <span>4.96 · cleaning</span>
+              <%# Top-right: Rating pill (per-slide) %>
+              <div class="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-pill bg-cream-elevated/95 backdrop-blur border border-line shadow-card">
+                <i class="fas fa-star text-amber-500 text-[11px]"></i>
+                <span class="display text-[15px] text-ink leading-none"><%= s[:rating] %></span>
+                <span class="font-mono text-[10px] text-ink-3">(<%= s[:reviews] %>)</span>
+              </div>
+
+              <%# Bottom: Editorial overlay %>
+              <div class="absolute inset-x-0 bottom-0 p-6 pt-28" style="background: linear-gradient(to top, rgba(29,24,19,0.94), rgba(29,24,19,0.55) 45%, transparent);">
+                <div class="font-mono text-[10px] uppercase tracking-[0.16em] text-cream/65 mb-2"><%= s[:cat] %> · <%= s[:city] %>, NY</div>
+                <div class="display text-cream leading-[0.95] tracking-[-0.02em]" style="font-size: clamp(28px, 3.5vw, 38px);">
+                  <%= s[:first] %> <em class="italic-wonk text-cream"><%= s[:last] %></em>
+                </div>
+                <div class="mt-3 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.08em] text-cream/65">
+                  <span><i class="fas fa-bolt text-amber-400/80 text-[10px] mr-1"></i>responds in <%= s[:response] %></span>
+                  <span class="opacity-50">·</span>
+                  <span><%= s[:jobs] %> jobs done</span>
+                </div>
               </div>
             </div>
+          <% end %>
+
+          <%# Static overlays — sit above slides %>
+          <%# Top-left: VERIFIED badge with slide number %>
+          <div class="absolute top-4 left-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-pill bg-cream-elevated/95 backdrop-blur border border-line shadow-card">
+            <i class="fas fa-check text-forest text-[10px]"></i>
+            <span class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink">verified · no.<span id="deck-no">01</span></span>
+          </div>
+
+          <%# Slide indicators (dots) — bottom-center, above gradient %>
+          <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
+            <% provider_slides.each_with_index do |_, i| %>
+              <button type="button" class="deck-dot w-1.5 h-1.5 rounded-full transition-all <%= i == 0 ? 'w-6 bg-cream' : 'bg-cream/40' %>" data-target="<%= i %>" aria-label="Slide <%= i + 1 %>"></button>
+            <% end %>
           </div>
         </div>
 
-        <%# Floating chip — bottom-right, breaks bounds %>
-        <div class="absolute bottom-10 sm:bottom-12" style="right: -28px;">
+        <%# Floating chip — top-left, breaks bounds (live booking pulse) %>
+        <div class="absolute top-12 sm:top-16 z-30 hidden sm:block" style="left: -22px;">
           <div class="bg-cream-elevated border border-line rounded-pill pl-3 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
             <span class="relative flex h-2 w-2">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: #2d6e4e;"></span>
               <span class="relative inline-flex rounded-full h-2 w-2" style="background-color: #2d6e4e;"></span>
             </span>
             <div class="leading-tight">
-              <div class="text-[12px] font-semibold text-ink">Booked · Tue 2pm</div>
-              <div class="text-[10px] text-ink-3">3hr · $147</div>
+              <div class="text-[12px] font-semibold text-ink">Just booked · 2m</div>
+              <div class="font-mono text-[10px] text-ink-3">3hr · $147</div>
             </div>
+          </div>
+        </div>
+
+        <%# Floating chip — bottom-right, breaks bounds (review just dropped) %>
+        <div class="absolute bottom-16 sm:bottom-20 z-30 hidden sm:block" style="right: -28px;">
+          <div class="bg-cream-elevated border border-line rounded-pill pl-1.5 pr-4 py-1.5 flex items-center gap-2.5 shadow-card-md">
+            <div class="w-7 h-7 rounded-full bg-cream-sunken text-ink-2 flex items-center justify-center text-[10px] font-bold border border-line">L</div>
+            <div class="leading-tight">
+              <div class="text-[12px] font-semibold text-ink">"Showed up early"</div>
+              <div class="font-mono text-[10px] text-ink-3 flex items-center gap-1">
+                <% 5.times do %><i class="fas fa-star text-amber-500 text-[7px]"></i><% end %><span class="ml-0.5">just now</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <%# Live activity strip — below card %>
+        <div class="mt-5 flex items-center justify-between gap-2 px-1">
+          <div class="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">
+            <span class="relative flex h-1.5 w-1.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: #2d6e4e;"></span>
+              <span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background-color: #2d6e4e;"></span>
+            </span>
+            <span><strong class="text-ink"><%= number_with_delimiter(@total_providers) %></strong> pros active</span>
+          </div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">
+            <strong class="text-ink"><%= [ ((@total_bookings || 0) / 30).to_i, 12 ].max %></strong> booked today
           </div>
         </div>
       </div>
@@ -723,73 +779,9 @@
 </section>
 
 <%# ================================================================
-    HERO BUBBLES STYLES (scoped) + JS
+    HERO ANIMATIONS — entrance + provider deck slider
     ================================================================ %>
 <style>
-  /* Falling pro-bubbles — light-mode tuned for the hero card */
-  #particle-canvas .pro-bubble {
-    position: absolute;
-    will-change: transform, opacity;
-    pointer-events: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    animation: bubbleFall linear infinite, bubbleDrift ease-in-out infinite, bubbleTwinkle ease-in-out infinite;
-    box-shadow: 0 4px 12px rgba(29, 24, 19, 0.08);
-    border: 1px solid #ddc9a8;
-    background: #fdf8ed;
-  }
-  #particle-canvas .pro-bubble img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    opacity: 0.85;
-  }
-  #particle-canvas .pro-bubble .bubble-icon {
-    position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 42%;
-    height: 42%;
-    border-radius: 50%;
-    background: #1d1813;
-    border: 1.5px solid #fdf8ed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 45%;
-    color: #fdf8ed;
-  }
-  #particle-canvas .pro-bubble .bubble-ring {
-    position: absolute;
-    inset: -3px;
-    border-radius: 50%;
-    border: 1px solid rgba(31, 77, 58, 0.3);
-    animation: ringPulse 4s ease-in-out infinite;
-  }
-  @keyframes bubbleFall {
-    0% { transform: translateY(-120px); }
-    100% { transform: translateY(800px); }
-  }
-  @keyframes bubbleDrift {
-    0%, 100% { margin-left: 0; }
-    25% { margin-left: 12px; }
-    50% { margin-left: -8px; }
-    75% { margin-left: 16px; }
-  }
-  @keyframes bubbleTwinkle {
-    0%, 100% { opacity: var(--base-opacity, 0.65); }
-    50% { opacity: calc(var(--base-opacity, 0.65) * 1.15); }
-  }
-  @keyframes ringPulse {
-    0%, 100% { transform: scale(1); opacity: 0.4; }
-    50% { transform: scale(1.18); opacity: 0.7; }
-  }
-
-  /* Hero entrance */
   .hero-reveal {
     opacity: 0;
     transform: translateY(16px);
@@ -799,86 +791,93 @@
   @keyframes heroReveal {
     to { opacity: 1; transform: translateY(0); }
   }
+
+  /* Provider deck — sliding showcase */
+  .provider-slide {
+    opacity: 0;
+    transform: translateX(40px) scale(1.02);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+  }
+  .provider-slide.is-active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: auto;
+  }
+  .provider-slide.is-leaving {
+    opacity: 0;
+    transform: translateX(-40px) scale(0.98);
+  }
+  .deck-dot { transition: all 0.4s ease; cursor: pointer; }
+
+  /* Subtle Ken Burns drift on the active image */
+  .provider-slide.is-active img {
+    animation: kenBurns 8s ease-out forwards;
+  }
+  @keyframes kenBurns {
+    from { transform: scale(1.04); }
+    to   { transform: scale(1); }
+  }
 </style>
 
 <script>
 (function() {
-  var canvas = document.getElementById('particle-canvas');
-  if (!canvas) return;
+  var deck = document.getElementById('provider-deck');
+  if (!deck) return;
+  var slides = deck.querySelectorAll('.provider-slide');
+  var dots = deck.querySelectorAll('.deck-dot');
+  var noLabel = document.getElementById('deck-no');
+  if (slides.length < 2) return;
 
-  var pros = [
-    { img: 'https://i.pravatar.cc/96?u=p1', icon: 'fa-wrench' },
-    { img: 'https://i.pravatar.cc/96?u=p2', icon: 'fa-broom' },
-    { img: 'https://i.pravatar.cc/96?u=p3', icon: 'fa-bolt' },
-    { img: 'https://i.pravatar.cc/96?u=p4', icon: 'fa-paint-roller' },
-    { img: 'https://i.pravatar.cc/96?u=p5', icon: 'fa-leaf' },
-    { img: 'https://i.pravatar.cc/96?u=p6', icon: 'fa-dumbbell' },
-    { img: 'https://i.pravatar.cc/96?u=p7', icon: 'fa-hammer' },
-    { img: 'https://i.pravatar.cc/96?u=p8', icon: 'fa-graduation-cap' },
-    { img: 'https://i.pravatar.cc/96?u=p9', icon: 'fa-truck' },
-    { img: 'https://i.pravatar.cc/96?u=p10', icon: 'fa-paw' },
-    { img: 'https://i.pravatar.cc/96?u=p11', icon: 'fa-wrench' },
-    { img: 'https://i.pravatar.cc/96?u=p12', icon: 'fa-broom' },
-    { img: 'https://i.pravatar.cc/96?u=p13', icon: 'fa-bolt' },
-    { img: 'https://i.pravatar.cc/96?u=p14', icon: 'fa-paint-roller' },
-    { img: 'https://i.pravatar.cc/96?u=p15', icon: 'fa-hammer' }
-  ];
+  var current = 0;
+  var interval = 5000;
+  var timer;
 
-  var BUBBLE_COUNT = 16;
+  function goTo(idx) {
+    if (idx === current) return;
+    var leaving = slides[current];
+    var entering = slides[idx];
+    leaving.classList.remove('is-active');
+    leaving.classList.add('is-leaving');
+    entering.classList.remove('is-leaving');
+    entering.classList.add('is-active');
+    setTimeout(function() { leaving.classList.remove('is-leaving'); }, 900);
 
-  function createBubble(initial) {
-    var pro = pros[Math.floor(Math.random() * pros.length)];
-    var size = 38 + Math.floor(Math.random() * 30);
-    var left = Math.random() * 100;
-    var fallDuration = 14 + Math.random() * 18;
-    var driftDuration = 6 + Math.random() * 8;
-    var twinkleDuration = 3 + Math.random() * 5;
-    var delay = initial ? -(Math.random() * fallDuration) : 0;
-    var baseOpacity = 0.55 + Math.random() * 0.35;
-    var hasRing = Math.random() > 0.55;
-    var hasIcon = Math.random() > 0.3;
-
-    var bubble = document.createElement('div');
-    bubble.className = 'pro-bubble';
-    bubble.style.cssText = 'width:' + size + 'px;height:' + size + 'px;left:' + left + '%;'
-      + 'animation-duration:' + fallDuration + 's,' + driftDuration + 's,' + twinkleDuration + 's;'
-      + 'animation-delay:' + delay + 's,' + (-Math.random() * driftDuration) + 's,' + (-Math.random() * twinkleDuration) + 's;'
-      + '--base-opacity:' + baseOpacity + ';';
-
-    var img = document.createElement('img');
-    img.src = pro.img;
-    img.loading = 'lazy';
-    img.alt = '';
-    bubble.appendChild(img);
-
-    if (hasIcon) {
-      var icon = document.createElement('div');
-      icon.className = 'bubble-icon';
-      icon.innerHTML = '<i class="fas ' + pro.icon + '"></i>';
-      bubble.appendChild(icon);
-    }
-    if (hasRing) {
-      var ring = document.createElement('div');
-      ring.className = 'bubble-ring';
-      ring.style.animationDelay = (-Math.random() * 4) + 's';
-      bubble.appendChild(ring);
-    }
-
-    canvas.appendChild(bubble);
-
-    bubble.addEventListener('animationiteration', function handler(e) {
-      if (e.animationName === 'bubbleFall') {
-        bubble.removeEventListener('animationiteration', handler);
-        bubble.remove();
-        createBubble(false);
+    dots.forEach(function(d, i) {
+      if (i === idx) {
+        d.classList.add('w-6', 'bg-cream');
+        d.classList.remove('bg-cream/40');
+      } else {
+        d.classList.remove('w-6', 'bg-cream');
+        d.classList.add('bg-cream/40');
       }
     });
+    if (noLabel) {
+      noLabel.textContent = String(idx + 1).padStart(2, '0');
+    }
+    current = idx;
   }
 
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    for (var i = 0; i < BUBBLE_COUNT; i++) {
-      createBubble(true);
-    }
+  function next() { goTo((current + 1) % slides.length); }
+
+  function start() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    timer = setInterval(next, interval);
   }
+  function stop() { clearInterval(timer); }
+
+  dots.forEach(function(d, i) {
+    d.addEventListener('click', function() {
+      stop();
+      goTo(i);
+      start();
+    });
+  });
+
+  deck.addEventListener('mouseenter', stop);
+  deck.addEventListener('mouseleave', start);
+
+  start();
 })();
 </script>
+
