@@ -328,31 +328,68 @@
 </section>
 
 <%# ================================================================
-    5. RECENTLY ACTIVE — repeats grid card layout
+    5. RECENTLY ACTIVE — repeats grid card layout per spec
     ================================================================ %>
-<% if @top_providers.length > 4 %>
+<% if @recently_active.any? %>
 <section class="bg-cream pb-14 sm:pb-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="mb-8 sm:mb-10">
-      <div class="eyebrow mb-3">recently active · 04</div>
-      <h2 class="display text-[28px] sm:text-[32px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Online <em class="italic-wonk" style="color: #1f4d3a;">now</em>.</h2>
+    <div class="flex items-end justify-between gap-4 mb-8 sm:mb-10">
+      <div>
+        <div class="eyebrow mb-3 flex items-center gap-2">
+          <span class="relative flex h-1.5 w-1.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: #2d6e4e;"></span>
+            <span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background-color: #2d6e4e;"></span>
+          </span>
+          <span>recently active · 04</span>
+        </div>
+        <h2 class="display text-[28px] sm:text-[40px] text-ink" style="line-height: 1.05; letter-spacing: -0.02em;">Online <em class="italic-wonk" style="color: #1f4d3a;">now</em>.</h2>
+      </div>
+      <%= link_to leaderboard_index_path, class: "hidden sm:inline-flex items-center gap-1.5 text-sm font-medium text-ink-2 hover:text-ink transition-colors" do %>
+        See all active <i class="fas fa-arrow-right text-[10px]"></i>
+      <% end %>
     </div>
 
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-      <% @top_providers[4..7].to_a.each do |provider| %>
+      <% @recently_active.first(4).each do |provider| %>
         <%= link_to provider_path(provider), class: "group block bg-cream-elevated rounded-xl border border-line overflow-hidden hover:shadow-card-md hover:-translate-y-0.5 transition-all duration-200" do %>
+          <%# 4:5 image %>
           <div class="relative aspect-[4/5] bg-cream-sunken">
             <% if provider.profile_picture.attached? %>
               <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover" %>
             <% else %>
               <img src="https://i.pravatar.cc/400?u=provider<%= provider.id %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= provider.display_name %>">
             <% end %>
+            <%# Active dot %>
+            <div class="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-pill bg-cream-elevated/95 backdrop-blur border border-line shadow-card">
+              <span class="relative flex h-1.5 w-1.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style="background-color: #2d6e4e;"></span>
+                <span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background-color: #2d6e4e;"></span>
+              </span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink">active now</span>
+            </div>
+            <%# Favorite icon %>
+            <div class="absolute top-3 right-3 w-8 h-8 rounded-full bg-cream-elevated/90 backdrop-blur border border-line flex items-center justify-center">
+              <i class="far fa-heart text-ink-3 text-xs"></i>
+            </div>
           </div>
+
           <div class="p-4">
-            <div class="display text-[17px] leading-[1.2] text-ink truncate"><%= provider.business_name.presence || provider.display_name %></div>
-            <div class="flex items-center gap-1.5 text-[13px] text-ink-2 mt-2">
-              <i class="fas fa-star text-amber-500 text-[10px]"></i>
-              <span class="font-medium"><%= provider.average_rating > 0 ? provider.average_rating : "New" %></span>
+            <% primary = provider.services.first %>
+            <% if primary&.category %>
+              <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5"><%= primary.category.name %></div>
+            <% end %>
+            <div class="display text-[17px] leading-[1.2] tracking-[-0.01em] text-ink truncate"><%= provider.business_name.presence || provider.display_name %></div>
+            <div class="mt-3 flex items-center justify-between">
+              <div class="flex items-center gap-1.5 text-[13px] text-ink-2">
+                <i class="fas fa-star text-amber-500 text-[10px]"></i>
+                <span class="font-medium"><%= provider.average_rating > 0 ? provider.average_rating : "New" %></span>
+                <% if provider.total_reviews > 0 %>
+                  <span class="text-ink-3">(<%= provider.total_reviews %>)</span>
+                <% end %>
+              </div>
+              <% if primary&.base_price.to_f > 0 %>
+                <div class="display text-[15px] text-ink leading-none">$<%= number_with_precision(primary.base_price, precision: 0) %><span class="font-sans text-[10px] text-ink-3 font-normal">/hr</span></div>
+              <% end %>
             </div>
           </div>
         <% end %>
