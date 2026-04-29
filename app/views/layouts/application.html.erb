@@ -523,9 +523,9 @@
             <% end %>
             <p class="text-ink-2 text-[14px] leading-[1.55] max-w-sm">Find vetted local service pros. Compare, book, and pay in one place.</p>
             <div class="flex gap-2 mt-5">
-              <% [ "fa-instagram", "fa-x-twitter", "fa-linkedin-in", "fa-facebook-f" ].each do |icon| %>
-                <a href="#" class="w-9 h-9 rounded-pill bg-cream-elevated border border-line text-ink-3 hover:text-ink hover:border-line-strong flex items-center justify-center transition-colors">
-                  <i class="fab <%= icon %> text-xs"></i>
+              <% [ "fa-instagram", "fa-twitter", "fa-linkedin-in", "fa-facebook-f" ].each do |icon| %>
+                <a href="#" class="w-9 h-9 rounded-pill bg-cream-elevated border border-line text-orange-500 hover:text-orange-600 hover:border-orange-400 hover:bg-orange-50 flex items-center justify-center transition-colors">
+                  <i class="fab <%= icon %> text-sm"></i>
                 </a>
               <% end %>
             </div>
@@ -564,11 +564,85 @@
           </div>
         </div>
 
-        <%# Bottom bar — copyright + version chip %>
+        <%# Bottom bar — copyright + version chip · Wintech popover %>
         <div class="mt-14 pt-6 border-t border-line flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <p class="text-ink-3 text-[13px]">&copy; <%= Date.current.year %> Radius · Built by <%= link_to "Wintech", "mailto:wintan1418@gmail.com", class: "text-ink-2 hover:text-ink underline-offset-2 hover:underline" %></p>
+          <p class="text-ink-3 text-[13px]">
+            &copy; <%= Date.current.year %> Radius · Built by
+            <span class="relative inline-block" id="wintech-wrap">
+              <button type="button" onclick="toggleWintechCard(event)" id="wintech-trigger"
+                      class="text-orange-500 hover:text-orange-600 font-semibold underline-offset-2 hover:underline cursor-pointer focus:outline-none">Wintech</button>
+
+              <div id="wintech-card" class="hidden absolute left-0 sm:left-auto sm:right-0 bottom-full mb-3 w-[280px] bg-cream-elevated border border-line rounded-xl shadow-card-lg z-50 overflow-hidden text-left">
+                <div class="p-5 border-b border-line bg-cream-sunken/40">
+                  <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-pill bg-orange-500 text-cream-elevated flex items-center justify-center font-display text-[16px] font-semibold">W</div>
+                    <div>
+                      <div class="font-display text-[18px] text-ink leading-[1.1]">Wintech</div>
+                      <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">independent dev · lagos</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="divide-y divide-line">
+                  <a href="https://wa.me/2348145804206" target="_blank" rel="noopener" class="flex items-center gap-3 px-5 py-3 hover:bg-cream-sunken/60 transition-colors">
+                    <i class="fab fa-whatsapp text-[15px] w-5 text-center" style="color:#25D366"></i>
+                    <div class="flex-1">
+                      <div class="text-[13px] font-semibold text-ink">WhatsApp</div>
+                      <div class="font-mono text-[10px] text-ink-3">+234 814 580 4206</div>
+                    </div>
+                    <i class="fas fa-arrow-up-right-from-square text-[10px] text-ink-3"></i>
+                  </a>
+                  <a href="https://oluwintan.com" target="_blank" rel="noopener" class="flex items-center gap-3 px-5 py-3 hover:bg-cream-sunken/60 transition-colors">
+                    <i class="fas fa-globe text-[15px] w-5 text-center text-orange-500"></i>
+                    <div class="flex-1">
+                      <div class="text-[13px] font-semibold text-ink">Portfolio</div>
+                      <div class="font-mono text-[10px] text-ink-3">oluwintan.com</div>
+                    </div>
+                    <i class="fas fa-arrow-up-right-from-square text-[10px] text-ink-3"></i>
+                  </a>
+                  <a href="https://github.com/wintan1418" target="_blank" rel="noopener" class="flex items-center gap-3 px-5 py-3 hover:bg-cream-sunken/60 transition-colors">
+                    <i class="fab fa-github text-[15px] w-5 text-center text-ink"></i>
+                    <div class="flex-1">
+                      <div class="text-[13px] font-semibold text-ink">GitHub</div>
+                      <div class="font-mono text-[10px] text-ink-3">@wintan1418</div>
+                    </div>
+                    <i class="fas fa-arrow-up-right-from-square text-[10px] text-ink-3"></i>
+                  </a>
+                  <a href="https://linkedin.com/in/oluwintan" target="_blank" rel="noopener" class="flex items-center gap-3 px-5 py-3 hover:bg-cream-sunken/60 transition-colors">
+                    <i class="fab fa-linkedin-in text-[15px] w-5 text-center" style="color:#0A66C2"></i>
+                    <div class="flex-1">
+                      <div class="text-[13px] font-semibold text-ink">LinkedIn</div>
+                      <div class="font-mono text-[10px] text-ink-3">in/oluwintan</div>
+                    </div>
+                    <i class="fas fa-arrow-up-right-from-square text-[10px] text-ink-3"></i>
+                  </a>
+                </div>
+                <%# Tail pointing down to the trigger %>
+                <div class="absolute -bottom-1.5 left-6 sm:left-auto sm:right-6 w-3 h-3 bg-cream-elevated border-r border-b border-line rotate-45"></div>
+              </div>
+            </span>
+          </p>
           <span class="version-chip">v 1.0 · 2026</span>
         </div>
+
+        <script>
+          function toggleWintechCard(e) {
+            if (e) e.stopPropagation();
+            var card = document.getElementById('wintech-card');
+            if (card) card.classList.toggle('hidden');
+          }
+          document.addEventListener('click', function(e) {
+            var wrap = document.getElementById('wintech-wrap');
+            var card = document.getElementById('wintech-card');
+            if (!wrap || !card || card.classList.contains('hidden')) return;
+            if (!wrap.contains(e.target)) card.classList.add('hidden');
+          });
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+              var card = document.getElementById('wintech-card');
+              if (card) card.classList.add('hidden');
+            }
+          });
+        </script>
       </div>
     </footer>
 
