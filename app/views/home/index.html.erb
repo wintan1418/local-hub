@@ -64,12 +64,16 @@
 
       <%# RIGHT: sliding editorial showcase — real pros at work %>
       <%
+        # Verified Unsplash photo IDs — all known-good, with safe fallback
+        fallback_img = "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=900&q=80&auto=format&fit=crop"
         provider_slides = [
-          { img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80&auto=format&fit=crop", first: "Maya", last: "Rodriguez", cat: "Cleaning", city: "Brooklyn", rating: "4.96", reviews: 127, response: "8 min", jobs: 312, no: "01" },
-          { img: "https://images.unsplash.com/photo-1632823469850-2f77dd9c52a1?w=900&q=80&auto=format&fit=crop", first: "Marcus", last: "Webb", cat: "Auto Repair", city: "Bronx", rating: "4.88", reviews: 156, response: "20 min", jobs: 298, no: "02" },
-          { img: "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=900&q=80&auto=format&fit=crop", first: "Diego", last: "Alvarez", cat: "Catering", city: "Brooklyn", rating: "4.94", reviews: 92, response: "15 min", jobs: 186, no: "03" },
-          { img: "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=900&q=80&auto=format&fit=crop", first: "Sarah", last: "Chen", cat: "Tutoring", city: "Manhattan", rating: "5.00", reviews: 64, response: "5 min", jobs: 142, no: "04" },
-          { img: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=900&q=80&auto=format&fit=crop", first: "James", last: "Mendoza", cat: "Plumbing", city: "Queens", rating: "4.92", reviews: 89, response: "12 min", jobs: 218, no: "05" }
+          { img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=900&q=80&auto=format&fit=crop", first: "Maya", last: "Rodriguez", cat: "Cleaning", city: "Brooklyn", rating: "4.96", reviews: 127, response: "8 min", jobs: 312 },
+          { img: "https://images.unsplash.com/photo-1486754735734-325b5831c3ad?w=900&q=80&auto=format&fit=crop", first: "Marcus", last: "Webb", cat: "Auto Repair", city: "Bronx", rating: "4.88", reviews: 156, response: "20 min", jobs: 298 },
+          { img: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=900&q=80&auto=format&fit=crop", first: "Diego", last: "Alvarez", cat: "Catering", city: "Brooklyn", rating: "4.94", reviews: 92, response: "15 min", jobs: 186 },
+          { img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=900&q=80&auto=format&fit=crop", first: "Sarah", last: "Chen", cat: "Tutoring", city: "Manhattan", rating: "5.00", reviews: 64, response: "5 min", jobs: 142 },
+          { img: "https://images.unsplash.com/photo-1585704032915-c3400ca199e7?w=900&q=80&auto=format&fit=crop", first: "James", last: "Mendoza", cat: "Plumbing", city: "Queens", rating: "4.92", reviews: 89, response: "12 min", jobs: 218 },
+          { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=900&q=80&auto=format&fit=crop", first: "Aisha", last: "Thompson", cat: "Landscaping", city: "Queens", rating: "4.95", reviews: 78, response: "18 min", jobs: 164 },
+          { img: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=900&q=80&auto=format&fit=crop", first: "Carlos", last: "Reyes", cat: "Personal Training", city: "Manhattan", rating: "4.97", reviews: 203, response: "10 min", jobs: 412 }
         ]
       %>
 
@@ -81,7 +85,12 @@
           <%# Slides %>
           <% provider_slides.each_with_index do |s, i| %>
             <div class="provider-slide absolute inset-0 <%= i == 0 ? 'is-active' : '' %>" data-slide="<%= i %>">
-              <img src="<%= s[:img] %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= s[:first] %> <%= s[:last] %> · <%= s[:cat] %>" loading="<%= i == 0 ? 'eager' : 'lazy' %>">
+              <img src="<%= s[:img] %>"
+                   data-fallback="<%= fallback_img %>"
+                   onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback;}"
+                   class="absolute inset-0 w-full h-full object-cover"
+                   alt="<%= s[:first] %> <%= s[:last] %> · <%= s[:cat] %>"
+                   loading="<%= i == 0 ? 'eager' : 'lazy' %>">
 
               <%# Top-right: Rating pill (per-slide) %>
               <div class="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-pill bg-cream-elevated/95 backdrop-blur border border-line shadow-card">
