@@ -89,7 +89,9 @@
       "Bash(ruby -c /home/wintan/local-hub/app/views/home/index.html.erb)",
       "Bash(grep -v \"^--$\")",
       "Bash(grep -c \"^</div>$\" /home/wintan/local-hub/app/views/conversations/show.html.erb)",
-      "Bash(ruby -i.bak -pe ' *)"
+      "Bash(ruby -i.bak -pe ' *)",
+      "Bash(grep -n \"^</script>$\\\\|^}\\)\\(\\);$\" /home/wintan/local-hub/app/views/home/index.html.erb)",
+      "Bash(grep -n \"^}\\)\\(\\);$\" /home/wintan/local-hub/app/views/home/index.html.erb)"
     ],
     "deny": []
   }

@@ -96,6 +96,8 @@ class Booking < ApplicationRecord
       generate_invoice
       send_sms_safe(customer, ->(b) { TwilioService.send_sms(b.customer.phone, "Your booking for #{b.service.title} is complete. Leave a review: #{Rails.application.routes.url_helpers.new_booking_review_url(b, host: ENV['APP_HOST'] || 'localhost:3000')}", "booking_completed", b.customer) }, self)
       RecurringBookingJob.perform_later(id) if recurring?
+      # Editorial review-reminder email 24h after completion (idempotent — bails if a review exists)
+      BookingReviewReminderJob.set(wait: 24.hours).perform_later(id)
     when 'cancelled'
       Notification.create_for_booking(self, :cancelled)
     end

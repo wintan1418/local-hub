@@ -1,0 +1,42 @@
+<div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 560px; margin: 0 auto; padding: 24px;">
+
+  <div style="background: #f3ead8; border-radius: 16px; padding: 32px 28px; text-align: center;">
+    <div style="display: inline-block; background: #1f4d3a; width: 32px; height: 32px; border-radius: 50%; position: relative; margin-bottom: 20px;">
+      <span style="position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px; border: 1.5px solid #f3ead8; border-radius: 50%;"></span>
+    </div>
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: #766853; margin-bottom: 12px;">leave a review</div>
+    <h1 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 400; font-size: 32px; line-height: 1.05; letter-spacing: -0.02em; color: #1d1813;">
+      How was it, <em style="font-style: italic; color: #1f4d3a;"><%= @first_name %></em>?
+    </h1>
+    <p style="margin: 16px 0 0; font-size: 15px; line-height: 1.5; color: #3d3327;">
+      You booked <strong><%= @service.title %></strong> with <%= @provider.display_name %>. A 30-second review helps the next customer trust them too.
+    </p>
+  </div>
+
+  <div style="background: #fdf8ed; border: 1px solid #ddc9a8; border-radius: 16px; padding: 22px; margin-top: 14px;">
+    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ddc9a8;">
+      <span style="color: #766853; font-size: 13px;">Service</span>
+      <span style="color: #1d1813; font-size: 13px; font-weight: 600;"><%= @service.title %></span>
+    </div>
+    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #ddc9a8;">
+      <span style="color: #766853; font-size: 13px;">Pro</span>
+      <span style="color: #1d1813; font-size: 13px; font-weight: 600;"><%= @provider.display_name %></span>
+    </div>
+    <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+      <span style="color: #766853; font-size: 13px;">Date</span>
+      <span style="color: #1d1813; font-size: 13px; font-weight: 600;"><%= @booking.scheduled_at.strftime("%B %-d, %Y") %></span>
+    </div>
+
+    <div style="margin: 20px 0 12px; text-align: center; font-size: 28px; letter-spacing: 8px; color: #ddc9a8;">
+      ★ ★ ★ ★ ★
+    </div>
+
+    <a href="<%= @review_url %>" style="display: block; background: #1d1813; color: #f3ead8; text-decoration: none; text-align: center; padding: 14px; border-radius: 999px; font-weight: 600; font-size: 14px;">Leave a review</a>
+
+    <p style="margin: 20px 0 0; font-size: 12px; color: #766853; text-align: center;">Takes about 30 seconds. Your honest feedback helps everyone.</p>
+  </div>
+
+  <p style="margin: 24px 0 0; font-size: 11px; color: #a89779; text-align: center; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em;">
+    sent by radius · don't want these? <a href="<%= Rails.application.routes.url_helpers.settings_url %>" style="color: #766853;">unsubscribe</a>
+  </p>
+</div>

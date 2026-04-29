@@ -1,18 +1,24 @@
 class ReviewFollowUpJob < ApplicationJob
   queue_as :default
 
+  # Safety-net batch: catches bookings whose per-booking
+  # BookingReviewReminderJob didn't fire (worker downtime, code shipped after
+  # the booking was completed, etc.). Filter on scheduled_at so we don't
+  # re-send when other fields like tip_amount get touched after completion.
   def perform
-    # Send review requests for bookings completed 24-48 hours ago without a review
     completed = Booking.where(status: :completed)
-                       .where(updated_at: 48.hours.ago..24.hours.ago)
+                       .where(scheduled_at: 5.days.ago..1.day.ago)
                        .left_joins(:review)
                        .where(reviews: { id: nil })
                        .includes(:customer, service: :provider)
 
-    completed.each do |booking|
-      UserMailer.review_request(booking).deliver_later
+    sent = 0
+    completed.find_each do |booking|
+      next if booking.customer&.email.blank?
+      BookingMailer.review_reminder(booking).deliver_later
+      sent += 1
     end
 
-    Rails.logger.info "ReviewFollowUpJob: Sent #{completed.count} review requests"
+    Rails.logger.info "ReviewFollowUpJob: queued #{sent} review reminders"
   end
 end

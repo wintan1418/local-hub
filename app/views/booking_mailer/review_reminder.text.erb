@@ -1,0 +1,13 @@
+Hi <%= @first_name %>,
+
+How was it?
+
+You booked <%= @service.title %> with <%= @provider.display_name %> on <%= @booking.scheduled_at.strftime("%B %-d, %Y") %>.
+
+A 30-second review helps the next customer trust them too.
+
+Leave a review:
+<%= @review_url %>
+
+—
+Radius

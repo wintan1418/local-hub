@@ -27,13 +27,17 @@
           read real reviews, book and pay in one place.
         </p>
 
-        <%# Pill search — what / where / submit %>
-        <div class="mt-8 max-w-xl hero-reveal" style="--delay: 0.15s">
-          <%= form_tag services_path, method: :get, class: "block" do %>
+        <%# Pill search — what / where / submit · with typeahead %>
+        <div class="mt-8 max-w-xl hero-reveal relative" style="--delay: 0.15s" id="hero-search">
+          <%= form_tag services_path, method: :get, class: "block", id: "hero-search-form", autocomplete: "off" do %>
             <div class="flex items-stretch gap-1 bg-cream-elevated border border-line-strong rounded-pill p-1.5 shadow-card">
               <div class="flex-1 min-w-0 px-4 py-1 hover:bg-cream-sunken rounded-pill transition-colors flex flex-col justify-center">
                 <label class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 leading-none">What</label>
-                <%= text_field_tag :query, nil, placeholder: "Cleaning, plumbing, lawn…", class: "w-full bg-transparent text-sm font-medium text-ink placeholder-ink-4 focus:outline-none mt-1" %>
+                <%= text_field_tag :query, nil,
+                    id: "hero-search-query",
+                    placeholder: "Cleaning, plumbing, lawn…",
+                    autocomplete: "off",
+                    class: "w-full bg-transparent text-sm font-medium text-ink placeholder-ink-4 focus:outline-none mt-1" %>
               </div>
               <span class="w-px self-stretch bg-line"></span>
               <div class="flex-1 min-w-0 px-4 py-1 hover:bg-cream-sunken rounded-pill transition-colors flex flex-col justify-center">
@@ -45,6 +49,10 @@
               </button>
             </div>
           <% end %>
+
+          <%# Typeahead dropdown (hidden until typing) %>
+          <div id="hero-search-suggest"
+               class="hidden absolute top-full left-0 right-0 mt-2 bg-cream-elevated border border-line rounded-2xl shadow-card-lg z-40 overflow-hidden text-left"></div>
         </div>
 
         <%# Trust strip — 3 items separated by top border %>
@@ -1136,6 +1144,132 @@
   deck.addEventListener('mouseleave', start);
 
   start();
+})();
+
+// Hero search typeahead
+(function() {
+  var input = document.getElementById('hero-search-query');
+  var dropdown = document.getElementById('hero-search-suggest');
+  var form = document.getElementById('hero-search-form');
+  var wrap = document.getElementById('hero-search');
+  if (!input || !dropdown || !form) return;
+
+  var debounceTimer = null;
+  var lastQ = '';
+  var activeIdx = -1;
+  var items = [];
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  function hide() {
+    dropdown.classList.add('hidden');
+    activeIdx = -1;
+    items = [];
+  }
+
+  function render(data) {
+    var html = '';
+    if (data.categories && data.categories.length) {
+      html += '<div class="px-4 pt-3 pb-1 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">categories</div>';
+      data.categories.forEach(function(c) {
+        html += '<a href="/services?category_id=' + c.id + '" data-suggest class="flex items-center justify-between px-4 py-2.5 hover:bg-cream-sunken transition-colors">' +
+          '<span class="flex items-center gap-2"><i class="fas fa-tag text-ink-3 text-[10px]"></i><span class="text-[14px] font-semibold text-ink">' + escapeHtml(c.name) + '</span></span>' +
+          '<span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">' + (c.count || 0) + ' pros</span>' +
+          '</a>';
+      });
+    }
+    if (data.services && data.services.length) {
+      html += '<div class="px-4 pt-3 pb-1 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 border-t border-line mt-1">services</div>';
+      data.services.forEach(function(s) {
+        html += '<a href="/services/' + s.id + '" data-suggest class="flex items-center justify-between px-4 py-2.5 hover:bg-cream-sunken transition-colors gap-3">' +
+          '<span class="min-w-0 flex-1">' +
+            '<span class="text-[14px] font-semibold text-ink truncate block">' + escapeHtml(s.title) + '</span>' +
+            '<span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">' + escapeHtml(s.category_name || '') + ' · ' + escapeHtml(s.provider_name || '') + '</span>' +
+          '</span>' +
+          '<span class="font-mono text-[12px] text-ink whitespace-nowrap">$' + (s.price || 0) + '</span>' +
+          '</a>';
+      });
+    }
+    if (data.providers && data.providers.length) {
+      html += '<div class="px-4 pt-3 pb-1 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 border-t border-line mt-1">pros</div>';
+      data.providers.forEach(function(p) {
+        html += '<a href="/providers/' + p.id + '" data-suggest class="flex items-center justify-between px-4 py-2.5 hover:bg-cream-sunken transition-colors">' +
+          '<span class="text-[14px] font-semibold text-ink truncate">' + escapeHtml(p.name) + '</span>' +
+          '<span class="font-mono text-[10px] text-ink-3 flex items-center gap-1"><i class="fas fa-star text-amber-500 text-[8px]"></i>' + (p.rating || 0) + ' (' + (p.reviews || 0) + ')</span>' +
+          '</a>';
+      });
+    }
+    if (!html) {
+      html = '<div class="px-4 py-6 text-center font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3">no matches · press enter to search anyway</div>';
+    } else {
+      // Footer hint
+      html += '<div class="px-4 py-2 text-center border-t border-line bg-cream-sunken/40 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3">↵ press enter to see all results</div>';
+    }
+    dropdown.innerHTML = html;
+    items = Array.prototype.slice.call(dropdown.querySelectorAll('[data-suggest]'));
+    activeIdx = -1;
+    dropdown.classList.remove('hidden');
+  }
+
+  function fetchSuggestions(q) {
+    fetch('/api/search_suggestions?q=' + encodeURIComponent(q), {
+      headers: { 'Accept': 'application/json' }
+    })
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .then(function(data) {
+        if (!data) return;
+        if (input.value.trim() !== q) return; // stale
+        render(data);
+      })
+      .catch(function() { /* silent */ });
+  }
+
+  function highlight(idx) {
+    items.forEach(function(el, i) {
+      if (i === idx) el.classList.add('bg-cream-sunken');
+      else el.classList.remove('bg-cream-sunken');
+    });
+  }
+
+  input.addEventListener('input', function() {
+    var q = input.value.trim();
+    if (q.length < 2) { hide(); return; }
+    if (q === lastQ) return;
+    lastQ = q;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() { fetchSuggestions(q); }, 180);
+  });
+
+  input.addEventListener('focus', function() {
+    if (input.value.trim().length >= 2) fetchSuggestions(input.value.trim());
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (dropdown.classList.contains('hidden') || items.length === 0) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIdx = (activeIdx + 1) % items.length;
+      highlight(activeIdx);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIdx = (activeIdx - 1 + items.length) % items.length;
+      highlight(activeIdx);
+    } else if (e.key === 'Enter' && activeIdx >= 0) {
+      e.preventDefault();
+      items[activeIdx].click();
+    } else if (e.key === 'Escape') {
+      hide();
+      input.blur();
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (wrap && !wrap.contains(e.target)) hide();
+  });
 })();
 </script>
 

@@ -233,6 +233,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :providers, only: [ :index ]
     resources :nearby_providers, only: [ :index ]
+    get "search_suggestions", to: "search_suggestions#index"
   end
 
   # Webhooks
