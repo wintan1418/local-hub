@@ -1,65 +1,71 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex items-center justify-between mb-8">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="flex items-end justify-between gap-3 mb-8">
       <div>
-        <h1 class="text-2xl font-black text-slate-900">Dispute Queue</h1>
-        <p class="text-sm text-slate-500 mt-1"><%= @disputes.size %> disputes</p>
+        <div class="eyebrow mb-3">disputes</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">Dispute <em class="italic-wonk" style="color: #1f4d3a;">queue</em>.</h1>
+        <p class="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3"><%= @disputes.size %> total</p>
       </div>
-      <%= link_to admin_dashboard_path, class: "text-sm text-slate-500 hover:text-slate-700" do %>
-        <i class="fas fa-arrow-left mr-1 text-xs"></i>Dashboard
+      <%= link_to admin_dashboard_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+        <i class="fas fa-arrow-left text-[10px]"></i>Dashboard
       <% end %>
     </div>
 
-    <div class="flex items-center gap-2 mb-6">
+    <%# Status filter %>
+    <div class="flex items-center gap-1.5 mb-6 overflow-x-auto pb-1">
       <% [
-        ["All", nil],
-        ["Open", "open"],
-        ["Under Review", "under_review"],
-        ["Resolved", "resolved"],
-        ["Refunded", "refunded"],
-        ["Dismissed", "dismissed"]
+        [ "All", nil ],
+        [ "Open", "open" ],
+        [ "Under review", "under_review" ],
+        [ "Resolved", "resolved" ],
+        [ "Refunded", "refunded" ],
+        [ "Dismissed", "dismissed" ]
       ].each do |label, status| %>
-        <%= link_to admin_disputes_path(status: status), class: "px-4 py-2 rounded-lg text-xs font-semibold transition-colors #{params[:status] == status ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'}" do %>
+        <%= link_to admin_disputes_path(status: status), class: "px-4 py-2 rounded-pill text-[13px] font-medium whitespace-nowrap transition-colors #{params[:status] == status ? 'bg-ink text-cream' : 'bg-cream-sunken/50 text-ink-2 hover:bg-cream-sunken'}" do %>
           <%= label %>
         <% end %>
       <% end %>
     </div>
 
     <% if @disputes.any? %>
-      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
-        <div class="divide-y divide-slate-50">
+      <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+        <div class="divide-y divide-line">
           <% @disputes.each do |dispute| %>
-            <%= link_to admin_dispute_path(dispute), class: "flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors" do %>
+            <%= link_to admin_dispute_path(dispute), class: "flex items-center justify-between px-5 sm:px-6 py-4 hover:bg-cream-sunken/40 transition-colors" do %>
               <div class="flex items-center gap-4 min-w-0">
-                <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center flex-shrink-0">
-                  <i class="fas fa-exclamation-triangle text-red-500 text-xs"></i>
+                <div class="w-10 h-10 rounded-full bg-rose-100/60 border border-rose-200 flex items-center justify-center flex-shrink-0">
+                  <i class="fas fa-exclamation-triangle text-rose-700 text-[12px]"></i>
                 </div>
                 <div class="min-w-0">
-                  <div class="text-sm font-bold text-slate-900 truncate"><%= dispute.reason %></div>
-                  <div class="text-xs text-slate-400">
-                    <%= dispute.raised_by.display_name %> &middot; Booking ##{<%= dispute.booking_id %>} &middot; <%= time_ago_in_words(dispute.created_at) %> ago
+                  <div class="text-[14px] font-semibold text-ink truncate"><%= dispute.reason %></div>
+                  <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3 truncate">
+                    <%= dispute.raised_by.display_name %> · booking #<%= dispute.booking_id %> · <%= time_ago_in_words(dispute.created_at) %> ago
                   </div>
                 </div>
               </div>
-              <% status_colors = { "open" => "amber", "under_review" => "sky", "resolved" => "emerald", "dismissed" => "slate", "refunded" => "violet" } %>
               <div class="flex items-center gap-3 flex-shrink-0">
                 <% if dispute.refund_amount.present? %>
-                  <span class="text-sm font-bold text-violet-600">-$<%= number_with_precision(dispute.refund_amount, precision: 0) %></span>
+                  <span class="display text-[14px] text-terracotta leading-none">−$<%= number_with_precision(dispute.refund_amount, precision: 0) %></span>
                 <% end %>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[dispute.status] %>-50 text-<%= status_colors[dispute.status] %>-700"><%= dispute.status.titleize %></span>
+                <% sc = {
+                  "open" => [ "bg-amber-100/60", "text-amber-800" ],
+                  "under_review" => [ "bg-cream-sunken", "text-ink-2" ],
+                  "resolved" => [ "bg-forest-soft", "text-forest" ],
+                  "dismissed" => [ "bg-cream-sunken", "text-ink-3" ],
+                  "refunded" => [ "bg-terracotta/15", "text-terracotta" ]
+                } %>
+                <% c = sc[dispute.status] || [ "bg-cream-sunken", "text-ink-3" ] %>
+                <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2.5 py-0.5 rounded-pill <%= c[0] %> <%= c[1] %>"><%= dispute.status %></span>
               </div>
             <% end %>
           <% end %>
         </div>
       </div>
     <% else %>
-      <div class="bg-white rounded-xl border border-slate-100 p-12 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-3">
-          <i class="fas fa-check text-emerald-500"></i>
-        </div>
-        <h3 class="text-base font-bold text-slate-900">All clear</h3>
-        <p class="text-sm text-slate-500">No disputes to review.</p>
-      </div>
+      <%= render "shared/empty_state",
+          icon: "fa-check",
+          title: "All clear",
+          message: "No disputes to review." %>
     <% end %>
   </div>
 </div>

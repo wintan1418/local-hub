@@ -1,36 +1,33 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <%= link_to admin_users_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
-      <i class="fas fa-arrow-left text-xs"></i> Back to Users
+<div class="min-h-screen bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <%= link_to admin_users_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors mb-6" do %>
+      <i class="fas fa-arrow-left text-[10px]"></i>Back to users
     <% end %>
 
-    <%# User header %>
-    <div class="bg-white rounded-xl border border-slate-100 p-6 mb-6">
-      <div class="flex items-center gap-5">
-        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center text-2xl font-black text-slate-300">
+    <%# Header %>
+    <div class="bg-cream-elevated border border-line rounded-xl p-6 mb-6">
+      <div class="flex items-center gap-5 flex-wrap">
+        <div class="w-16 h-16 rounded-full bg-cream-sunken text-ink-2 flex items-center justify-center text-[24px] font-semibold border border-line">
           <%= @user.display_name.first.upcase %>
         </div>
-        <div class="flex-1">
-          <h1 class="text-xl font-black text-slate-900"><%= @user.display_name %></h1>
-          <p class="text-sm text-slate-500"><%= @user.email %></p>
-          <div class="flex items-center gap-3 mt-2">
-            <% role_colors = { "customer" => "sky", "provider" => "emerald", "admin" => "orange" } %>
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-<%= role_colors[@user.user_role] || 'slate' %>-50 text-<%= role_colors[@user.user_role] || 'slate' %>-700">
-              <%= @user.user_role&.titleize %>
-            </span>
-            <span class="text-xs text-slate-400">Joined <%= @user.created_at.strftime("%B %d, %Y") %></span>
+        <div class="flex-1 min-w-0">
+          <h1 class="display text-[24px] sm:text-[28px] text-ink leading-[1.1]"><%= @user.display_name %></h1>
+          <p class="font-mono text-[11px] text-ink-3 truncate"><%= @user.email %></p>
+          <div class="flex items-center gap-2 mt-2">
+            <% role_colors = { "customer" => [ "bg-cream-sunken", "text-ink-2" ], "provider" => [ "bg-forest-soft", "text-forest" ], "admin" => [ "bg-terracotta/15", "text-terracotta" ] } %>
+            <% c = role_colors[@user.user_role] || [ "bg-cream-sunken", "text-ink-2" ] %>
+            <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill <%= c[0] %> <%= c[1] %>"><%= @user.user_role %></span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">joined <%= @user.created_at.strftime("%b %-d, %Y") %></span>
           </div>
         </div>
-
-        <%# Role change %>
         <% if @user.id != current_user.id %>
-          <div class="flex gap-2">
+          <div class="flex gap-2 flex-wrap">
             <% %w[customer provider admin].each do |role| %>
               <% next if role == @user.user_role %>
               <%= link_to toggle_role_admin_user_path(@user, role: role), method: :patch,
-                  data: { confirm: "Change #{@user.display_name}'s role to #{role}?" },
-                  class: "text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors" do %>
-                Make <%= role.titleize %>
+                  data: { turbo_confirm: "Change #{@user.display_name}'s role to #{role}?" },
+                  class: "font-mono text-[10px] uppercase tracking-[0.1em] px-3 py-1.5 rounded-pill border border-line text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+                make <%= role %>
               <% end %>
             <% end %>
           </div>
@@ -38,59 +35,60 @@
       </div>
     </div>
 
-    <%# User details %>
-    <div class="grid md:grid-cols-2 gap-6 mb-6">
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <h3 class="text-sm font-bold text-slate-900 mb-4">Details</h3>
-        <div class="space-y-3 text-sm">
-          <div class="flex justify-between"><span class="text-slate-500">Phone</span><span class="text-slate-900 font-medium"><%= @user.phone || '—' %></span></div>
-          <div class="flex justify-between"><span class="text-slate-500">Location</span><span class="text-slate-900 font-medium"><%= [@user.city, @user.state].compact.join(", ").presence || '—' %></span></div>
+    <%# Details %>
+    <div class="grid md:grid-cols-2 gap-4 mb-6">
+      <div class="bg-cream-elevated border border-line rounded-xl p-5">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">details</div>
+        <div class="space-y-2.5 text-[14px]">
+          <div class="flex justify-between"><span class="text-ink-2">Phone</span><span class="text-ink font-medium"><%= @user.phone || '—' %></span></div>
+          <div class="flex justify-between"><span class="text-ink-2">Location</span><span class="text-ink font-medium"><%= [ @user.city, @user.state ].compact.join(", ").presence || '—' %></span></div>
           <% if @user.provider? %>
-            <div class="flex justify-between"><span class="text-slate-500">Business</span><span class="text-slate-900 font-medium"><%= @user.business_name || '—' %></span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Experience</span><span class="text-slate-900 font-medium"><%= @user.years_experience %> years</span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Verified</span><span class="text-slate-900 font-medium"><%= @user.verified? ? 'Yes' : 'No' %></span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Rating</span><span class="text-slate-900 font-medium"><%= @user.average_rating %> (<%= @user.total_reviews %> reviews)</span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Business</span><span class="text-ink font-medium"><%= @user.business_name || '—' %></span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Experience</span><span class="text-ink font-medium"><%= @user.years_experience %> years</span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Verified</span><span class="<%= @user.verified? ? 'text-forest' : 'text-ink-3' %> font-medium"><%= @user.verified? ? 'Yes' : 'No' %></span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Rating</span><span class="text-ink font-medium"><%= @user.average_rating %> (<%= @user.total_reviews %>)</span></div>
           <% end %>
         </div>
       </div>
 
-      <div class="bg-white rounded-xl border border-slate-100 p-6">
-        <h3 class="text-sm font-bold text-slate-900 mb-4">Activity</h3>
-        <div class="space-y-3 text-sm">
+      <div class="bg-cream-elevated border border-line rounded-xl p-5">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">activity</div>
+        <div class="space-y-2.5 text-[14px]">
           <% if @user.customer? %>
-            <div class="flex justify-between"><span class="text-slate-500">Total Bookings</span><span class="text-slate-900 font-medium"><%= @user.bookings.count %></span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Total Spent</span><span class="text-slate-900 font-medium">$<%= number_with_delimiter(@user.bookings.where(status: :completed).sum(:total_price)) %></span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Total bookings</span><span class="text-ink font-medium"><%= @user.bookings.count %></span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Total spent</span><span class="text-ink font-medium">$<%= number_with_delimiter(@user.bookings.where(status: :completed).sum(:total_price)) %></span></div>
           <% elsif @user.provider? %>
-            <div class="flex justify-between"><span class="text-slate-500">Services</span><span class="text-slate-900 font-medium"><%= @user.services.count %></span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Completed Jobs</span><span class="text-slate-900 font-medium"><%= @user.total_completed_bookings %></span></div>
-            <div class="flex justify-between"><span class="text-slate-500">Revenue</span><span class="text-slate-900 font-medium">$<%= number_with_delimiter(@user.total_revenue) %></span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Services</span><span class="text-ink font-medium"><%= @user.services.count %></span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Completed jobs</span><span class="text-ink font-medium"><%= @user.total_completed_bookings %></span></div>
+            <div class="flex justify-between"><span class="text-ink-2">Revenue</span><span class="text-ink font-medium">$<%= number_with_delimiter(@user.total_revenue) %></span></div>
           <% end %>
-          <div class="flex justify-between"><span class="text-slate-500">Messages</span><span class="text-slate-900 font-medium"><%= @user.customer? ? Conversation.where(customer_id: @user.id).count : Conversation.where(provider_id: @user.id).count %></span></div>
+          <div class="flex justify-between"><span class="text-ink-2">Conversations</span><span class="text-ink font-medium"><%= @user.customer? ? Conversation.where(customer_id: @user.id).count : Conversation.where(provider_id: @user.id).count %></span></div>
         </div>
       </div>
     </div>
 
     <%# Recent bookings %>
-    <div class="bg-white rounded-xl border border-slate-100 p-6">
-      <h3 class="text-sm font-bold text-slate-900 mb-4">Recent Bookings</h3>
+    <div class="bg-cream-elevated border border-line rounded-xl p-5">
+      <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">recent bookings</div>
       <% if @bookings.any? %>
-        <div class="space-y-3">
+        <div class="space-y-1.5">
           <% @bookings.each do |booking| %>
-            <div class="flex items-center justify-between p-3 rounded-lg border border-slate-100 hover:bg-slate-50 transition-colors">
-              <div>
-                <div class="text-sm font-semibold text-slate-900"><%= booking.service.title %></div>
-                <div class="text-xs text-slate-400"><%= booking.scheduled_at.strftime("%b %d, %Y") %></div>
+            <div class="flex items-center justify-between gap-3 p-3 rounded-lg border border-line">
+              <div class="min-w-0">
+                <div class="text-[14px] font-semibold text-ink truncate"><%= booking.service.title %></div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3"><%= booking.scheduled_at.strftime("%b %-d, %Y") %></div>
               </div>
-              <div class="flex items-center gap-3">
-                <span class="text-sm font-medium text-slate-900">$<%= booking.total_price %></span>
-                <% status_colors = { "pending" => "amber", "confirmed" => "emerald", "completed" => "sky", "cancelled" => "red" } %>
-                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[booking.status] %>-50 text-<%= status_colors[booking.status] %>-700"><%= booking.status.titleize %></span>
+              <div class="flex items-center gap-3 flex-shrink-0">
+                <span class="display text-[15px] text-ink leading-none">$<%= booking.total_price %></span>
+                <% sc = { "pending" => [ "bg-amber-100/60", "text-amber-800" ], "confirmed" => [ "bg-forest-soft", "text-forest" ], "completed" => [ "bg-cream-sunken", "text-ink-2" ], "cancelled" => [ "bg-rose-100/60", "text-rose-700" ] } %>
+                <% c = sc[booking.status] || [ "bg-cream-sunken", "text-ink-2" ] %>
+                <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill <%= c[0] %> <%= c[1] %>"><%= booking.status %></span>
               </div>
             </div>
           <% end %>
         </div>
       <% else %>
-        <p class="text-sm text-slate-400 text-center py-4">No bookings found.</p>
+        <p class="text-[13px] text-ink-3 text-center py-4">No bookings found.</p>
       <% end %>
     </div>
   </div>

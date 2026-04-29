@@ -1,77 +1,78 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex items-center justify-between mb-8">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="flex items-end justify-between gap-3 mb-8">
       <div>
-        <h1 class="text-2xl font-black text-slate-900">Manage Services</h1>
-        <p class="text-sm text-slate-500 mt-1"><%= @services.total_count %> total services</p>
+        <div class="eyebrow mb-3">services</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">All <em class="italic-wonk" style="color: #1f4d3a;">services</em>.</h1>
+        <p class="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3"><%= @services.total_count %> total</p>
       </div>
-      <%= link_to admin_dashboard_path, class: "text-sm text-slate-500 hover:text-slate-700" do %>
-        <i class="fas fa-arrow-left mr-1"></i> Dashboard
+      <%= link_to admin_dashboard_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+        <i class="fas fa-arrow-left text-[10px]"></i>Dashboard
       <% end %>
     </div>
 
-    <%# Search + filter %>
-    <%= form_with url: admin_services_path, method: :get, local: true, class: "flex gap-3 mb-6" do |f| %>
+    <%# Filters %>
+    <%= form_with url: admin_services_path, method: :get, local: true, class: "flex flex-col sm:flex-row gap-2 mb-6" do |f| %>
       <div class="relative flex-1">
-        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-          <i class="fas fa-search text-slate-400 text-sm"></i>
-        </div>
-        <%= f.text_field :q, value: params[:q], placeholder: "Search services...",
-            class: "w-full pl-11 pr-4 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
+        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-ink-4 text-xs"></i>
+        <%= f.text_field :q, value: params[:q], placeholder: "Search services…",
+            class: "w-full pl-10 pr-4 py-2.5 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
       </div>
-      <%= f.select :category_id, options_for_select([['All Categories', '']] + Category.order(:name).map { |c| [c.name, c.id] }, params[:category_id]),
-          {}, class: "px-4 py-2.5 rounded-lg border border-slate-200 text-sm bg-white" %>
-      <button type="submit" class="bg-slate-900 text-white px-5 py-2.5 rounded-lg text-sm font-semibold">Search</button>
+      <%= f.select :category_id, options_for_select([ [ "All categories", "" ] ] + Category.order(:name).map { |c| [ c.name, c.id ] }, params[:category_id]),
+          {}, class: "px-4 py-2.5 rounded-pill border border-line text-ink bg-cream-elevated text-sm focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink" %>
+      <button type="submit" class="bg-ink text-cream px-5 py-2.5 rounded-pill text-sm font-semibold hover:bg-ink-2 transition-colors">Search</button>
     <% end %>
 
-    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
-      <table class="w-full">
-        <thead class="bg-slate-50 border-b border-slate-100">
-          <tr>
-            <th class="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase">Service</th>
-            <th class="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase">Provider</th>
-            <th class="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase">Category</th>
-            <th class="text-left px-6 py-3 text-xs font-bold text-slate-500 uppercase">Price</th>
-            <th class="text-right px-6 py-3 text-xs font-bold text-slate-500 uppercase">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-slate-50">
-          <% @services.each do |service| %>
-            <tr class="hover:bg-slate-50/50 transition-colors">
-              <td class="px-6 py-4">
-                <div class="text-sm font-semibold text-slate-900"><%= service.title %></div>
-                <div class="text-xs text-slate-400 mt-0.5"><%= service.created_at.strftime("%b %d, %Y") %></div>
-              </td>
-              <td class="px-6 py-4 text-sm text-slate-600"><%= service.provider.display_name %></td>
-              <td class="px-6 py-4"><span class="text-xs font-medium bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full"><%= service.category.name %></span></td>
-              <td class="px-6 py-4 text-sm font-semibold text-slate-900">$<%= number_with_precision(service.base_price, precision: 0) %></td>
-              <td class="px-6 py-4 text-right">
-                <%= link_to service_path(service), class: "text-xs font-semibold text-slate-500 hover:text-slate-700 mr-3" do %>View<% end %>
-                <%= link_to admin_service_path(service), data: { turbo_method: :delete, turbo_confirm: "Remove this service?" }, class: "text-xs font-semibold text-red-500 hover:text-red-700" do %>Remove<% end %>
-              </td>
+    <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-cream-sunken/40 border-b border-line">
+            <tr>
+              <th class="text-left px-5 sm:px-6 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Service</th>
+              <th class="text-left px-5 sm:px-6 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Provider</th>
+              <th class="text-left px-5 sm:px-6 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Category</th>
+              <th class="text-left px-5 sm:px-6 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Price</th>
+              <th class="text-right px-5 sm:px-6 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3"></th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody class="divide-y divide-line">
+            <% @services.each do |service| %>
+              <tr class="hover:bg-cream-sunken/40 transition-colors">
+                <td class="px-5 sm:px-6 py-4">
+                  <div class="text-[14px] font-semibold text-ink"><%= service.title %></div>
+                  <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3 mt-0.5"><%= service.created_at.strftime("%b %-d, %Y") %></div>
+                </td>
+                <td class="px-5 sm:px-6 py-4 text-[13px] text-ink-2"><%= service.provider.display_name %></td>
+                <td class="px-5 sm:px-6 py-4"><span class="font-mono text-[10px] uppercase tracking-[0.08em] bg-cream-sunken text-ink-2 px-2 py-0.5 rounded-pill"><%= service.category.name %></span></td>
+                <td class="px-5 sm:px-6 py-4 display text-[16px] text-ink leading-none">$<%= number_with_precision(service.base_price, precision: 0) %></td>
+                <td class="px-5 sm:px-6 py-4 text-right whitespace-nowrap">
+                  <%= link_to service_path(service), class: "font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 hover:text-ink mr-3" do %>view<% end %>
+                  <%= link_to admin_service_path(service), data: { turbo_method: :delete, turbo_confirm: "Remove this service?" }, class: "font-mono text-[10px] uppercase tracking-[0.1em] text-rose-700 hover:text-rose-800" do %>remove<% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <% if @services.total_pages > 1 %>
       <div class="mt-6 flex justify-center">
         <nav class="flex items-center gap-1">
           <% if @services.prev_page %>
-            <%= link_to admin_services_path(q: params[:q], category_id: params[:category_id], page: @services.prev_page), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50" do %><i class="fas fa-chevron-left text-xs"></i><% end %>
+            <%= link_to admin_services_path(q: params[:q], category_id: params[:category_id], page: @services.prev_page), class: "w-10 h-10 rounded-pill border border-line flex items-center justify-center text-ink-3 hover:bg-cream-elevated" do %><i class="fas fa-chevron-left text-[10px]"></i><% end %>
           <% end %>
           <% (1..@services.total_pages).each do |p| %>
             <% if p == @services.current_page %>
-              <span class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center text-sm font-medium"><%= p %></span>
+              <span class="w-10 h-10 rounded-pill bg-ink text-cream flex items-center justify-center font-mono text-[13px]"><%= p %></span>
             <% elsif (p - @services.current_page).abs <= 2 || p == 1 || p == @services.total_pages %>
-              <%= link_to admin_services_path(q: params[:q], category_id: params[:category_id], page: p), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-700 hover:bg-slate-50 text-sm" do %><%= p %><% end %>
+              <%= link_to admin_services_path(q: params[:q], category_id: params[:category_id], page: p), class: "w-10 h-10 rounded-pill border border-line flex items-center justify-center font-mono text-[13px] text-ink-2 hover:bg-cream-elevated" do %><%= p %><% end %>
             <% elsif (p - @services.current_page).abs == 3 %>
-              <span class="w-9 h-9 flex items-center justify-center text-slate-400 text-sm">&hellip;</span>
+              <span class="w-10 h-10 flex items-center justify-center text-ink-3 font-mono">…</span>
             <% end %>
           <% end %>
           <% if @services.next_page %>
-            <%= link_to admin_services_path(q: params[:q], category_id: params[:category_id], page: @services.next_page), class: "w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:bg-slate-50" do %><i class="fas fa-chevron-right text-xs"></i><% end %>
+            <%= link_to admin_services_path(q: params[:q], category_id: params[:category_id], page: @services.next_page), class: "w-10 h-10 rounded-pill border border-line flex items-center justify-center text-ink-3 hover:bg-cream-elevated" do %><i class="fas fa-chevron-right text-[10px]"></i><% end %>
           <% end %>
         </nav>
       </div>

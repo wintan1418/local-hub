@@ -1,63 +1,53 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex items-center justify-between mb-8">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="flex items-end justify-between gap-3 mb-8">
       <div>
-        <h1 class="text-2xl font-black text-slate-900">Manage Categories</h1>
-        <p class="text-sm text-slate-500 mt-1"><%= @categories.size %> categories</p>
+        <div class="eyebrow mb-3">categories</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">Manage <em class="italic-wonk" style="color: #1f4d3a;">categories</em>.</h1>
+        <p class="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3"><%= @categories.size %> total</p>
       </div>
-      <%= link_to admin_dashboard_path, class: "text-sm text-slate-500 hover:text-slate-700" do %>
-        <i class="fas fa-arrow-left mr-1"></i> Dashboard
+      <%= link_to admin_dashboard_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+        <i class="fas fa-arrow-left text-[10px]"></i>Dashboard
       <% end %>
     </div>
 
-    <%# Add category form %>
-    <div class="bg-white rounded-xl border border-slate-100 p-6 mb-6">
-      <h2 class="text-sm font-bold text-slate-900 mb-4">Add New Category</h2>
-      <%= form_with(model: @category, url: admin_categories_path, local: true, class: "flex gap-3") do |f| %>
-        <div class="flex-1">
-          <%= f.text_field :name, placeholder: "Category name", required: true,
-              class: "w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-        </div>
-        <div class="w-48">
-          <%= f.text_field :icon, placeholder: "Icon class (e.g. fas fa-wrench)",
-              class: "w-full px-4 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-        </div>
-        <button type="submit" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors whitespace-nowrap">
-          <i class="fas fa-plus mr-1"></i> Add
+    <%# Add %>
+    <div class="bg-cream-elevated border border-line rounded-xl p-5 mb-6">
+      <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">add new</div>
+      <%= form_with(model: @category, url: admin_categories_path, local: true, class: "flex flex-col sm:flex-row gap-2") do |f| %>
+        <%= f.text_field :name, placeholder: "Category name", required: true,
+            class: "flex-1 px-4 py-2.5 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+        <%= f.text_field :icon, placeholder: "Icon class (fas fa-wrench)",
+            class: "sm:w-64 px-4 py-2.5 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+        <button type="submit" class="bg-ink hover:bg-ink-2 text-cream px-5 py-2.5 rounded-pill text-sm font-semibold transition-colors whitespace-nowrap active:translate-y-px">
+          <i class="fas fa-plus text-[10px] mr-1"></i>Add
         </button>
       <% end %>
       <% if @category.errors.any? %>
-        <p class="text-sm text-red-500 mt-2"><%= @category.errors.full_messages.join(", ") %></p>
+        <p class="text-[13px] text-rose-700 mt-2"><%= @category.errors.full_messages.join(", ") %></p>
       <% end %>
     </div>
 
-    <%# Categories list %>
-    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
-      <div class="divide-y divide-slate-50">
+    <%# List %>
+    <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+      <div class="divide-y divide-line">
         <% @categories.each do |category| %>
-          <div class="flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors">
-            <div class="flex items-center gap-4">
-              <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center">
-                <% if category.icon.present? %>
-                  <i class="<%= category.icon %> text-slate-500"></i>
-                <% else %>
-                  <i class="fas fa-tag text-slate-400"></i>
-                <% end %>
+          <div class="flex items-center justify-between px-5 sm:px-6 py-4 hover:bg-cream-sunken/40 transition-colors">
+            <div class="flex items-center gap-4 min-w-0">
+              <div class="w-10 h-10 rounded-full bg-cream-sunken border border-line flex items-center justify-center flex-shrink-0">
+                <i class="<%= category.icon.presence || 'fas fa-tag' %> text-ink-2 text-[13px]"></i>
               </div>
-              <div>
-                <div class="text-sm font-semibold text-slate-900"><%= category.name %></div>
-                <div class="text-xs text-slate-400"><%= category.slug %> &middot; <%= category.services.count %> services</div>
+              <div class="min-w-0">
+                <div class="text-[14px] font-semibold text-ink truncate"><%= category.name %></div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3"><%= category.slug %> · <%= category.services.count %> services</div>
               </div>
             </div>
-            <div class="flex items-center gap-3">
-              <span class="text-xs text-slate-400"><%= category.services.count %> services</span>
-              <% if category.services.count == 0 %>
-                <%= link_to admin_category_path(category), data: { turbo_method: :delete, turbo_confirm: "Delete #{category.name}?" },
-                    class: "text-xs font-semibold text-red-500 hover:text-red-700" do %>
-                  <i class="fas fa-trash"></i>
-                <% end %>
+            <% if category.services.count == 0 %>
+              <%= link_to admin_category_path(category), data: { turbo_method: :delete, turbo_confirm: "Delete #{category.name}?" },
+                  class: "text-ink-3 hover:text-rose-700 p-2 cursor-pointer" do %>
+                <i class="fas fa-trash text-[12px]"></i>
               <% end %>
-            </div>
+            <% end %>
           </div>
         <% end %>
       </div>
