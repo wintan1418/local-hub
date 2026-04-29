@@ -1,58 +1,63 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <%= link_to booking_path(@booking), class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-900 mb-6" do %>
-      <i class="fas fa-arrow-left text-xs"></i>Back to booking
+<div class="min-h-screen bg-cream">
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <%= link_to booking_path(@booking), class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors mb-6" do %>
+      <i class="fas fa-arrow-left text-[10px]"></i>Back to booking
     <% end %>
 
-    <% status_colors = { "open" => "amber", "under_review" => "sky", "resolved" => "emerald", "dismissed" => "slate", "refunded" => "violet" } %>
-    <% sc = status_colors[@dispute.status] %>
+    <% sc = {
+      "open" => [ "bg-amber-100/60", "text-amber-800" ],
+      "under_review" => [ "bg-cream-sunken", "text-ink-2" ],
+      "resolved" => [ "bg-forest-soft", "text-forest" ],
+      "dismissed" => [ "bg-cream-sunken", "text-ink-3" ],
+      "refunded" => [ "bg-terracotta/15", "text-terracotta" ]
+    } %>
+    <% c = sc[@dispute.status] || [ "bg-cream-sunken", "text-ink-3" ] %>
 
-    <div class="bg-white rounded-2xl border border-slate-100 shadow-lg overflow-hidden">
-      <div class="p-6 sm:p-8 border-b border-slate-100">
-        <div class="flex items-start justify-between mb-4">
+    <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+      <div class="p-6 sm:p-8 border-b border-line">
+        <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
           <div>
-            <h1 class="text-xl font-black text-slate-900">Dispute ##{<%= @dispute.id %>}</h1>
-            <p class="text-xs text-slate-400 mt-1">Opened <%= time_ago_in_words(@dispute.created_at) %> ago by <%= @dispute.raised_by.display_name %></p>
+            <div class="eyebrow mb-2">dispute · #<%= @dispute.id %></div>
+            <h1 class="display text-[24px] sm:text-[28px] text-ink leading-[1.1]">Opened <%= time_ago_in_words(@dispute.created_at) %> ago</h1>
+            <p class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mt-1">by <%= @dispute.raised_by.display_name %></p>
           </div>
-          <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-<%= sc %>-50 text-<%= sc %>-700"><%= @dispute.status.titleize %></span>
+          <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-3 py-1.5 rounded-pill <%= c[0] %> <%= c[1] %>"><%= @dispute.status %></span>
         </div>
 
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-100 mb-4">
-          <i class="fas fa-tag text-slate-400 text-xs"></i>
-          <span class="text-sm font-semibold text-slate-700"><%= @dispute.reason %></span>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-pill bg-cream-sunken/50 border border-line mb-4">
+          <i class="fas fa-tag text-ink-3 text-[10px]"></i>
+          <span class="text-[13px] font-semibold text-ink"><%= @dispute.reason %></span>
         </div>
 
-        <p class="text-sm text-slate-600 leading-relaxed"><%= @dispute.description %></p>
+        <p class="text-[14px] text-ink-2 leading-[1.65] whitespace-pre-line"><%= @dispute.description %></p>
       </div>
 
       <% if @dispute.resolution.present? %>
-        <div class="p-6 sm:p-8 bg-<%= sc %>-50 border-b border-<%= sc %>-100">
+        <div class="p-6 sm:p-8 <%= c[0] %> border-b border-line">
           <div class="flex items-start gap-3">
-            <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center flex-shrink-0">
-              <i class="fas fa-gavel text-<%= sc %>-600 text-xs"></i>
-            </div>
+            <i class="fas fa-gavel <%= c[1] %> mt-1"></i>
             <div>
-              <div class="text-xs font-bold text-<%= sc %>-900 uppercase tracking-wider mb-1">Resolution</div>
-              <p class="text-sm text-<%= sc %>-800 leading-relaxed"><%= @dispute.resolution %></p>
+              <div class="font-mono text-[10px] uppercase tracking-[0.12em] <%= c[1] %> mb-2">resolution</div>
+              <p class="text-[14px] text-ink-2 leading-[1.6]"><%= @dispute.resolution %></p>
               <% if @dispute.refund_amount.present? && @dispute.refund_amount > 0 %>
-                <div class="mt-2 text-sm font-bold text-<%= sc %>-900">Refund: $<%= number_with_precision(@dispute.refund_amount, precision: 2) %></div>
+                <div class="display text-[20px] <%= c[1] %> mt-3">Refund: $<%= number_with_precision(@dispute.refund_amount, precision: 2) %></div>
               <% end %>
               <% if @dispute.resolved_at %>
-                <p class="text-xs text-<%= sc %>-600 mt-2"><%= time_ago_in_words(@dispute.resolved_at) %> ago</p>
+                <p class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mt-2"><%= time_ago_in_words(@dispute.resolved_at) %> ago</p>
               <% end %>
             </div>
           </div>
         </div>
       <% end %>
 
-      <div class="p-6 sm:p-8 bg-slate-50/50">
-        <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Related Booking</div>
-        <%= link_to booking_path(@booking), class: "flex items-center justify-between p-3 rounded-lg bg-white border border-slate-100 hover:border-slate-300 transition-colors" do %>
+      <div class="p-6 sm:p-8 bg-cream-sunken/40">
+        <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-3">related booking</div>
+        <%= link_to booking_path(@booking), class: "flex items-center justify-between p-3 rounded-lg bg-cream-elevated border border-line hover:border-line-strong transition-colors" do %>
           <div>
-            <div class="text-sm font-bold text-slate-900"><%= @booking.service.title %></div>
-            <div class="text-xs text-slate-400"><%= @booking.scheduled_at.strftime("%b %d, %Y") %> · $<%= @booking.total_price %></div>
+            <div class="text-[14px] font-semibold text-ink"><%= @booking.service.title %></div>
+            <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3"><%= @booking.scheduled_at.strftime("%b %-d, %Y") %> · $<%= @booking.total_price %></div>
           </div>
-          <i class="fas fa-arrow-right text-slate-300"></i>
+          <i class="fas fa-arrow-right text-ink-3 text-[12px]"></i>
         <% end %>
       </div>
     </div>

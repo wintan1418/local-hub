@@ -1,105 +1,90 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="bg-white shadow rounded-lg">
-    <div class="px-6 py-4 border-b border-slate-200">
-      <div class="flex justify-between items-center">
-        <h2 class="text-2xl font-semibold text-slate-900">SMS/WhatsApp Campaigns</h2>
-        <%= link_to new_provider_crm_campaign_path, class: "bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition duration-200" do %>
-          <i class="fas fa-plus mr-2"></i>New Campaign
-        <% end %>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="flex items-end justify-between gap-3 mb-8">
+      <div>
+        <div class="eyebrow mb-3">crm campaigns</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">SMS &amp; WhatsApp <em class="italic-wonk" style="color: #1f4d3a;">campaigns</em>.</h1>
       </div>
+      <%= link_to new_provider_crm_campaign_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors active:translate-y-px" do %>
+        <i class="fas fa-plus text-[10px]"></i>New campaign
+      <% end %>
     </div>
-    
+
     <% if @campaigns.any? %>
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-slate-50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Campaign Name</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Target</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Status</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Sent/Success</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <% @campaigns.each do |campaign| %>
+      <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="bg-cream-sunken/40 border-b border-line">
               <tr>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <div>
-                    <div class="text-sm font-medium text-slate-900"><%= campaign.name %></div>
-                    <div class="text-sm text-slate-500"><%= campaign.description %></div>
-                  </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                    <%= campaign.sms? ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800' %>">
-                    <%= campaign.campaign_type.humanize %>
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  <%= campaign.target_audience.humanize %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                    <%= campaign.completed? ? 'bg-green-100 text-green-800' : 
-                        campaign.in_progress? ? 'bg-yellow-100 text-yellow-800' : 
-                        'bg-slate-100 text-slate-800' %>">
-                    <%= campaign.status.humanize %>
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                  <%= campaign.sent_count || 0 %> / <%= campaign.success_count || 0 %>
-                  <% if campaign.sent_count.to_i > 0 %>
-                    <span class="text-xs text-slate-400">(<%= campaign.success_rate %>%)</span>
-                  <% end %>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <%= link_to "View", provider_crm_campaign_path(campaign), class: "text-indigo-600 hover:text-indigo-900 mr-2" %>
-                  <% if campaign.can_send? %>
-                    <%= link_to "Send", send_campaign_provider_crm_campaign_path(campaign), method: :post, 
-                        data: { confirm: "Are you sure you want to send this campaign?" },
-                        class: "text-green-600 hover:text-green-900" %>
-                  <% end %>
-                </td>
+                <th class="text-left px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Campaign</th>
+                <th class="text-left px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Type</th>
+                <th class="text-left px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Target</th>
+                <th class="text-left px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Status</th>
+                <th class="text-left px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">Sent / Success</th>
+                <th class="text-right px-5 py-3 font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3"></th>
               </tr>
-            <% end %>
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="divide-y divide-line">
+              <% @campaigns.each do |campaign| %>
+                <tr class="hover:bg-cream-sunken/40 transition-colors">
+                  <td class="px-5 py-4">
+                    <div class="text-[14px] font-semibold text-ink"><%= campaign.name %></div>
+                    <div class="text-[12px] text-ink-3 truncate max-w-xs"><%= campaign.description %></div>
+                  </td>
+                  <td class="px-5 py-4">
+                    <span class="font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill <%= campaign.sms? ? 'bg-cream-sunken text-ink-2' : 'bg-forest-soft text-forest' %>"><%= campaign.campaign_type %></span>
+                  </td>
+                  <td class="px-5 py-4 text-[13px] text-ink-2"><%= campaign.target_audience.humanize %></td>
+                  <td class="px-5 py-4">
+                    <% sc = campaign.completed? ? [ "bg-forest-soft", "text-forest" ] : campaign.in_progress? ? [ "bg-amber-100/60", "text-amber-800" ] : [ "bg-cream-sunken", "text-ink-3" ] %>
+                    <span class="font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill <%= sc[0] %> <%= sc[1] %>"><%= campaign.status %></span>
+                  </td>
+                  <td class="px-5 py-4 text-[13px] text-ink-2 whitespace-nowrap">
+                    <%= campaign.sent_count || 0 %> / <%= campaign.success_count || 0 %>
+                    <% if campaign.sent_count.to_i > 0 %>
+                      <span class="font-mono text-[10px] text-ink-3">(<%= campaign.success_rate %>%)</span>
+                    <% end %>
+                  </td>
+                  <td class="px-5 py-4 text-right whitespace-nowrap">
+                    <%= link_to "view", provider_crm_campaign_path(campaign), class: "font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 hover:text-ink mr-3" %>
+                    <% if campaign.can_send? %>
+                      <%= link_to "send", send_campaign_provider_crm_campaign_path(campaign), method: :post,
+                          data: { turbo_confirm: "Send this campaign?" },
+                          class: "font-mono text-[10px] uppercase tracking-[0.1em] text-forest hover:text-forest/80" %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     <% else %>
-      <div class="text-center py-12">
-        <i class="fas fa-bullhorn text-slate-400 text-6xl mb-4"></i>
-        <h3 class="text-lg font-medium text-slate-900 mb-2">No campaigns yet</h3>
-        <p class="text-slate-500 mb-6">Create your first SMS or WhatsApp campaign to engage with customers</p>
-        <%= link_to new_provider_crm_campaign_path, class: "bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition duration-200" do %>
-          <i class="fas fa-plus mr-2"></i>Create Campaign
-        <% end %>
+      <%= render "shared/empty_state",
+          icon: "fa-bullhorn",
+          title: "No campaigns yet",
+          message: "Create your first SMS or WhatsApp campaign to engage with customers.",
+          cta_text: "Create campaign",
+          cta_path: new_provider_crm_campaign_path,
+          cta_icon: "fa-plus" %>
+    <% end %>
+
+    <% unless ENV['TWILIO_ACCOUNT_SID'].present? %>
+      <div class="mt-6 bg-amber-100/60 border border-amber-200 rounded-xl p-5">
+        <div class="flex items-start gap-3">
+          <i class="fas fa-exclamation-triangle text-amber-700 mt-0.5"></i>
+          <div>
+            <div class="display text-[16px] text-ink leading-[1.15]">Twilio configuration required</div>
+            <p class="text-[13px] text-ink-2 mt-1">To send SMS and WhatsApp messages, set these environment variables:</p>
+            <ul class="font-mono text-[11px] text-ink-2 mt-2 space-y-0.5">
+              <li>· TWILIO_ACCOUNT_SID</li>
+              <li>· TWILIO_AUTH_TOKEN</li>
+              <li>· TWILIO_PHONE_NUMBER</li>
+              <li>· TWILIO_WHATSAPP_NUMBER (optional)</li>
+            </ul>
+          </div>
+        </div>
       </div>
     <% end %>
   </div>
-  
-  <!-- Twilio Setup Notice -->
-  <% unless ENV['TWILIO_ACCOUNT_SID'].present? %>
-    <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-      <div class="flex">
-        <div class="flex-shrink-0">
-          <i class="fas fa-exclamation-triangle text-yellow-400"></i>
-        </div>
-        <div class="ml-3">
-          <h3 class="text-sm font-medium text-yellow-800">Twilio Configuration Required</h3>
-          <p class="mt-2 text-sm text-yellow-700">
-            To send SMS and WhatsApp messages, you need to configure your Twilio credentials. 
-            Please set the following environment variables:
-          </p>
-          <ul class="mt-2 text-sm text-yellow-700 list-disc list-inside">
-            <li>TWILIO_ACCOUNT_SID</li>
-            <li>TWILIO_AUTH_TOKEN</li>
-            <li>TWILIO_PHONE_NUMBER</li>
-            <li>TWILIO_WHATSAPP_NUMBER (optional)</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  <% end %>
 </div>

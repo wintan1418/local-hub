@@ -1,5 +1,5 @@
 <% is_current_user = message.sender == current_user %>
-<div class="group relative flex <%= is_current_user ? 'justify-end' : 'justify-start' %> mb-3 hover:bg-slate-50 hover:bg-opacity-50 rounded-lg p-2 transition-colors" 
+<div class="group relative flex <%= is_current_user ? 'justify-end' : 'justify-start' %> mb-3 hover:bg-cream hover:bg-opacity-50 rounded-lg p-2 transition-colors" 
      id="message-<%= message.id %>" 
      data-message-id="<%= message.id %>"
      oncontextmenu="showMessageMenu(event, <%= message.id %>, <%= is_current_user %>); return false;"
@@ -19,8 +19,8 @@
       <% if message.sender.profile_picture.attached? %>
         <%= image_tag message.sender.profile_picture, class: "h-8 w-8 rounded-full object-cover" %>
       <% else %>
-        <div class="h-8 w-8 rounded-full bg-slate-300 flex items-center justify-center">
-          <i class="fas fa-user text-slate-600 text-xs"></i>
+        <div class="h-8 w-8 rounded-full bg-cream-sunken flex items-center justify-center">
+          <i class="fas fa-user text-ink-2 text-xs"></i>
         </div>
       <% end %>
     </div>
@@ -29,14 +29,14 @@
   <div class="max-w-xs lg:max-w-md <%= message.pinned? ? 'mt-4' : '' %> relative">
     <!-- Reply thread indicator -->
     <% if message.reply_to.present? %>
-      <div class="mb-2 pl-3 border-l-4 border-slate-300 bg-slate-50 rounded-lg p-2">
+      <div class="mb-2 pl-3 border-l-4 border-line-strong bg-cream rounded-lg p-2">
         <div class="flex items-center space-x-2 mb-1">
-          <i class="fas fa-reply text-slate-500 text-xs"></i>
-          <span class="text-xs text-slate-600 font-medium"><%= message.reply_to.sender.email.split('@').first.titleize %></span>
+          <i class="fas fa-reply text-ink-3 text-xs"></i>
+          <span class="text-xs text-ink-2 font-medium"><%= message.reply_to.sender.email.split('@').first.titleize %></span>
         </div>
-        <p class="text-sm text-slate-700 truncate max-w-xs">
+        <p class="text-sm text-ink-2 truncate max-w-xs">
           <% if message.reply_to.deleted? %>
-            <em class="text-slate-500">Message was deleted</em>
+            <em class="text-ink-3">Message was deleted</em>
           <% elsif message.reply_to.content.present? %>
             <%= truncate(message.reply_to.content, length: 100) %>
           <% elsif message.reply_to.attachments.any? %>
@@ -46,7 +46,7 @@
       </div>
     <% end %>
     
-    <div class="px-4 py-2 rounded-lg <%= is_current_user ? 'bg-blue-600 text-white rounded-br-sm' : 'bg-slate-200 text-slate-900 rounded-bl-sm' %> relative message-bubble" data-message-id="<%= message.id %>">
+    <div class="px-4 py-2 rounded-lg <%= is_current_user ? 'bg-ink text-white rounded-br-sm' : 'bg-cream-sunken text-ink rounded-bl-sm' %> relative message-bubble" data-message-id="<%= message.id %>">
       <!-- Message Content -->
       <% if message.content.present? %>
         <% unless message.deleted? %>
@@ -65,7 +65,7 @@
       <div class="<%= message.content.present? ? 'mt-2' : '' %> space-y-2">
         <% message.attachments.each do |attachment| %>
           <% attachment_type = message.attachment_type(attachment) %>
-          <div class="rounded-md overflow-hidden border <%= is_current_user ? 'border-blue-300' : 'border-slate-300' %>">
+          <div class="rounded-md overflow-hidden border <%= is_current_user ? 'border-blue-300' : 'border-line-strong' %>">
             <% case attachment_type %>
             <% when :image %>
               <%= image_tag attachment, class: "max-w-full h-auto max-h-64 object-cover cursor-pointer", onclick: "openImageModal('#{url_for(attachment)}')" %>
@@ -86,22 +86,22 @@
                   <% when :pdf %>
                     <i class="fas fa-file-pdf text-red-500 text-xl"></i>
                   <% when :document %>
-                    <i class="fas fa-file-word text-blue-500 text-xl"></i>
+                    <i class="fas fa-file-word text-ink-2 text-xl"></i>
                   <% else %>
-                    <i class="fas fa-file text-slate-500 text-xl"></i>
+                    <i class="fas fa-file text-ink-3 text-xl"></i>
                   <% end %>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <p class="text-sm font-medium <%= is_current_user ? 'text-white' : 'text-slate-900' %> truncate">
+                  <p class="text-sm font-medium <%= is_current_user ? 'text-white' : 'text-ink' %> truncate">
                     <%= attachment.blob.filename %>
                   </p>
-                  <p class="text-xs <%= is_current_user ? 'text-blue-100' : 'text-slate-500' %>">
+                  <p class="text-xs <%= is_current_user ? 'text-cream/65' : 'text-ink-3' %>">
                     <%= number_to_human_size(attachment.blob.byte_size) %>
                   </p>
                 </div>
                 <div class="flex-shrink-0">
                   <%= link_to url_for(attachment), download: attachment.blob.filename, 
-                            class: "text-sm #{is_current_user ? 'text-blue-100 hover:text-white' : 'text-blue-600 hover:text-blue-800'} font-medium" do %>
+                            class: "text-sm #{is_current_user ? 'text-cream/65 hover:text-white' : 'text-ink hover:text-blue-800'} font-medium" do %>
                     <i class="fas fa-download"></i>
                   <% end %>
                 </div>
@@ -113,14 +113,14 @@
     <% end %>
 
       <div class="flex items-center <%= is_current_user ? 'justify-end' : 'justify-start' %> mt-1 space-x-1">
-        <p class="text-xs <%= is_current_user ? 'text-blue-100' : 'text-slate-500' %>">
+        <p class="text-xs <%= is_current_user ? 'text-cream/65' : 'text-ink-3' %>">
           <%= message.created_at.strftime('%H:%M') %>
           <% if message.edited? %>
             <span class="italic ml-1">(edited)</span>
           <% end %>
         </p>
         <% if is_current_user %>
-          <div class="text-blue-100 text-xs">
+          <div class="text-cream/65 text-xs">
             <% if message.read_at.present? %>
               <i class="fas fa-check-double"></i>
             <% else %>
@@ -135,7 +135,7 @@
     <div class="absolute <%= is_current_user ? '-left-12' : '-right-12' %> top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center space-x-1 bg-white rounded-lg shadow-lg border p-1">
       <!-- Reply Button -->
       <button onclick="replyToMessage(<%= message.id %>, '<%= j(message.sender.email.split('@').first.titleize) %>', '<%= j(truncate(message.content.presence || 'Attachment', length: 50)) %>')" 
-              class="p-2 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded transition-colors tooltip" 
+              class="p-2 text-ink-2 hover:text-ink hover:bg-cream-sunken/40 rounded transition-colors tooltip" 
               title="Reply">
         <i class="fas fa-reply text-sm"></i>
       </button>
@@ -143,14 +143,14 @@
       <% if is_current_user && message.can_modify?(current_user) %>
         <!-- Edit Button -->
         <button onclick="editMessage(<%= message.id %>, '<%= j(message.content) %>')" 
-                class="p-2 text-slate-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors tooltip" 
+                class="p-2 text-ink-2 hover:text-green-600 hover:bg-green-50 rounded transition-colors tooltip" 
                 title="Edit">
           <i class="fas fa-edit text-sm"></i>
         </button>
         
         <!-- Delete Button -->
         <button onclick="deleteMessage(<%= message.id %>)" 
-                class="p-2 text-slate-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors tooltip" 
+                class="p-2 text-ink-2 hover:text-red-600 hover:bg-red-50 rounded transition-colors tooltip" 
                 title="Delete">
           <i class="fas fa-trash text-sm"></i>
         </button>
@@ -158,14 +158,14 @@
       
       <!-- Pin/Unpin Button -->
       <button onclick="togglePinMessage(<%= message.id %>)" 
-              class="p-2 text-slate-600 hover:text-yellow-600 hover:bg-yellow-50 rounded transition-colors tooltip" 
+              class="p-2 text-ink-2 hover:text-amber-700 hover:bg-amber-100/30 rounded transition-colors tooltip" 
               title="<%= message.pinned? ? 'Unpin' : 'Pin' %>">
         <i class="fas fa-thumbtack text-sm <%= 'text-yellow-500' if message.pinned? %>"></i>
       </button>
       
       <!-- More Actions Button -->
       <button onclick="showMoreActions(<%= message.id %>)" 
-              class="p-2 text-slate-600 hover:text-slate-800 hover:bg-slate-50 rounded transition-colors tooltip" 
+              class="p-2 text-ink-2 hover:text-slate-800 hover:bg-cream rounded transition-colors tooltip" 
               title="More">
         <i class="fas fa-ellipsis-h text-sm"></i>
       </button>

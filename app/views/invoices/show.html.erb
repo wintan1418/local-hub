@@ -1,96 +1,92 @@
-<div class="min-h-screen bg-slate-50 py-12">
+<div class="min-h-screen bg-cream py-10 sm:py-14">
   <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-    <%# Print button %>
     <div class="flex justify-end mb-4 print:hidden">
-      <button onclick="window.print()" class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors">
-        <i class="fas fa-print mr-2 text-xs"></i>Print / Save PDF
+      <button onclick="window.print()" class="inline-flex items-center gap-2 px-4 py-2 rounded-pill text-sm font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors">
+        <i class="fas fa-print text-[10px]"></i>Print / Save PDF
       </button>
     </div>
 
-    <div class="bg-white rounded-xl border border-slate-100 overflow-hidden shadow-sm" id="invoice">
-      <%# Header %>
-      <div class="bg-slate-900 px-8 py-8 flex items-start justify-between">
+    <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden" id="invoice">
+      <%# Header — ink %>
+      <div class="px-7 sm:px-8 py-7 flex items-start justify-between" style="background-color: #1d1813;">
         <div>
           <div class="flex items-center gap-2.5 mb-3">
-            <div class="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center">
-              <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-            </div>
-            <span class="text-lg font-black text-white">Radius</span>
+            <span class="brand-mark brand-mark--on-dark"></span>
+            <span class="font-display text-[20px] font-medium tracking-tight text-cream">radius</span>
           </div>
-          <p class="text-slate-400 text-xs">Invoice</p>
+          <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-cream/55">invoice</p>
         </div>
         <div class="text-right">
-          <div class="text-white text-lg font-black"><%= @invoice.invoice_number %></div>
-          <div class="text-slate-400 text-xs mt-1">Issued: <%= @invoice.issued_at&.strftime("%B %d, %Y") %></div>
-          <% status_colors = { "issued" => "amber", "paid" => "emerald", "overdue" => "red", "cancelled" => "slate" } %>
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[@invoice.status] %>-500/20 text-<%= status_colors[@invoice.status] %>-300 mt-2"><%= @invoice.status.titleize %></span>
+          <div class="display text-[20px] text-cream"><%= @invoice.invoice_number %></div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-cream/55 mt-1">issued <%= @invoice.issued_at&.strftime("%b %-d, %Y") %></div>
+          <% sc = { "issued" => "bg-amber-100/20 text-amber-300", "paid" => "bg-forest/30 text-cream", "overdue" => "bg-rose-500/20 text-rose-300", "cancelled" => "bg-cream/10 text-cream/55" } %>
+          <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2.5 py-0.5 rounded-pill mt-2 <%= sc[@invoice.status] || 'bg-cream/10 text-cream/55' %>"><%= @invoice.status %></span>
         </div>
       </div>
 
       <%# Parties %>
-      <div class="grid sm:grid-cols-2 gap-6 px-8 py-6 border-b border-slate-100">
+      <div class="grid sm:grid-cols-2 gap-6 px-7 sm:px-8 py-6 border-b border-line">
         <div>
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">From</h4>
-          <div class="text-sm font-bold text-slate-900"><%= @booking.service.provider.business_name || @booking.service.provider.display_name %></div>
-          <div class="text-xs text-slate-500 mt-1"><%= @booking.service.provider.email %></div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">from</div>
+          <div class="text-[14px] font-semibold text-ink"><%= @booking.service.provider.business_name || @booking.service.provider.display_name %></div>
+          <div class="font-mono text-[11px] text-ink-3 mt-0.5"><%= @booking.service.provider.email %></div>
           <% if @booking.service.provider.phone.present? %>
-            <div class="text-xs text-slate-500"><%= @booking.service.provider.phone %></div>
+            <div class="font-mono text-[11px] text-ink-3"><%= @booking.service.provider.phone %></div>
           <% end %>
         </div>
         <div>
-          <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Bill To</h4>
-          <div class="text-sm font-bold text-slate-900"><%= @booking.customer.display_name %></div>
-          <div class="text-xs text-slate-500 mt-1"><%= @booking.customer.email %></div>
+          <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2">bill to</div>
+          <div class="text-[14px] font-semibold text-ink"><%= @booking.customer.display_name %></div>
+          <div class="font-mono text-[11px] text-ink-3 mt-0.5"><%= @booking.customer.email %></div>
         </div>
       </div>
 
-      <%# Service details %>
-      <div class="px-8 py-6 border-b border-slate-100">
+      <%# Service line %>
+      <div class="px-7 sm:px-8 py-6 border-b border-line">
         <table class="w-full">
           <thead>
-            <tr class="text-xs font-bold text-slate-400 uppercase tracking-wider">
-              <th class="text-left pb-3">Service</th>
-              <th class="text-left pb-3">Date</th>
-              <th class="text-right pb-3">Amount</th>
+            <tr class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3">
+              <th class="text-left pb-3 font-medium">Service</th>
+              <th class="text-left pb-3 font-medium">Date</th>
+              <th class="text-right pb-3 font-medium">Amount</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td class="py-3">
-                <div class="text-sm font-semibold text-slate-900"><%= @booking.service.title %></div>
-                <div class="text-xs text-slate-500"><%= @booking.service.category.name %></div>
+                <div class="text-[14px] font-semibold text-ink"><%= @booking.service.title %></div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3"><%= @booking.service.category.name %></div>
               </td>
-              <td class="py-3 text-sm text-slate-600"><%= @booking.scheduled_at.strftime("%b %d, %Y") %></td>
-              <td class="py-3 text-sm font-bold text-slate-900 text-right">$<%= number_with_precision(@invoice.amount, precision: 2) %></td>
+              <td class="py-3 text-[13px] text-ink-2"><%= @booking.scheduled_at.strftime("%b %-d, %Y") %></td>
+              <td class="py-3 display text-[16px] text-ink leading-none text-right">$<%= number_with_precision(@invoice.amount, precision: 2) %></td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <%# Total %>
-      <div class="px-8 py-6 bg-slate-50">
+      <div class="px-7 sm:px-8 py-6 bg-cream-sunken/40">
         <div class="flex items-center justify-between">
           <div>
-            <div class="text-sm text-slate-500">Subtotal</div>
-            <div class="text-xs text-slate-400 mt-1">Platform fee: $0.00</div>
+            <div class="text-[14px] text-ink-2">Subtotal</div>
+            <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mt-1">platform fee · $0.00</div>
           </div>
           <div class="text-right">
-            <div class="text-xs text-slate-400 uppercase tracking-wider mb-1">Total Due</div>
-            <div class="text-3xl font-black text-slate-900">$<%= number_with_precision(@invoice.amount, precision: 2) %></div>
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1">total due</div>
+            <div class="display text-[36px] sm:text-[40px] text-ink leading-none">$<%= number_with_precision(@invoice.amount, precision: 2) %></div>
           </div>
         </div>
 
         <% if @invoice.paid? %>
-          <div class="mt-4 flex items-center gap-2 text-emerald-600">
+          <div class="mt-4 flex items-center gap-2 text-forest">
             <i class="fas fa-check-circle"></i>
-            <span class="text-sm font-bold">Paid<%= @invoice.paid_at.present? ? " on #{@invoice.paid_at.strftime('%B %d, %Y')}" : "" %></span>
+            <span class="text-[14px] font-semibold">Paid<%= @invoice.paid_at.present? ? " on #{@invoice.paid_at.strftime('%b %-d, %Y')}" : "" %></span>
           </div>
         <% end %>
       </div>
 
-      <%# Footer %>
-      <div class="px-8 py-4 text-center">
-        <p class="text-xs text-slate-400">Thank you for using Radius. Questions? Contact support@radiusapp.com</p>
+      <div class="px-7 sm:px-8 py-4 text-center border-t border-line">
+        <p class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3">thank you for using radius · support@radiusapp.com</p>
       </div>
     </div>
   </div>
@@ -100,7 +96,7 @@
   @media print {
     body * { visibility: hidden; }
     #invoice, #invoice * { visibility: visible; }
-    #invoice { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; }
+    #invoice { position: absolute; left: 0; top: 0; width: 100%; border: none; }
     .print\\:hidden { display: none !important; }
     nav, footer { display: none !important; }
   }
