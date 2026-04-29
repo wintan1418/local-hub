@@ -1,63 +1,64 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex items-center justify-between mb-8">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
       <div>
-        <h1 class="text-2xl font-black text-slate-900">My Website</h1>
-        <p class="text-sm text-slate-500 mt-1">Your branded mini-site at <code class="text-xs font-mono bg-slate-100 px-1.5 py-0.5 rounded">radiusapp.com<%= @user.site_url %></code></p>
+        <div class="eyebrow mb-3">your website</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">Branded mini-<em class="italic-wonk" style="color: #1f4d3a;">site</em>.</h1>
+        <p class="mt-2 text-[13px] text-ink-2">Live at <span class="font-mono text-[12px] bg-cream-sunken px-2 py-0.5 rounded">radiusapp.com<%= @user.site_url %></span></p>
       </div>
       <div class="flex gap-2 flex-wrap">
-        <%= link_to preview_provider_site_path, target: "_blank", class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>
-          <i class="fas fa-eye mr-2 text-xs"></i>Preview
+        <%= link_to preview_provider_site_path, target: "_blank", class: "inline-flex items-center gap-2 px-4 py-2 rounded-pill text-sm font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+          <i class="fas fa-eye text-[10px]"></i>Preview
         <% end %>
         <% if @user.site_published? %>
-          <%= link_to public_provider_site_path(slug: @user.slug), target: "_blank", class: "inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold border border-slate-200 text-slate-600 hover:bg-slate-50 transition-all" do %>
-            <i class="fas fa-external-link-alt mr-2 text-xs"></i>View Live
+          <%= link_to public_provider_site_path(slug: @user.slug), target: "_blank", class: "inline-flex items-center gap-2 px-4 py-2 rounded-pill text-sm font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+            <i class="fas fa-external-link-alt text-[10px]"></i>View live
           <% end %>
-          <%= button_to unpublish_provider_site_path, method: :post, class: "bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-xl text-sm font-semibold cursor-pointer" do %>
+          <%= button_to unpublish_provider_site_path, method: :post, class: "px-4 py-2 rounded-pill text-sm font-medium bg-cream-sunken text-ink hover:bg-line cursor-pointer transition-colors" do %>
             Unpublish
           <% end %>
         <% else %>
-          <%= button_to publish_provider_site_path, method: :post, class: "bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white px-6 py-2 rounded-xl text-sm font-bold cursor-pointer" do %>
-            <i class="fas fa-rocket mr-2 text-xs"></i>Publish Site
+          <%= button_to publish_provider_site_path, method: :post, class: "inline-flex items-center gap-2 bg-ink hover:bg-ink-2 text-cream px-5 py-2 rounded-pill text-sm font-semibold cursor-pointer transition-colors active:translate-y-px" do %>
+            <i class="fas fa-rocket text-[10px]"></i>Publish site
           <% end %>
         <% end %>
       </div>
     </div>
 
     <% if @user.site_published? %>
-      <div class="mb-6 p-4 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-3">
-        <i class="fas fa-check-circle text-emerald-500"></i>
-        <div class="text-sm text-emerald-700">Your site is live. <%= link_to "Copy link", "##{request.base_url}#{@user.site_url}", class: "font-semibold underline" %></div>
+      <div class="mb-6 p-4 rounded-xl bg-forest-soft border border-forest/20 flex items-center gap-3">
+        <i class="fas fa-check-circle text-forest"></i>
+        <div class="text-[13px] text-ink-2">Your site is live. <%= link_to "Copy link", "##{request.base_url}#{@user.site_url}", class: "font-semibold text-forest underline underline-offset-2" %></div>
       </div>
     <% end %>
 
-    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8">
-      <%= form_with model: @user, url: provider_site_path, method: :patch, local: true, multipart: true, class: "space-y-8" do |f| %>
+    <div class="bg-cream-elevated border border-line rounded-xl p-6 sm:p-8">
+      <%= form_with model: @user, url: provider_site_path, method: :patch, local: true, multipart: true, class: "space-y-6" do |f| %>
         <%# Slug %>
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-2">Your URL</label>
-          <div class="flex items-stretch rounded-xl border border-slate-200 overflow-hidden focus-within:ring-4 focus-within:ring-orange-500/10 focus-within:border-orange-500">
-            <span class="inline-flex items-center px-4 bg-slate-50 text-sm text-slate-500">radiusapp.com/pros/</span>
-            <%= f.text_field :slug, class: "flex-1 px-3 py-3 text-sm focus:outline-none" %>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Your URL</label>
+          <div class="flex items-stretch rounded-pill border border-line overflow-hidden focus-within:ring-2 focus-within:ring-ink/20 focus-within:border-ink bg-cream-elevated">
+            <span class="inline-flex items-center px-4 bg-cream-sunken text-[13px] text-ink-3 font-mono">radiusapp.com/pros/</span>
+            <%= f.text_field :slug, class: "flex-1 px-3 py-3 text-sm focus:outline-none bg-transparent" %>
           </div>
-          <p class="text-xs text-slate-400 mt-1.5">Letters, numbers, and hyphens only.</p>
+          <p class="text-[11px] text-ink-3 mt-1.5">Letters, numbers, and hyphens only.</p>
         </div>
 
         <%# Theme %>
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-3">Theme</label>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2 block">Theme</label>
           <div class="grid grid-cols-3 gap-3">
             <% [
-              { value: "modern", name: "Modern", desc: "Bold hero, gradient accents", preview: "bg-gradient-to-br from-orange-500 to-rose-500" },
-              { value: "classic", name: "Classic", desc: "Clean white, serif headers", preview: "bg-white border-2 border-slate-200" },
-              { value: "bold", name: "Bold", desc: "Dark bg, premium feel", preview: "bg-slate-900" }
+              { value: "modern", name: "Modern", desc: "Bold hero, accent forest", preview_bg: "#1f4d3a" },
+              { value: "classic", name: "Classic", desc: "Cream, serif headers", preview_bg: "#f3ead8", preview_border: true },
+              { value: "bold", name: "Bold", desc: "Dark, premium feel", preview_bg: "#1d1813" }
             ].each do |t| %>
-              <label class="relative cursor-pointer">
-                <input type="radio" name="user[site_theme]" value="<%= t[:value] %>" <%= 'checked' if @user.site_theme == t[:value] %> class="peer absolute opacity-0">
-                <div class="rounded-xl border-2 border-slate-100 peer-checked:border-orange-500 peer-checked:ring-2 peer-checked:ring-orange-500/20 transition-all p-3">
-                  <div class="w-full h-16 rounded-lg mb-3 <%= t[:preview] %>"></div>
-                  <div class="text-sm font-bold text-slate-900"><%= t[:name] %></div>
-                  <div class="text-xs text-slate-400"><%= t[:desc] %></div>
+              <label class="cursor-pointer">
+                <input type="radio" name="user[site_theme]" value="<%= t[:value] %>" <%= 'checked' if @user.site_theme == t[:value] %> class="peer sr-only">
+                <div class="rounded-xl border border-line bg-cream-elevated peer-checked:border-ink peer-checked:bg-cream-sunken/40 transition-all p-3">
+                  <div class="w-full h-16 rounded-lg mb-3 <%= 'border border-line-strong' if t[:preview_border] %>" style="background-color: <%= t[:preview_bg] %>;"></div>
+                  <div class="text-[13px] font-semibold text-ink"><%= t[:name] %></div>
+                  <div class="text-[11px] text-ink-3 mt-0.5"><%= t[:desc] %></div>
                 </div>
               </label>
             <% end %>
@@ -66,67 +67,74 @@
 
         <%# Brand color %>
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-2">Brand Color</label>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Brand color</label>
           <div class="flex items-center gap-3">
-            <%= f.color_field :site_brand_color, class: "w-14 h-14 rounded-xl border border-slate-200 cursor-pointer" %>
-            <%= f.text_field :site_brand_color, placeholder: "#f97316", class: "flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm font-mono focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500" %>
+            <%= f.color_field :site_brand_color, class: "w-12 h-12 rounded-pill border border-line cursor-pointer" %>
+            <%= f.text_field :site_brand_color, placeholder: "#1f4d3a",
+                class: "flex-1 px-4 py-3 rounded-pill border border-line text-ink font-mono text-sm focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated" %>
           </div>
         </div>
 
         <%# Tagline %>
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-2">Tagline</label>
-          <%= f.text_field :site_tagline, placeholder: "Trusted plumbers for 20+ years", class: "w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all" %>
-          <p class="text-xs text-slate-400 mt-1.5">Short, punchy headline shown in the hero.</p>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Tagline</label>
+          <%= f.text_field :site_tagline, placeholder: "Trusted plumbers for 20+ years",
+              class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+          <p class="text-[11px] text-ink-3 mt-1.5">Short, punchy headline shown in the hero.</p>
         </div>
 
         <%# About %>
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-2">About You</label>
-          <%= f.text_area :site_about, rows: 5, placeholder: "Tell visitors about your business — your story, values, what makes you different.", class: "w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all resize-none" %>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">About</label>
+          <%= f.text_area :site_about, rows: 5, placeholder: "Tell visitors about your business — your story, values, what makes you different.",
+              class: "w-full px-4 py-3 rounded-2xl border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none" %>
         </div>
 
         <%# Cover photo %>
         <div>
-          <label class="block text-sm font-bold text-slate-900 mb-2">Cover Photo</label>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block">Cover photo</label>
           <% if @user.site_cover_photo.attached? %>
-            <div class="mb-3 rounded-xl overflow-hidden">
+            <div class="mb-3 rounded-xl overflow-hidden border border-line">
               <%= image_tag @user.site_cover_photo, class: "w-full h-48 object-cover" %>
             </div>
           <% end %>
-          <%= f.file_field :site_cover_photo, accept: "image/*", class: "w-full text-sm file:mr-3 file:px-3 file:py-2 file:rounded-lg file:border-0 file:bg-orange-50 file:text-orange-700 file:text-xs file:font-semibold hover:file:bg-orange-100" %>
-          <p class="text-xs text-slate-400 mt-1.5">Recommended: 1600×800px</p>
+          <%= f.file_field :site_cover_photo, accept: "image/*",
+              class: "w-full text-[12px] file:mr-3 file:px-3 file:py-2 file:rounded-pill file:border-0 file:bg-cream-sunken file:text-ink-2 file:text-[11px] file:font-semibold hover:file:bg-line" %>
+          <p class="text-[11px] text-ink-3 mt-1.5">Recommended: 1600×800px</p>
         </div>
 
-        <div class="flex items-center justify-end pt-6 border-t border-slate-100">
-          <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 rounded-xl font-bold text-sm cursor-pointer">Save Changes</button>
+        <div class="flex items-center justify-end pt-5 border-t border-line">
+          <button type="submit" class="bg-ink hover:bg-ink-2 text-cream px-7 py-3 rounded-pill font-semibold text-sm cursor-pointer transition-colors active:translate-y-px">Save changes</button>
         </div>
       <% end %>
     </div>
 
     <%# FAQs section %>
-    <div class="mt-6 bg-white rounded-2xl border border-slate-100 shadow-sm p-6 sm:p-8">
-      <h2 class="text-base font-bold text-slate-900 mb-4">FAQs on Your Site</h2>
-      <p class="text-sm text-slate-500 mb-5">Add common questions and answers. These help customers trust you.</p>
+    <div class="mt-6 bg-cream-elevated border border-line rounded-xl p-6 sm:p-8">
+      <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1">faqs on your site</div>
+      <h2 class="display text-[20px] text-ink leading-[1.1] mb-2">Common questions</h2>
+      <p class="text-[13px] text-ink-2 mb-5">Add Q&amp;As to help customers trust you.</p>
 
       <% @faqs.each do |faq| %>
-        <div class="mb-3 p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-start justify-between gap-3">
-          <div class="flex-1">
-            <div class="text-sm font-bold text-slate-900"><%= faq.question %></div>
-            <div class="text-xs text-slate-500 mt-1"><%= faq.answer %></div>
+        <div class="mb-2 p-4 rounded-lg bg-cream-sunken/30 border border-line flex items-start justify-between gap-3">
+          <div class="flex-1 min-w-0">
+            <div class="text-[14px] font-semibold text-ink"><%= faq.question %></div>
+            <div class="text-[12px] text-ink-2 mt-1 leading-[1.5]"><%= faq.answer %></div>
           </div>
-          <%= button_to provider_site_faq_path(faq), method: :delete, data: { turbo_confirm: "Remove?" }, class: "text-slate-400 hover:text-red-500 cursor-pointer" do %>
-            <i class="fas fa-times"></i>
+          <%= button_to provider_site_faq_path(faq), method: :delete, data: { turbo_confirm: "Remove?" }, class: "text-ink-3 hover:text-rose-700 cursor-pointer flex-shrink-0" do %>
+            <i class="fas fa-times text-[12px]"></i>
           <% end %>
         </div>
       <% end %>
 
-      <details class="mt-4">
-        <summary class="cursor-pointer text-sm font-semibold text-orange-600 hover:text-orange-700">+ Add FAQ</summary>
-        <%= form_with url: provider_site_faqs_path, local: true, class: "mt-3 p-4 rounded-xl bg-slate-50 space-y-3" do |f| %>
-          <%= text_field_tag "provider_faq[question]", nil, placeholder: "Question (e.g. Do you charge for estimates?)", class: "w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm" %>
-          <%= text_area_tag "provider_faq[answer]", nil, rows: 2, placeholder: "Answer", class: "w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm resize-none" %>
-          <button type="submit" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-semibold">Add</button>
+      <details class="mt-4 group">
+        <summary class="cursor-pointer font-mono text-[11px] uppercase tracking-[0.12em] text-ink-2 hover:text-ink">+ add FAQ</summary>
+        <%= form_with url: provider_site_faqs_path, local: true, class: "mt-3 p-4 rounded-xl bg-cream-sunken/30 border border-line space-y-3" do |f| %>
+          <%= text_field_tag "provider_faq[question]", nil, placeholder: "Question (e.g. Do you charge for estimates?)",
+              class: "w-full px-3 py-2.5 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+          <%= text_area_tag "provider_faq[answer]", nil, rows: 2, placeholder: "Answer",
+              class: "w-full px-3 py-2.5 rounded-2xl border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none" %>
+          <button type="submit" class="bg-ink hover:bg-ink-2 text-cream px-5 py-2 rounded-pill text-sm font-semibold cursor-pointer transition-colors">Add</button>
         <% end %>
       </details>
     </div>

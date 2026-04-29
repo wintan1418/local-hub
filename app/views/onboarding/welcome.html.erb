@@ -1,225 +1,144 @@
-<div class="min-h-screen flex">
-  <%# ===== LEFT: Image Panel (hidden on mobile) ===== %>
-  <div class="hidden lg:flex lg:w-5/12 relative bg-slate-900 items-center justify-center overflow-hidden">
-    <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80"
-         alt="Welcome aboard"
-         class="absolute inset-0 w-full h-full object-cover opacity-30">
-    <div class="absolute inset-0 bg-gradient-to-br from-orange-600/40 to-slate-900/80"></div>
-    <div class="relative z-10 max-w-sm px-12 text-center">
-      <div class="w-16 h-16 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center mx-auto mb-8">
-        <i class="fas fa-rocket text-2xl text-orange-400"></i>
-      </div>
-      <h2 class="text-3xl font-bold text-white mb-4">You're almost there!</h2>
-      <p class="text-slate-300 text-base leading-relaxed">Complete your profile to unlock the full Radius experience.</p>
+<% input_class = "w-full px-4 py-3 rounded-pill border border-line text-ink placeholder-ink-4 focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+<% label_class = "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
 
-      <div class="mt-10 space-y-4 text-left">
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-check text-orange-400 text-xs"></i>
-          </div>
-          <span class="text-sm text-slate-300">Personalized recommendations</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-check text-orange-400 text-xs"></i>
-          </div>
-          <span class="text-sm text-slate-300">Book services in your area</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-            <i class="fas fa-check text-orange-400 text-xs"></i>
-          </div>
-          <span class="text-sm text-slate-300">Direct messaging with providers</span>
-        </div>
-        <% if @user.provider? %>
-          <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center flex-shrink-0">
-              <i class="fas fa-check text-orange-400 text-xs"></i>
+<div class="min-h-screen flex bg-cream">
+
+  <%# ===== LEFT: editorial panel ===== %>
+  <div class="hidden lg:flex lg:w-5/12 relative items-center justify-center overflow-hidden border-r border-line" style="background-color: #1d1813;">
+    <div class="relative z-10 max-w-sm px-12">
+      <span class="brand-mark brand-mark--on-dark mb-8 inline-block"></span>
+      <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/55 mb-4">welcome</div>
+      <h2 class="display text-cream leading-[1] tracking-[-0.02em]" style="font-size: clamp(36px, 4vw, 48px);">
+        Almost <em class="italic-wonk" style="color: #d96a3a;">there</em>.
+      </h2>
+      <p class="mt-4 text-[14px] leading-[1.55] text-cream/65">Complete your profile to unlock the full experience.</p>
+
+      <div class="mt-10 space-y-3">
+        <% items = [ "Personalized recommendations", "Book services in your area", "Direct messaging with providers" ] %>
+        <% items << "List your services & get bookings" if @user.provider? %>
+        <% items.each do |item| %>
+          <div class="flex items-start gap-3">
+            <div class="w-6 h-6 rounded-full border border-cream/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <i class="fas fa-check text-cream text-[10px]"></i>
             </div>
-            <span class="text-sm text-slate-300">List your services & get bookings</span>
+            <span class="text-[13px] text-cream/75 leading-[1.5]"><%= item %></span>
           </div>
         <% end %>
       </div>
     </div>
   </div>
 
-  <%# ===== RIGHT: Form ===== %>
-  <div class="flex-1 flex items-start justify-center px-4 sm:px-6 lg:px-8 py-12 bg-slate-50 overflow-y-auto">
+  <%# ===== RIGHT: form ===== %>
+  <div class="flex-1 flex items-start justify-center px-4 sm:px-6 lg:px-8 py-12 bg-cream overflow-y-auto">
     <div class="w-full max-w-lg">
-      <%# Logo %>
-      <div class="text-center mb-8">
+      <div class="text-center mb-8 lg:hidden">
         <a href="<%= root_path %>" class="inline-flex items-center gap-2.5">
-          <div class="w-10 h-10 bg-orange-500 rounded-xl flex items-center justify-center shadow-sm">
-            <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="7" opacity="0.6"/><circle cx="12" cy="12" r="11" opacity="0.3"/></svg>
-          </div>
-          <span class="text-xl font-bold text-slate-900">Rad<span class="text-orange-500">ius</span></span>
+          <span class="brand-mark"></span>
+          <span class="font-display text-[22px] font-medium tracking-tight text-ink">radius</span>
         </a>
       </div>
 
-      <%# Card %>
-      <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 sm:p-10">
-        <%# Header %>
-        <div class="mb-8">
-          <div class="flex items-center gap-3 mb-2">
-            <div class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center">
-              <i class="fas fa-user-edit text-orange-500"></i>
-            </div>
-            <div>
-              <h1 class="text-xl font-bold text-slate-900">Complete your profile</h1>
-              <p class="text-sm text-slate-500">
-                <% if @user.provider? %>
-                  Set up your business profile to start getting bookings
-                <% else %>
-                  Tell us a bit about yourself to get started
-                <% end %>
-              </p>
-            </div>
-          </div>
+      <div class="bg-cream-elevated border border-line rounded-xl p-7 sm:p-9">
+        <div class="mb-6">
+          <div class="eyebrow mb-3">step 1 of 1</div>
+          <h1 class="display text-[28px] sm:text-[32px] text-ink leading-[1.05] tracking-[-0.02em]">Complete your <em class="italic-wonk" style="color: #1f4d3a;">profile</em>.</h1>
+          <p class="mt-2 text-[13px] text-ink-2">
+            <%= @user.provider? ? "Set up your business profile to start getting bookings." : "Tell us a bit about yourself to get started." %>
+          </p>
         </div>
 
-        <%# Progress indicator %>
-        <div class="flex items-center gap-3 mb-8 p-3 rounded-xl bg-slate-50">
-          <div class="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center text-xs font-bold">1</div>
-          <div class="flex-1 h-1.5 rounded-full bg-slate-200">
-            <div class="h-full rounded-full bg-orange-500 w-1/3"></div>
+        <%# Progress bar %>
+        <div class="flex items-center gap-3 mb-7 p-3 rounded-xl bg-cream-sunken/40 border border-line">
+          <div class="w-7 h-7 rounded-full bg-ink text-cream flex items-center justify-center font-mono text-[11px] font-semibold">1</div>
+          <div class="flex-1 h-1.5 rounded-pill bg-line overflow-hidden">
+            <div class="h-full rounded-pill bg-ink w-full"></div>
           </div>
-          <span class="text-xs text-slate-500 font-medium">Step 1 of 1</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3">step 1 / 1</span>
         </div>
 
-        <%= form_with(model: @user, url: onboarding_update_profile_path, method: :patch, local: true) do |form| %>
-          <%# Error messages %>
+        <%= form_with(model: @user, url: onboarding_update_profile_path, method: :patch, local: true, class: "space-y-5") do |form| %>
           <% if @user.errors.any? %>
-            <div class="mb-6 p-4 rounded-xl bg-red-50 border border-red-100">
-              <div class="flex items-center gap-2 mb-2">
-                <i class="fas fa-exclamation-circle text-red-400"></i>
-                <h3 class="text-sm font-semibold text-red-700">Please fix the following:</h3>
-              </div>
-              <ul class="space-y-1 ml-6">
-                <% @user.errors.full_messages.each do |message| %>
-                  <li class="text-sm text-red-600 list-disc"><%= message %></li>
-                <% end %>
+            <div class="p-3 rounded-lg bg-rose-50 border border-rose-200">
+              <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-rose-700 mb-1">please fix:</div>
+              <ul class="space-y-0.5 ml-5">
+                <% @user.errors.full_messages.each do |message| %><li class="text-[13px] text-rose-700 list-disc"><%= message %></li><% end %>
               </ul>
             </div>
           <% end %>
 
-          <div class="space-y-5">
-            <%# Profile Picture %>
-            <div>
-              <label class="block text-sm font-medium text-slate-700 mb-2">Profile picture <span class="text-slate-400 font-normal">(optional)</span></label>
-              <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
-                  <i class="fas fa-camera text-slate-400"></i>
-                </div>
-                <%= form.file_field :profile_picture, class: "text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-orange-50 file:text-orange-600 hover:file:bg-orange-100 file:cursor-pointer cursor-pointer" %>
+          <%# Profile Picture %>
+          <div>
+            <label class="<%= label_class %>">Profile picture <span class="normal-case tracking-normal text-ink-4">(optional)</span></label>
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-full bg-cream-sunken border border-line flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-camera text-ink-3 text-[14px]"></i>
               </div>
+              <%= form.file_field :profile_picture, class: "text-[12px] file:mr-3 file:px-4 file:py-2 file:rounded-pill file:border-0 file:bg-cream-sunken file:text-ink-2 file:text-[11px] file:font-semibold hover:file:bg-line cursor-pointer" %>
             </div>
-
-            <%# Name fields %>
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label for="user_first_name" class="block text-sm font-medium text-slate-700 mb-1.5">First name</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fas fa-user text-slate-400 text-sm"></i>
-                  </div>
-                  <%= form.text_field :first_name, required: true, placeholder: "John",
-                      class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-                </div>
-              </div>
-              <div>
-                <label for="user_last_name" class="block text-sm font-medium text-slate-700 mb-1.5">Last name</label>
-                <div class="relative">
-                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <i class="fas fa-user text-slate-400 text-sm"></i>
-                  </div>
-                  <%= form.text_field :last_name, required: true, placeholder: "Doe",
-                      class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-                </div>
-              </div>
-            </div>
-
-            <%# Phone %>
-            <div>
-              <label for="user_phone" class="block text-sm font-medium text-slate-700 mb-1.5">Phone number</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <i class="fas fa-phone text-slate-400 text-sm"></i>
-                </div>
-                <%= form.text_field :phone, required: true, placeholder: "1234567890",
-                    class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-              </div>
-              <p class="mt-1.5 text-xs text-slate-400">10-15 digits</p>
-            </div>
-
-            <%# Provider-only business fields %>
-            <% if @user.provider? %>
-              <div class="pt-4 border-t border-slate-100">
-                <div class="flex items-center gap-2 mb-5">
-                  <i class="fas fa-briefcase text-orange-500 text-sm"></i>
-                  <h3 class="text-sm font-semibold text-slate-900">Business Information</h3>
-                </div>
-
-                <div class="space-y-5">
-                  <%# Business Name %>
-                  <div>
-                    <label for="user_business_name" class="block text-sm font-medium text-slate-700 mb-1.5">Business name</label>
-                    <div class="relative">
-                      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i class="fas fa-store text-slate-400 text-sm"></i>
-                      </div>
-                      <%= form.text_field :business_name, required: true, placeholder: "Your Business Name",
-                          class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-                    </div>
-                  </div>
-
-                  <%# Bio %>
-                  <div>
-                    <label for="user_bio" class="block text-sm font-medium text-slate-700 mb-1.5">About your services</label>
-                    <%= form.text_area :bio, rows: 3, placeholder: "Tell customers what you offer...",
-                        class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm resize-none" %>
-                  </div>
-
-                  <%# Address %>
-                  <div>
-                    <label for="user_address" class="block text-sm font-medium text-slate-700 mb-1.5">Business address</label>
-                    <div class="relative">
-                      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                        <i class="fas fa-map-marker-alt text-slate-400 text-sm"></i>
-                      </div>
-                      <%= form.text_field :address, required: true, placeholder: "123 Main Street",
-                          class: "w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-                    </div>
-                  </div>
-
-                  <%# City / State / ZIP %>
-                  <div class="grid grid-cols-3 gap-3">
-                    <div>
-                      <label for="user_city" class="block text-sm font-medium text-slate-700 mb-1.5">City</label>
-                      <%= form.text_field :city, required: true, placeholder: "City",
-                          class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-                    </div>
-                    <div>
-                      <label for="user_state" class="block text-sm font-medium text-slate-700 mb-1.5">State</label>
-                      <%= form.text_field :state, required: true, placeholder: "State",
-                          class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-                    </div>
-                    <div>
-                      <label for="user_zip_code" class="block text-sm font-medium text-slate-700 mb-1.5">ZIP</label>
-                      <%= form.text_field :zip_code, required: true, placeholder: "12345",
-                          class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-shadow text-sm" %>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            <% end %>
-
-            <%# Submit %>
-            <button type="submit"
-                    class="w-full bg-orange-500 hover:bg-orange-600 text-white py-3.5 rounded-xl font-semibold text-sm transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-2 mt-2">
-              <i class="fas fa-check-circle"></i>
-              Complete Profile
-            </button>
           </div>
+
+          <%# Name %>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="<%= label_class %>">First name</label>
+              <%= form.text_field :first_name, required: true, placeholder: "John", class: input_class %>
+            </div>
+            <div>
+              <label class="<%= label_class %>">Last name</label>
+              <%= form.text_field :last_name, required: true, placeholder: "Doe", class: input_class %>
+            </div>
+          </div>
+
+          <%# Phone %>
+          <div>
+            <label class="<%= label_class %>">Phone</label>
+            <%= form.text_field :phone, required: true, placeholder: "1234567890", class: input_class %>
+            <p class="text-[11px] text-ink-3 mt-1.5">10–15 digits</p>
+          </div>
+
+          <%# Provider-only %>
+          <% if @user.provider? %>
+            <div class="pt-5 border-t border-line">
+              <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-4">business</div>
+
+              <div class="space-y-4">
+                <div>
+                  <label class="<%= label_class %>">Business name</label>
+                  <%= form.text_field :business_name, required: true, placeholder: "Your Business Name", class: input_class %>
+                </div>
+
+                <div>
+                  <label class="<%= label_class %>">About your services</label>
+                  <%= form.text_area :bio, rows: 3, placeholder: "Tell customers what you offer…",
+                      class: "w-full px-4 py-3 rounded-2xl border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none" %>
+                </div>
+
+                <div>
+                  <label class="<%= label_class %>">Business address</label>
+                  <%= form.text_field :address, required: true, placeholder: "123 Main Street", class: input_class %>
+                </div>
+
+                <div class="grid grid-cols-3 gap-3">
+                  <div>
+                    <label class="<%= label_class %>">City</label>
+                    <%= form.text_field :city, required: true, placeholder: "City", class: input_class %>
+                  </div>
+                  <div>
+                    <label class="<%= label_class %>">State</label>
+                    <%= form.text_field :state, required: true, placeholder: "State", class: input_class %>
+                  </div>
+                  <div>
+                    <label class="<%= label_class %>">ZIP</label>
+                    <%= form.text_field :zip_code, required: true, placeholder: "12345", class: input_class %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <button type="submit" class="w-full bg-ink hover:bg-ink-2 text-cream py-3.5 rounded-pill font-semibold text-sm transition-colors active:translate-y-px">
+            Complete profile
+          </button>
         <% end %>
       </div>
     </div>

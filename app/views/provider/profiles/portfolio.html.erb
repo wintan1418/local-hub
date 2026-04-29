@@ -1,73 +1,63 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="bg-white rounded-xl border border-slate-100">
-    <div class="px-4 py-5 sm:p-6">
-      <div class="flex justify-between items-center mb-6">
-        <div>
-          <h3 class="text-lg leading-6 font-medium text-slate-900">Portfolio</h3>
-          <p class="mt-1 text-sm text-slate-500">Showcase your previous work to attract more customers</p>
-        </div>
-        <%= link_to "Back to Profile", provider_profile_path, class: "text-sm text-blue-600 hover:text-blue-500" %>
-      </div>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <%= link_to provider_profile_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors mb-6" do %>
+      <i class="fas fa-arrow-left text-[10px]"></i>Back to profile
+    <% end %>
 
-      <!-- Upload Form -->
-      <div class="mb-8">
-        <%= form_with(url: upload_portfolio_provider_profile_path, method: :post, local: true) do |form| %>
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-slate-700 mb-2">Add Portfolio Images</label>
-            <%= form.file_field :portfolio_images, multiple: true, accept: "image/*", 
-                class: "block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" %>
-            <p class="mt-1 text-sm text-slate-500">Accepted formats: JPG, PNG, GIF (Max 5MB per image)</p>
+    <div class="mb-8">
+      <div class="eyebrow mb-3">portfolio</div>
+      <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">Show your <em class="italic-wonk" style="color: #1f4d3a;">work</em>.</h1>
+      <p class="mt-2 text-[14px] text-ink-2">Showcase previous work to attract more customers.</p>
+    </div>
+
+    <%# Upload form %>
+    <div class="bg-cream-elevated border border-line rounded-xl p-6 sm:p-8 mb-6">
+      <%= form_with(url: upload_portfolio_provider_profile_path, method: :post, local: true, class: "space-y-4") do |form| %>
+        <div>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2 block">Add images</label>
+          <%= form.file_field :portfolio_images, multiple: true, accept: "image/*",
+              class: "block w-full text-[13px] file:mr-3 file:px-4 file:py-2 file:rounded-pill file:border-0 file:bg-cream-sunken file:text-ink-2 file:text-[12px] file:font-semibold hover:file:bg-line" %>
+          <p class="text-[11px] text-ink-3 mt-1.5">JPG, PNG, GIF · max 5MB per image</p>
+        </div>
+        <%= form.submit "Upload images", class: "bg-ink hover:bg-ink-2 text-cream px-5 py-2.5 rounded-pill text-sm font-semibold cursor-pointer transition-colors active:translate-y-px" %>
+      <% end %>
+    </div>
+
+    <%# Gallery %>
+    <% if @portfolio_images.any? %>
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+        <% @portfolio_images.each do |image| %>
+          <div class="relative group">
+            <div class="aspect-square rounded-xl overflow-hidden border border-line bg-cream-sunken">
+              <%= image_tag image, class: "object-cover w-full h-full group-hover:opacity-75 transition-opacity" %>
+            </div>
+            <%= link_to destroy_portfolio_image_provider_profile_path(image_id: image.id),
+                method: :delete, data: { turbo_confirm: "Remove this image?" },
+                class: "absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity w-8 h-8 rounded-full bg-rose-700 hover:bg-rose-800 text-cream flex items-center justify-center" do %>
+              <i class="fas fa-times text-[12px]"></i>
+            <% end %>
+            <p class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mt-2">uploaded <%= image.created_at.strftime("%b %-d") %></p>
           </div>
-          <%= form.submit "Upload Images", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" %>
         <% end %>
       </div>
+    <% else %>
+      <%= render "shared/empty_state",
+          icon: "fa-image",
+          title: "No portfolio images",
+          message: "Upload photos of your work to start your portfolio." %>
+    <% end %>
 
-      <!-- Portfolio Gallery -->
-      <% if @portfolio_images.any? %>
-        <div>
-          <h4 class="text-md font-medium text-slate-900 mb-4">Your Work</h4>
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <% @portfolio_images.each do |image| %>
-              <div class="relative group">
-                <div class="aspect-w-3 aspect-h-2 overflow-hidden rounded-lg">
-                  <%= image_tag image, class: "object-cover w-full h-full group-hover:opacity-75 transition-opacity" %>
-                </div>
-                <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <%= link_to destroy_portfolio_image_provider_profile_path(image_id: image.id), 
-                      method: :delete, 
-                      data: { confirm: "Are you sure you want to remove this image?" },
-                      class: "inline-flex items-center p-1 border border-transparent rounded-full shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" do %>
-                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  <% end %>
-                </div>
-                <p class="mt-2 text-sm text-slate-500">Uploaded <%= image.created_at.strftime("%b %d, %Y") %></p>
-              </div>
-            <% end %>
-          </div>
-        </div>
-      <% else %>
-        <div class="text-center py-12">
-          <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <h3 class="mt-2 text-sm font-medium text-slate-900">No portfolio images</h3>
-          <p class="mt-1 text-sm text-slate-500">Get started by uploading images of your work</p>
-        </div>
-      <% end %>
-
-      <!-- Tips -->
-      <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h4 class="text-sm font-medium text-blue-900 mb-2">Tips for a Great Portfolio</h4>
-        <ul class="text-sm text-blue-700 space-y-1 list-disc list-inside">
-          <li>Include before and after photos when possible</li>
-          <li>Show a variety of your work to demonstrate your range</li>
-          <li>Use high-quality, well-lit photos</li>
-          <li>Add images that showcase your attention to detail</li>
-          <li>Keep your portfolio updated with recent work</li>
-        </ul>
-      </div>
+    <%# Tips %>
+    <div class="mt-8 bg-forest-soft border border-forest/20 rounded-xl p-5">
+      <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-forest mb-2">tips</div>
+      <h4 class="display text-[18px] text-ink leading-[1.15] mb-3">For a great portfolio</h4>
+      <ul class="space-y-1.5 text-[13px] text-ink-2">
+        <li class="flex items-start gap-2"><i class="fas fa-check text-forest text-[10px] mt-1.5"></i>Include before and after photos when possible</li>
+        <li class="flex items-start gap-2"><i class="fas fa-check text-forest text-[10px] mt-1.5"></i>Show a variety of your work to demonstrate range</li>
+        <li class="flex items-start gap-2"><i class="fas fa-check text-forest text-[10px] mt-1.5"></i>Use high-quality, well-lit photos</li>
+        <li class="flex items-start gap-2"><i class="fas fa-check text-forest text-[10px] mt-1.5"></i>Showcase attention to detail</li>
+        <li class="flex items-start gap-2"><i class="fas fa-check text-forest text-[10px] mt-1.5"></i>Keep your portfolio updated with recent work</li>
+      </ul>
     </div>
   </div>
 </div>

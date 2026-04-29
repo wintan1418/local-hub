@@ -1,86 +1,90 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <%= link_to provider_quotes_path, class: "inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 mb-6" do %>
-      <i class="fas fa-arrow-left text-xs"></i> Back to Quotes
+<div class="min-h-screen bg-cream">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <%= link_to provider_quotes_path, class: "inline-flex items-center gap-2 px-3 py-1.5 rounded-pill text-[13px] font-medium text-ink-2 hover:bg-cream-sunken transition-colors mb-6" do %>
+      <i class="fas fa-arrow-left text-[10px]"></i>Back to quotes
     <% end %>
 
-    <h1 class="text-2xl font-black text-slate-900 mb-8">Create New Quote</h1>
+    <div class="mb-8">
+      <div class="eyebrow mb-3">new quote</div>
+      <h1 class="display text-[32px] sm:text-[40px] text-ink leading-[1] tracking-[-0.02em]">Build the <em class="italic-wonk" style="color: #1f4d3a;">offer</em>.</h1>
+    </div>
 
-    <div class="bg-white rounded-xl border border-slate-100 p-6 sm:p-8">
-      <%= form_with(model: [:provider, @quote], local: true) do |f| %>
+    <div class="bg-cream-elevated border border-line rounded-xl p-6 sm:p-8">
+      <%= form_with(model: [ :provider, @quote ], local: true, class: "space-y-5") do |f| %>
         <% if @quote.errors.any? %>
-          <div class="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
-            <p class="text-sm font-medium text-red-800"><%= pluralize(@quote.errors.count, "error") %>:</p>
-            <ul class="mt-1 list-disc list-inside text-sm text-red-700">
-              <% @quote.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+          <div class="p-3 rounded-lg bg-rose-50 border border-rose-200">
+            <div class="font-mono text-[10px] uppercase tracking-[0.12em] text-rose-700 mb-1"><%= pluralize(@quote.errors.count, "error") %>:</div>
+            <ul class="space-y-0.5 ml-5">
+              <% @quote.errors.full_messages.each do |msg| %><li class="text-[13px] text-rose-700 list-disc"><%= msg %></li><% end %>
             </ul>
           </div>
         <% end %>
 
-        <div class="space-y-6">
+        <div>
+          <%= f.label :title, class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+          <%= f.text_field :title, placeholder: "e.g. Bathroom Plumbing Repair",
+              class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
           <div>
-            <%= f.label :title, class: "block text-sm font-bold text-slate-900 mb-1.5" %>
-            <%= f.text_field :title, placeholder: "e.g. Bathroom Plumbing Repair", class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
+            <%= f.label :service_id, "Service", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+            <%= f.select :service_id, options_for_select(@services.map { |s| [ s.title, s.id ] }, @quote.service_id), { include_blank: "Select a service" },
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink bg-cream-elevated focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink text-sm" %>
           </div>
-
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <%= f.label :service_id, "Service", class: "block text-sm font-bold text-slate-900 mb-1.5" %>
-              <%= f.select :service_id, options_for_select(@services.map { |s| [s.title, s.id] }, @quote.service_id), { include_blank: "Select a service" }, class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-            </div>
-            <div>
-              <%= f.label :customer_id, "Customer", class: "block text-sm font-bold text-slate-900 mb-1.5" %>
-              <%= f.select :customer_id, options_for_select(@customers.map { |c| [c.display_name + " (#{c.email})", c.id] }, @quote.customer_id), { include_blank: "Select a customer" }, class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-            </div>
-          </div>
-
           <div>
-            <%= f.label :description, "Description / Scope of Work", class: "block text-sm font-bold text-slate-900 mb-1.5" %>
-            <%= f.text_area :description, rows: 3, placeholder: "Describe what's included in this quote...", class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 resize-none" %>
-          </div>
-
-          <%# Line items %>
-          <div>
-            <label class="block text-sm font-bold text-slate-900 mb-3">Line Items</label>
-            <div id="line-items" class="space-y-3">
-              <%= f.fields_for :line_items do |li| %>
-                <div class="flex gap-3 items-start line-item-row">
-                  <div class="flex-1">
-                    <%= li.text_field :description, placeholder: "Item description", class: "w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-                  </div>
-                  <div class="w-20">
-                    <%= li.number_field :quantity, value: li.object.quantity || 1, min: 1, class: "w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm text-center focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-                  </div>
-                  <div class="w-28">
-                    <%= li.number_field :unit_price, step: 0.01, min: 0, placeholder: "Price", class: "w-full px-3 py-2.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-                  </div>
-                </div>
-              <% end %>
-            </div>
-            <p class="text-xs text-slate-400 mt-2">Total will be calculated automatically from line items.</p>
-          </div>
-
-          <div class="grid sm:grid-cols-2 gap-4">
-            <div>
-              <%= f.label :total_price, "Total Price ($)", class: "block text-sm font-bold text-slate-900 mb-1.5" %>
-              <%= f.number_field :total_price, step: 0.01, min: 0, placeholder: "0.00", class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-              <p class="text-xs text-slate-400 mt-1">Override if different from line items total.</p>
-            </div>
-            <div>
-              <%= f.label :valid_until, "Valid Until", class: "block text-sm font-bold text-slate-900 mb-1.5" %>
-              <%= f.date_field :valid_until, value: @quote.valid_until || 30.days.from_now.to_date, class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
-            </div>
-          </div>
-
-          <div>
-            <%= f.label :notes, "Internal Notes (not visible to customer)", class: "block text-sm font-bold text-slate-900 mb-1.5" %>
-            <%= f.text_area :notes, rows: 2, placeholder: "Any internal notes...", class: "w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 resize-none" %>
+            <%= f.label :customer_id, "Customer", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+            <%= f.select :customer_id, options_for_select(@customers.map { |c| [ "#{c.display_name} (#{c.email})", c.id ] }, @quote.customer_id), { include_blank: "Select a customer" },
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink bg-cream-elevated focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink text-sm" %>
           </div>
         </div>
 
-        <div class="flex items-center justify-between mt-8 pt-6 border-t border-slate-100">
-          <%= link_to "Cancel", provider_quotes_path, class: "text-sm font-semibold text-slate-500 hover:text-slate-700" %>
-          <%= f.submit "Create Quote", class: "bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-bold text-sm transition-all cursor-pointer" %>
+        <div>
+          <%= f.label :description, "Scope of work", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+          <%= f.text_area :description, rows: 3, placeholder: "Describe what's included…",
+              class: "w-full px-4 py-3 rounded-2xl border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none" %>
+        </div>
+
+        <div>
+          <label class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-2 block">Line items</label>
+          <div id="line-items" class="space-y-2">
+            <%= f.fields_for :line_items do |li| %>
+              <div class="flex gap-2 items-start">
+                <%= li.text_field :description, placeholder: "Item description",
+                    class: "flex-1 px-3 py-2.5 rounded-lg border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+                <%= li.number_field :quantity, value: li.object.quantity || 1, min: 1,
+                    class: "w-20 px-3 py-2.5 rounded-lg border border-line text-ink text-center focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+                <%= li.number_field :unit_price, step: 0.01, min: 0, placeholder: "Price",
+                    class: "w-28 px-3 py-2.5 rounded-lg border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+              </div>
+            <% end %>
+          </div>
+          <p class="text-[11px] text-ink-3 mt-2">Total calculated from line items.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <%= f.label :total_price, "Total ($)", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+            <%= f.number_field :total_price, step: 0.01, min: 0, placeholder: "0.00",
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+            <p class="text-[11px] text-ink-3 mt-1">Override if different from line items total.</p>
+          </div>
+          <div>
+            <%= f.label :valid_until, "Valid until", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+            <%= f.date_field :valid_until, value: @quote.valid_until || 30.days.from_now.to_date,
+                class: "w-full px-4 py-3 rounded-pill border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm" %>
+          </div>
+        </div>
+
+        <div>
+          <%= f.label :notes, "Internal notes (private)", class: "font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3 mb-1.5 block" %>
+          <%= f.text_area :notes, rows: 2, placeholder: "Any internal notes…",
+              class: "w-full px-4 py-3 rounded-2xl border border-line text-ink focus:outline-none focus:ring-2 focus:ring-ink/20 focus:border-ink bg-cream-elevated text-sm resize-none" %>
+        </div>
+
+        <div class="flex items-center justify-between pt-5 border-t border-line">
+          <%= link_to "Cancel", provider_quotes_path, class: "font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 hover:text-ink" %>
+          <%= f.submit "Create quote", class: "bg-ink hover:bg-ink-2 text-cream px-7 py-3 rounded-pill font-semibold text-sm cursor-pointer transition-colors active:translate-y-px" %>
         </div>
       <% end %>
     </div>

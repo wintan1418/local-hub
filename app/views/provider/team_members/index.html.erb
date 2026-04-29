@@ -1,47 +1,45 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="flex items-center justify-between mb-8">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="flex items-end justify-between gap-3 mb-8">
       <div>
-        <h1 class="text-2xl font-black text-slate-900">Team Members</h1>
-        <p class="text-sm text-slate-500 mt-1">Invite people to help run your business.</p>
+        <div class="eyebrow mb-3">team</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">Your <em class="italic-wonk" style="color: #1f4d3a;">crew</em>.</h1>
+        <p class="mt-2 text-[14px] text-ink-2">Invite people to help run your business.</p>
       </div>
-      <%= link_to new_provider_team_member_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
-        <i class="fas fa-plus mr-2 text-xs"></i>Invite Member
+      <%= link_to new_provider_team_member_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors active:translate-y-px" do %>
+        <i class="fas fa-plus text-[10px]"></i>Invite member
       <% end %>
     </div>
 
     <% if @team_members.any? %>
-      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
-        <div class="divide-y divide-slate-50">
+      <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+        <div class="divide-y divide-line">
           <% @team_members.each do |tm| %>
-            <div class="flex items-center justify-between px-6 py-4">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-400">
+            <div class="flex items-center justify-between px-5 sm:px-6 py-4">
+              <div class="flex items-center gap-3 min-w-0">
+                <div class="w-10 h-10 rounded-full bg-cream-sunken text-ink-2 flex items-center justify-center text-[13px] font-semibold border border-line flex-shrink-0">
                   <%= (tm.member&.display_name || tm.invite_email)[0].upcase %>
                 </div>
-                <div>
-                  <div class="text-sm font-bold text-slate-900"><%= tm.member&.display_name || tm.invite_email %></div>
-                  <div class="text-xs text-slate-400"><%= tm.role&.titleize %> · <%= tm.status.titleize %></div>
+                <div class="min-w-0">
+                  <div class="text-[14px] font-semibold text-ink truncate"><%= tm.member&.display_name || tm.invite_email %></div>
+                  <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3"><%= tm.role&.titleize %> · <%= tm.status.titleize %></div>
                 </div>
               </div>
-              <%= button_to provider_team_member_path(tm), method: :delete, data: { turbo_confirm: "Remove this team member?" }, class: "text-slate-400 hover:text-red-500 cursor-pointer" do %>
-                <i class="fas fa-times"></i>
+              <%= button_to provider_team_member_path(tm), method: :delete, data: { turbo_confirm: "Remove this team member?" }, class: "text-ink-3 hover:text-rose-700 cursor-pointer p-2" do %>
+                <i class="fas fa-times text-[12px]"></i>
               <% end %>
             </div>
           <% end %>
         </div>
       </div>
     <% else %>
-      <div class="bg-white rounded-xl border border-dashed border-slate-200 p-12 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center mx-auto mb-3">
-          <i class="fas fa-users text-slate-300 text-xl"></i>
-        </div>
-        <h3 class="text-base font-bold text-slate-900 mb-1">No team members yet</h3>
-        <p class="text-sm text-slate-500 mb-6">Invite staff to assign bookings and help manage your business.</p>
-        <%= link_to new_provider_team_member_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white" do %>
-          Invite First Member
-        <% end %>
-      </div>
+      <%= render "shared/empty_state",
+          icon: "fa-users",
+          title: "No team members yet",
+          message: "Invite staff to assign bookings and help manage your business.",
+          cta_text: "Invite first member",
+          cta_path: new_provider_team_member_path,
+          cta_icon: "fa-plus" %>
     <% end %>
   </div>
 </div>

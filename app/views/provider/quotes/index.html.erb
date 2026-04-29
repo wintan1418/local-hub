@@ -1,42 +1,50 @@
-<div class="min-h-screen bg-slate-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="flex items-center justify-between mb-8">
+<div class="min-h-screen bg-cream">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <div class="flex items-end justify-between gap-3 mb-8">
       <div>
-        <h1 class="text-2xl font-black text-slate-900">Quotes</h1>
-        <p class="text-sm text-slate-500 mt-1"><%= @quotes.size %> total quotes</p>
+        <div class="eyebrow mb-3">quotes</div>
+        <h1 class="display text-[36px] sm:text-[44px] text-ink leading-[1] tracking-[-0.02em]">Your <em class="italic-wonk" style="color: #1f4d3a;">offers</em>.</h1>
+        <p class="mt-2 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3"><%= @quotes.size %> total</p>
       </div>
-      <%= link_to new_provider_quote_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 hover:bg-orange-600 text-white transition-all" do %>
-        <i class="fas fa-plus mr-2 text-xs"></i>New Quote
+      <%= link_to new_provider_quote_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors active:translate-y-px" do %>
+        <i class="fas fa-plus text-[10px]"></i>New quote
       <% end %>
     </div>
 
     <% if @quotes.any? %>
-      <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
-        <div class="divide-y divide-slate-50">
+      <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+        <div class="divide-y divide-line">
           <% @quotes.each do |quote| %>
-            <%= link_to provider_quote_path(quote), class: "flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors" do %>
+            <%= link_to provider_quote_path(quote), class: "flex items-center justify-between px-5 sm:px-6 py-4 hover:bg-cream-sunken/40 transition-colors" do %>
               <div class="flex-1 min-w-0">
-                <div class="text-sm font-bold text-slate-900"><%= quote.title %></div>
-                <div class="text-xs text-slate-400 mt-0.5"><%= quote.customer.display_name %> &middot; <%= quote.service.title %> &middot; <%= time_ago_in_words(quote.created_at) %> ago</div>
+                <div class="display text-[16px] text-ink leading-[1.15] truncate"><%= quote.title %></div>
+                <div class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3 mt-0.5 truncate"><%= quote.customer.display_name %> · <%= quote.service.title %> · <%= time_ago_in_words(quote.created_at) %> ago</div>
               </div>
               <div class="flex items-center gap-3 flex-shrink-0">
-                <span class="text-sm font-black text-slate-900">$<%= number_with_precision(quote.total_price, precision: 2) %></span>
-                <% status_colors = { "draft" => "slate", "sent" => "sky", "approved" => "emerald", "rejected" => "red", "expired" => "amber", "converted" => "violet" } %>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-<%= status_colors[quote.status] %>-50 text-<%= status_colors[quote.status] %>-700"><%= quote.status.titleize %></span>
+                <span class="display text-[16px] text-ink leading-none">$<%= number_with_precision(quote.total_price, precision: 2) %></span>
+                <% sc = {
+                  "draft" => [ "bg-cream-sunken", "text-ink-3" ],
+                  "sent" => [ "bg-cream-sunken", "text-ink-2" ],
+                  "approved" => [ "bg-forest-soft", "text-forest" ],
+                  "rejected" => [ "bg-rose-100/60", "text-rose-700" ],
+                  "expired" => [ "bg-amber-100/60", "text-amber-800" ],
+                  "converted" => [ "bg-forest-soft", "text-forest" ]
+                } %>
+                <% c = sc[quote.status] || [ "bg-cream-sunken", "text-ink-3" ] %>
+                <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2.5 py-0.5 rounded-pill <%= c[0] %> <%= c[1] %>"><%= quote.status %></span>
               </div>
             <% end %>
           <% end %>
         </div>
       </div>
     <% else %>
-      <div class="bg-white rounded-xl border border-slate-100 p-12 text-center">
-        <i class="fas fa-file-invoice text-3xl text-slate-300 mb-3"></i>
-        <h3 class="text-lg font-bold text-slate-900 mb-2">No quotes yet</h3>
-        <p class="text-sm text-slate-500 mb-6">Create a quote to send to your customers.</p>
-        <%= link_to new_provider_quote_path, class: "inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold bg-orange-500 text-white" do %>
-          <i class="fas fa-plus mr-2 text-xs"></i>Create First Quote
-        <% end %>
-      </div>
+      <%= render "shared/empty_state",
+          icon: "fa-file-invoice",
+          title: "No quotes yet",
+          message: "Create a quote to send to your customers.",
+          cta_text: "Create first quote",
+          cta_path: new_provider_quote_path,
+          cta_icon: "fa-plus" %>
     <% end %>
   </div>
 </div>

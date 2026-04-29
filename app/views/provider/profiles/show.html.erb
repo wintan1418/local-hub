@@ -1,137 +1,67 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div class="bg-white rounded-xl border border-slate-100 overflow-hidden">
-    <!-- Header -->
-    <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
-      <div>
-        <h3 class="text-lg leading-6 font-medium text-slate-900">Provider Profile</h3>
-        <p class="mt-1 max-w-2xl text-sm text-slate-500">Personal and business information</p>
-      </div>
-      <div class="flex space-x-3">
-        <%= link_to "Edit Profile", edit_provider_profile_path, class: "inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700" %>
-        <%= link_to "Manage Documents", verification_provider_profile_path, class: "inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-xl text-slate-700 bg-white hover:bg-slate-50" %>
-        <%= link_to "Portfolio", portfolio_provider_profile_path, class: "inline-flex items-center px-4 py-2 border border-slate-300 text-sm font-medium rounded-xl text-slate-700 bg-white hover:bg-slate-50" %>
-      </div>
-    </div>
+<div class="min-h-screen bg-cream">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
 
-    <!-- Profile Picture and Verification Status -->
-    <div class="border-t border-slate-200 px-4 py-5 sm:px-6">
-      <div class="flex items-center space-x-5">
-        <div class="flex-shrink-0">
-          <% if @user.profile_picture.attached? %>
-            <%= image_tag @user.profile_picture, class: "h-20 w-20 rounded-full object-cover" %>
-          <% else %>
-            <div class="h-20 w-20 rounded-full bg-slate-300 flex items-center justify-center">
-              <svg class="h-12 w-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-              </svg>
-            </div>
-          <% end %>
-        </div>
+    <%# Header with avatar %>
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 mb-8">
+      <div class="flex items-center gap-5">
+        <% if @user.profile_picture.attached? %>
+          <%= image_tag @user.profile_picture, class: "h-20 w-20 rounded-full object-cover border border-line flex-shrink-0" %>
+        <% else %>
+          <div class="h-20 w-20 rounded-full bg-cream-sunken text-ink-2 flex items-center justify-center text-[24px] font-semibold border border-line flex-shrink-0">
+            <%= @user.display_name.first.upcase %>
+          </div>
+        <% end %>
         <div>
-          <h1 class="text-2xl font-bold text-slate-900"><%= @user.display_name %></h1>
-          <div class="mt-1 flex items-center space-x-4">
+          <div class="eyebrow mb-2">profile</div>
+          <h1 class="display text-[28px] sm:text-[36px] text-ink leading-[1.05] tracking-[-0.02em]"><%= @user.display_name %></h1>
+          <div class="mt-2 flex items-center gap-2 flex-wrap">
             <% if @user.verified? %>
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                <svg class="mr-1.5 h-2 w-2 text-green-400" fill="currentColor" viewBox="0 0 8 8">
-                  <circle cx="4" cy="4" r="3" />
-                </svg>
-                Verified Provider
-              </span>
+              <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill bg-forest-soft text-forest"><i class="fas fa-check text-[8px] mr-0.5"></i>verified</span>
             <% else %>
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                <svg class="mr-1.5 h-2 w-2 text-yellow-400" fill="currentColor" viewBox="0 0 8 8">
-                  <circle cx="4" cy="4" r="3" />
-                </svg>
-                Pending Verification
-              </span>
+              <span class="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.08em] px-2 py-0.5 rounded-pill bg-amber-100/60 text-amber-800">pending verification</span>
             <% end %>
             <% if @user.profile_complete? %>
-              <span class="text-sm text-slate-500">Profile Complete</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink-3">profile complete</span>
             <% else %>
-              <span class="text-sm text-red-500">Profile Incomplete</span>
+              <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-rose-700">profile incomplete</span>
             <% end %>
           </div>
         </div>
       </div>
+
+      <div class="flex flex-wrap gap-2">
+        <%= link_to edit_provider_profile_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-semibold bg-ink text-cream hover:bg-ink-2 transition-colors" do %>
+          <i class="fas fa-pen text-[10px]"></i>Edit
+        <% end %>
+        <%= link_to verification_provider_profile_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+          Documents
+        <% end %>
+        <%= link_to portfolio_provider_profile_path, class: "inline-flex items-center gap-2 px-5 py-2.5 rounded-pill text-sm font-medium border border-line text-ink-2 hover:bg-cream-sunken transition-colors" do %>
+          Portfolio
+        <% end %>
+      </div>
     </div>
 
-    <!-- Profile Information -->
-    <div class="border-t border-slate-200">
-      <dl>
-        <!-- Personal Information -->
-        <div class="bg-slate-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Full name</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.full_name.presence || "Not provided" %>
-          </dd>
+    <%# Info card %>
+    <div class="bg-cream-elevated border border-line rounded-xl overflow-hidden">
+      <% [
+        [ "Full name", @user.full_name.presence || "—" ],
+        [ "Email", @user.email ],
+        [ "Phone", @user.phone.presence || "—" ],
+        [ "Business name", @user.business_name.presence || "—" ],
+        [ "Years experience", @user.years_experience.present? ? pluralize(@user.years_experience, "year") : "—" ],
+        [ "Business address", @user.complete_address.presence || "—" ],
+        [ "Business license", @user.business_license.presence || "—" ],
+        [ "Insurance number", @user.insurance_number.presence || "—" ],
+        [ "About", @user.bio.presence || "—" ],
+        [ "Member since", @user.created_at.strftime("%B %-d, %Y") ],
+        [ "Verification status", @user.verification_status ]
+      ].each do |label, value| %>
+        <div class="px-5 sm:px-6 py-4 grid sm:grid-cols-3 gap-2 sm:gap-4 border-b border-line last:border-0">
+          <dt class="font-mono text-[10px] uppercase tracking-[0.12em] text-ink-3"><%= label %></dt>
+          <dd class="sm:col-span-2 text-[14px] text-ink leading-[1.5]"><%= value %></dd>
         </div>
-        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Email address</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2"><%= @user.email %></dd>
-        </div>
-        <div class="bg-slate-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Phone number</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.phone.presence || "Not provided" %>
-          </dd>
-        </div>
-
-        <!-- Business Information -->
-        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Business name</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.business_name.presence || "Not provided" %>
-          </dd>
-        </div>
-        <div class="bg-slate-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Years of experience</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.years_experience.present? ? pluralize(@user.years_experience, 'year') : "Not provided" %>
-          </dd>
-        </div>
-        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Business address</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.complete_address.presence || "Not provided" %>
-          </dd>
-        </div>
-
-        <!-- Business Verification -->
-        <div class="bg-slate-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Business license</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.business_license.presence || "Not provided" %>
-          </dd>
-        </div>
-        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Insurance number</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.insurance_number.presence || "Not provided" %>
-          </dd>
-        </div>
-
-        <!-- Bio -->
-        <div class="bg-slate-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">About</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.bio.presence || "No bio provided" %>
-          </dd>
-        </div>
-
-        <!-- Account Status -->
-        <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Account created</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.created_at.strftime("%B %d, %Y") %>
-          </dd>
-        </div>
-        <div class="bg-slate-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt class="text-sm font-medium text-slate-500">Verification status</dt>
-          <dd class="mt-1 text-sm text-slate-900 sm:mt-0 sm:col-span-2">
-            <%= @user.verification_status %>
-          </dd>
-        </div>
-      </dl>
+      <% end %>
     </div>
   </div>
 </div>
