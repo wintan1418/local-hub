@@ -1,16 +1,16 @@
-<div class="min-h-screen flex items-center justify-center bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex items-center justify-center bg-cream py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8">
     <div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-slate-900">
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-ink">
         Set new password
       </h2>
-      <p class="mt-2 text-center text-sm text-slate-600">
+      <p class="mt-2 text-center text-sm text-ink-2">
         Enter your new password below.
       </p>
     </div>
     
     <% if @user&.errors&.any? %>
-      <div class="rounded-lg bg-rose-50 border border-rose-200 p-4">
+      <div class="rounded-pill bg-rose-50 border border-rose-200 p-4">
         <div class="flex">
           <i class="fas fa-exclamation-circle text-rose-500 mt-0.5"></i>
           <div class="ml-3">
@@ -27,26 +27,26 @@
 
     <%= form_with url: password_reset_path(token: params[:token]), method: :patch, local: true, class: "mt-8 space-y-4" do |form| %>
       <div>
-        <%= form.label :password, "New Password", class: "block text-sm font-semibold text-slate-700 mb-1" %>
+        <%= form.label :password, "New Password", class: "block text-sm font-semibold text-ink-2 mb-1" %>
         <%= form.password_field :password,
               autocomplete: "new-password",
               required: true,
               placeholder: "Enter new password",
-              class: "w-full px-3 py-2.5 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
+              class: "w-full px-3 py-2.5 text-sm rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
       </div>
 
       <div>
-        <%= form.label :password_confirmation, "Confirm Password", class: "block text-sm font-semibold text-slate-700 mb-1" %>
+        <%= form.label :password_confirmation, "Confirm Password", class: "block text-sm font-semibold text-ink-2 mb-1" %>
         <%= form.password_field :password_confirmation,
               autocomplete: "new-password",
               required: true,
               placeholder: "Confirm new password",
-              class: "w-full px-3 py-2.5 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
+              class: "w-full px-3 py-2.5 text-sm rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500" %>
       </div>
 
       <div>
         <%= form.submit "Reset Password",
-              class: "w-full py-2.5 px-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-semibold cursor-pointer transition-colors" %>
+              class: "w-full py-2.5 px-4 bg-ink hover:bg-ink-2 text-white rounded-pill text-sm font-semibold cursor-pointer transition-colors" %>
       </div>
 
       <div class="text-center">

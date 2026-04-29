@@ -1,11 +1,11 @@
-<div class="min-h-screen bg-slate-50">
+<div class="min-h-screen bg-cream">
   <div class="max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
     <div class="mb-6">
-      <h1 class="text-2xl font-black text-slate-900">Add New Service</h1>
-      <p class="mt-1 text-sm text-slate-500">Describe what you offer so customers can book it.</p>
+      <h1 class="text-2xl font-black text-ink">Add New Service</h1>
+      <p class="mt-1 text-sm text-ink-3">Describe what you offer so customers can book it.</p>
     </div>
 
-    <div class="bg-white rounded-xl border border-slate-100 p-5 sm:p-6">
+    <div class="bg-white rounded-xl border border-line p-5 sm:p-6">
       <%= form_with model: [ :provider, @service ], local: true, multipart: true, class: "space-y-5" do |f| %>
         <% if @service.errors.any? %>
           <div class="bg-rose-50 border border-rose-200 text-rose-700 rounded-lg p-3 text-sm">
@@ -19,39 +19,39 @@
         <% end %>
 
         <div>
-          <%= f.label :title, class: "block text-sm font-semibold text-slate-700 mb-1" %>
-          <%= f.text_field :title, class: "w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", required: true %>
+          <%= f.label :title, class: "block text-sm font-semibold text-ink-2 mb-1" %>
+          <%= f.text_field :title, class: "w-full px-3 py-2 text-sm rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", required: true %>
         </div>
 
         <div>
-          <%= f.label :description, class: "block text-sm font-semibold text-slate-700 mb-1" %>
-          <%= f.text_area :description, rows: 4, class: "w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", required: true %>
+          <%= f.label :description, class: "block text-sm font-semibold text-ink-2 mb-1" %>
+          <%= f.text_area :description, rows: 4, class: "w-full px-3 py-2 text-sm rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", required: true %>
         </div>
 
         <div>
-          <%= f.label :category_id, "Category", class: "block text-sm font-semibold text-slate-700 mb-1" %>
-          <%= f.select :category_id, options_from_collection_for_select(@categories, :id, :name, @service.category_id), { prompt: "Select a category" }, class: "w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 bg-white" %>
+          <%= f.label :category_id, "Category", class: "block text-sm font-semibold text-ink-2 mb-1" %>
+          <%= f.select :category_id, options_from_collection_for_select(@categories, :id, :name, @service.category_id), { prompt: "Select a category" }, class: "w-full px-3 py-2 text-sm rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 bg-white" %>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <%= f.label :price_type, class: "block text-sm font-semibold text-slate-700 mb-1" %>
-            <%= f.select :price_type, Service.price_types.keys.map { |k| [ k.titleize, k ] }, { prompt: "Select" }, class: "w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 bg-white" %>
+            <%= f.label :price_type, class: "block text-sm font-semibold text-ink-2 mb-1" %>
+            <%= f.select :price_type, Service.price_types.keys.map { |k| [ k.titleize, k ] }, { prompt: "Select" }, class: "w-full px-3 py-2 text-sm rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 bg-white" %>
           </div>
           <div>
-            <%= f.label :base_price, class: "block text-sm font-semibold text-slate-700 mb-1" %>
-            <%= f.number_field :base_price, min: 0, step: 1, class: "w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", required: true %>
+            <%= f.label :base_price, class: "block text-sm font-semibold text-ink-2 mb-1" %>
+            <%= f.number_field :base_price, min: 0, step: 1, class: "w-full px-3 py-2 text-sm rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500", required: true %>
           </div>
         </div>
 
         <div>
-          <%= f.label :images, "Service Images", class: "block text-sm font-semibold text-slate-700 mb-1" %>
-          <%= f.file_field :images, multiple: true, direct_upload: true, class: "w-full px-3 py-2 text-sm rounded-lg border border-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 bg-white" %>
-          <p class="text-xs text-slate-500 mt-1">Upload multiple images. The first becomes the cover.</p>
+          <%= f.label :images, "Service Images", class: "block text-sm font-semibold text-ink-2 mb-1" %>
+          <%= f.file_field :images, multiple: true, direct_upload: true, class: "w-full px-3 py-2 text-sm rounded-pill border border-line focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 bg-white" %>
+          <p class="text-xs text-ink-3 mt-1">Upload multiple images. The first becomes the cover.</p>
         </div>
 
         <div class="pt-2">
-          <%= f.submit "Create Service", class: "w-full py-2.5 px-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-sm font-semibold cursor-pointer transition-colors" %>
+          <%= f.submit "Create Service", class: "w-full py-2.5 px-4 bg-ink hover:bg-ink-2 text-white rounded-pill text-sm font-semibold cursor-pointer transition-colors" %>
         </div>
       <% end %>
     </div>
