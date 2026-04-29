@@ -79,12 +79,37 @@
 
       <div class="relative hero-reveal" style="--delay: 0.1s">
 
-        <%# Main hero card with sliding deck %>
+        <%# Main hero card with shattering deck %>
         <div class="provider-deck relative rounded-[20px] overflow-hidden border border-line shadow-card-lg bg-cream-sunken" style="aspect-ratio: 4/5; min-height: 480px;" id="provider-deck">
+
+          <%# Shatter layer — shards rendered here during transitions %>
+          <div class="shatter-layer absolute inset-0 z-30 pointer-events-none" id="shatter-layer"></div>
+
+          <%# Flash overlay — bright burst on impact %>
+          <div class="shatter-flash absolute inset-0 z-25 pointer-events-none" id="shatter-flash"></div>
+
+          <%# Crack lines — radiate from impact point %>
+          <svg class="crack-lines" id="crack-lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <g stroke="white" stroke-width="0.4" fill="none" stroke-linecap="round" opacity="0.95">
+              <path d="M50,50 L20,8" />
+              <path d="M50,50 L75,5" />
+              <path d="M50,50 L98,38" />
+              <path d="M50,50 L92,85" />
+              <path d="M50,50 L48,98" />
+              <path d="M50,50 L8,75" />
+              <path d="M50,50 L2,40" />
+              <path d="M50,50 L25,72" />
+              <path d="M50,50 L72,28" />
+              <path d="M22,16 L40,30" />
+              <path d="M70,12 L60,28" />
+              <path d="M88,40 L72,46" />
+              <path d="M85,80 L62,68" />
+            </g>
+          </svg>
 
           <%# Slides %>
           <% provider_slides.each_with_index do |s, i| %>
-            <div class="provider-slide absolute inset-0 <%= i == 0 ? 'is-active' : '' %>" data-slide="<%= i %>">
+            <div class="provider-slide absolute inset-0 <%= i == 0 ? 'is-active is-initial' : '' %>" data-slide="<%= i %>">
               <img src="<%= s[:img] %>"
                    data-fallback="<%= fallback_img %>"
                    onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback;}"
@@ -801,25 +826,26 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Provider deck — sliding showcase */
+  /* Provider deck — glass-shatter showcase */
   .provider-slide {
     opacity: 0;
-    transform: translateX(40px) scale(1.02);
-    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
   }
   .provider-slide.is-active {
     opacity: 1;
-    transform: translateX(0) scale(1);
     pointer-events: auto;
+    animation: revealZoom 1.1s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .provider-slide.is-leaving {
-    opacity: 0;
-    transform: translateX(-40px) scale(0.98);
+  /* Initial slide skips the reveal animation */
+  .provider-slide.is-active.is-initial {
+    animation: none;
   }
-  .deck-dot { transition: all 0.4s ease; cursor: pointer; }
+  @keyframes revealZoom {
+    from { transform: scale(1.08); }
+    to   { transform: scale(1); }
+  }
 
-  /* Subtle Ken Burns drift on the active image */
+  /* Subtle Ken Burns drift on active image */
   .provider-slide.is-active img {
     animation: kenBurns 8s ease-out forwards;
   }
@@ -827,6 +853,51 @@
     from { transform: scale(1.04); }
     to   { transform: scale(1); }
   }
+
+  /* Shatter shards — single bg-image clipped to triangles */
+  .shatter-layer .shard {
+    position: absolute;
+    inset: 0;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    will-change: transform, opacity, filter;
+    /* Subtle inner edge to read as glass */
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
+  }
+
+  /* Bright flash burst on impact */
+  .shatter-flash {
+    background: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.35) 35%, transparent 65%);
+    opacity: 0;
+    mix-blend-mode: screen;
+  }
+  .shatter-flash.flashing {
+    animation: shatterFlash 280ms cubic-bezier(0.4, 0, 0.6, 1);
+  }
+  @keyframes shatterFlash {
+    0% { opacity: 0; }
+    15% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* Crack lines drawn at impact moment */
+  .crack-lines {
+    position: absolute;
+    inset: 0;
+    z-index: 28;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .crack-lines.cracking {
+    animation: crackFlash 180ms ease-out;
+  }
+  @keyframes crackFlash {
+    0% { opacity: 0; }
+    20% { opacity: 0.9; }
+    100% { opacity: 0; }
+  }
+
+  .deck-dot { transition: all 0.4s ease; cursor: pointer; }
 </style>
 
 <script>
@@ -836,22 +907,96 @@
   var slides = deck.querySelectorAll('.provider-slide');
   var dots = deck.querySelectorAll('.deck-dot');
   var noLabel = document.getElementById('deck-no');
-  if (slides.length < 2) return;
+  var shatterLayer = document.getElementById('shatter-layer');
+  var flashEl = document.getElementById('shatter-flash');
+  var cracksEl = document.getElementById('crack-lines');
+  if (slides.length < 2 || !shatterLayer) return;
 
   var current = 0;
-  var interval = 5000;
+  var interval = 5500;
   var timer;
+  var transitioning = false;
 
-  function goTo(idx) {
-    if (idx === current) return;
-    var leaving = slides[current];
-    var entering = slides[idx];
-    leaving.classList.remove('is-active');
-    leaving.classList.add('is-leaving');
-    entering.classList.remove('is-leaving');
-    entering.classList.add('is-active');
-    setTimeout(function() { leaving.classList.remove('is-leaving'); }, 900);
+  // Build a triangle mesh of clip-paths covering the card.
+  // Each cell becomes 2 triangles with a randomly-flipped diagonal so the
+  // mesh doesn't look like a uniform grid.
+  function buildShards() {
+    var ROWS = 4, COLS = 4;
+    var shards = [];
+    for (var r = 0; r < ROWS; r++) {
+      for (var c = 0; c < COLS; c++) {
+        var x1 = (c / COLS) * 100;
+        var x2 = ((c + 1) / COLS) * 100;
+        var y1 = (r / ROWS) * 100;
+        var y2 = ((r + 1) / ROWS) * 100;
+        var flip = Math.random() > 0.5;
+        var polyA = flip
+          ? 'polygon(' + x1 + '% ' + y1 + '%, ' + x2 + '% ' + y1 + '%, ' + x2 + '% ' + y2 + '%)'
+          : 'polygon(' + x1 + '% ' + y1 + '%, ' + x2 + '% ' + y1 + '%, ' + x1 + '% ' + y2 + '%)';
+        var polyB = flip
+          ? 'polygon(' + x1 + '% ' + y1 + '%, ' + x2 + '% ' + y2 + '%, ' + x1 + '% ' + y2 + '%)'
+          : 'polygon(' + x2 + '% ' + y1 + '%, ' + x2 + '% ' + y2 + '%, ' + x1 + '% ' + y2 + '%)';
+        shards.push({ clip: polyA, cx: (x1 + x2) / 2, cy: (y1 + y2) / 2 });
+        shards.push({ clip: polyB, cx: (x1 + x2) / 2, cy: (y1 + y2) / 2 });
+      }
+    }
+    return shards;
+  }
 
+  function shatter(leavingSlide, onDone) {
+    var img = leavingSlide.querySelector('img');
+    if (!img || !img.src) { onDone(); return; }
+
+    shatterLayer.innerHTML = '';
+    var shards = buildShards();
+
+    shards.forEach(function(s) {
+      var el = document.createElement('div');
+      el.className = 'shard';
+      el.style.backgroundImage = 'url("' + img.src + '")';
+      el.style.clipPath = s.clip;
+      el.style.webkitClipPath = s.clip;
+      el.style.transform = 'translate(0, 0) rotate(0)';
+      el.style.opacity = '1';
+      shatterLayer.appendChild(el);
+
+      // Direction outward from card center, with gravity drag and slight randomness
+      var dx = (s.cx - 50) * 5 + (Math.random() - 0.5) * 90;
+      var dy = (s.cy - 50) * 5 + 90 + (Math.random() - 0.5) * 70;
+      var rot = (Math.random() - 0.5) * 90;
+      var delay = Math.random() * 70;
+      var dur = 850 + Math.random() * 200;
+
+      requestAnimationFrame(function() {
+        el.style.transition =
+          'transform ' + dur + 'ms cubic-bezier(0.4, 0.05, 0.7, 1) ' + delay + 'ms, ' +
+          'opacity 700ms ease-in ' + (delay + 250) + 'ms';
+        el.style.transform = 'translate(' + dx + 'px, ' + dy + 'px) rotate(' + rot + 'deg)';
+        el.style.opacity = '0';
+      });
+    });
+
+    // Trigger flash + crack lines simultaneously
+    if (flashEl) {
+      flashEl.classList.remove('flashing');
+      void flashEl.offsetWidth; // restart animation
+      flashEl.classList.add('flashing');
+    }
+    if (cracksEl) {
+      cracksEl.classList.remove('cracking');
+      void cracksEl.offsetWidth;
+      cracksEl.classList.add('cracking');
+    }
+
+    setTimeout(function() {
+      shatterLayer.innerHTML = '';
+      if (flashEl) flashEl.classList.remove('flashing');
+      if (cracksEl) cracksEl.classList.remove('cracking');
+      onDone();
+    }, 1200);
+  }
+
+  function updateChrome(idx) {
     dots.forEach(function(d, i) {
       if (i === idx) {
         d.classList.add('w-6', 'bg-cream');
@@ -861,9 +1006,25 @@
         d.classList.add('bg-cream/40');
       }
     });
-    if (noLabel) {
-      noLabel.textContent = String(idx + 1).padStart(2, '0');
-    }
+    if (noLabel) noLabel.textContent = String(idx + 1).padStart(2, '0');
+  }
+
+  function goTo(idx) {
+    if (idx === current || transitioning) return;
+    transitioning = true;
+    var leaving = slides[current];
+    var entering = slides[idx];
+
+    // Reveal incoming slide underneath the shards
+    entering.classList.remove('is-initial');
+    entering.classList.add('is-active');
+
+    shatter(leaving, function() {
+      leaving.classList.remove('is-active');
+      transitioning = false;
+    });
+
+    updateChrome(idx);
     current = idx;
   }
 
