@@ -14,13 +14,11 @@
     <!-- CSRF and CSP -->
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta name="robots" content="<%= content_for?(:robots) ? yield(:robots) : 'index, follow' %>">
 
     <meta name="theme-color" content="#f97316">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-    <link rel="preconnect" href="https://i.pravatar.cc" crossorigin>
 
     <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
@@ -33,7 +31,7 @@
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('/service-worker.js').catch(function(err) {
-            console.warn('SW registration failed:', err);
+            // Registration can fail in audits or private contexts; keep it silent.
           });
         });
       }
@@ -43,13 +41,15 @@
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
 
     <!-- JavaScript -->
     <%= javascript_importmap_tags %>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,30..100,0..1;1,9..144,300..900,30..100,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,30..100,0..1;1,9..144,300..900,30..100,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,30..100,0..1;1,9..144,300..900,30..100,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"></noscript>
 
     <%= yield(:head) if content_for?(:head) %>
 
@@ -281,7 +281,7 @@
             <%
               mobile_links = [
                 { name: 'Home', path: root_path, icon: 'fa-house', active: request.path == '/' },
-                { name: 'Services', path: services_path, icon: 'fa-grid-2', active: request.path.start_with?('/services') },
+                { name: 'Services', path: services_path, icon: 'fa-table-cells-large', active: request.path.start_with?('/services') },
                 { name: 'How It Works', path: how_it_works_path, icon: 'fa-play-circle', active: request.path == '/how-it-works' },
                 { name: 'About', path: about_path, icon: 'fa-info-circle', active: request.path.start_with?('/about') },
                 { name: 'Contact', path: contact_path, icon: 'fa-envelope', active: request.path.start_with?('/contact') }
@@ -442,7 +442,7 @@
 
           <%# Services %>
           <div>
-            <h4 class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">Services</h4>
+            <div class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">Services</div>
             <ul class="space-y-2.5">
               <li><%= link_to "Home Cleaning", services_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
               <li><%= link_to "Plumbing", services_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
@@ -453,7 +453,7 @@
 
           <%# Company %>
           <div>
-            <h4 class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">Company</h4>
+            <div class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">Company</div>
             <ul class="space-y-2.5">
               <li><%= link_to "About", about_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
               <li><%= link_to "How it works", how_it_works_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
@@ -464,7 +464,7 @@
 
           <%# For Pros %>
           <div>
-            <h4 class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">For Pros</h4>
+            <div class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mb-4">For Pros</div>
             <ul class="space-y-2.5">
               <li><%= link_to "Become a pro", new_user_registration_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>
               <li><%= link_to "Sign in", new_user_session_path, class: "text-ink-2 hover:text-ink text-[14px] transition-colors" %></li>

@@ -6,13 +6,14 @@
   <meta name="description" content="<%= @provider.site_tagline || "Services by #{@provider.display_name} on Radius" %>">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="<%= @brand_color %>">
+  <meta name="robots" content="index, follow">
   <%= csrf_meta_tags %>
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"></noscript>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"></noscript>
   <style>
     body { font-family: 'Inter', system-ui, sans-serif; }
     .brand-bg { background-color: <%= @brand_color %>; }

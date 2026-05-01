@@ -38,7 +38,8 @@ Rails.application.configure do
   config.action_dispatch.default_headers.merge!(
     "Cross-Origin-Opener-Policy" => "same-origin",
     "Referrer-Policy" => "strict-origin-when-cross-origin",
-    "X-Content-Type-Options" => "nosniff"
+    "X-Content-Type-Options" => "nosniff",
+    "X-Robots-Tag" => "index, follow"
   )
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
@@ -52,6 +53,7 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
+  config.ssl_options = { hsts: { expires: 1.year, subdomains: true } }
 
   # Skip http-to-https redirect for the default health check endpoint.
   # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }

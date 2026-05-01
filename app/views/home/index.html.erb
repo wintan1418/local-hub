@@ -133,8 +133,15 @@
                  data-r-initial="<%= s[:r_initial] %>"
                  data-r-quote="<%= s[:r_quote] %>"
                  data-r-when="<%= s[:r_when] %>">
-              <img src="<%= s[:img] %>"
+              <img
+                   <% if i == 0 %>
+                   src="<%= s[:img] %>"
                    srcset="<%= slide_srcset %>"
+                   <% else %>
+                   src="data:image/gif;base64,R0lGODlhAQABAAAAACw="
+                   data-src="<%= s[:img] %>"
+                   data-srcset="<%= slide_srcset %>"
+                   <% end %>
                    sizes="(min-width: 1024px) 38vw, 92vw"
                    data-fallback="<%= fallback_img %>"
                    onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback;}"
@@ -178,7 +185,7 @@
           <%# Slide indicators (dots) — bottom-center, above gradient %>
           <div class="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5">
             <% provider_slides.each_with_index do |_, i| %>
-              <button type="button" class="deck-dot w-1.5 h-1.5 rounded-full transition-all <%= i == 0 ? 'w-6 bg-cream' : 'bg-cream/40' %>" data-target="<%= i %>" aria-label="Slide <%= i + 1 %>"></button>
+              <button type="button" class="deck-dot rounded-full transition-all <%= i == 0 ? 'w-6 bg-cream' : 'bg-cream/40' %>" data-target="<%= i %>" aria-label="Slide <%= i + 1 %>"></button>
             <% end %>
           </div>
         </div>
@@ -296,9 +303,9 @@
               </div>
             <% end %>
             <%# Favorite icon overlay %>
-            <div class="absolute top-3 right-3 w-8 h-8 rounded-full bg-cream-elevated/90 backdrop-blur-sm border border-line flex items-center justify-center hover:bg-cream-elevated transition-colors">
-              <i class="far fa-heart text-ink-3 text-xs"></i>
-            </div>
+              <div class="absolute top-3 right-3 w-11 h-11 rounded-full bg-cream-elevated/90 backdrop-blur-sm border border-line flex items-center justify-center hover:bg-cream-elevated transition-colors" aria-hidden="true">
+                <i class="far fa-heart text-ink-3 text-xs"></i>
+              </div>
           </div>
 
           <div class="p-4">
@@ -394,7 +401,7 @@
               <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-ink">active now</span>
             </div>
             <%# Favorite icon %>
-            <div class="absolute top-3 right-3 w-8 h-8 rounded-full bg-cream-elevated/90 backdrop-blur border border-line flex items-center justify-center">
+            <div class="absolute top-3 right-3 w-11 h-11 rounded-full bg-cream-elevated/90 backdrop-blur border border-line flex items-center justify-center" aria-hidden="true">
               <i class="far fa-heart text-ink-3 text-xs"></i>
             </div>
           </div>
@@ -836,7 +843,7 @@
         <details class="group border-b border-line">
           <summary class="flex items-center justify-between cursor-pointer py-5 text-left">
             <span class="display text-[18px] sm:text-[20px] text-ink leading-[1.2] pr-4"><%= faq[:q] %></span>
-            <span class="flex-shrink-0 w-7 h-7 rounded-full border border-line flex items-center justify-center transition-colors group-open:bg-ink group-open:border-ink">
+            <span class="flex-shrink-0 w-11 h-11 rounded-full border border-line flex items-center justify-center transition-colors group-open:bg-ink group-open:border-ink">
               <i class="fas fa-plus text-ink-3 text-[10px] transition-all group-open:rotate-45 group-open:text-cream"></i>
             </span>
           </summary>
@@ -858,11 +865,11 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="rounded-[20px] p-10 sm:p-14 lg:p-16 grid lg:grid-cols-[1.5fr_1fr] gap-8 lg:gap-10 items-center" style="background-color: #1d1813;">
       <div>
-        <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/55 mb-4">For service pros</div>
+        <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/75 mb-4">For service pros</div>
         <h2 class="display text-cream" style="font-size: clamp(36px, 5vw, 56px); line-height: 1; letter-spacing: -0.02em;">
           Get hired by people who <em class="italic-wonk" style="color: #d96a3a;">actually</em> show up.
         </h2>
-        <p class="mt-5 text-cream/70 text-[15px] sm:text-[17px] leading-[1.5] max-w-md">
+        <p class="mt-5 text-cream/85 text-[15px] sm:text-[17px] leading-[1.5] max-w-md">
           List your services, set your rates, and get paid securely. We handle bookings, payments, and reviews — you handle the work.
         </p>
       </div>
@@ -870,7 +877,7 @@
         <%= link_to new_user_registration_path, class: "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-pill text-sm font-semibold bg-cream text-ink hover:bg-cream-sunken transition-colors active:translate-y-px" do %>
           Become a Radius pro <i class="fas fa-arrow-right text-[10px]"></i>
         <% end %>
-        <%= link_to how_it_works_path, class: "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-pill text-sm font-medium text-cream/80 hover:text-cream border border-cream/20 hover:border-cream/40 transition-colors" do %>
+        <%= link_to how_it_works_path, class: "inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-pill text-sm font-medium text-cream/90 hover:text-cream border border-cream/40 hover:border-cream/60 transition-colors" do %>
           See how it works
         <% end %>
       </div>
@@ -963,7 +970,27 @@
     100% { opacity: 0; }
   }
 
-  .deck-dot { transition: all 0.4s ease; cursor: pointer; }
+  .deck-dot {
+    width: 44px !important;
+    height: 44px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    cursor: pointer;
+  }
+  .deck-dot::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(243, 234, 216, 0.45);
+    transition: all 0.4s ease;
+  }
+  .deck-dot.w-6::before {
+    width: 24px;
+    background: #f3ead8;
+  }
 
   /* Chip swap animation — fires when content updates with each shatter */
   .chip-inner {
@@ -1071,6 +1098,15 @@
     }, 1200);
   }
 
+  function prepareSlideImage(slide) {
+    var img = slide.querySelector('img');
+    if (!img || !img.dataset.src) return;
+    img.src = img.dataset.src;
+    if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+    img.removeAttribute('data-src');
+    img.removeAttribute('data-srcset');
+  }
+
   function updateChrome(idx) {
     dots.forEach(function(d, i) {
       if (i === idx) {
@@ -1119,6 +1155,7 @@
     transitioning = true;
     var leaving = slides[current];
     var entering = slides[idx];
+    prepareSlideImage(entering);
 
     // Reveal incoming slide underneath the shards
     entering.classList.remove('is-initial');
