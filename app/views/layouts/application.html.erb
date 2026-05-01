@@ -16,6 +16,11 @@
     <%= csp_meta_tag %>
 
     <meta name="theme-color" content="#f97316">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link rel="preconnect" href="https://i.pravatar.cc" crossorigin>
 
     <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
@@ -35,113 +40,15 @@
     </script>
 
     <!-- CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            maxWidth: {
-              '7xl': '1280px',
-            },
-            colors: {
-              // Champagne/sand — warmer, more distinctive than generic cream
-              cream: '#f3ead8',
-              'cream-elevated': '#fdf8ed',
-              'cream-sunken': '#e6d8bf',
-              ink: '#1d1813',
-              'ink-2': '#3d3327',
-              'ink-3': '#766853',
-              'ink-4': '#a89779',
-              line: '#ddc9a8',
-              'line-strong': '#c4ab85',
-              forest: '#1f4d3a',
-              'forest-soft': '#dce5d4',
-              terracotta: '#d96a3a',
-              clay: '#b8551c',
-            },
-            fontFamily: {
-              display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
-              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-              mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-            },
-            borderRadius: {
-              'pill': '999px',
-            },
-            boxShadow: {
-              'card': '0 1px 2px rgba(26,26,23,0.04), 0 1px 1px rgba(26,26,23,0.03)',
-              'card-md': '0 4px 16px rgba(26,26,23,0.06), 0 1px 2px rgba(26,26,23,0.04)',
-              'card-lg': '0 12px 40px rgba(26,26,23,0.08), 0 2px 6px rgba(26,26,23,0.04)',
-              'card-hover': '0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.04)',
-            },
-          }
-        }
-      }
-    </script>
-    <style>
-      /* Editorial display typography — Fraunces with WONK + SOFT axes */
-      .display {
-        font-family: 'Fraunces', ui-serif, Georgia, serif;
-        font-weight: 400;
-        letter-spacing: -0.02em;
-        line-height: 1.05;
-        font-variation-settings: 'SOFT' 30, 'WONK' 0;
-      }
-      .display em, .italic-wonk {
-        font-style: italic;
-        font-variation-settings: 'SOFT' 100, 'WONK' 1;
-        font-feature-settings: 'ss01';
-      }
-      .eyebrow {
-        font-family: 'JetBrains Mono', ui-monospace, monospace;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: #6f6a5e;
-      }
-      /* Brand mark — concentric ring */
-      .brand-mark {
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: #1f4d3a;
-        position: relative;
-        flex-shrink: 0;
-      }
-      .brand-mark::after {
-        content: '';
-        position: absolute;
-        inset: 6px;
-        border: 1.5px solid #f3ead8;
-        border-radius: 50%;
-      }
-      .brand-mark--on-dark::after { border-color: #1d1813; }
-      /* Footer version chip */
-      .version-chip {
-        font-family: 'JetBrains Mono', ui-monospace, monospace;
-        font-size: 11px;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: #766853;
-        padding: 4px 10px;
-        border: 1px solid #ddc9a8;
-        border-radius: 999px;
-      }
-    </style>
-    <%= stylesheet_link_tag "https://cdn.jsdelivr.net/npm/flatpickr@4.6.13/dist/flatpickr.min.css", rel: "stylesheet" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-
     <!-- JavaScript -->
     <%= javascript_importmap_tags %>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,30..100,0..1;1,9..144,300..900,30..100,0..1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <%= yield(:head) if content_for?(:head) %>
@@ -162,7 +69,7 @@
           <%# Left: Logo + Nav Links %>
           <div class="flex items-center gap-7">
             <%# Logo — brand mark + Fraunces wordmark %>
-            <%= link_to root_path, class: "flex items-center gap-2.5 group" do %>
+            <%= link_to root_path, class: "flex items-center gap-2.5 group", aria: { label: "Radius home" } do %>
               <span class="brand-mark group-hover:scale-105 transition-transform"></span>
               <span class="font-display text-[22px] font-medium tracking-tight text-ink hidden sm:inline">radius</span>
             <% end %>
@@ -189,7 +96,7 @@
           <div class="flex items-center gap-3">
             <% if user_signed_in? %>
               <%# Messages %>
-              <%= link_to conversations_path, class: "relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors", title: "Messages" do %>
+              <%= link_to conversations_path, class: "relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors", title: "Messages", aria: { label: "Messages" } do %>
                 <i class="fas fa-comment-dots text-lg"></i>
                 <% if current_user.total_unread_messages > 0 %>
                   <span class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
@@ -200,7 +107,7 @@
 
               <%# Notifications Dropdown %>
               <div class="relative">
-                <button type="button" onclick="toggleNotifDropdown(event)" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors" title="Notifications">
+                <button type="button" onclick="toggleNotifDropdown(event)" class="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors" title="Notifications" aria-label="Notifications">
                   <i class="fas fa-bell text-lg"></i>
                   <span data-notification-count class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center <%= current_user.unread_notifications_count > 0 ? '' : 'hidden' %>">
                     <%= current_user.unread_notifications_count > 9 ? '9+' : current_user.unread_notifications_count %>
@@ -265,7 +172,7 @@
 
               <%# User Dropdown %>
               <div class="relative">
-                <button type="button" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-50 transition-colors" onclick="toggleDropdown()" aria-haspopup="true">
+                <button type="button" class="flex items-center gap-2 p-1.5 rounded-lg hover:bg-slate-50 transition-colors" onclick="toggleDropdown()" aria-haspopup="true" aria-label="Open account menu">
                   <div class="h-8 w-8 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold text-sm shadow-sm">
                     <%= current_user.display_name.first.upcase %>
                   </div>
@@ -469,7 +376,7 @@
               <p class="text-sm font-medium text-slate-900">Success</p>
               <p class="text-sm text-slate-600 mt-0.5"><%= notice %></p>
             </div>
-            <button type="button" onclick="dismissFlash('notice-flash')" class="flex-shrink-0 text-slate-400 hover:text-slate-600">
+            <button type="button" onclick="dismissFlash('notice-flash')" class="flex-shrink-0 text-slate-400 hover:text-slate-600" aria-label="Dismiss success message">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>
@@ -495,7 +402,7 @@
               <p class="text-sm font-medium text-slate-900">Error</p>
               <p class="text-sm text-slate-600 mt-0.5"><%= alert %></p>
             </div>
-            <button type="button" onclick="dismissFlash('alert-flash')" class="flex-shrink-0 text-slate-400 hover:text-slate-600">
+            <button type="button" onclick="dismissFlash('alert-flash')" class="flex-shrink-0 text-slate-400 hover:text-slate-600" aria-label="Dismiss error message">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
               </svg>
@@ -509,7 +416,9 @@
     <% end %>
 
     <%# ========== PAGE CONTENT ========== %>
-    <%= yield %>
+    <main id="main-content">
+      <%= yield %>
+    </main>
 
     <%# ========== FOOTER — editorial, 4-col, brand col 2x wide ========== %>
     <footer class="bg-cream border-t border-line">
@@ -517,16 +426,16 @@
         <div class="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
           <%# Brand — 2x wide %>
           <div class="col-span-2">
-            <%= link_to root_path, class: "inline-flex items-center gap-2.5 mb-4" do %>
+            <%= link_to root_path, class: "inline-flex items-center gap-2.5 mb-4", aria: { label: "Radius home" } do %>
               <span class="brand-mark"></span>
               <span class="font-display text-[22px] font-medium tracking-tight text-ink">radius</span>
             <% end %>
             <p class="text-ink-2 text-[14px] leading-[1.55] max-w-sm">Find vetted local service pros. Compare, book, and pay in one place.</p>
             <div class="flex gap-2 mt-5">
               <% [ "fa-instagram", "fa-twitter", "fa-linkedin-in", "fa-facebook-f" ].each do |icon| %>
-                <a href="#" class="w-9 h-9 rounded-pill bg-cream-elevated border border-line text-orange-500 hover:text-orange-600 hover:border-orange-400 hover:bg-orange-50 flex items-center justify-center transition-colors">
+                <span class="w-9 h-9 rounded-pill bg-cream-elevated border border-line text-orange-500 flex items-center justify-center">
                   <i class="fab <%= icon %> text-sm"></i>
-                </a>
+                </span>
               <% end %>
             </div>
           </div>
@@ -691,11 +600,6 @@
           });
         }
 
-        // AOS
-        if (typeof AOS !== 'undefined') {
-          AOS.init({ duration: 800, easing: 'ease-in-out', once: true, offset: 100 });
-        }
-
         // Flash auto-dismiss
         ['notice-flash', 'alert-flash'].forEach(function(id) {
           var el = document.getElementById(id);
@@ -713,12 +617,5 @@
         }
       }
     </script>
-
-    <style>
-      @keyframes progress { 0% { width: 0; } 100% { width: 100%; } }
-      .animate-progress { animation: progress 5s linear forwards; }
-      @keyframes slide-in-right { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
-      .animate-slide-in-right { animation: slide-in-right 0.3s ease-out; }
-    </style>
   </body>
 </html>

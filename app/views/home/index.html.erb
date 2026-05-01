@@ -120,6 +120,12 @@
 
           <%# Slides %>
           <% provider_slides.each_with_index do |s, i| %>
+            <%
+              slide_srcset = [480, 720, 900].map do |width|
+                quality = width >= 900 ? 75 : 70
+                "#{s[:img].sub(/w=\d+/, "w=#{width}").sub(/q=\d+/, "q=#{quality}")} #{width}w"
+              end.join(", ")
+            %>
             <div class="provider-slide absolute inset-0 <%= i == 0 ? 'is-active is-initial' : '' %>"
                  data-slide="<%= i %>"
                  data-b-when="<%= s[:b_when] %>"
@@ -128,10 +134,16 @@
                  data-r-quote="<%= s[:r_quote] %>"
                  data-r-when="<%= s[:r_when] %>">
               <img src="<%= s[:img] %>"
+                   srcset="<%= slide_srcset %>"
+                   sizes="(min-width: 1024px) 38vw, 92vw"
                    data-fallback="<%= fallback_img %>"
                    onerror="if(this.src!==this.dataset.fallback){this.src=this.dataset.fallback;}"
                    class="absolute inset-0 w-full h-full object-cover"
                    alt="<%= s[:first] %> <%= s[:last] %> · <%= s[:cat] %>"
+                   width="720"
+                   height="900"
+                   decoding="async"
+                   fetchpriority="<%= i == 0 ? 'high' : 'low' %>"
                    loading="<%= i == 0 ? 'eager' : 'lazy' %>">
 
               <%# Top-right: Rating pill (per-slide) %>
@@ -242,7 +254,7 @@
           </div>
           <div class="mt-6">
             <div class="display text-[22px] leading-[1.1] tracking-[-0.01em] text-ink"><%= category.name %></div>
-            <div class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mt-1.5"><%= category.services.count %> pros</div>
+            <div class="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-3 mt-1.5"><%= category.services_count %> pros</div>
           </div>
         <% end %>
       <% end %>
@@ -272,9 +284,9 @@
           <%# Image area — provider photo (pravatar fallback) %>
           <div class="relative aspect-[4/5] bg-cream-sunken">
             <% if provider.profile_picture.attached? %>
-              <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover" %>
+              <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover", alt: provider.display_name, loading: "lazy", decoding: "async" %>
             <% else %>
-              <img src="https://i.pravatar.cc/400?u=provider<%= provider.id %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= provider.display_name %>">
+              <img src="https://i.pravatar.cc/400?u=provider<%= provider.id %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= provider.display_name %>" width="400" height="500" loading="lazy" decoding="async">
             <% end %>
             <%# Top-rated badge overlay %>
             <% if provider.average_rating >= 4.8 %>
@@ -293,7 +305,7 @@
             <div class="display text-[17px] leading-[1.2] tracking-[-0.01em] text-ink truncate"><%= provider.business_name.presence || provider.display_name %></div>
             <div class="text-[13px] text-ink-3 mt-1 truncate">
               <% primary_service = provider.services.first %>
-              <%= primary_service&.title || (primary_service&.category&.name + " pro") || "Local pro" %>
+              <%= primary_service&.title || (primary_service&.category&.name.present? ? "#{primary_service.category.name} pro" : "Local pro") %>
             </div>
             <div class="mt-3 flex items-center justify-between">
               <div class="flex items-center gap-1.5 text-[13px] text-ink-2">
@@ -369,9 +381,9 @@
           <%# 4:5 image %>
           <div class="relative aspect-[4/5] bg-cream-sunken">
             <% if provider.profile_picture.attached? %>
-              <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover" %>
+              <%= image_tag provider.profile_picture, class: "absolute inset-0 w-full h-full object-cover", alt: provider.display_name, loading: "lazy", decoding: "async" %>
             <% else %>
-              <img src="https://i.pravatar.cc/400?u=provider<%= provider.id %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= provider.display_name %>">
+              <img src="https://i.pravatar.cc/400?u=provider<%= provider.id %>" class="absolute inset-0 w-full h-full object-cover" alt="<%= provider.display_name %>" width="400" height="500" loading="lazy" decoding="async">
             <% end %>
             <%# Active dot %>
             <div class="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-pill bg-cream-elevated/95 backdrop-blur border border-line shadow-card">
@@ -640,7 +652,7 @@
           </p>
         </div>
         <div class="flex md:flex-col items-center gap-4 md:text-center">
-          <img src="https://i.pravatar.cc/120?u=featured1" alt="Sarah Johnson" class="w-16 h-16 rounded-full border border-line">
+          <img src="https://i.pravatar.cc/120?u=featured1" alt="Sarah Johnson" class="w-16 h-16 rounded-full border border-line" width="64" height="64" loading="lazy" decoding="async">
           <div>
             <div class="text-[14px] font-semibold text-ink">Sarah Johnson</div>
             <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3 mt-0.5">Homeowner</div>
@@ -668,7 +680,7 @@
           <p class="text-[14px] leading-[1.55] text-ink-2 mb-5">"<%= t[:review] %>"</p>
           <div class="flex items-center justify-between pt-4 border-t border-line">
             <div class="flex items-center gap-3">
-              <img src="<%= t[:avatar] %>" alt="" class="w-9 h-9 rounded-full border border-line">
+              <img src="<%= t[:avatar] %>" alt="" class="w-9 h-9 rounded-full border border-line" width="36" height="36" loading="lazy" decoding="async">
               <div>
                 <div class="text-[13px] font-semibold text-ink"><%= t[:name] %></div>
                 <div class="font-mono text-[10px] uppercase tracking-[0.1em] text-ink-3"><%= t[:role] %></div>
@@ -1272,4 +1284,3 @@
   });
 })();
 </script>
-

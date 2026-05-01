@@ -8,7 +8,7 @@ Rails.application.configure do
   Rails.application.routes.default_url_options = { host: ENV.fetch("APP_HOST") { "localhost" }, protocol: "https" }
 
   # Use environment variables for secrets in production
-  config.secret_key_base = ENV['SECRET_KEY_BASE']
+  config.secret_key_base = ENV["SECRET_KEY_BASE"]
 
   # Disable credentials system in production - use environment variables instead
   config.require_master_key = false
@@ -22,8 +22,8 @@ Rails.application.configure do
   # Full error reports are disabled.
   config.consider_all_requests_local = false
   config.hosts << ".hatchboxapp.com"
-  config.assets.check_precompiled_asset = false                                                                   
-   
+  config.assets.check_precompiled_asset = false
+
   # Turn on fragment caching in view templates.
   config.action_controller.perform_caching = true
 
@@ -35,6 +35,11 @@ Rails.application.configure do
 
   # Cache assets for far-future expiry since they are all digest stamped.
   config.public_file_server.headers = { "cache-control" => "public, max-age=#{1.year.to_i}" }
+  config.action_dispatch.default_headers.merge!(
+    "Cross-Origin-Opener-Policy" => "same-origin",
+    "Referrer-Policy" => "strict-origin-when-cross-origin",
+    "X-Content-Type-Options" => "nosniff"
+  )
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
@@ -72,16 +77,16 @@ Rails.application.configure do
 
   # Email configuration for production
   # Only use SMTP if credentials are configured, otherwise use test delivery
-  if ENV['SMTP_USERNAME'].present? && ENV['SMTP_PASSWORD'].present?
+  if ENV["SMTP_USERNAME"].present? && ENV["SMTP_PASSWORD"].present?
     config.action_mailer.raise_delivery_errors = true
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.perform_deliveries = true
     config.action_mailer.smtp_settings = {
-      address: ENV.fetch('SMTP_ADDRESS', 'smtp.gmail.com'),
-      port: ENV.fetch('SMTP_PORT', 587).to_i,
-      domain: ENV.fetch('SMTP_DOMAIN', 'gmail.com'),
-      user_name: ENV['SMTP_USERNAME'],
-      password: ENV['SMTP_PASSWORD'],
+      address: ENV.fetch("SMTP_ADDRESS", "smtp.gmail.com"),
+      port: ENV.fetch("SMTP_PORT", 587).to_i,
+      domain: ENV.fetch("SMTP_DOMAIN", "gmail.com"),
+      user_name: ENV["SMTP_USERNAME"],
+      password: ENV["SMTP_PASSWORD"],
       authentication: :plain,
       enable_starttls_auto: true
     }

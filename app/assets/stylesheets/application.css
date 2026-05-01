@@ -5,3 +5,79 @@
 @tailwind utilities;
 
 /* Custom application styles */
+@layer components {
+  .display {
+    font-family: 'Fraunces', ui-serif, Georgia, serif;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.05;
+    font-variation-settings: 'SOFT' 30, 'WONK' 0;
+  }
+
+  .display em,
+  .italic-wonk {
+    font-style: italic;
+    font-variation-settings: 'SOFT' 100, 'WONK' 1;
+    font-feature-settings: 'ss01';
+  }
+
+  .eyebrow {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #514637;
+  }
+
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #1f4d3a;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .brand-mark::after {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1.5px solid #f3ead8;
+    border-radius: 50%;
+  }
+
+  .brand-mark--on-dark::after {
+    border-color: #1d1813;
+  }
+
+  .version-chip {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #514637;
+    padding: 4px 10px;
+    border: 1px solid #ddc9a8;
+    border-radius: 999px;
+  }
+}
+
+@layer utilities {
+  @keyframes progress {
+    0% { width: 0; }
+    100% { width: 100%; }
+  }
+
+  .animate-progress {
+    animation: progress 5s linear forwards;
+  }
+
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.3s ease-out;
+  }
+}
